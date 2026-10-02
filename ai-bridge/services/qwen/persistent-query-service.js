@@ -1,0 +1,513 @@
+/**
+ * Qwen Code persistent query service — daemon-mode entry point.
+ *
+ * Contract (mirrors the shared persistent-query service shape):
+ *   sendMessagePersistent / preconnectPersistent / resetRuntimePersistent /
+ *   abortCurrentTurn / setPermissionModePersistent / getContextUsagePersistent /
+ *   shutdownPersistentRuntimes / getRuntimeSnapshot
+ *
+ * Uses the Qwen Code TypeScript SDK (`@qwen-code/sdk`) with its `query()` API.
+ */
+import {
+  beginStream,
+  endStream,
+  emitSessionId,
+  emitUsage,
+  emitMessageMarker,
+  emitSendError,
+} from '../../utils/marker-protocol.js';
+import { loadQwenSdk, isQwenSdkAvailable } from '../../utils/sdk-loader.js';
+import { maybeGenerateSessionTitle } from '../session-title-service.js';
+
+// ─── Runtime registry (mirrors the upstream SDK pattern) ───
+
+const runtimes = new Map();          // key → { query, sessionId, model, permissionMode, ... }
+const activeTurns = new Map();       // key → { abortController, ... }
+let activeTurnRuntime = null;
+
+// ─── Helpers ───
+
+function makeRuntimeKey(params) {
+  return `${params.sessionId || 'anon'}::${params.cwd || process.cwd()}::${params.model || 'default'}`;
+}
+
+// Qwen Code CLI approval modes (mirrors its ApprovalMode enum). Legacy CC GUI
+// ids are migrated so persisted sessions keep their meaning.
+const VALID_PERMISSION_MODES = ['plan', 'default', 'auto-edit', 'auto', 'yolo'];
+const LEGACY_MODE_ALIASES = {
+  acceptEdits: 'auto-edit',
+  autoEdit: 'auto-edit',
+  bypassPermissions: 'yolo',
+};
+
+function normalizePermissionMode(mode) {
+  const aliased = LEGACY_MODE_ALIASES[mode] ?? mode;
+  return VALID_PERMISSION_MODES.includes(aliased) ? aliased : 'default';
+}
+
+function buildUserMessage(text, sessionId) {
+  return {
+    type: 'user',
+    session_id: sessionId || 'qwen-session',
+    parent_tool_use_id: null,
+    message: { role: 'user', content: [{ type: 'text', text }] },
+  };
+}
+
+function emitContentDelta(text) {
+  if (text) console.log(`[CONTENT_DELTA] ${JSON.stringify(text)}`);
+}
+
+function emitThinkingDelta(text) {
+  if (text) console.log(`[THINKING_DELTA] ${JSON.stringify(text)}`);
+}
+
+function emitToolUse(toolUse) {
+  emitMessageMarker({
+    type: 'assistant',
+    message: {
+      role: 'assistant',
+      content: [{
+        type: 'tool_use',
+        id: toolUse.id || `tool_${Date.now()}`,
+        name: toolUse.name,
+        input: toolUse.input || {},
+      }],
+    },
+  });
+}
+
+function emitToolResult(toolResult) {
+  emitMessageMarker({
+    type: 'user',
+    message: {
+      role: 'user',
+      content: [{
+        type: 'tool_result',
+        tool_use_id: toolResult.toolUseId || toolResult.id,
+        content: toolResult.content || '',
+        is_error: !!toolResult.isError,
+      }],
+    },
+  });
+}
+
+function safeString(v, max = 20000) {
+  const s = typeof v === 'string' ? v : JSON.stringify(v);
+  return s.length > max ? s.slice(0, Math.floor(max * 0.65)) + '\n...[truncated]...\n' + s.slice(-Math.floor(max * 0.35)) : s;
+}
+
+/**
+ * Extract plain text out of the user prompt (string or content-block array)
+ * for session-title generation. Exported for tests.
+ * @param {string|Array|unknown} message
+ * @returns {string|null}
+ */
+export function extractUserMessageText(message) {
+  if (typeof message === 'string') {
+    return message;
+  }
+  if (Array.isArray(message)) {
+    const text = message
+      .filter((block) => block && block.type === 'text' && typeof block.text === 'string')
+      .map((block) => block.text)
+      .join('\n');
+    return text || null;
+  }
+  return null;
+}
+
+// ─── Event normalization: SDK messages → marker protocol ───
+
+async function consumeQueryStream(result, sessionId) {
+  let hasStreamEvents = false;
+  let sawSessionId = false;
+  let lastUsage = null;
+
+  for await (const message of result) {
+    // System message with session ID
+    if (message.type === 'system' && message.session_id && !sawSessionId) {
+      sawSessionId = true;
+      emitSessionId(message.session_id);
+      sessionId = message.session_id;
+    }
+
+    // Partial/streaming messages
+    if (message.type === 'assistant' || message.type === 'partial_assistant') {
+      const content = message.message?.content;
+      if (!content) continue;
+
+      if (Array.isArray(content)) {
+        for (const block of content) {
+          if (block.type === 'text') {
+            if (message.type === 'partial_assistant') {
+              if (!hasStreamEvents) {
+                beginStream();
+                hasStreamEvents = true;
+              }
+              emitContentDelta(block.text);
+            } else {
+              // Full snapshot
+              emitMessageMarker({
+                type: 'assistant',
+                message: { role: 'assistant', content: [block] },
+              });
+            }
+          } else if (block.type === 'thinking') {
+            if (message.type === 'partial_assistant') {
+              if (!hasStreamEvents) {
+                beginStream();
+                hasStreamEvents = true;
+              }
+              emitThinkingDelta(block.thinking || block.text);
+            } else {
+              emitMessageMarker({
+                type: 'assistant',
+                message: { role: 'assistant', content: [block] },
+              });
+            }
+          } else if (block.type === 'tool_use') {
+            emitToolUse(block);
+          }
+        }
+      } else if (typeof content === 'string') {
+        if (!hasStreamEvents) {
+          beginStream();
+          hasStreamEvents = true;
+        }
+        emitContentDelta(content);
+      }
+
+      // Track usage from assistant messages
+      if (message.usage) {
+        lastUsage = message.usage;
+      }
+    }
+
+    // User messages (tool results)
+    if (message.type === 'user') {
+      const content = message.message?.content;
+      if (Array.isArray(content)) {
+        for (const block of content) {
+          if (block.type === 'tool_result') {
+            emitToolResult(block);
+          }
+        }
+      }
+    }
+
+    // Result message
+    if (message.type === 'result') {
+      if (message.usage) {
+        lastUsage = message.usage;
+      }
+
+      if (message.is_error || message.subtype === 'error_during_execution') {
+        const error = message.error?.message || message.result || 'Unknown error';
+        if (hasStreamEvents) endStream();
+        emitSendError(String(error));
+        return { success: false, sessionId, error: String(error) };
+      }
+
+      // Emit final assistant message if we haven't yet
+      if (!hasStreamEvents && message.result) {
+        emitMessageMarker({
+          type: 'assistant',
+          message: {
+            role: 'assistant',
+            content: [{ type: 'text', text: String(message.result) }],
+          },
+        });
+      }
+
+      if (hasStreamEvents) endStream();
+      emitMessageMarker({ type: 'result', result: message.result, usage: lastUsage });
+      return { success: true, sessionId };
+    }
+  }
+
+  // Stream ended without explicit result
+  if (hasStreamEvents) endStream();
+  console.log('[MESSAGE_END]');
+  return { success: true, sessionId };
+}
+
+// ─── CanUseTool callback (permission handling) ───
+
+// Qwen Code tool names (lowercase wire ids) plus upstream-style aliases, so the
+// gates below match regardless of the naming the SDK reports.
+const READ_ONLY_TOOL_NAMES = new Set([
+  'read_file', 'grep', 'grep_search', 'glob', 'list_directory', 'ls',
+  'web_search', 'web_fetch', 'todo_write', 'todo_read', 'tool_search',
+  'read_mcp_resource', 'lsp', 'zoom_image',
+  'Read', 'Glob', 'Grep', 'WebSearch', 'WebFetch', 'TodoWrite', 'TodoRead',
+]);
+
+// Auto-edit auto-approves exactly these (mirrors the CLI docs: "自动审批的编辑
+// 工具包括 edit、write_file 和 notebook_edit").
+const AUTO_EDIT_TOOL_NAMES = new Set([
+  'edit', 'write_file', 'notebook_edit',
+  'Edit', 'Write', 'MultiEdit', 'NotebookEdit',
+]);
+
+function isReadOnlyTool(toolName) {
+  return READ_ONLY_TOOL_NAMES.has(toolName);
+}
+
+function buildCanUseTool(params) {
+  const mode = normalizePermissionMode(params.permissionMode);
+
+  // YOLO: the CLI auto-approves every tool call. Keep a permissive callback as
+  // a second gate for anything the CLI still surfaces (plugin tools etc.).
+  if (mode === 'yolo') {
+    return async (toolName, input) => ({ behavior: 'allow', updatedInput: input });
+  }
+
+  // Plan: read-only analysis only — no edits, no shell (mirrors the CLI's own
+  // plan restrictions as a second gate).
+  if (mode === 'plan') {
+    return async (toolName, input) => {
+      if (isReadOnlyTool(toolName)) {
+        return { behavior: 'allow', updatedInput: input };
+      }
+      return { behavior: 'deny', message: 'Plan mode: write operations are not allowed' };
+    };
+  }
+
+  // auto-edit / auto / default (Ask Permissions): the CLI's approval-mode
+  // policy decides which tools ask at all (auto-edit pre-approves edits, auto
+  // runs its classifier). Whatever still reaches us goes to the GUI dialog,
+  // except read-only tools which never need confirmation.
+  return async (toolName, input, { signal } = {}) => {
+    if (isReadOnlyTool(toolName)) {
+      return { behavior: 'allow', updatedInput: input };
+    }
+    if (mode === 'auto-edit' && AUTO_EDIT_TOOL_NAMES.has(toolName)) {
+      return { behavior: 'allow', updatedInput: input };
+    }
+    return requestPermissionFromJava(toolName, input, signal);
+  };
+}
+
+// Permission request/response bridge
+const pendingPermissions = new Map();
+
+function requestPermissionFromJava(toolName, input, signal) {
+  return new Promise((resolve) => {
+    const requestId = `perm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+    // Emit permission request marker for Java to parse
+    console.log(`[PERMISSION_REQUEST] ${JSON.stringify({ requestId, toolName, input })}`);
+
+    pendingPermissions.set(requestId, resolve);
+
+    // Auto-deny after 60 seconds
+    const timeout = setTimeout(() => {
+      if (pendingPermissions.has(requestId)) {
+        pendingPermissions.delete(requestId);
+        resolve({ behavior: 'deny', message: 'Permission request timed out' });
+      }
+    }, 60_000);
+
+    // Listen for abort
+    if (signal) {
+      signal.addEventListener('abort', () => {
+        clearTimeout(timeout);
+        pendingPermissions.delete(requestId);
+        resolve({ behavior: 'deny', message: 'Request cancelled' });
+      });
+    }
+  });
+}
+
+export function respondToPermission(requestId, allowed, message) {
+  const resolve = pendingPermissions.get(requestId);
+  if (resolve) {
+    pendingPermissions.delete(requestId);
+    if (allowed) {
+      resolve({ behavior: 'allow' });
+    } else {
+      resolve({ behavior: 'deny', message: message || 'Denied by user' });
+    }
+    return true;
+  }
+  return false;
+}
+
+// ─── Persistent service API (daemon contract) ───
+
+export async function sendMessagePersistent(params = {}) {
+  const {
+    message,
+    sessionId: requestSessionId,
+    cwd,
+    permissionMode = 'default',
+    model,
+    streaming = true,
+    attachments,
+  } = params;
+
+  const runtimeKey = makeRuntimeKey(params);
+
+  try {
+    // Load SDK
+    const sdk = await loadQwenSdk();
+    const queryFn = sdk?.query;
+    if (typeof queryFn !== 'function') {
+      throw new Error('Qwen SDK does not export a query() function');
+    }
+
+    // Build options
+    const options = {
+      cwd: cwd || process.cwd(),
+      permissionMode: normalizePermissionMode(permissionMode),
+      includePartialMessages: streaming,
+    };
+
+    if (model) options.model = model;
+    if (requestSessionId) options.resume = requestSessionId;
+
+    // Attachments → content blocks
+    let prompt;
+    if (attachments && attachments.length > 0) {
+      const blocks = [{ type: 'text', text: message }];
+      for (const att of attachments) {
+        if (att.mediaType?.startsWith('image/')) {
+          blocks.push({ type: 'image', data: att.data, mimeType: att.mediaType });
+        }
+      }
+      prompt = blocks;
+    } else {
+      prompt = message;
+    }
+
+    // Permission callback
+    const canUseTool = buildCanUseTool(params);
+    if (canUseTool) options.canUseTool = canUseTool;
+
+    // Emit stream markers
+    console.log('[MESSAGE_START]');
+    console.log('[STREAM_START]');
+
+    // Execute query
+    const abortController = new AbortController();
+    options.abortController = abortController;
+
+    activeTurns.set(runtimeKey, { abortController });
+    activeTurnRuntime = runtimeKey;
+
+    const result = queryFn({ prompt, options });
+    const outcome = await consumeQueryStream(result, requestSessionId);
+
+    activeTurns.delete(runtimeKey);
+    activeTurnRuntime = null;
+
+    console.log('[MESSAGE_END]');
+
+    // Emit final result
+    const resultPayload = {
+      success: outcome.success,
+      sessionId: outcome.sessionId || requestSessionId,
+    };
+    if (outcome.error) resultPayload.error = outcome.error;
+
+    console.log(JSON.stringify(resultPayload));
+
+    // Fire-and-forget: generate an AI title for brand-new sessions (not
+    // resumes). maybeGenerateSessionTitle dedupes concurrent triggers per
+    // session, never generates twice, and throttles retries after transient
+    // failures. Failures are silent (logged as structured daemon events).
+    if (outcome.success && outcome.sessionId && !requestSessionId) {
+      const userMessageText = extractUserMessageText(message);
+      if (userMessageText) {
+        maybeGenerateSessionTitle(userMessageText, outcome.sessionId, cwd || null)
+          .catch(() => { /* fire-and-forget must never throw */ });
+      }
+    }
+
+  } catch (error) {
+    activeTurns.delete(runtimeKey);
+    activeTurnRuntime = null;
+    emitSendError(safeString(error?.message || error));
+    console.log(JSON.stringify({ success: false, error: safeString(error?.message || error, 5000) }));
+  }
+}
+
+export async function sendMessageWithAttachmentsPersistent(params = {}) {
+  return sendMessagePersistent(params);
+}
+
+export async function preconnectPersistent(params = {}) {
+  try {
+    await loadQwenSdk();
+    console.log(JSON.stringify({ success: true, preconnected: true }));
+  } catch (error) {
+    emitSendError(`Preconnect failed: ${error?.message || error}`);
+    console.log(JSON.stringify({ success: false, error: String(error?.message || error) }));
+  }
+}
+
+export async function resetRuntimePersistent(params = {}) {
+  // Close any running queries
+  for (const [key, turn] of activeTurns) {
+    try {
+      turn.abortController?.abort();
+    } catch { /* ignore */ }
+    activeTurns.delete(key);
+  }
+  activeTurnRuntime = null;
+
+  // Clear cached runtimes
+  runtimes.clear();
+  console.log(JSON.stringify({ success: true }));
+}
+
+export async function setPermissionModePersistent(params = {}) {
+  // Qwen SDK supports setPermissionMode on active query
+  // For now, this is handled per-turn via options.permissionMode
+  console.log(JSON.stringify({ success: true }));
+}
+
+export async function abortCurrentTurn() {
+  if (activeTurnRuntime && activeTurns.has(activeTurnRuntime)) {
+    try {
+      activeTurns.get(activeTurnRuntime).abortController?.abort();
+    } catch { /* ignore */ }
+    activeTurns.delete(activeTurnRuntime);
+    activeTurnRuntime = null;
+    return true;
+  }
+  // Also resolve any pending permission requests as denied
+  for (const [id, resolve] of pendingPermissions) {
+    resolve({ behavior: 'deny', message: 'Turn cancelled' });
+    pendingPermissions.delete(id);
+  }
+  return false;
+}
+
+export async function getContextUsagePersistent(params = {}) {
+  try {
+    const sdk = await loadQwenSdk();
+    // The Qwen SDK's query instance has getContextUsage()
+    // For now, return a placeholder — this requires an active query instance
+    console.log(JSON.stringify({ success: true, usage: { used: 0, size: 1000000 } }));
+  } catch (error) {
+    console.log(JSON.stringify({ success: false, error: String(error?.message || error) }));
+  }
+}
+
+export async function shutdownPersistentRuntimes() {
+  await abortCurrentTurn();
+  runtimes.clear();
+}
+
+export function getRuntimeSnapshot() {
+  return {
+    qwen: {
+      runtimes: runtimes.size,
+      activeTurns: activeTurns.size,
+      hasActiveTurn: activeTurnRuntime !== null,
+      sdkAvailable: isQwenSdkAvailable(),
+    },
+  };
+}

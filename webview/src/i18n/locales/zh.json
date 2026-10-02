@@ -1,0 +1,1643 @@
+{
+  "common": {
+    "loading": "加载中",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确定",
+    "delete": "删除",
+    "edit": "编辑",
+    "add": "添加",
+    "back": "返回",
+    "close": "关闭",
+    "newSession": "新会话",
+    "newTab": "新标签页",
+    "dontAskAgain": "不再提示",
+    "history": "历史记录",
+    "settings": "设置",
+    "thinking": "思考",
+    "thinkingProcess": "思考过程",
+    "gotIt": "知道了",
+    "seconds": "秒",
+    "collapse": "收起",
+    "expand": "展开"
+  },
+  "chat": {
+    "sendMessage": "给 {{provider}} 发送消息",
+    "createNewSession": "创建新会话",
+    "confirmNewSession": "当前会话已有消息，确定要创建新会话吗？",
+    "confirmInterrupt": "当前正在对话中，创建新会话将中断当前对话，是否继续？",
+    "requestInterrupted": "请求已被用户中断",
+    "uploadedFiles": "已上传附件: {{files}}",
+    "emptyMessage": "空消息",
+    "clickToPreview": "点击预览大图",
+    "userUploadedImage": "用户上传的图片",
+    "inputPlaceholder": "@引用文件，#唤起智能体，!插入提示词，Enter 发送",
+    "inputPlaceholderEnter": "@引用文件，#唤起智能体，!插入提示词，Enter 发送",
+    "inputPlaceholderCmdEnter": "@引用文件，#唤起智能体，!插入提示词，⌘Enter 发送",
+    "noThinkingContent": "无思考内容",
+    "parseError": "无法解析内容",
+    "sendMessageEnter": "发送消息 (Enter)",
+    "currentMode": "当前模式: {{mode}}",
+    "currentModel": "当前模型: {{model}}",
+    "removeAttachment": "移除附件",
+    "closePreview": "关闭预览",
+    "loadingDropdown": "加载中...",
+    "modelsLoadFailed": "模型列表加载失败，点击重试",
+    "stopGeneration": "停止生成",
+    "generatingResponse": "正在生成响应",
+    "elapsedTime": "已用 {{time}}",
+    "minutesAndSeconds": "{{minutes}} 分 {{seconds}} 秒",
+    "imagePreview": "预览",
+    "context": "上下文",
+    "usage": "上下文",
+    "usagePercentage": "上下文: {{percentage}}",
+    "noMatchingFiles": "无匹配文件",
+    "noMatchingCommands": "无匹配命令",
+    "noAvailableAgents": "无可用智能体",
+    "collapse": "收起",
+    "expand": "展开",
+    "backToTop": "回到顶部",
+    "backToBottom": "回到底部",
+    "refresh": "刷新",
+    "clickToDisable": "点击停用",
+    "clickToEnable": "点击启用",
+    "copyHomepageLink": "复制主页链接",
+    "copyDocsLink": "复制文档链接",
+    "copyConfig": "复制配置",
+    "editConfig": "编辑配置",
+    "deleteServer": "删除服务器",
+    "loadingFailed": "加载失败",
+    "pleaseCloseAndReopen": "请关闭并重新打开窗口",
+    "loadingSlashCommands": "正在加载斜杠指令...",
+    "pleaseWait": "请稍候...",
+    "retrying": "正在重试 ({{count}}/{{max}})...",
+    "global": "全局",
+    "localProject": "本项目",
+    "disabled": "已停用",
+    "sdkNotInstalled": "{{provider}} SDK 尚未安装，请先安装 SDK 才能开始对话",
+    "sdkStatusLoading": "正在检查 SDK 状态...",
+    "sdkStatusUnavailable": "无法检查 SDK 状态。",
+    "retrySdkStatus": "重试",
+    "openSourceBanner": "本项目保证100%开源和免费（谨防盗版项目）",
+    "openSourceBannerStar": "点个 Star",
+    "openSourceBannerStarAria": "前往 GitHub 点 Star",
+    "goInstallSdk": "前往安装",
+    "commandNotImplemented": "`{{command}}` 功能暂未实现。",
+    "clearCommandDescription": "清除对话历史并新建会话",
+    "unknownFile": "未知文件",
+    "streamingConnected": "AI 已成功连接，正在理解问题",
+    "showEarlierTurns": "显示更早的 {{count}} 轮对话（当前已加载还剩 {{remaining}} 轮）",
+    "totalDuration": "本次耗时",
+    "tokenUsage": "输入 {{input}} / 输出 {{output}}",
+    "tokenUsageDetail": "本轮合计 — 输入 {{input}} · 缓存写入 {{cacheWrite}} · 缓存读取 {{cacheRead}} · 输出 {{output}}",
+    "cacheHitsWithRatio": "（缓存命中 {{tokens}}，{{ratio}}）",
+    "search": {
+      "ariaLabel": "在对话中搜索",
+      "placeholder": "在对话中搜索…",
+      "next": "下一个匹配 (Enter)",
+      "previous": "上一个匹配 (Shift+Enter)",
+      "close": "关闭 (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "无结果",
+      "searching": "搜索中…",
+      "expandedHint": "已展开 {{count}} 条早期消息",
+      "matchCase": "区分大小写 (Alt+C)",
+      "wholeWord": "全词匹配 (Alt+W)",
+      "regex": "正则表达式 (Alt+R)",
+      "invalidRegex": "正则无效",
+      "openTooltip": "在对话中搜索 (Cmd/Ctrl+F)"
+    },
+    "compactSummary": {
+      "summarizedConversation": "已总结的对话",
+      "compactSummary": "对话摘要",
+      "messagesUpTo": "已总结此节点之前的 {{count}} 条消息",
+      "messagesFrom": "已总结此节点之后的 {{count}} 条消息",
+      "userContext": "补充说明：「{{context}}」",
+      "expand": "展开摘要",
+      "collapse": "折叠摘要"
+    },
+    "bridgeUnavailable": "桥接服务当前不可用",
+    "commandProviderOnly": "{{command}} 仅在 {{provider}} 提供商下可用",
+    "loadEarlierTurns": "加载更早消息",
+    "loadEarlierTurnsFailed": "加载更早消息失败，点击重试",
+    "loadingEarlierTurns": "正在加载更早消息…",
+    "planModeEnabled": "已启用计划模式"
+  },
+  "settings": {
+    "title": "设置",
+    "basic": {
+      "title": "基础配置",
+      "description": "配置页面主题、语言和 Node.js 运行环境",
+      "tabs": {
+        "appearance": "外观",
+        "behavior": "行为",
+        "environment": "环境"
+      },
+      "theme": {
+        "label": "界面主题",
+        "system": "跟随 IDE",
+        "light": "亮色",
+        "dark": "暗色"
+      },
+      "language": {
+        "label": "界面语言",
+        "followIde": "跟随 IDE",
+        "simplifiedChinese": "简体中文",
+        "traditionalChinese": "繁體中文",
+        "english": "English",
+        "hindi": "हिन्दी",
+        "spanish": "Español",
+        "french": "Français",
+        "japanese": "日本語",
+        "russian": "Русский",
+        "korean": "한국어",
+        "portuguese": "Português (Brasil)"
+      },
+      "nodePath": {
+        "label": "Node.js 路径",
+        "placeholder": "Windows: C:\\Program Files\\nodejs\\node.exe (必须以 .exe 结尾) | macOS/Linux: /usr/local/bin/node",
+        "hint": "在终端中运行",
+        "hintCommand": "node -p \"process.execPath\"",
+        "hintText": "获取实际的 Node.js 可执行文件路径。为空时插件会自动尝试检测 Node.js。⚠️ Windows 用户注意：路径必须指向完整的可执行文件（node.exe），不能只填写目录。",
+        "versionTooLow": "Node.js 版本过低，插件需要 v{{minVersion}} 或更高版本才能正常运行"
+      },
+      "workingDirectory": {
+        "label": "工作目录",
+        "placeholder": "例如 project1 或留空使用项目根目录",
+        "hint": "指定 Qwen 工作的目录。可以使用相对路径（相对于项目根目录）或绝对路径。留空则使用项目根目录。"
+      },
+      "fontSize": {
+        "label": "字体大小",
+        "level1": "小（80%）",
+        "level2": "较小（90%）",
+        "level3": "标准（100%）",
+        "level4": "较大（110%）",
+        "level5": "大（120%）",
+        "level6": "最大（140%）"
+      },
+      "editorFont": {
+        "label": "UI 字体",
+        "followOption": "跟随 IDEA UI 字体（{{font}}）",
+        "customOption": "自定义 UI 字体文件",
+        "customPathLabel": "UI 字体文件路径",
+        "customPathPlaceholder": "选择或输入 .ttf / .otf UI 字体文件路径",
+        "browse": "浏览",
+        "warningUnavailable": "UI 字体不可用，当前已回退到 IDEA UI 字体",
+        "statusFollowEditor": "当前跟随 IDEA UI 字体：{{font}}",
+        "statusCustom": "当前使用自定义 UI 字体：{{font}}"
+      },
+      "codeFont": {
+        "label": "代码字体",
+        "followOption": "跟随编辑器字体（{{font}}）",
+        "customOption": "自定义代码字体文件",
+        "customPathLabel": "代码字体文件路径",
+        "customPathPlaceholder": "选择或输入 .ttf / .otf 代码字体文件路径",
+        "browse": "浏览",
+        "warningUnavailable": "代码字体不可用，当前已回退到编辑器字体",
+        "statusFollowEditor": "当前跟随编辑器字体：{{font}}",
+        "statusCustom": "当前使用自定义代码字体：{{font}}"
+      },
+      "streaming": {
+        "label": "流式传输",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，AI 回复将实时逐字显示，而非等待完整响应后一次性展示。可能会消耗更多资源。"
+      },
+      "autoOpenFile": {
+        "label": "发送打开的文件路径",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，在项目树选择文件时会自动将文件路径告诉 AI（注意：只传递文件路径，不传文件内容）。关闭后需要手动操作。"
+      },
+      "promptEnhancer": {
+        "label": "增强提示词",
+        "modelLabel": "增强模型",
+        "resetToDefault": "恢复默认",
+        "providerAvailable": "可用",
+        "providerUnavailable": "当前不可用",
+        "provider": {
+          "qwen": "Qwen Code",
+          "dsh": "DeepSeek Harness"
+        },
+        "currentProviderAuto": "当前使用自动选择：{{provider}}",
+        "currentProviderManual": "当前使用手动选择的 provider：{{provider}}",
+        "currentProviderUnavailable": "当前所选 provider 不可用：{{provider}}",
+        "modeLabel": "使用方式",
+        "modeAuto": "自动",
+        "modeManual": "手动",
+        "autoSummary": "自动跟随当前聊天 CLI · 现在解析为 {{provider}}",
+        "autoUnavailable": "当前没有可用的 CLI，请切换到手动并选择。"
+      },
+      "diffExpanded": {
+        "label": "默认展开差异",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，聊天中的代码差异将默认展开显示。关闭后，差异默认折叠，可点击展开。"
+      },
+      "commitGeneration": {
+        "label": "AI 生成提交信息",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，在提交对话框中显示「AI 生成提交信息」按钮。关闭后隐藏该按钮。"
+      },
+      "statusBarWidget": {
+        "label": "状态栏信息展示",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，在 IDE 右下角状态栏显示当前模型和模式信息（如 GUI [Qwen-Max] {自动}）。关闭后隐藏。"
+      },
+      "taskCompletionNotification": {
+        "label": "任务完成系统通知",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，当 AI 任务完成时显示系统通知。关闭后不显示系统通知。"
+      },
+      "askUserQuestionNotification": {
+        "label": "提问系统通知",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，当 Qwen 向你提问时显示系统通知提醒，避免错过。关闭后不显示通知。"
+      },
+      "detailedOutput": {
+        "label": "详细输出信息",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，消息底部会在可用时显示本轮预估费用，并在输入 Token 中标明缓存命中。Token 消耗信息始终保持显示。"
+      },
+      "askUserQuestionSoundNotification": {
+        "label": "提问提示音",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，当 Qwen 向你提问时播放已配置的提示音。会使用下方的音效选择和焦点规则。"
+      },
+      "systemNotificationOnlyWhenUnfocused": {
+        "label": "仅在 IDE 未聚焦时显示系统通知",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，仅在 IDE 窗口未聚焦时显示任务完成和提问系统通知。"
+      },
+      "sendShortcut": {
+        "label": "发送快捷键",
+        "enter": "Enter 发送",
+        "enterDesc": "按 Enter 发送消息，Shift+Enter 换行",
+        "cmdEnter": "⌘/Ctrl+Enter 发送",
+        "cmdEnterDesc": "按 ⌘/Ctrl+Enter 发送消息，Enter 换行"
+      },
+      "permissionDialogTimeout": {
+        "label": "权限与提问对话框超时时间",
+        "unit": "秒",
+        "hint": "设置 Qwen 提问对话框和权限请求对话框的超时时间（30~3600 秒）。超时后对话框将自动关闭，Qwen 会继续执行。"
+      },
+      "chatBgColor": {
+        "label": "聊天背景色",
+        "custom": "自定义",
+        "reset": "恢复默认",
+        "hint": "自定义聊天区域的背景颜色，留空则跟随主题默认颜色"
+      },
+      "chatBarColor": {
+        "label": "标题栏与状态栏颜色",
+        "custom": "自定义",
+        "reset": "恢复默认",
+        "hint": "统一设置会话标题栏和任务状态栏的主题颜色，留空则跟随当前界面主题"
+      },
+      "diffTheme": {
+        "label": "Diff 主题",
+        "follow": "跟随界面",
+        "followDesc": "跟随当前聊天界面明暗主题",
+        "editor": "跟随编辑器",
+        "editorDesc": "尽量贴近 IDE 编辑器的 diff 氛围",
+        "light": "浅色",
+        "lightDesc": "更轻、更贴近当前设置页背景",
+        "softDark": "柔和深色",
+        "softDarkDesc": "保留代码感，但弱化纯黑对比"
+      },
+      "soundNotification": {
+        "label": "任务完成提示音",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，AI 完成任务时会播放提示音，方便您离开屏幕时也能知道任务已完成。",
+        "onlyWhenUnfocused": "仅在 IDE 未聚焦时播放提示音",
+        "onlyWhenUnfocusedHint": "开启后，仅在 IDE 窗口未聚焦时播放任务完成和提问提示音。",
+        "selectSound": "提示音",
+        "soundDefault": "默认",
+        "soundChime": "清脆铃声",
+        "soundBell": "钟声",
+        "soundDing": "叮咚",
+        "soundSuccess": "成功提示",
+        "soundCustom": "自定义...",
+        "customSound": "自定义音频文件",
+        "customSoundPlaceholder": "选择或输入音频文件路径",
+        "customSoundHint": "支持 WAV、MP3、AIFF 格式",
+        "testSound": "试听",
+        "browse": "浏览"
+      },
+      "userMsgColor": {
+        "label": "用户消息颜色",
+        "custom": "自定义",
+        "reset": "恢复默认",
+        "hint": "自定义您的消息背景颜色，留空则跟随主题默认颜色"
+      },
+      "newSessionConfirm": {
+        "label": "新建会话时二次确认",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "关闭后，在已有消息的会话中点击新建将直接创建，不再弹出确认窗口"
+      }
+    },
+    "providers": "供应商管理",
+    "providersDesc": "管理 Qwen 认证配置与 CLI 工具",
+    "promptEnhancer": {
+      "title": "增强提示词",
+      "description": "配置增强提示词功能使用的 provider 与模型，在消息发送前对输入内容进行重写增强。"
+    },
+    "providerTab": {
+      "qwen": "Qwen 配置",
+      "cli": "CLI 工具"
+    },
+    "qwenConfig": {
+      "cliModelsTitle": "来自 CLI 配置",
+      "cliModelsDesc": "读取 ~/.qwen/settings.json 的 modelProviders 配置；如需增改请直接编辑该文件。",
+      "cliModelsEmpty": "未在 CLI 配置中发现模型",
+      "readOnly": "只读",
+      "contextWindow": "上下文"
+    },
+    "cli": {
+      "hint": "以下 CLI 需在系统终端自行安装并完成配置。插件只负责检测是否已安装及版本号，不会替你自动安装。请先在终端确认可正常使用，再回到此处使用。",
+      "refresh": "重新检测",
+      "retry": "重试",
+      "loading": "正在检测 CLI 安装状态…",
+      "loadFailed": "检测失败，请重试",
+      "status": {
+        "installed": "已安装",
+        "notInstalled": "未安装"
+      },
+      "viewInstallGuide": "查看安装方式",
+      "howToInstall": "查看安装说明",
+      "copy": "复制",
+      "copied": "已复制到剪贴板",
+      "copyFailed": "复制失败",
+      "tools": {
+        "qwen": {
+          "name": "Qwen Code",
+          "description": "阿里 Qwen 终端编码助手"
+        },
+        "dsh": {
+          "name": "DeepSeek Harness",
+          "description": "DeepSeek 终端智能体 CLI（dsh）"
+        }
+      },
+      "installDialog": {
+        "title": "安装 {{name}}",
+        "lead": "请先在系统终端中安装 {{name}}，确保命令 `{{binary}}` 可用后，再回到这里点击「重新检测」。本插件不会替你执行安装。",
+        "stepOpenTerminal": "打开系统终端（Terminal / iTerm / PowerShell 等）",
+        "stepRunCommand": "复制并运行下方安装命令",
+        "stepVerify": "安装完成后执行 `{{binary}} --version` 确认成功",
+        "stepReturn": "回到本页点击「重新检测」",
+        "primaryCommand": "推荐安装命令（macOS / Linux）",
+        "windowsCommand": "Windows（PowerShell）",
+        "altCommand": "备选安装方式",
+        "openDocs": "打开官方文档"
+      },
+      "listTitle": "本地 CLI 工具",
+      "summary": "{{installed}} / {{total}} 已安装",
+      "moreComingSoon": "即将支持更多",
+      "copyPath": "复制路径",
+      "visibility": {
+        "hide": "在切换菜单中隐藏",
+        "show": "在切换菜单中显示"
+      },
+      "dsh": {
+        "groupTitle": "DeepSeek Harness",
+        "cliRowTitle": "CLI 安装",
+        "cardTitle": "本机宿主",
+        "rowHint": "启动或接管本机 dsh web",
+        "hint": "DSH 由本机一个常驻 dsh web 宿主承载所有会话；插件会接管已在运行的宿主，而不会重复启动。",
+        "state": {
+          "checking": "检测中…",
+          "notInstalled": "未安装",
+          "notRunning": "未运行",
+          "connected": "已连接"
+        },
+        "adopted": "已接管",
+        "adoptedHint": "已接管正在运行的宿主；插件不会停止它。",
+        "openWebUi": "打开 DSH Web UI",
+        "startHost": "立即启动",
+        "stopHost": "关闭（仅限插件启动的宿主）",
+        "autoStart": "需要时自动启动",
+        "moreActions": "更多"
+      }
+    },
+    "pluginModels": {
+      "title": "自定义模型",
+      "description": "添加的自定义模型将在所有供应商下可见，显示在模型选择列表的最前面",
+      "dialogTitle": "管理自定义模型",
+      "manage": "管理模型",
+      "pricing": {
+        "title": "价格（美元/百万 tokens）",
+        "optionalLabel": "非必填",
+        "hint": "可选。留空某项会使用该 token 类型的默认费率。",
+        "inputLabel": "输入",
+        "outputLabel": "输出",
+        "cacheWriteLabel": "缓存写入",
+        "cacheReadLabel": "缓存读取",
+        "inputShort": "输入",
+        "outputShort": "输出",
+        "cacheWriteShort": "缓存写入",
+        "cacheReadShort": "缓存读取",
+        "invalidValue": "价格必须是非负数字",
+        "defaultPricing": "使用默认价格"
+      },
+      "contextWindow": {
+        "label": "最大上下文（K tokens）",
+        "placeholder": "例如 500",
+        "hint": "可选。请输入整数 K 值（500 = 500,000 tokens），仅用于插件显示上下文用量。",
+        "invalidValue": "最大上下文必须是正整数（单位 K）",
+        "summary": "上下文：{{value}} tokens"
+      },
+      "configuredSectionTitle": "已配置的 Qwen 模型",
+      "configuredSectionDesc": "这些模型来自当前 Qwen 供应商或 settings.json，已经会显示在模型选择器中。这里仅可修改价格。",
+      "configuredEditHint": "此模型由当前 Qwen 供应商或 settings.json 管理，只能在这里修改价格。",
+      "customSectionTitle": "自定义模型",
+      "editPricing": "编辑价格"
+    },
+    "dependencies": "SDK 依赖",
+    "dependency": {
+      "title": "SDK 依赖管理",
+      "description": "管理 AI SDK 依赖包。首次使用时需要安装对应的 SDK。",
+      "installPolicyTip": "安装遇到问题？可复制报错信息，交给终端里的 Qwen Code 协助排查",
+      "qwenSdkName": "Qwen Code SDK",
+      "qwenSdkDescription": "Qwen Code 运行所需。包含 Qwen Code SDK 及相关依赖。",
+      "loading": "正在加载依赖状态...",
+      "install": "安装",
+      "installing": "安装中...",
+      "uninstall": "卸载",
+      "uninstalling": "卸载中...",
+      "update": "更新",
+      "installVersion": "安装 {{version}}",
+      "updateToVersion": "更新到 {{version}}",
+      "rollbackToVersion": "回退到 {{version}}",
+      "currentVersionAction": "当前版本",
+      "updateAvailable": "有更新",
+      "installLogs": "安装日志",
+      "waitingForLogs": "等待日志输出...",
+      "targetVersion": "目标版本",
+      "loadingVersions": "版本列表加载中",
+      "installedVersion": "当前版本 {{version}}",
+      "latestStableVersion": "最新稳定版 {{version}}",
+      "targetVersionValue": "目标版本 {{version}}",
+      "versionSourceFallback": "远程版本列表获取失败，当前展示内置推荐版本。你仍然可以手动输入版本号。",
+      "rollbackWarning": "这是回退操作，建议在切换后重新验证相关 AI 功能是否正常。",
+      "nodeNotConfigured": "Node.js 未配置，请先在基础配置中设置 Node.js 路径。",
+      "installSuccess": "{{name}} 安装成功",
+      "installFailed": "安装失败: {{error}}",
+      "uninstallSuccess": "{{name}} 已卸载",
+      "uninstallFailed": "卸载失败: {{error}}",
+      "updating": "更新中...",
+      "updateSuccess": "{{name}} 更新成功"
+    },
+    "usage": "使用统计",
+    "usageDesc": "查看您的 Token 消耗、费用统计和使用趋势分析",
+    "mcp": "MCP 服务器",
+    "mcpDesc": "配置和管理 Model Context Protocol 服务器",
+    "permissions": "权限配置",
+    "permissionsDesc": "管理 Qwen Code 的文件访问和操作权限",
+    "commit": {
+      "title": "Commit AI",
+      "description": "配置 AI 生成 Git Commit 消息的行为",
+      "providerModel": {
+        "label": "Commit 生成 Provider",
+        "modelLabel": "Commit 生成模型",
+        "resetToDefault": "恢复默认",
+        "providerAvailable": "可用",
+        "providerUnavailable": "当前不可用",
+        "currentProviderAuto": "当前使用自动选择：{{provider}}",
+        "currentProviderManual": "当前使用手动选择的 provider：{{provider}}",
+        "currentProviderUnavailable": "当前所选 provider 不可用：{{provider}}",
+        "modeLabel": "使用方式",
+        "modeAuto": "自动",
+        "modeManual": "手动",
+        "autoSummary": "自动跟随当前聊天 CLI · 现在解析为 {{provider}}",
+        "autoUnavailable": "当前没有可用的 CLI，请切换到手动并选择。"
+      },
+      "prompt": {
+        "label": "附加提示词",
+        "placeholder": "在此添加您的额外要求，例如：使用中文生成 commit、包含 issue 编号，使用表情符号等等...",
+        "hint": "插件已内置完整的 CCG Commits 规范提示词。您在此处添加的内容将作为附加要求，AI 会优先遵循您的要求。"
+      },
+      "projectPrompt": {
+        "label": "项目级附加提示词",
+        "placeholder": "在此添加当前项目的专属要求，例如：scope 必须使用模块名、commit body 需包含影响范围等...",
+        "hint": "此提示词仅对当前项目生效，与全局附加提示词同时拼接。当两者内容矛盾时，以项目提示词为准。不同项目可独立配置。"
+      },
+      "codeReview": {
+        "label": "Code Review AI 附加提示词"
+      }
+    },
+    "agents": "Agents",
+    "agentsDesc": "管理和配置AI代理",
+    "skills": "Skills",
+    "skillsDesc": "管理和配置技能模块",
+    "other": {
+      "title": "其他设置",
+      "description": "配置其他杂项设置",
+      "historyCompletion": {
+        "label": "历史输入补全",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，输入框会根据历史输入自动补全，按 Tab 键接受建议",
+        "manageHistory": "管理历史记录",
+        "empty": "暂无历史记录",
+        "clearAll": "清空全部",
+        "clearLow": "清空低重要度",
+        "clearLowHint": "删除重要度 ≤ 1 的记录",
+        "delete": "删除",
+        "edit": "编辑",
+        "add": "添加",
+        "importance": "重要度",
+        "editor": {
+          "addTitle": "添加历史记录",
+          "editTitle": "编辑历史记录",
+          "contentLabel": "内容",
+          "contentPlaceholder": "输入历史记录内容...",
+          "importanceLabel": "重要度",
+          "importanceHint": "重要度越高，自动补全时越靠前"
+        },
+        "timeAgo": {
+          "yearsAgo_one": "{{count}} year ago",
+          "yearsAgo_other": "{{count}} years ago",
+          "monthsAgo_one": "{{count}} month ago",
+          "monthsAgo_other": "{{count}} months ago",
+          "daysAgo_one": "{{count}} day ago",
+          "daysAgo_other": "{{count}} days ago",
+          "hoursAgo_one": "{{count}} hour ago",
+          "hoursAgo_other": "{{count}} hours ago",
+          "minutesAgo_one": "{{count}} minute ago",
+          "minutesAgo_other": "{{count}} minutes ago",
+          "justNow": "刚刚",
+          "yearsAgo": "{{count}}年前",
+          "monthsAgo": "{{count}}个月前",
+          "daysAgo": "{{count}}天前",
+          "hoursAgo": "{{count}}小时前",
+          "minutesAgo": "{{count}}分钟前",
+          "yearsAgo_few": "{{count}} года назад",
+          "yearsAgo_many": "{{count}} лет назад",
+          "monthsAgo_few": "{{count}} месяца назад",
+          "monthsAgo_many": "{{count}} месяцев назад",
+          "daysAgo_few": "{{count}} дня назад",
+          "daysAgo_many": "{{count}} дней назад",
+          "hoursAgo_few": "{{count}} часа назад",
+          "hoursAgo_many": "{{count}} часов назад",
+          "minutesAgo_few": "{{count}} минуты назад",
+          "minutesAgo_many": "{{count}} минут назад"
+        }
+      },
+      "aiTitleGeneration": {
+        "label": "AI 会话标题自动生成",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "开启后，新会话首次回复完成时将调用轻量模型自动生成简短标题；关闭后会话仍按用户首条消息显示"
+      },
+      "loadError": "设置加载失败"
+    },
+    "codexFeatureUnavailable": "当前模式下该设置页不可用。",
+    "sidebar": {
+      "expand": "展开侧边栏",
+      "collapse": "折叠侧边栏"
+    },
+    "provider": {
+      "featureComingSoon": "功能暂未实现，敬请期待"
+    },
+    "permissionsComingSoon": "权限配置功能即将推出...",
+    "agentsComingSoon": "Agents配置功能即将推出...",
+    "skillsComingSoon": "Skills配置功能即将推出...",
+    "codexProvider": {
+      "dialog": {
+        "noCustomModels": "暂无自定义模型",
+        "addModel": "添加模型",
+        "modelIdPlaceholder": "模型 ID（必填，如 qwen3-coder-plus）",
+        "modelLabelPlaceholder": "显示名称（可选）",
+        "modelDescPlaceholder": "模型描述（可选）",
+        "modelIdRequired": "请输入模型 ID",
+        "modelIdDuplicate": "模型 ID 已存在"
+      }
+    },
+    "agent": {
+      "title": "提示词",
+      "create": "创建",
+      "export": "导出",
+      "import": "导入",
+      "createAgent": "创建提示词",
+      "createAgentHint": "点击跳转到提示词设置页面进行创建",
+      "customAgents": "自定义提示词",
+      "noAgents": "暂无自定义提示词",
+      "noAgentsDropdown": "暂无提示词",
+      "loadFailed": "加载失败",
+      "loading": "加载中...",
+      "menu": "菜单",
+      "addSuccess": "提示词创建成功",
+      "updateSuccess": "提示词更新成功",
+      "deleteSuccess": "提示词删除成功",
+      "operationSuccess": "操作成功",
+      "deleteConfirmTitle": "确认删除",
+      "deleteConfirmMessage": "确定要删除提示词 \"{{name}}\" 吗？此操作无法撤销。",
+      "dialog": {
+        "addTitle": "创建提示词",
+        "editTitle": "编辑提示词",
+        "name": "名称",
+        "namePlaceholder": "请输入提示词名称",
+        "nameRequired": "请输入提示词名称",
+        "prompt": "提示词",
+        "promptPlaceholder": "请输入提示词的角色、语气、工作流程、工具偏好及规则规范等。（选填）",
+        "promptHint": "提示词会在对话开始时作为系统指令发送给AI",
+        "confirmAdd": "创建",
+        "saveChanges": "保存"
+      },
+      "importDialog": {
+        "title": "导入提示词",
+        "summary": "共 {{total}} 个提示词：",
+        "newCount": "{{count}} 个新建",
+        "updateCount": "{{count}} 个更新",
+        "selectedCount": "已选择 {{count}} 项",
+        "conflictStrategy": "冲突处理策略",
+        "strategySkip": "跳过",
+        "strategySkipDesc": "跳过已存在的提示词",
+        "strategyOverwrite": "覆盖",
+        "strategyOverwriteDesc": "覆盖已存在的提示词",
+        "strategyDuplicate": "复制",
+        "strategyDuplicateDesc": "创建副本（生成新ID）",
+        "conflictWarning": "检测到 {{count}} 个冲突项",
+        "columnName": "名称",
+        "columnId": "ID",
+        "columnStatus": "状态",
+        "statusNew": "新建",
+        "statusUpdate": "更新",
+        "importPartialSuccess": "成功导入 {{imported}} 个，跳过 {{skipped}} 个，更新 {{updated}} 个",
+        "confirmImport": "确认导入"
+      },
+      "exportDialog": {
+        "title": "导出提示词",
+        "selectHint": "选择要导出的提示词",
+        "confirmExport": "确认导出"
+      }
+    },
+    "prompts": "提示词库",
+    "prompt": {
+      "title": "提示词库",
+      "create": "创建",
+      "export": "导出",
+      "import": "导入",
+      "createPrompt": "创建提示词",
+      "createPromptHint": "点击跳转到提示词设置页面进行创建",
+      "noPrompts": "暂无自定义提示词",
+      "noPromptsDropdown": "暂无提示词",
+      "loading": "加载中...",
+      "menu": "菜单",
+      "addSuccess": "提示词创建成功",
+      "updateSuccess": "提示词更新成功",
+      "deleteSuccess": "提示词删除成功",
+      "operationSuccess": "操作成功",
+      "operationFailed": "操作失败",
+      "deleteConfirmTitle": "确认删除",
+      "deleteConfirmMessage": "确定要删除提示词 \"{{name}}\" 吗？此操作无法撤销。",
+      "description": "创建常用提示词模板，在聊天输入框中输入 ! 即可快速选择并插入",
+      "global": "全局提示词",
+      "project": "项目提示词",
+      "projectScope": "项目提示词 - {{projectName}}",
+      "noProject": "无活动项目",
+      "dialog": {
+        "addTitle": "创建提示词",
+        "editTitle": "编辑提示词",
+        "name": "名称",
+        "namePlaceholder": "请输入提示词名称",
+        "nameRequired": "请输入提示词名称",
+        "content": "内容",
+        "contentPlaceholder": "请输入提示词内容，可以包含变量如 {{variable}}",
+        "contentHint": "提示词内容会在选择后直接插入到输入框中",
+        "confirmAdd": "创建",
+        "saveChanges": "保存"
+      },
+      "importDialog": {
+        "title": "导入提示词",
+        "summary": "共 {{total}} 个提示词：",
+        "newCount": "{{count}} 个新建",
+        "updateCount": "{{count}} 个更新",
+        "selectedCount": "已选择 {{count}} 项",
+        "conflictStrategy": "冲突处理策略",
+        "strategySkip": "跳过",
+        "strategySkipDesc": "跳过已存在的提示词",
+        "strategyOverwrite": "覆盖",
+        "strategyOverwriteDesc": "覆盖已存在的提示词",
+        "strategyDuplicate": "复制",
+        "strategyDuplicateDesc": "创建副本（生成新ID）",
+        "conflictWarning": "检测到 {{count}} 个冲突项",
+        "columnName": "名称",
+        "columnId": "ID",
+        "columnStatus": "状态",
+        "statusNew": "新建",
+        "statusUpdate": "更新",
+        "importPartialSuccess": "成功导入 {{imported}} 个，跳过 {{skipped}} 个，更新 {{updated}} 个",
+        "confirmImport": "确认导入"
+      },
+      "exportDialog": {
+        "title": "导出提示词",
+        "selectHint": "选择要导出的提示词",
+        "confirmExport": "确认导出"
+      }
+    },
+    "configure": "配置"
+  },
+  "history": {
+    "title": "历史会话",
+    "sessionDeleted": "会话已删除",
+    "confirmDelete": "确认删除",
+    "deleteMessage": "确定要删除这个会话吗?此操作无法撤销。",
+    "deleteSession": "删除此会话",
+    "selectMode": "多选",
+    "exitSelectMode": "退出多选",
+    "selectedSessions": "已选择 {{count}} 个会话",
+    "selectAll": "全选",
+    "clearSelection": "清除",
+    "deleteSelected": "删除所选",
+    "confirmDeleteSelected": "确认删除",
+    "deleteSelectedMessage": "确定要删除选中的 {{count}} 个会话吗?此操作无法撤销。",
+    "selectSession": "选择会话",
+    "selectSessionWithTitle": "选择 {{title}}",
+    "exportSession": "导出会话",
+    "exportFailed": "导出失败",
+    "favoriteSession": "收藏会话",
+    "unfavoriteSession": "取消收藏",
+    "favorited": "已收藏",
+    "unfavorited": "已取消收藏",
+    "loading": "加载历史记录中...",
+    "loadFailed": "加载失败",
+    "noSessions": "暂无历史会话",
+    "noSessionsDesc": "当前项目下没有找到会话记录",
+    "totalSessions": "共 {{count}} 个会话 · {{total}} 条消息",
+    "messageCount": "{{count}} 条消息",
+    "searchPlaceholder": "搜索会话标题...",
+    "noSearchResults": "未找到匹配的会话",
+    "tryOtherKeywords": "尝试其他搜索关键词",
+    "deepSearchTooltip": "深度搜索（清空缓存后重新加载）",
+    "editTitle": "编辑标题",
+    "saveTitleButton": "保存",
+    "cancelEditButton": "取消",
+    "titleUpdated": "标题已更新",
+    "copySessionId": "复制会话ID用于CLI恢复",
+    "sessionIdCopied": "会话ID已复制",
+    "copyFailed": "复制失败",
+    "entrypointLabel": {
+      "sdk-cli": "SDK会话",
+      "claude-vscode": "VS Code",
+      "remote": "远程"
+    },
+    "entrypointTooltip": {
+      "sdk-cli": "此会话由插件通过 SDK 创建，CLI 的 /resume 列表默认不显示。",
+      "claude-vscode": "此会话由 VS Code 插件创建，CLI 的 /resume 列表默认不显示。",
+      "remote": "此会话由远程 Qwen Code 实例创建"
+    },
+    "timeAgo": {
+      "yearsAgo": "年前",
+      "monthsAgo": "个月前",
+      "daysAgo": "天前",
+      "hoursAgo": "小时前",
+      "minutesAgo": "分钟前",
+      "secondsAgo": "秒前",
+      "yearsAgo_one": "{{count}} год назад",
+      "yearsAgo_other": "{{count}} лет назад",
+      "monthsAgo_one": "{{count}} месяц назад",
+      "monthsAgo_other": "{{count}} месяцев назад",
+      "daysAgo_one": "{{count}} день назад",
+      "daysAgo_other": "{{count}} дней назад",
+      "hoursAgo_one": "{{count}} час назад",
+      "hoursAgo_other": "{{count}} часов назад",
+      "minutesAgo_one": "{{count}} минуту назад",
+      "minutesAgo_other": "{{count}} минут назад",
+      "yearsAgo_few": "{{count}} года назад",
+      "yearsAgo_many": "{{count}} лет назад",
+      "monthsAgo_few": "{{count}} месяца назад",
+      "monthsAgo_many": "{{count}} месяцев назад",
+      "daysAgo_few": "{{count}} дня назад",
+      "daysAgo_many": "{{count}} дней назад",
+      "hoursAgo_few": "{{count}} часа назад",
+      "hoursAgo_many": "{{count}} часов назад",
+      "minutesAgo_few": "{{count}} минуты назад",
+      "minutesAgo_many": "{{count}} минут назад"
+    }
+  },
+  "permission": {
+    "allow": "允许一次",
+    "allowAlways": "总是允许",
+    "deny": "拒绝",
+    "userDenied": "用户拒绝了权限请求",
+    "fromExternalProcess": "来自外部进程的请求",
+    "tools": {
+      "Write": "写入文件",
+      "Edit": "编辑文件",
+      "Read": "读取文件",
+      "ReadBatch": "批量读取文件",
+      "Bash": "执行命令",
+      "TodoWrite": "写入待办",
+      "TodoRead": "读取待办",
+      "WebSearch": "网页搜索",
+      "WebFetch": "获取网页",
+      "execute": "执行 {{toolName}}",
+      "readDirectory": "读取目录",
+      "timeoutWarning": "请尽快回答，对话框将在 {{seconds}} 秒后自动关闭"
+    },
+    "timeoutWarning": "请尽快操作，对话框将在 {{seconds}} 秒后自动关闭"
+  },
+  "askUserQuestion": {
+    "title": "Qwen 有一些问题想问你",
+    "progress": "问题 {{current}} / {{total}}",
+    "multiSelectHint": "可以选择多个选项",
+    "cancel": "取消",
+    "back": "上一步",
+    "next": "下一步",
+    "submit": "提交",
+    "otherOption": "其他",
+    "otherOptionDesc": "输入自定义答案",
+    "customInputPlaceholder": "请输入您的答案...",
+    "timeoutWarning": "请尽快回答，对话框将在 {{seconds}} 秒后自动关闭",
+    "expand": "展开",
+    "collapse": "收起",
+    "clickToAnswer": "点击回答",
+    "dshTitle": "DeepSeek Harness 有一些问题想问你",
+    "invalidFormat": "问题数据格式不支持，请取消后重试。",
+    "loading": "正在加载问题...",
+    "planDetail": "计划内容"
+  },
+  "planApproval": {
+    "title": "计划已准备就绪",
+    "subtitle": "Qwen 已完成规划，准备执行。",
+    "executionMode": "执行模式",
+    "executionModeDescription": "选择 Qwen 执行计划的方式：",
+    "approve": "批准并执行",
+    "reject": "拒绝",
+    "toApprove": "批准",
+    "toReject": "拒绝",
+    "timeoutWarning": "请尽快做出选择，对话框将在 {{seconds}} 秒后自动关闭"
+  },
+  "toast": {
+    "switchSuccess": "切换成功",
+    "thinkingEnabled": "思考已开启",
+    "thinkingDisabled": "思考已关闭",
+    "saveSuccess": "保存成功",
+    "restartRequired": "请重启 IDEA 以生效本配置",
+    "saveFailed": "保存失败",
+    "operationFailed": "操作失败",
+    "operationSuccess": "操作成功"
+  },
+  "config": {
+    "officialDocs": "官方文档",
+    "switch": "切换",
+    "switchProvider": "切换供应商",
+    "nodeProcesses": {
+      "title": "Node 进程管理",
+      "badge": "{{total}} 个进程",
+      "badgeWithOrphan": "{{total}} 个 · {{orphan}} 孤立 ⚠",
+      "summary": "共 {{total}} 个 · 孤立 {{orphan}} 个",
+      "loading": "正在加载进程信息...",
+      "empty": "当前没有活跃的 Node 进程",
+      "refresh": "刷新",
+      "groups": {
+        "daemon": "守护进程",
+        "channel": "进行中对话",
+        "orphan": "孤立进程"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "对话",
+        "orphanShort": "孤立"
+      },
+      "kill": "终止",
+      "interrupt": "中断",
+      "restart": "重启",
+      "killAll": "清理所有孤立进程 ({{count}})",
+      "killAllHint": "一键清理所有失控的孤立进程",
+      "killConfirmTitle": "终止该进程？",
+      "killConfirm": "确认终止 PID {{pid}}？当前对话可能丢失。",
+      "restartConfirmTitle": "重启守护进程？",
+      "restartConfirm": "确认重启守护进程？当前正在进行的对话会被中断。",
+      "killAllConfirmTitle": "清理所有孤立进程？",
+      "killAllConfirm": "确认终止全部 {{count}} 个孤立进程？",
+      "killSuccess": "进程已终止",
+      "killAllSuccess": "已清理 {{count}} 个孤立进程",
+      "restartSuccess": "守护进程已关闭，下一条消息会自动启动新实例",
+      "killFailed": "终止失败：{{error}}",
+      "activeRequests": "{{count}} 个进行中"
+    }
+  },
+  "markdown": {
+    "copyCode": "复制代码",
+    "copyMessage": "复制消息",
+    "copySuccess": "复制成功",
+    "quoteMessage": "引用消息",
+    "quoteSuccess": "已引用！"
+  },
+  "contextMenu": {
+    "copy": "复制",
+    "quote": "引用",
+    "cut": "剪切",
+    "paste": "粘贴",
+    "newline": "插入换行"
+  },
+  "usage": {
+    "checkingLabel": "正在检测 tokentracker-cli…",
+    "installingLabel": "正在安装 tokentracker-cli…",
+    "installingDesc": "可能需要一点时间。安装完成后，本应用会自动重新检测并启动本地服务。",
+    "startingLabel": "正在启动 tokentracker 服务…",
+    "guideTitle": "安装 tokentracker-cli 查看使用统计",
+    "guideDesc": "使用统计由GitHub开源项目 tokentracker-cli 提供。它在本机运行一个本地服务，汇总各 AI 工具的 token 用量，并以仪表盘展示。",
+    "guideInstallLabel": "安装命令",
+    "guideCopy": "复制",
+    "guideCopied": "已复制",
+    "guideInstallNow": "一键安装",
+    "guideNoteHooks": "首次启动时，tokentracker 服务会向已安装的 AI 工具写入 hooks（这是它的数据采集机制）。",
+    "guideNoteTelemetry": "本应用已为其关闭匿名遥测。",
+    "errorTitle": "tokentracker 服务启动失败",
+    "errorRetry": "重试"
+  },
+  "mcp": {
+    "title": "MCP 服务器",
+    "whatIsMcp": "什么是 MCP?",
+    "refreshStatus": "刷新服务器状态",
+    "add": "添加",
+    "manualConfig": "手动配置",
+    "addFromMarket": "从 MCP市场 添加",
+    "import": {
+      "menuLabel": "从 GitHub Copilot 导入",
+      "title": "从 GitHub Copilot 导入",
+      "description": "粘贴 GitHub Copilot 的 MCP 配置（根键 “servers”）以导入其服务器。",
+      "placeholder": "{\n  \"servers\": {\n    \"my-server\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"my-mcp-server\"]\n    }\n  }\n}",
+      "previewButton": "预览",
+      "previewTitle": "待导入的服务器",
+      "empty": "粘贴配置并点击预览。",
+      "footerHint": "导入前请检查服务器和重命名情况。",
+      "renamedFrom": "从 {{id}} 重命名",
+      "renameSummary": "因名称冲突重命名了 {{count}} 个",
+      "confirm": "导入 {{count}} 个服务器"
+    },
+    "market": {
+      "title": "MCP 市场",
+      "subtitle": "浏览注册表来源并添加可安装的 MCP 服务器。",
+      "searchPlaceholder": "搜索服务器、发布者或标签",
+      "allSources": "所有来源",
+      "refresh": "刷新市场",
+      "loading": "正在加载市场条目…",
+      "empty": "未找到 MCP 服务器。",
+      "selectServer": "选择一个服务器以查看安装详情。",
+      "footerHint": "在添加服务器之前，请核实命令、URL、请求头和环境变量占位符。",
+      "addServer": "添加服务器",
+      "official": "官方",
+      "installable": "可安装",
+      "browseOnly": "仅浏览",
+      "repository": "代码仓库",
+      "docs": "文档",
+      "homepage": "主页",
+      "installOption": "安装选项",
+      "riskWarning": "此选项会在你的设备上运行命令。添加前请仔细核对。",
+      "riskWarningUnverified": "此选项会运行无法识别的命令。仅在你信任来源时才添加。",
+      "noInstall": "此来源仅提供发现元数据。请在查看其代码仓库说明后手动添加此服务器。",
+      "configPreview": "配置预览"
+    },
+    "description": "描述",
+    "command": "命令",
+    "url": "URL",
+    "homepage": "主页",
+    "docs": "文档",
+    "delete": "删除",
+    "noServers": "暂无 MCP 服务器",
+    "addServerHint": "点击「添加」按钮添加服务器",
+    "loading": "加载中...",
+    "deleteTitle": "删除 MCP 服务器",
+    "deleteMessage": "确定要删除服务器 \"{{name}}\" 吗？\n\n此操作无法撤销。",
+    "deleteConfirm": "删除",
+    "cancel": "取消",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "deleted": "已删除",
+    "updated": "已更新",
+    "saved": "已保存",
+    "added": "已添加",
+    "linkCopied": "链接已复制，请到浏览器打开",
+    "configCopied": "配置已复制到剪切板",
+    "copyFailed": "复制失败，请手动复制",
+    "connectionStatus": "连接状态",
+    "serverVersion": "服务器版本",
+    "statusConnected": "已连接",
+    "statusFailed": "连接失败",
+    "statusNeedsAuth": "需要认证",
+    "statusPending": "连接中...",
+    "statusUnknown": "未知",
+    "logs": {
+      "title": "连接日志",
+      "empty": "暂无日志",
+      "clear": "清空日志",
+      "close": "关闭",
+      "count": "共 {{count}} 条日志",
+      "loadingServers": "正在加载 MCP 服务器列表...",
+      "refreshingStatus": "正在刷新 MCP 服务器连接状态...",
+      "loadedToolsFromCache": "从缓存加载服务器 \"{{name}}\" 的工具列表：{{count}} 个工具",
+      "forceRefreshingTools": "正在强制刷新服务器 \"{{name}}\" 的工具列表...",
+      "loadingTools": "正在加载服务器 \"{{name}}\" 的工具列表...",
+      "fastLoadCache": "快速加载缓存：{{count}} 个服务器 (缓存时间: {{seconds}}秒前)",
+      "loadedToolsFromCacheSimple": "从缓存加载工具列表：{{count}} 个工具",
+      "usingCacheStrategy": "使用缓存优先策略，可点击刷新按钮获取最新数据",
+      "firstLoad": "首次加载，正在获取服务器列表...",
+      "loadedServersSuccess": "加载服务器列表成功：找到 {{count}} 个服务器",
+      "loadedServersFailed": "加载服务器列表失败：{{error}}",
+      "statusUpdateComplete": "服务器状态更新完成：{{total}} 个服务器 ({{connected}} 已连接, {{failed}} 失败, {{pending}} 待定, {{needsAuth}} 需要认证)",
+      "loadedStatusFailed": "加载服务器状态失败：{{error}}",
+      "cleared": "刷新日志已清空",
+      "refreshingAll": "开始刷新所有 MCP 服务器...",
+      "startRefresh": "开始刷新",
+      "forceRefreshingToolsServer": "强制刷新服务器 \"{{name}}\" 的工具列表...",
+      "startRefreshServer": "开始刷新服务器 \"{{name}}\"...",
+      "checkingConnection": "检查连接状态",
+      "checkingConnectionServer": "服务器 \"{{name}}\" - 检查连接状态...",
+      "refreshComplete": "服务器 \"{{name}}\" 刷新完成",
+      "forceRefreshTools": "强制刷新工具"
+    },
+    "presets": {
+      "fetch": "Web 内容获取工具，可以抓取网页内容",
+      "time": "时间和时区工具",
+      "memory": "知识图谱和记忆存储工具",
+      "sequentialThinking": "顺序思考和推理工具",
+      "context7": "文档搜索和上下文检索工具"
+    },
+    "help": {
+      "title": "什么是 MCP?",
+      "protocol": {
+        "title": "Model Context Protocol",
+        "description": "MCP (Model Context Protocol) 是一个开放协议，让 AI 模型能够安全地访问外部工具和数据源。"
+      },
+      "features": {
+        "title": "主要特性",
+        "toolExtension": {
+          "label": "工具扩展",
+          "description": "为 Qwen 添加文件系统、网络访问等能力"
+        },
+        "dataConnection": {
+          "label": "数据连接",
+          "description": "连接数据库、API 等外部数据源"
+        },
+        "security": {
+          "label": "安全可控",
+          "description": "严格的权限控制和数据隔离"
+        },
+        "integration": {
+          "label": "易于集成",
+          "description": "支持多种编程语言和运行环境"
+        }
+      },
+      "configuration": {
+        "title": "配置方式",
+        "description": "支持两种配置类型：",
+        "stdio": {
+          "description": "通过标准输入输出与本地进程通信",
+          "example": "npx/uvx 命令启动"
+        },
+        "httpSse": {
+          "description": "通过网络与远程服务器通信",
+          "example": "URL 地址"
+        }
+      },
+      "learnMore": {
+        "title": "了解更多",
+        "description": "访问官方文档："
+      },
+      "gotIt": "知道了"
+    },
+    "serverDialog": {
+      "addTitle": "手动配置",
+      "editTitle": "编辑服务器",
+      "rawConfig": "原始配置（JSON）",
+      "description": "请输入 MCP Servers 配置 JSON（优先使用 NPX 或 UVX 配置）",
+      "securityWarning": "配置前请自行确认来源，甄别风险",
+      "saving": "保存中...",
+      "errors": {
+        "idExists": "服务器 ID \"{{id}}\" 已存在",
+        "unrecognizedFormat": "无法识别的配置格式",
+        "jsonParseError": "JSON 解析错误: {{message}}"
+      }
+    },
+    "tools": "工具",
+    "loadTools": "加载工具列表",
+    "notConnected": "未连接",
+    "loadFailed": "加载失败",
+    "noTools": "无工具",
+    "clickToLoad": "点击刷新加载",
+    "noParams": "无参数",
+    "required": "必填",
+    "optional": "可选"
+  },
+  "tools": {
+    "toolCall": "工具调用",
+    "runCommand": "运行命令",
+    "contextEngine": "上下文引擎",
+    "task": "任务",
+    "agent": "智能体",
+    "agentGroupToggle": "展开/收起智能体详情",
+    "promptLabel": "提示词 (Prompt)",
+    "readFile": "读取文件",
+    "editFile": "编辑文件",
+    "writeFile": "写入文件",
+    "replaceString": "替换字符串",
+    "executeCommand": "执行命令",
+    "search": "搜索",
+    "fileMatch": "文件匹配",
+    "webFetch": "网页获取",
+    "webSearch": "网页搜索",
+    "delete": "删除",
+    "explore": "探索",
+    "createDirectory": "创建目录",
+    "moveFile": "移动文件",
+    "copyFile": "复制文件",
+    "listFiles": "列出文件",
+    "findFile": "查找文件",
+    "todoList": "任务列表",
+    "editFileTitle": "编辑文件",
+    "refreshFileInIdea": "在 IDEA 中刷新文件",
+    "refreshFileInIdeaSuccess": "已手动刷新本文件在IDEA中的内容",
+    "showDiffInIdea": "在 IDEA 中显示变更",
+    "diffButton": "Diff",
+    "editBatchTitle": "批量编辑文件",
+    "searchBatchTitle": "批量搜索",
+    "editPrefix": "编辑: {{fileName}}",
+    "lineRange": "第 {{start}}-{{end}} 行",
+    "lineSingle": "第 {{line}} 行",
+    "editLocationsSuffix": "处",
+    "unknownTool": "未知工具",
+    "bashGroupBatchRun": "批量运行命令",
+    "bashGroupCompleted": "完成",
+    "bashGroupAllCompleted": "全部完成",
+    "bashGroupFailed": "失败",
+    "updatePlan": "更新计划",
+    "applyPatch": "应用补丁",
+    "reportFindings": {
+      "title": "审查发现",
+      "findingsCount_one": "{{count}} 条发现",
+      "findingsCount_other": "{{count}} 条发现",
+      "confirmedCount_one": "{{count}} 条已确认",
+      "confirmedCount_other": "{{count}} 条已确认",
+      "plausibleCount_one": "{{count}} 条待复核",
+      "plausibleCount_other": "{{count}} 条待复核",
+      "confirmed": "已确认",
+      "plausible": "待复核",
+      "fixed": "已修复",
+      "skipped": "已跳过",
+      "noChangeNeeded": "无需修改",
+      "empty": "未发现问题",
+      "summaryLabel": "审查摘要",
+      "summary": "问题摘要",
+      "failureScenario": "触发场景",
+      "reviewLevel": "审查级别：{{level}}",
+      "openFile": "打开 {{filePath}}",
+      "expandFinding": "展开问题详情",
+      "collapseFinding": "收起问题详情",
+      "expandReport": "展开审查发现",
+      "collapseReport": "收起审查发现",
+      "untitled": "未命名问题"
+    }
+  },
+  "subagent": {
+    "process": {
+      "title": "Agent 进程",
+      "prompt": "提示词",
+      "thought": "思考",
+      "filesRead_one": "读取 {{count}} 个文件",
+      "filesRead_other": "读取 {{count}} 个文件",
+      "otherTools": "其他工具",
+      "result": "结果",
+      "showFullOutput": "查看完整输出",
+      "loading": "正在加载 Agent 进程…",
+      "unavailable": "本次会话未生成进程日志（需要会话 ID）。",
+      "reportGenerated": "已生成结构化分析报告",
+      "unitMs": "毫秒",
+      "unitS": "秒",
+      "unitTools": "个工具",
+      "unitTokens": "tokens"
+    }
+  },
+  "statusPanel": {
+    "todoTab": "计划",
+    "tasksTab": "任务",
+    "subagentTab": "子代理",
+    "editsTab": "编辑",
+    "noTodos": "暂无任务运行",
+    "noSubagents": "暂无子代理运行",
+    "noFileChanges": "暂无文件改动",
+    "blockedBy": "被阻塞: {{ids}}",
+    "showDiff": "查看差异",
+    "expand": "展开状态面板",
+    "collapse": "收起状态面板",
+    "undoChanges": "撤销更改",
+    "undoConfirmTitle": "撤销文件更改",
+    "undoWillDelete": "此文件是新创建的，撤销将删除该文件。",
+    "undoWillRestore": "将恢复此文件到 Qwen 修改之前的状态。",
+    "undoCannotUndo": "此操作无法撤销。",
+    "confirmUndo": "确认撤销",
+    "undoSuccess": "已撤销 {{fileName}} 的更改",
+    "undoFailed": "撤销失败: {{error}}",
+    "discardAll": "回撤全部",
+    "keepAll": "保存全部",
+    "discardAllConfirmTitle": "回撤全部更改",
+    "discardAllConfirmMessage": "将撤销所有文件的更改，此操作无法恢复。",
+    "discardAllSuccess": "已撤销所有文件更改",
+    "discardAllFailed": "撤销失败: {{error}}",
+    "keepAllSuccess": "已保存全部，改动记录已重置",
+    "multiAgentBadge": "多 Agent",
+    "multiAgentEdited": "本会话有 {{count}} 个 Agent 修改过此文件，请留意合并冲突"
+  },
+  "skills": {
+    "all": "全部",
+    "global": "全局",
+    "local": "本项目",
+    "filterEnabled": "筛选启用的 Skills",
+    "enabled": "启用",
+    "filterDisabled": "筛选停用的 Skills",
+    "disabled": "停用",
+    "searchPlaceholder": "搜索 Skills...",
+    "whatIsSkills": "什么是 Skills?",
+    "importSkill": "导入 Skill",
+    "importGlobalSkill": "导入全局 Skill",
+    "importLocalSkill": "导入本项目 Skill",
+    "importUserSkill": "导入用户 Skill",
+    "importRepoSkill": "导入仓库 Skill",
+    "user": "用户",
+    "repo": "仓库",
+    "description": "描述",
+    "noDescription": "暂无描述",
+    "noMatchingSkills": "未找到匹配的 Skills",
+    "importHint": "点击 + 按钮导入 Skill 文件或文件夹",
+    "deleteTitle": "删除 Skill",
+    "deleteMessage": "确定要删除{{scope}} Skill \"{{name}}\" 吗？\n\n此操作无法撤销。",
+    "deleteMessageGlobal": "全局",
+    "deleteMessageLocal": "本项目",
+    "deleteMessageUser": "用户",
+    "deleteMessageRepo": "仓库",
+    "importSuccess": "已成功导入 {{count}} 个 Skills",
+    "importSuccessOne": "已成功导入 1 个 Skill",
+    "importPartialSuccess": "成功导入 {{count}}/{{total}} 个 Skills，部分失败",
+    "importFailed": "导入 Skill 失败",
+    "deleteSuccess": "已成功删除 Skill",
+    "deleteFailed": "删除 Skill 失败",
+    "enableSuccess": "已成功启用 Skill: {{name}}",
+    "disableSuccess": "已成功停用 Skill: {{name}}",
+    "operationFailed": "操作失败: {{error}}",
+    "operationError": "操作 Skill 失败",
+    "refreshed": "已刷新 Skills 列表",
+    "help": {
+      "title": "什么是 Skills?",
+      "overview": {
+        "title": "概述",
+        "description": "Skills 是 Qwen 动态加载的指令、脚本和资源文件夹，用于提升特定任务的表现。Skills 可以教会 Qwen 以可重复的方式完成特定任务，比如使用公司品牌指南创建文档、按照组织特定的工作流分析数据，或自动化个人任务。"
+      },
+      "structure": {
+        "title": "Skill 结构",
+        "description": "一个 Skill 是包含 SKILL.md 文件的文件夹：",
+        "example": "my-skill/\n├── SKILL.md          # Required: skill definition file\n├── templates/        # Optional: template files\n└── references/       # Optional: reference materials"
+      },
+      "format": {
+        "title": "SKILL.md 格式",
+        "description": "SKILL.md 文件使用 YAML frontmatter + Markdown 格式：",
+        "example": "---\nname: my-skill-name\ndescription: Skill description and when to use\n---\n\n# Skill Instructions\n\nDetailed instruction content...",
+        "hint": "name 和 description 是必填字段，可选字段包括 license、allowed-tools、metadata"
+      },
+      "configuration": {
+        "title": "配置方式",
+        "description": "添加 Skill 的方式：",
+        "localPath": {
+          "label": "本地路径",
+          "description": "指定包含 SKILL.md 的文件夹路径"
+        },
+        "relativePath": {
+          "label": "相对路径",
+          "description": "相对于项目根目录，如 ./skills/my-skill"
+        },
+        "absolutePath": {
+          "label": "绝对路径",
+          "description": "完整的文件系统路径"
+        }
+      },
+      "tips": {
+        "title": "使用提示",
+        "item1": "确保 Skill 目录包含有效的 SKILL.md 文件",
+        "item2": "Skill 名称必须使用小写字母、数字和连字符（hyphen-case）",
+        "item3": "Skill 加载后会在 Qwen 会话中自动生效",
+        "item4": "可以通过启用/禁用开关控制单个 Skill 的状态",
+        "item5": "在聊天中提及 Skill 名称即可使用，如：\"使用 pdf skill 提取表单字段\""
+      },
+      "learnMore": {
+        "title": "了解更多",
+        "description": "更多关于 Skills 的信息：",
+        "link1": "Skills 官方文档",
+        "link2": "Skills 实战案例",
+        "link3": "Qwen Code GitHub 仓库"
+      }
+    }
+  },
+  "models": {
+    "addModel": "添加模型",
+    "searchPlaceholder": "搜索模型",
+    "noModelsFound": "未找到模型",
+    "hiddenModelCount": "+ 还有 {{count}} 个模型。输入以搜索。",
+    "pinned": "置顶",
+    "pin": "置顶",
+    "unpin": "取消置顶",
+    "groups": {
+      "cliConfig": "来自 CLI 配置",
+      "custom": "自定义模型"
+    },
+    "qwen": {
+      "followCliDefault": {
+        "label": "默认（跟随 CLI 配置）",
+        "labelWithModel": "默认（跟随 CLI 配置 · {{model}}）"
+      },
+      "currentConfigured": {
+        "badge": "当前"
+      },
+      "coderPlus": {
+        "label": "Qwen3-Coder-Plus",
+        "description": "Qwen3-Coder-Plus · 编码旗舰 · 推荐默认模型"
+      },
+      "coderFlash": {
+        "label": "Qwen3-Coder-Flash",
+        "description": "Qwen3-Coder-Flash · 快速编码模型，响应迅捷"
+      },
+      "max": {
+        "label": "Qwen-Max",
+        "description": "Qwen-Max · 通用能力最强"
+      },
+      "plus": {
+        "label": "Qwen-Plus",
+        "description": "Qwen-Plus · 能力与成本均衡"
+      },
+      "turbo": {
+        "label": "Qwen-Turbo",
+        "description": "Qwen-Turbo · 面向成本敏感场景"
+      }
+    }
+  },
+  "modelConfig": {
+    "title": "模型设置",
+    "effort": "思考强度",
+    "preset": "预设"
+  },
+  "modes": {
+    "plan": {
+      "label": "规划模式",
+      "shortLabel": "规划",
+      "tooltip": "规划模式——只读分析",
+      "description": "仅进行只读分析，不执行文件编辑或 Shell 命令"
+    },
+    "default": {
+      "label": "请求授权",
+      "shortLabel": "授权",
+      "tooltip": "请求授权——更改前逐一确认",
+      "description": "文件编辑和 Shell 命令执行前需要手动批准"
+    },
+    "auto-edit": {
+      "label": "自动接受编辑",
+      "shortLabel": "自动编辑",
+      "tooltip": "自动接受编辑——Shell 仍需确认",
+      "description": "自动批准文件编辑（edit / write_file / notebook_edit），Shell 命令仍需手动批准"
+    },
+    "auto": {
+      "label": "自动模式",
+      "shortLabel": "自动",
+      "tooltip": "自动模式——分类器审查",
+      "description": "由分类器评估每个 Shell 命令和编辑操作，自动批准安全操作、阻止高风险操作"
+    },
+    "yolo": {
+      "label": "YOLO 模式",
+      "shortLabel": "YOLO",
+      "tooltip": "YOLO 模式——自动批准全部",
+      "description": "自动批准所有工具调用（含文件编辑和 Shell 命令）【谨慎使用】"
+    }
+  },
+  "providers": {
+    "qwen": {
+      "label": "Qwen Code"
+    },
+    "beta": {
+      "badge": "Beta",
+      "title": "Beta 功能",
+      "message": "此功能仍处于 Beta 阶段。如果遇到使用 Bug，请及时反馈给作者。"
+    },
+    "dsh": {
+      "label": "DeepSeek Harness"
+    },
+    "manageCli": "CLI 配置管理"
+  },
+  "promptEnhancer": {
+    "title": "增强提示词",
+    "tooltip": "增强提示词",
+    "shortcut": "⌘/",
+    "enhancing": "正在增强提示词...",
+    "originalPrompt": "原始提示词",
+    "enhancedPrompt": "增强后的提示词",
+    "useEnhanced": "使用增强版本",
+    "keepOriginal": "保留原始版本",
+    "modeLabel": "模式",
+    "modeAuto": "自动",
+    "modeManual": "手动",
+    "modeUnavailable": "不可用",
+    "providerLabel": "CLI",
+    "providerUnresolved": "未解析 CLI",
+    "modelLabel": "模型",
+    "modelUnresolved": "默认模型",
+    "openSettings": "配置",
+    "openSettingsTooltip": "打开增强提示词设置",
+    "resolvingUsage": "正在解析运行配置…"
+  },
+  "fileContext": {
+    "placeholder": "文件上下文",
+    "enableTitle": "开启文件上下文？",
+    "enableDescription": "开启后，编辑器中当前打开的文件路径将发送给 AI。注意：仅传递文件路径，不会传递文件内容。",
+    "enable": "开启",
+    "cancel": "取消"
+  },
+  "contextUsage": {
+    "title": "上下文使用",
+    "loading": "正在加载上下文使用情况...",
+    "autoCompactEnabled": "自动压缩已启用",
+    "autoCompactEnabledWithThreshold": "自动压缩已启用 ({{threshold}}%)",
+    "notAvailable": "不可用",
+    "categories": {
+      "systemPrompt": "系统提示词",
+      "systemTools": "系统工具",
+      "mcpTools": "MCP 工具",
+      "customAgents": "自定义智能体",
+      "memoryFiles": "记忆文件",
+      "skills": "Skills",
+      "messages": "消息",
+      "autoCompactBuffer": "自动压缩缓冲区",
+      "freeSpace": "空闲空间"
+    },
+    "sections": {
+      "mcpTools": "MCP 工具 ({{count}})",
+      "agents": "智能体 ({{count}})",
+      "memoryFiles": "记忆文件 ({{count}})",
+      "skills": "Skills ({{included}}/{{total}})"
+    },
+    "table": {
+      "tool": "工具",
+      "server": "服务器",
+      "tokens": "令牌",
+      "agent": "智能体",
+      "source": "来源",
+      "type": "类型",
+      "path": "路径",
+      "skill": "Skill"
+    }
+  },
+  "reasoning": {
+    "title": "选择思考深度",
+    "low": {
+      "label": "low",
+      "description": "快速响应，基础推理"
+    },
+    "medium": {
+      "label": "medium",
+      "description": "平衡思考（默认）"
+    },
+    "high": {
+      "label": "high",
+      "description": "深度推理，适合复杂任务"
+    },
+    "xhigh": {
+      "label": "xhigh",
+      "description": "额外深度推理，适合高难度任务"
+    },
+    "max": {
+      "label": "max",
+      "description": "最大推理深度"
+    }
+  },
+  "errorBoundary": {
+    "title": "出错了",
+    "description": "应用程序遇到了意外错误。请复制以下错误详情并分享给开发者以便排查问题。",
+    "possibleCauses": "可能的原因：",
+    "cause1": "Node.js 未安装或配置不正确",
+    "cause2": "网络连接问题",
+    "cause3": "插件或 IDE 兼容性问题",
+    "cause4": "系统资源不足",
+    "errorDetails": "错误详情",
+    "copyError": "复制错误信息",
+    "copied": "已复制！",
+    "reload": "重新加载",
+    "helpText": "如果问题持续存在，请复制错误信息并在 GitHub 上提交 Issue，或在社区群中分享。",
+    "componentChain": "组件链",
+    "debugHints": "调试提示"
+  },
+  "aiBridge": {
+    "qwenCodeInterrupted": "Qwen Code 运行被中断（可能是响应超时或用户取消）：",
+    "qwenCodeError": "Qwen Code 出现错误：",
+    "errorMessage": "错误信息",
+    "currentApiKeySource": "当前 API Key 来源",
+    "currentApiKeyPreview": "当前 API Key 预览",
+    "currentBaseUrl": "当前 Base URL",
+    "source": "来源",
+    "notConfigured": "未配置",
+    "notConfiguredEmpty": "未配置（值为空或缺失）",
+    "defaultBaseUrl": "默认值（未显式配置）",
+    "configTip": "提示：CLI 可以读取环境变量或 settings.json 两种方式；本插件为了避免产生问题，只支持读取 settings.json 内容，您可以在本插件右上角设置 - 供应商管理配置下即可使用",
+    "apiError": "API 错误",
+    "apiErrorCauses": "可能的原因：\n1. API Key 配置不正确\n2. 第三方代理服务配置问题\n3. 请检查 ~/.qwen/settings.json 中的配置",
+    "codexAuthError": "认证错误：",
+    "codexAuthErrorChecks": "请检查以下配置：\n1. 插件设置中的 API Key 是否正确\n2. API Key 是否有足够的权限\n3. 如果使用自定义 Base URL，请确认地址正确",
+    "codexAuthTip": "提示：需要有效的 API Key",
+    "codexNetworkError": "网络错误：",
+    "codexNetworkErrorChecks": "请检查：\n1. 网络连接是否正常\n2. 如果使用代理，请确认代理配置\n3. 防火墙是否阻止了连接",
+    "codexError": "错误：",
+    "codexErrorCheck": "请检查网络连接和相关配置",
+    "userDeniedPermission": "用户拒绝了 {{toolName}} 工具的使用权限",
+    "userDidNotProvideAnswers": "用户未提供问题答案",
+    "dbMissingPath": "缺少数据库文件路径参数",
+    "dbFileNotExist": "数据库文件不存在",
+    "dbReadFailed": "读取数据库失败",
+    "dbParseProviderFailed": "解析供应商配置失败",
+    "aiResponseEmpty": "AI 响应为空",
+    "enhancementFailed": "增强失败",
+    "uploadedImages": "已上传 {{count}} 张图片",
+    "uploadedAttachments": "已上传附件",
+    "emptyMessage": "空消息",
+    "attachment": "附件"
+  },
+  "dshPresets": {
+    "title": "选择 DeepSeek Harness Agent 预设",
+    "none": {
+      "label": "默认",
+      "description": "dsh 默认 headless 组合（完整工具集）"
+    },
+    "standard": {
+      "label": "标准模式",
+      "description": "功能完整的标准编码工具集"
+    },
+    "code": {
+      "label": "PTC 模式",
+      "description": "标准能力加 Code Mode"
+    },
+    "minimal": {
+      "label": "极简模式",
+      "description": "仅提供 bash 与 str_replace_editor"
+    },
+    "cordis": {
+      "label": "创造模式",
+      "description": "标准能力加组合编排能力"
+    },
+    "user": {
+      "description": "安装在 DSH 主目录中的自定义预设"
+    }
+  },
+  "error": {
+    "providerNotConfigured": "供应商未配置",
+    "providerNotConfiguredDesc": "尚未配置 AI 供应商或未授权使用本地配置，请先在供应商管理设置中完成配置后再开始对话。",
+    "goToProviderSettings": "前往设置"
+  },
+  "errorDiagnostic": {
+    "copyCommand": "复制",
+    "copied": "已复制",
+    "openDependencySettings": "打开依赖管理",
+    "recommended": "推荐",
+    "sdkNativeBinaryMissing": {
+      "title": "SDK 安装不完整 — 缺少 native 二进制文件",
+      "intro": "这是淘宝 npm 镜像源的已知问题（非插件 bug）。镜像源未完整同步 platform 文件。可手动按以下方案处理：",
+      "reason": "淘宝源同步完成后此问题会自动消失，无需担心。",
+      "solutions": {
+        "switchRegistry": {
+          "title": "方案一：临时切换官方源重装",
+          "step0": "1. 在终端运行（切换到 npm 官方源）：",
+          "step1": "2. 打开插件设置中的「依赖管理」，点击重装：",
+          "step2": "3. 重装完成后，切回淘宝源："
+        },
+        "downgrade": {
+          "title": "方案二：版本回退",
+          "step0": "在「依赖管理」中将 SDK 版本切换到 v0.2.112 或更早版本，切换后需要重启 IDEA。"
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — 子进程启动失败",
+      "intro": "该错误通常由 Node.js 版本不兼容或 SDK 安装不完整引起，按以下两个方向排查通常可解决：",
+      "reason": "EBUSY 是 Node.js 启动子进程时遇到资源繁忙的系统错误。常见原因：Node.js 24 兼容性问题、SDK 版本过旧、或使用淘宝源安装时同步不完整。",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "方案一：检查 Node.js 版本",
+          "step0": "在终端运行下面的命令查看版本号。建议使用 Node 22 或当前最新 LTS 版本 — 用户反馈 Node 24 报错较多，请优先使用 20 或 22："
+        },
+        "reinstallLatestSdk": {
+          "title": "方案二：用 npm 官方源重装最新版 SDK",
+          "step0": "1. 切换到 npm 官方源（淘宝源可能未同步最新版本，请勿使用淘宝源安装）：",
+          "step1": "2. 打开「依赖管理」重装最新版 SDK："
+        }
+      }
+    },
+    "codexThreadResume": {
+      "title": "会话恢复失败",
+      "intro": "尝试恢复历史会话时出错。",
+      "reason": "会话线程恢复请求被拒绝，可能是会话已过期或服务端不支持该操作。"
+    }
+  }
+}

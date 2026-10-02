@@ -1,0 +1,87 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+sdk-packages/
+
+local.properties
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Kotlin ###
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+.npm-cache
+
+# Webview frontend artifacts
+node_modules/
+**/node_modules/
+webview/dist/
+webview/test-results/
+webview/playwright-report/
+
+src/main/resources/html/*
+
+.specify
+.claude
+specs
+CLAUDE.md
+.idea/copilot*
+**/.nvmrc
+.github/*.md
+!.github/PULL_REQUEST_TEMPLATE.md
+webview/src/version/version.ts
+AGENTS.md
+openspec/
+
+# 自定义沙箱目录（如果启用）
+.sandbox/
+logs/*.log
+.intellijPlatform/
+/.idea/
+.ace-tool/
+.workflow
+.worktrees/
+.omx/
+
+.codex
+.opencode
+
+# Playwright MCP local test artifacts
+.playwright-mcp/

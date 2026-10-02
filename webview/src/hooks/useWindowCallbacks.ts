@@ -1,0 +1,157 @@
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { TFunction } from 'i18next';
+import type { MutableRefObject, RefObject } from 'react';
+import type { QwenMateMessage, QwenMateRawMessage, HistoryData, SubagentHistoryResponse, TaskEventMap } from '../types';
+import type {
+  PermissionMode,
+  ReasoningEffort,
+  SelectedAgent,
+} from '../components/ChatInputBox/types';
+import type { PermissionRequest } from '../components/PermissionDialog';
+import type { AskUserQuestionRequest } from '../components/AskUserQuestionDialog';
+import type { PlanApprovalRequest } from '../components/PlanApprovalDialog';
+import type { RestoredSessionTitle } from '../contexts/SessionContext';
+import { registerWindowCallbacks } from './windowCallbacks/registerCallbacks';
+import { sendBridgeEvent } from '../utils/bridge';
+
+// Re-export from messageSync to avoid duplicate definition
+export { OPTIMISTIC_MESSAGE_TIME_WINDOW } from './windowCallbacks/messageSync';
+
+export interface ContextInfo {
+  file: string;
+  startLine?: number;
+  endLine?: number;
+  raw: string;
+}
+
+export interface UseWindowCallbacksOptions {
+  t: TFunction;
+  addToast: (message: string, type?: 'info' | 'success' | 'warning' | 'error') => void;
+  clearToasts: () => void;
+
+  // State setters
+  setMessages: React.Dispatch<React.SetStateAction<QwenMateMessage[]>>;
+  setStatus: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoadingStartTime: React.Dispatch<React.SetStateAction<number | null>>;
+  setIsThinking: React.Dispatch<React.SetStateAction<boolean>>;
+  setExpandedThinking?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setStreamingActive: React.Dispatch<React.SetStateAction<boolean>>;
+  setHistoryData: React.Dispatch<React.SetStateAction<HistoryData | null>>;
+  setCurrentSessionId: React.Dispatch<React.SetStateAction<string | null>>;
+  setUsagePercentage: React.Dispatch<React.SetStateAction<number>>;
+  setUsageUsedTokens: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setUsageMaxTokens: React.Dispatch<React.SetStateAction<number | undefined>>;
+  setPermissionMode: React.Dispatch<React.SetStateAction<PermissionMode>>;
+  setCurrentProvider: React.Dispatch<React.SetStateAction<string>>;
+  setQwenPermissionMode: React.Dispatch<React.SetStateAction<PermissionMode>>;
+  setDshPermissionMode: React.Dispatch<React.SetStateAction<PermissionMode>>;
+  setSelectedQwenModel: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedDshModel: React.Dispatch<React.SetStateAction<string>>;
+  setReasoningEffort: React.Dispatch<React.SetStateAction<ReasoningEffort>>;
+  setAlwaysThinkingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  setStreamingEnabledSetting: React.Dispatch<React.SetStateAction<boolean>>;
+  setSendShortcut: React.Dispatch<React.SetStateAction<'enter' | 'cmdEnter'>>;
+  setAutoOpenFileEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  setPermissionDialogTimeoutSeconds: React.Dispatch<React.SetStateAction<number>>;
+  setSdkStatus: React.Dispatch<React.SetStateAction<Record<string, { installed?: boolean; status?: string }>>>;
+  setSdkStatusLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  setSdkStatusError: React.Dispatch<React.SetStateAction<string | null>>;
+  setContextInfo: React.Dispatch<React.SetStateAction<ContextInfo | null>>;
+  setSelectedAgent: React.Dispatch<React.SetStateAction<SelectedAgent | null>>;
+  setSubagentHistories?: React.Dispatch<React.SetStateAction<Record<string, SubagentHistoryResponse>>>;
+  setTaskEvents?: React.Dispatch<React.SetStateAction<TaskEventMap>>;
+
+  // Refs
+  currentProviderRef: MutableRefObject<string>;
+  messagesContainerRef: RefObject<HTMLDivElement | null>;
+  isUserAtBottomRef: MutableRefObject<boolean>;
+  userPausedRef: MutableRefObject<boolean>;
+  suppressNextStatusToastRef: MutableRefObject<boolean>;
+
+  // Streaming refs from useStreamingMessages
+  streamingContentRef: MutableRefObject<string>;
+  streamingThinkingRef: MutableRefObject<string>;
+  isStreamingRef: MutableRefObject<boolean>;
+  useBackendStreamingRenderRef: MutableRefObject<boolean>;
+  autoExpandedThinkingKeysRef: MutableRefObject<Set<string>>;
+  streamingMessageIndexRef: MutableRefObject<number>;
+  streamingTurnIdRef: MutableRefObject<number>;
+  turnIdCounterRef: MutableRefObject<number>;
+  recordStreamingBlockReset?: () => void;
+  clearStreamingBlockResets?: () => void;
+  lastContentUpdateRef: MutableRefObject<number>;
+  contentUpdateTimeoutRef: MutableRefObject<number | null>;
+  lastThinkingUpdateRef: MutableRefObject<number>;
+  thinkingUpdateTimeoutRef: MutableRefObject<number | null>;
+
+  // Functions from useStreamingMessages
+  findLastAssistantIndex: (messages: QwenMateMessage[]) => number;
+  extractRawBlocks: (raw: QwenMateRawMessage | string | undefined) => Array<Record<string, unknown>>;
+  getOrCreateStreamingAssistantIndex: (messages: QwenMateMessage[]) => number;
+  patchAssistantForStreaming: (msg: QwenMateMessage) => QwenMateMessage;
+
+  // Permission dialog handlers from useDialogManagement
+  openPermissionDialog: (request: PermissionRequest) => void;
+  openAskUserQuestionDialog: (request: AskUserQuestionRequest) => void;
+  openPlanApprovalDialog: (request: PlanApprovalRequest) => void;
+  forceClosePermissionDialog: (channelId?: string | null, dialogToken?: string) => void;
+  forceCloseAskUserQuestionDialog: (requestId?: string | null, dialogToken?: string) => void;
+  forceClosePlanApprovalDialog: (requestId?: string | null, dialogToken?: string) => void;
+  openContextUsageDialog: (requestId?: string | null, loading?: boolean) => void;
+  updateContextUsageData: (
+    requestId: string | null | undefined,
+    data: import('../components/ContextUsageDialog').ContextUsageData,
+  ) => boolean;
+  closeContextUsageDialog: (requestId?: string | null) => boolean;
+
+  // B-011: Title migration on session ID change
+  customSessionTitleRef: MutableRefObject<string | null>;
+  currentSessionIdRef: MutableRefObject<string | null>;
+  updateHistoryTitle: (sessionId: string, newTitle: string) => void;
+  applyHistoryTitleLocal: (sessionId: string, newTitle: string) => void;
+
+  /**
+   * Discards messages waiting in the send queue; wired into
+   * resetTransientUiState so every session-reset path (beginSessionTransition
+   * and the Java-driven clearMessages callback) drops them. Resolved through a
+   * ref by the caller because registration happens once on mount, before the
+   * message queue hook has been created.
+   */
+  clearQueuedMessages?: () => void;
+
+  // AI title generation: update the displayed session title when backend generates one
+  setCustomSessionTitle: React.Dispatch<React.SetStateAction<string | null>>;
+
+  /** Stores the CLI-derived title carried by a history page payload. */
+  setRestoredSessionTitle: React.Dispatch<React.SetStateAction<RestoredSessionTitle | null>>;
+}
+
+export function useWindowCallbacks(options: UseWindowCallbacksOptions): void {
+  const { t } = options;
+  const [historyRenderCommitEpoch, setHistoryRenderCommitEpoch] = useState(0);
+
+  // Store t in ref to avoid stale closures
+  const tRef = useRef(t);
+  useEffect(() => {
+    tRef.current = t;
+  }, [t]);
+
+  useEffect(() => {
+    registerWindowCallbacks(options, tRef, setHistoryRenderCommitEpoch);
+    // Callbacks are registered once on mount; re-registration would cause duplicate handlers.
+    // Options object reference is intentionally excluded from deps.
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // This signal means only that React committed the restored message tree. Native OSR
+  // publication is fenced separately by Java using real OnPaint callbacks.
+  useLayoutEffect(() => {
+    if (
+      historyRenderCommitEpoch > 0
+      && window.__historySurfaceRefreshEpoch === historyRenderCommitEpoch
+    ) {
+      sendBridgeEvent('history_dom_committed', String(historyRenderCommitEpoch));
+    }
+    return undefined;
+  }, [historyRenderCommitEpoch]);
+}

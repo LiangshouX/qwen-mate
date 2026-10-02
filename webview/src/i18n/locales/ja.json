@@ -1,0 +1,1575 @@
+{
+  "common": {
+    "loading": "読み込み中",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "delete": "削除",
+    "edit": "編集",
+    "add": "追加",
+    "back": "戻る",
+    "close": "閉じる",
+    "newSession": "新規セッション",
+    "newTab": "新しいタブ",
+    "dontAskAgain": "次回から表示しない",
+    "history": "履歴",
+    "settings": "設定",
+    "thinking": "思考中",
+    "thinkingProcess": "思考プロセス",
+    "seconds": "秒",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "gotIt": "Got it"
+  },
+  "chat": {
+    "sendMessage": "{{provider}}にメッセージを送信",
+    "createNewSession": "新規セッションを作成",
+    "confirmNewSession": "現在のセッションにメッセージがあります。新規セッションを作成してもよろしいですか?",
+    "confirmInterrupt": "会話が進行中です。新規セッションを作成すると中断されます。続行しますか?",
+    "requestInterrupted": "ユーザーによってリクエストが中断されました",
+    "uploadedFiles": "アップロードされたファイル: {{files}}",
+    "emptyMessage": "メッセージが空です",
+    "clickToPreview": "クリックしてプレビュー",
+    "userUploadedImage": "ユーザーがアップロードした画像",
+    "inputPlaceholder": "@でファイルを参照、#でエージェントを呼び出し、Enterで送信",
+    "inputPlaceholderEnter": "@でファイルを参照、#でエージェントを呼び出し、Enterで送信",
+    "inputPlaceholderCmdEnter": "@でファイルを参照、#でエージェントを呼び出し、⌘Enterで送信",
+    "noThinkingContent": "思考内容がありません",
+    "parseError": "コンテンツの解析に失敗しました",
+    "sendMessageEnter": "メッセージを送信 (Enter)",
+    "currentMode": "現在のモード: {{mode}}",
+    "currentModel": "現在のモデル: {{model}}",
+    "removeAttachment": "添付ファイルを削除",
+    "closePreview": "プレビューを閉じる",
+    "loadingDropdown": "読み込み中...",
+    "modelsLoadFailed": "モデルの読み込みに失敗しました。クリックして再試行",
+    "stopGeneration": "生成を停止",
+    "generatingResponse": "応答を生成中",
+    "elapsedTime": "経過時間 {{time}}",
+    "minutesAndSeconds": "{{minutes}}分 {{seconds}}秒",
+    "imagePreview": "プレビュー",
+    "context": "コンテキスト",
+    "usage": "使用状況",
+    "usagePercentage": "使用率: {{percentage}}",
+    "noMatchingFiles": "一致するファイルがありません",
+    "noMatchingCommands": "一致するコマンドがありません",
+    "noAvailableAgents": "利用可能なエージェントがいません",
+    "collapse": "折りたたむ",
+    "expand": "展開",
+    "backToTop": "上部に戻る",
+    "backToBottom": "下部に戻る",
+    "refresh": "更新",
+    "clickToDisable": "クリックして無効化",
+    "clickToEnable": "クリックして有効化",
+    "copyHomepageLink": "ホームページリンクをコピー",
+    "copyDocsLink": "ドキュメントリンクをコピー",
+    "copyConfig": "Copy config",
+    "editConfig": "設定を編集",
+    "deleteServer": "サーバーを削除",
+    "loadingFailed": "読み込みに失敗しました",
+    "pleaseCloseAndReopen": "閉じて再度開いてください",
+    "loadingSlashCommands": "スラッシュコマンドを読み込み中...",
+    "pleaseWait": "お待ちください...",
+    "retrying": "再試行中 ({{count}}/{{max}})...",
+    "global": "グローバル",
+    "localProject": "ローカル",
+    "disabled": "無効",
+    "sdkNotInstalled": "{{provider}} SDKがインストールされていません。チャットを開始するにはSDKをインストールしてください。",
+    "sdkStatusLoading": "Checking SDK status...",
+    "sdkStatusUnavailable": "SDK の状態を確認できませんでした。",
+    "retrySdkStatus": "再試行",
+    "openSourceBanner": "このプロジェクトは100%オープンソースかつ無料を保証します（海賊版プロジェクトにご注意ください）",
+    "openSourceBannerStar": "Star",
+    "openSourceBannerStarAria": "GitHub でリポジトリを開いてスター",
+    "goInstallSdk": "インストールへ",
+    "commandNotImplemented": "`{{command}}` 機能はまだ実装されていません。",
+    "clearCommandDescription": "会話履歴をクリアして新しいセッションを開始",
+    "unknownFile": "Unknown file",
+    "streamingConnected": "{{provider}}に接続しました、質問を理解しています",
+    "showEarlierTurns": "前の{{count}}ターンを表示（読み込み済み残り{{remaining}}ターン）",
+    "totalDuration": "今回の応答時間",
+    "tokenUsage": "入力 {{input}} / 出力 {{output}}",
+    "tokenUsageDetail": "ターン合計 — 入力 {{input}} · キャッシュ書き込み {{cacheWrite}} · キャッシュ読み取り {{cacheRead}} · 出力 {{output}}",
+    "cacheHitsWithRatio": "（キャッシュヒット {{tokens}}、{{ratio}}）",
+    "search": {
+      "ariaLabel": "会話内を検索",
+      "placeholder": "会話内を検索...",
+      "next": "次の一致 (Enter)",
+      "previous": "前の一致 (Shift+Enter)",
+      "close": "閉じる (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "結果なし",
+      "searching": "検索中...",
+      "expandedHint": "以前のメッセージを {{count}} 件展開しました",
+      "matchCase": "大文字と小文字を区別 (Alt+C)",
+      "wholeWord": "単語単位で検索 (Alt+W)",
+      "regex": "正規表現 (Alt+R)",
+      "invalidRegex": "無効な正規表現",
+      "openTooltip": "会話内を検索 (Cmd/Ctrl+F)"
+    },
+    "compactSummary": {
+      "summarizedConversation": "要約された会話",
+      "compactSummary": "会話の要約",
+      "messagesUpTo": "この時点までの{{count}}件のメッセージを要約しました",
+      "messagesFrom": "この時点以降の{{count}}件のメッセージを要約しました",
+      "userContext": "コンテキスト：「{{context}}」",
+      "expand": "要約を展開",
+      "collapse": "要約を折りたたむ"
+    },
+    "bridgeUnavailable": "Bridge is not available right now",
+    "commandProviderOnly": "{{command}} is only available for the {{provider}} provider",
+    "loadEarlierTurns": "Load earlier turns",
+    "loadEarlierTurnsFailed": "Failed to load earlier turns. Click to retry",
+    "loadingEarlierTurns": "Loading earlier turns…",
+    "planModeEnabled": "Plan mode enabled"
+  },
+  "settings": {
+    "title": "設定",
+    "basic": {
+      "title": "基本設定",
+      "description": "ページテーマ、言語、Node.js環境を設定",
+      "tabs": {
+        "appearance": "外観",
+        "behavior": "動作",
+        "environment": "環境"
+      },
+      "theme": {
+        "label": "テーマ",
+        "system": "IDE のテーマに従う",
+        "light": "ライト",
+        "dark": "ダーク"
+      },
+      "language": {
+        "label": "言語",
+        "followIde": "IDE に従う",
+        "simplifiedChinese": "简体中文",
+        "traditionalChinese": "繁體中文",
+        "english": "English",
+        "hindi": "हिन्दी",
+        "spanish": "Español",
+        "french": "Français",
+        "japanese": "日本語",
+        "russian": "Русский",
+        "korean": "한국어",
+        "portuguese": "Português (Brasil)"
+      },
+      "nodePath": {
+        "label": "Node.jsパス",
+        "placeholder": "例: C:\\Program Files\\nodejs\\node.exe または /usr/local/bin/node",
+        "hint": "ターミナルで実行",
+        "hintCommand": "node -p \"process.execPath\"",
+        "hintText": "実際のNode.js実行可能ファイルのパスを取得します。空欄の場合は自動検出します。",
+        "versionTooLow": "Node.jsのバージョンが低すぎます。プラグインを正常に動作させるにはv{{minVersion}}以上が必要です"
+      },
+      "workingDirectory": {
+        "label": "作業ディレクトリ",
+        "placeholder": "例: project1 または空欄でプロジェクトルートを使用",
+        "hint": "Qwenが作業するディレクトリを指定します。相対パス(プロジェクトルートからの相対)または絶対パスを使用できます。空欄の場合はプロジェクトルートを使用します。"
+      },
+      "fontSize": {
+        "label": "フォントサイズ",
+        "level1": "小 (80%)",
+        "level2": "やや小 (90%)",
+        "level3": "標準 (100%)",
+        "level4": "やや大 (110%)",
+        "level5": "大 (120%)",
+        "level6": "最大 (140%)"
+      },
+      "editorFont": {
+        "label": "UI フォント",
+        "followOption": "IDEA UI フォントに従う ({{font}})",
+        "customOption": "カスタム UI フォントファイル",
+        "customPathLabel": "UI フォントファイルのパス",
+        "customPathPlaceholder": ".ttf / .otf UI フォントファイルのパスを選択または入力",
+        "browse": "参照",
+        "warningUnavailable": "UI フォントを利用できないため、現在は IDEA UI フォントを使用しています",
+        "statusFollowEditor": "現在は IDEA UI フォントを使用中: {{font}}",
+        "statusCustom": "現在はカスタム UI フォントを使用中: {{font}}"
+      },
+      "codeFont": {
+        "label": "コードフォント",
+        "followOption": "エディタフォントに従う ({{font}})",
+        "customOption": "カスタムコードフォントファイル",
+        "customPathLabel": "コードフォントファイルのパス",
+        "customPathPlaceholder": ".ttf / .otf コードフォントファイルのパスを選択または入力",
+        "browse": "参照",
+        "warningUnavailable": "コードフォントを利用できないため、現在はエディタフォントを使用しています",
+        "statusFollowEditor": "現在はエディタフォントを使用中: {{font}}",
+        "statusCustom": "現在はカスタムコードフォントを使用中: {{font}}"
+      },
+      "streaming": {
+        "label": "Streaming",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, AI responses will appear character by character in real-time, instead of waiting for the complete response. May consume more resources."
+      },
+      "autoOpenFile": {
+        "label": "開いたファイルパスを送信",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、プロジェクトツリーでファイルを選択した際に自動的にファイルパスを AI に送信します（注意：ファイルパスのみ送信され、ファイル内容は送信されません）。無効時は手動操作が必要です。"
+      },
+      "promptEnhancer": {
+        "label": "Prompt Enhancer",
+        "modelLabel": "Enhancer Model",
+        "resetToDefault": "Restore Default",
+        "providerAvailable": "Available",
+        "providerUnavailable": "Currently unavailable",
+        "currentProviderAuto": "Currently using automatic selection: {{provider}}",
+        "currentProviderManual": "Currently using manually selected provider: {{provider}}",
+        "currentProviderUnavailable": "The selected provider is currently unavailable: {{provider}}",
+        "modeLabel": "選択モード",
+        "modeAuto": "自動",
+        "modeManual": "手動",
+        "autoSummary": "現在のチャット CLI に追従 · 現在は {{provider}}",
+        "autoUnavailable": "利用可能な CLI がありません。手動に切り替えて選択してください。",
+        "provider": {
+          "dsh": "DeepSeek Harness",
+          "qwen": "Qwen Code"
+        }
+      },
+      "diffExpanded": {
+        "label": "差分をデフォルトで展開",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、チャット内のコード差分がデフォルトで展開表示されます。無効の場合、差分は折りたたまれた状態で表示されます。"
+      },
+      "taskCompletionNotification": {
+        "label": "タスク完了システム通知",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、AIタスクが完了した時にシステム通知を表示します。無効の場合、通知は表示されません。"
+      },
+      "askUserQuestionNotification": {
+        "label": "質問システム通知",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、Qwen が質問した時にシステム通知を表示し、見逃しを防ぎます。無効の場合、通知は表示されません。"
+      },
+      "detailedOutput": {
+        "label": "詳細な出力情報",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、利用可能な場合にメッセージ下部へターンの推定コストを表示し、入力 Token の概要内にキャッシュヒットを含めます。Token 消費量は常に表示されます。"
+      },
+      "askUserQuestionSoundNotification": {
+        "label": "質問アラート音",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、Qwen が質問した時に設定済みのアラート音を再生します。下のサウンド選択とフォーカス規則を使用します。"
+      },
+      "systemNotificationOnlyWhenUnfocused": {
+        "label": "IDE がフォーカスされていない時だけシステム通知を表示",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、タスク完了と質問のシステム通知は IDE がフォーカスされていない時だけ表示されます。"
+      },
+      "soundNotification": {
+        "label": "タスク完了アラート音",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、AI タスクが完了した時に通知音を再生します。画面から離れていても完了に気づけます。",
+        "onlyWhenUnfocused": "IDE がフォーカスされていない時だけアラート音を再生",
+        "onlyWhenUnfocusedHint": "有効にすると、タスク完了と質問のアラート音は IDE がフォーカスされていない時だけ再生されます。",
+        "selectSound": "通知音",
+        "soundDefault": "デフォルト",
+        "soundChime": "チャイム",
+        "soundBell": "ベル",
+        "soundDing": "ディン",
+        "soundSuccess": "成功",
+        "soundCustom": "カスタム...",
+        "customSound": "カスタム音声ファイル",
+        "customSoundPlaceholder": "音声ファイルのパスを選択または入力",
+        "customSoundHint": "WAV、MP3、AIFF 形式に対応",
+        "testSound": "テスト",
+        "browse": "参照"
+      },
+      "sendShortcut": {
+        "label": "送信ショートカット",
+        "enter": "Enterで送信",
+        "enterDesc": "Enterでメッセージを送信、Shift+Enterで改行",
+        "cmdEnter": "⌘/Ctrl+Enterで送信",
+        "cmdEnterDesc": "⌘/Ctrl+Enterでメッセージを送信、Enterで改行"
+      },
+      "permissionDialogTimeout": {
+        "label": "権限と質問ダイアログのタイムアウト",
+        "unit": "秒",
+        "hint": "Qwenの質問ダイアログと権限リクエストダイアログのタイムアウト時間を設定します（30~3600秒）。タイムアウト後、ダイアログは自動的に閉じられ、Qwenは続行します。"
+      },
+      "chatBgColor": {
+        "label": "チャット背景色",
+        "custom": "カスタム",
+        "reset": "デフォルトに戻す",
+        "hint": "チャットエリアの背景色をカスタマイズします。空欄の場合はテーマのデフォルト色に従います。"
+      },
+      "chatBarColor": {
+        "label": "ヘッダーとステータスバーの色",
+        "custom": "カスタム",
+        "reset": "リセット",
+        "hint": "セッションヘッダーとタスクステータスバーに共通のテーマ色を設定します。空欄の場合は現在のUIテーマに従います。"
+      },
+      "userMsgColor": {
+        "label": "ユーザーメッセージの色",
+        "custom": "カスタム",
+        "reset": "デフォルトに戻す",
+        "hint": "メッセージの背景色をカスタマイズします。空欄の場合はテーマのデフォルト色に従います。"
+      },
+      "newSessionConfirm": {
+        "label": "新規セッション作成の確認",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "無効にすると、メッセージが存在するセッションで新規作成を選択した際、確認ダイアログを表示せず直接新規セッションを作成します。"
+      },
+      "commitGeneration": {
+        "label": "AI Commit Message Generation",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, shows the 'AI Generate Commit Message' button in the commit dialog. When disabled, the button is hidden."
+      },
+      "statusBarWidget": {
+        "label": "Status Bar Info Display",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, shows current model and mode info in the IDE status bar (e.g. GUI [Qwen-Max] {Auto}). When disabled, the widget is hidden."
+      },
+      "diffTheme": {
+        "label": "Diff Theme",
+        "follow": "Follow UI",
+        "followDesc": "Match the current chat UI light or dark theme",
+        "editor": "Follow Editor",
+        "editorDesc": "Stay closer to the IDE editor diff atmosphere",
+        "light": "Light",
+        "lightDesc": "Cleaner and better integrated with the settings page",
+        "softDark": "Soft Dark",
+        "softDarkDesc": "Keep code contrast without the harsh black background"
+      }
+    },
+    "providers": "プロバイダー",
+    "providersDesc": "Qwen の認証設定と CLI ツールを管理",
+    "providerTab": {
+      "cli": "CLI ツール",
+      "qwen": "Qwen Config"
+    },
+    "pluginModels": {
+      "title": "カスタムモデル",
+      "description": "ここで追加されたカスタムモデルは、すべてのプロバイダーで表示され、モデル選択リストの先頭に表示されます",
+      "dialogTitle": "カスタムモデル管理",
+      "manage": "モデル管理",
+      "pricing": {
+        "title": "料金（USD/100万トークン）",
+        "optionalLabel": "任意",
+        "hint": "任意です。空欄の項目はそのトークン種別の既定レートを使用します。",
+        "inputLabel": "入力",
+        "outputLabel": "出力",
+        "cacheWriteLabel": "キャッシュ書き込み",
+        "cacheReadLabel": "キャッシュ読み取り",
+        "inputShort": "入力",
+        "outputShort": "出力",
+        "cacheWriteShort": "キャッシュ書き込み",
+        "cacheReadShort": "キャッシュ読み取り",
+        "invalidValue": "料金は0以上の数値で入力してください",
+        "defaultPricing": "既定料金を使用中"
+      },
+      "contextWindow": {
+        "label": "最大コンテキスト（Kトークン）",
+        "placeholder": "例: 500",
+        "hint": "任意。トークン数を千単位の整数で入力します（500 = 500,000トークン）。プラグインの使用量表示にのみ使用されます。",
+        "invalidValue": "最大コンテキストはK単位の正の整数で入力してください",
+        "summary": "コンテキスト: {{value}} トークン"
+      },
+      "configuredSectionTitle": "設定済みの Qwen モデル",
+      "configuredSectionDesc": "現在の Qwen プロバイダーまたは settings.json のモデルは既にモデル選択リストに表示されています。ここでは料金のみ変更できます。",
+      "configuredEditHint": "このモデルは現在の Qwen プロバイダーまたは settings.json で管理されています。ここでは料金のみ変更できます。",
+      "customSectionTitle": "カスタムモデル",
+      "editPricing": "料金を編集"
+    },
+    "dependencies": "SDK依存関係",
+    "dependency": {
+      "title": "SDK依存関係管理",
+      "description": "AI SDK依存関係を管理します。初回使用前に必要なSDKをインストールしてください。",
+      "installPolicyTip": "インストールに問題がありますか？エラーをコピーして、ターミナルの Qwen Code CLI に相談してください。",
+      "qwenSdkName": "Qwen Code SDK",
+      "qwenSdkDescription": "Required for Qwen Code. Includes the Qwen Code SDK and its dependencies.",
+      "loading": "依存関係の状態を読み込み中...",
+      "install": "インストール",
+      "installing": "インストール中...",
+      "uninstall": "アンインストール",
+      "uninstalling": "アンインストール中...",
+      "update": "更新",
+      "updateAvailable": "更新あり",
+      "installLogs": "インストールログ",
+      "waitingForLogs": "ログ出力を待機中...",
+      "nodeNotConfigured": "Node.jsが設定されていません。まず基本設定でNode.jsパスを設定してください。",
+      "installSuccess": "{{name}}のインストールが完了しました",
+      "installFailed": "インストール失敗: {{error}}",
+      "uninstallSuccess": "{{name}}がアンインストールされました",
+      "uninstallFailed": "アンインストール失敗: {{error}}",
+      "updating": "更新中...",
+      "updateSuccess": "{{name}}が正常に更新されました",
+      "installVersion": "Install {{version}}",
+      "updateToVersion": "Update to {{version}}",
+      "rollbackToVersion": "Rollback to {{version}}",
+      "currentVersionAction": "Current version",
+      "targetVersion": "Target version",
+      "loadingVersions": "Version list loading",
+      "installedVersion": "Installed {{version}}",
+      "latestStableVersion": "Latest stable {{version}}",
+      "targetVersionValue": "Target {{version}}",
+      "versionSourceFallback": "Remote versions could not be loaded. Showing the built-in recommended versions instead. You can still enter a version manually.",
+      "rollbackWarning": "This is a rollback operation. Re-check the related AI features after switching versions."
+    },
+    "usage": "使用統計",
+    "usageDesc": "トークン消費量、コスト統計、使用傾向分析を表示",
+    "mcp": "MCPサーバー",
+    "mcpDesc": "Model Context Protocolサーバーを設定および管理",
+    "permissions": "権限",
+    "permissionsDesc": "Qwen Codeのファイルアクセスおよび操作権限を管理",
+    "promptEnhancer": {
+      "title": "Prompt Enhancer",
+      "description": "Choose which provider and model should be used when enhancing prompts before sending them."
+    },
+    "commit": {
+      "title": "Commit AI",
+      "description": "Configure AI-generated Git commit message behavior",
+      "providerModel": {
+        "label": "コミットモデルプロバイダー",
+        "modelLabel": "コミットモデル",
+        "resetToDefault": "リセット",
+        "providerAvailable": "利用可能",
+        "providerUnavailable": "利用不可",
+        "currentProviderAuto": "現在自動選択を使用中：{{provider}}",
+        "currentProviderManual": "現在手動選択したプロバイダーを使用中：{{provider}}",
+        "currentProviderUnavailable": "選択したプロバイダーは現在利用できません：{{provider}}",
+        "modeLabel": "選択モード",
+        "modeAuto": "自動",
+        "modeManual": "手動",
+        "autoSummary": "現在のチャット CLI に追従 · 現在は {{provider}}",
+        "autoUnavailable": "利用可能な CLI がありません。手動に切り替えて選択してください。"
+      },
+      "prompt": {
+        "label": "Additional Prompt",
+        "placeholder": "Add your extra requirements here, e.g., generate commit in English, include issue number, etc...",
+        "hint": "The plugin has built-in CCG Commits specification prompts. Content you add here will be used as additional requirements, and AI will prioritize your instructions."
+      },
+      "projectPrompt": {
+        "label": "プロジェクト固有の追加プロンプト",
+        "placeholder": "現在のプロジェクト固有の要件をここに追加してください。例：scopeにはモジュール名を使用、commit bodyに影響範囲を含めるなど...",
+        "hint": "このプロンプトは現在のプロジェクトにのみ適用され、グローバル追加プロンプトと同時に結合されます。両者の内容が矛盾する場合、プロジェクトプロンプトが優先されます。異なるプロジェクトを独立して設定できます。"
+      },
+      "codeReview": {
+        "label": "Code Review AI Additional Prompt"
+      }
+    },
+    "agents": "エージェント",
+    "agentsDesc": "AIエージェントを管理および設定",
+    "skills": "スキル",
+    "skillsDesc": "スキルモジュールを管理および設定",
+    "other": {
+      "title": "その他の設定",
+      "description": "その他の設定を構成",
+      "historyCompletion": {
+        "label": "入力履歴補完",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、入力ボックスは入力履歴に基づいて自動補完します。Tabキーで提案を受け入れます。",
+        "manageHistory": "履歴を管理",
+        "empty": "履歴記録がありません",
+        "clearAll": "すべてクリア",
+        "clearLow": "低重要度をクリア",
+        "clearLowHint": "重要度 ≤ 1 の記録を削除",
+        "delete": "削除",
+        "edit": "編集",
+        "add": "追加",
+        "importance": "重要度",
+        "editor": {
+          "addTitle": "履歴記録を追加",
+          "editTitle": "履歴記録を編集",
+          "contentLabel": "内容",
+          "contentPlaceholder": "履歴記録の内容を入力...",
+          "importanceLabel": "重要度",
+          "importanceHint": "重要度が高いほど、自動補完で優先されます"
+        },
+        "timeAgo": {
+          "yearsAgo_one": "{{count}} year ago",
+          "yearsAgo_other": "{{count}} years ago",
+          "monthsAgo_one": "{{count}} month ago",
+          "monthsAgo_other": "{{count}} months ago",
+          "daysAgo_one": "{{count}} day ago",
+          "daysAgo_other": "{{count}} days ago",
+          "hoursAgo_one": "{{count}} hour ago",
+          "hoursAgo_other": "{{count}} hours ago",
+          "minutesAgo_one": "{{count}} minute ago",
+          "minutesAgo_other": "{{count}} minutes ago",
+          "justNow": "たった今",
+          "yearsAgo": "{{count}}年前",
+          "monthsAgo": "{{count}}ヶ月前",
+          "daysAgo": "{{count}}日前",
+          "hoursAgo": "{{count}}時間前",
+          "minutesAgo": "{{count}}分前",
+          "yearsAgo_few": "{{count}} года назад",
+          "yearsAgo_many": "{{count}} лет назад",
+          "monthsAgo_few": "{{count}} месяца назад",
+          "monthsAgo_many": "{{count}} месяцев назад",
+          "daysAgo_few": "{{count}} дня назад",
+          "daysAgo_many": "{{count}} дней назад",
+          "hoursAgo_few": "{{count}} часа назад",
+          "hoursAgo_many": "{{count}} часов назад",
+          "minutesAgo_few": "{{count}} минуты назад",
+          "minutesAgo_many": "{{count}} минут назад"
+        }
+      },
+      "aiTitleGeneration": {
+        "label": "AI セッションタイトル自動生成",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "有効にすると、新しいセッションの最初の応答完了後に短いタイトルを自動生成します。無効の場合は、最初のユーザーメッセージがタイトルとして使われます。"
+      },
+      "loadError": "Failed to load settings"
+    },
+    "codexFeatureUnavailable": "現在のモードではこの設定セクションは利用できません。",
+    "sidebar": {
+      "expand": "Expand Sidebar",
+      "collapse": "Collapse Sidebar"
+    },
+    "provider": {
+      "featureComingSoon": "この機能はまだ実装されていません。近日公開予定"
+    },
+    "permissionsComingSoon": "権限設定は近日公開予定...",
+    "agentsComingSoon": "エージェント設定は近日公開予定...",
+    "skillsComingSoon": "スキル設定は近日公開予定...",
+    "codexProvider": {
+      "dialog": {
+        "noCustomModels": "No custom models",
+        "addModel": "Add Model",
+        "modelIdPlaceholder": "Model ID (required, e.g., qwen3-coder-plus)",
+        "modelLabelPlaceholder": "Display name (optional)",
+        "modelDescPlaceholder": "Model description (optional)",
+        "modelIdRequired": "Model ID is required",
+        "modelIdDuplicate": "Model ID already exists"
+      }
+    },
+    "agent": {
+      "title": "プロンプト",
+      "create": "作成",
+      "createAgent": "プロンプトを作成",
+      "createAgentHint": "クリックしてプロンプト設定ページに移動して作成",
+      "customAgents": "カスタムプロンプト",
+      "noAgents": "カスタムプロンプトなし",
+      "noAgentsDropdown": "プロンプトなし",
+      "loadFailed": "読み込み失敗",
+      "loading": "読み込み中...",
+      "menu": "メニュー",
+      "addSuccess": "プロンプトが正常に作成されました",
+      "updateSuccess": "プロンプトが正常に更新されました",
+      "deleteSuccess": "プロンプトが正常に削除されました",
+      "operationSuccess": "操作成功",
+      "deleteConfirmTitle": "削除を確認",
+      "deleteConfirmMessage": "プロンプト\"{{name}}\"を削除してもよろしいですか? この操作は元に戻せません。",
+      "dialog": {
+        "addTitle": "プロンプトを作成",
+        "editTitle": "プロンプトを編集",
+        "name": "名前",
+        "namePlaceholder": "プロンプト名を入力",
+        "nameRequired": "プロンプト名を入力してください",
+        "prompt": "プロンプト",
+        "promptPlaceholder": "プロンプトの役割、トーン、ワークフロー、ツールの設定、ルールを入力してください。(オプション)",
+        "promptHint": "プロンプトは会話の開始時にシステム指示としてAIに送信されます",
+        "confirmAdd": "作成",
+        "saveChanges": "保存"
+      },
+      "export": "Export",
+      "import": "Import",
+      "importDialog": {
+        "title": "Import Prompts",
+        "summary": "Total {{total}} prompts:",
+        "newCount": "{{count}} new",
+        "updateCount": "{{count}} updates",
+        "selectedCount": "{{count}} items selected",
+        "conflictStrategy": "Conflict Resolution Strategy",
+        "strategySkip": "Skip",
+        "strategySkipDesc": "Skip existing prompts",
+        "strategyOverwrite": "Overwrite",
+        "strategyOverwriteDesc": "Overwrite existing prompts",
+        "strategyDuplicate": "Duplicate",
+        "strategyDuplicateDesc": "Create duplicates (generate new IDs)",
+        "conflictWarning": "{{count}} conflicts detected",
+        "columnName": "Name",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "New",
+        "statusUpdate": "Update",
+        "importPartialSuccess": "Imported {{imported}}, skipped {{skipped}}, updated {{updated}}",
+        "confirmImport": "Confirm Import"
+      },
+      "exportDialog": {
+        "title": "Export Prompts",
+        "selectHint": "Select prompts to export",
+        "confirmExport": "Confirm Export"
+      }
+    },
+    "prompts": "Prompt Library",
+    "prompt": {
+      "title": "Prompt Library",
+      "create": "Create",
+      "createPrompt": "Create Prompt",
+      "createPromptHint": "Click to go to prompt settings page to create",
+      "noPrompts": "No custom prompts",
+      "noPromptsDropdown": "No prompts",
+      "loading": "Loading...",
+      "menu": "Menu",
+      "addSuccess": "Prompt created successfully",
+      "updateSuccess": "Prompt updated successfully",
+      "deleteSuccess": "Prompt deleted successfully",
+      "operationSuccess": "Operation successful",
+      "operationFailed": "Operation failed",
+      "deleteConfirmTitle": "Confirm Delete",
+      "deleteConfirmMessage": "Are you sure you want to delete prompt \"{{name}}\"? This action cannot be undone.",
+      "description": "Create common prompt templates. Type ! in the chat input to quickly select and insert",
+      "dialog": {
+        "addTitle": "Create Prompt",
+        "editTitle": "Edit Prompt",
+        "name": "Name",
+        "namePlaceholder": "Enter prompt name",
+        "nameRequired": "Please enter prompt name",
+        "content": "Content",
+        "contentPlaceholder": "Enter prompt content, you can include variables like {{variable}}",
+        "contentHint": "Prompt content will be inserted directly into the input box when selected",
+        "confirmAdd": "Create",
+        "saveChanges": "Save"
+      },
+      "export": "Export",
+      "import": "Import",
+      "global": "Global Prompts",
+      "project": "Project Prompts",
+      "projectScope": "Project Prompts - {{projectName}}",
+      "noProject": "No Active Project",
+      "importDialog": {
+        "title": "Import Prompts",
+        "summary": "Total {{total}} prompts:",
+        "newCount": "{{count}} new",
+        "updateCount": "{{count}} updates",
+        "selectedCount": "{{count}} items selected",
+        "conflictStrategy": "Conflict Resolution Strategy",
+        "strategySkip": "Skip",
+        "strategySkipDesc": "Skip existing prompts",
+        "strategyOverwrite": "Overwrite",
+        "strategyOverwriteDesc": "Overwrite existing prompts",
+        "strategyDuplicate": "Duplicate",
+        "strategyDuplicateDesc": "Create duplicates (generate new IDs)",
+        "conflictWarning": "{{count}} conflicts detected",
+        "columnName": "Name",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "New",
+        "statusUpdate": "Update",
+        "importPartialSuccess": "Imported {{imported}}, skipped {{skipped}}, updated {{updated}}",
+        "confirmImport": "Confirm Import"
+      },
+      "exportDialog": {
+        "title": "Export Prompts",
+        "selectHint": "Select prompts to export",
+        "confirmExport": "Confirm Export"
+      }
+    },
+    "cli": {
+      "hint": "These CLIs must be installed and configured in your system terminal. The plugin only detects installation status and version — it will never install them for you. Confirm each CLI works in the terminal before coming back here to use it.",
+      "refresh": "Re-check",
+      "retry": "Retry",
+      "loading": "Checking CLI installation status…",
+      "loadFailed": "Detection failed. Please try again.",
+      "status": {
+        "installed": "Installed",
+        "notInstalled": "Not installed"
+      },
+      "viewInstallGuide": "Install guide",
+      "howToInstall": "Install guide",
+      "copy": "Copy",
+      "copied": "Copied to clipboard",
+      "copyFailed": "Failed to copy",
+      "tools": {
+        "qwen": {
+          "name": "Qwen Code",
+          "description": "Alibaba Qwen terminal coding agent"
+        },
+        "dsh": {
+          "name": "DeepSeek Harness",
+          "description": "DeepSeek terminal agent CLI (dsh)"
+        }
+      },
+      "installDialog": {
+        "title": "Install {{name}}",
+        "lead": "Install {{name}} in your system terminal first and make sure `{{binary}}` is available, then come back and click Re-check. This plugin will not run the installer for you.",
+        "stepOpenTerminal": "Open your system terminal (Terminal / iTerm / PowerShell, etc.)",
+        "stepRunCommand": "Copy and run the install command below",
+        "stepVerify": "After install, run `{{binary}} --version` to verify",
+        "stepReturn": "Return here and click Re-check",
+        "primaryCommand": "Recommended install command (macOS / Linux)",
+        "windowsCommand": "Windows (PowerShell)",
+        "altCommand": "Alternative install method",
+        "openDocs": "Open official docs"
+      },
+      "listTitle": "ローカル CLI ツール",
+      "summary": "{{installed}} / {{total}} インストール済み",
+      "moreComingSoon": "今後さらに対応予定",
+      "copyPath": "パスをコピー",
+      "visibility": {
+        "hide": "プロバイダー切り替えメニューに表示しない",
+        "show": "プロバイダー切り替えメニューに表示する"
+      },
+      "dsh": {
+        "groupTitle": "DeepSeek Harness",
+        "cliRowTitle": "CLI install",
+        "cardTitle": "Local host",
+        "rowHint": "Start or adopt the local dsh web host",
+        "hint": "One persistent local dsh web host serves all sessions; the plugin adopts a running host instead of spawning a second one.",
+        "state": {
+          "checking": "Checking…",
+          "notInstalled": "Not installed",
+          "notRunning": "Not running",
+          "connected": "Connected"
+        },
+        "adopted": "adopted",
+        "adoptedHint": "Adopted an already-running host; it is never stopped by the plugin.",
+        "openWebUi": "Open DSH Web UI",
+        "startHost": "Start host",
+        "stopHost": "Stop host (plugin-spawned only)",
+        "autoStart": "Auto-start when needed",
+        "moreActions": "More"
+      }
+    },
+    "configure": "Configure",
+    "qwenConfig": {
+      "cliModelsTitle": "CLI 設定から",
+      "cliModelsDesc": "~/.qwen/settings.json の modelProviders から読み込みます。モデルの追加・変更はこのファイルを編集してください。",
+      "cliModelsEmpty": "CLI 設定にモデルが見つかりません",
+      "readOnly": "読み取り専用",
+      "contextWindow": "コンテキスト"
+    },
+    "entrypointLabel": {
+      "sdk-cli": "SDKセッション",
+      "claude-vscode": "VS Code",
+      "remote": "リモート"
+    },
+    "entrypointTooltip": {
+      "sdk-cli": "このセッションはプラグインが SDK 経由で作成したもので、CLI の /resume リストにはデフォルトでは表示されません。",
+      "claude-vscode": "このセッションは VS Code 拡張機能によって作成されたもので、CLI の /resume リストにはデフォルトでは表示されません。",
+      "remote": "このセッションはリモートのQwen Codeインスタンスによって作成されました"
+    }
+  },
+  "permission": {
+    "allow": "1回のみ許可",
+    "allowAlways": "常に許可",
+    "deny": "拒否",
+    "userDenied": "ユーザーが権限リクエストを拒否しました",
+    "fromExternalProcess": "外部プロセスからのリクエスト",
+    "tools": {
+      "Write": "ファイルを書き込む",
+      "Edit": "ファイルを編集",
+      "Read": "ファイルを読み取る",
+      "ReadBatch": "ファイルを一括読み取り",
+      "Bash": "コマンドを実行",
+      "TodoWrite": "TODOを書き込む",
+      "TodoRead": "TODOを読み取る",
+      "WebSearch": "ウェブ検索",
+      "WebFetch": "ウェブ取得",
+      "execute": "{{toolName}}を実行",
+      "readDirectory": "ディレクトリを読み取る",
+      "timeoutWarning": "お早めにご回答ください。ダイアログは {{seconds}} 秒後に自動的に閉じます"
+    },
+    "timeoutWarning": "Please answer soon — the dialog will close in {{seconds}} seconds"
+  },
+  "askUserQuestion": {
+    "title": "Qwenからの質問があります",
+    "progress": "質問 {{current}} / {{total}}",
+    "multiSelectHint": "複数のオプションを選択できます",
+    "cancel": "キャンセル",
+    "back": "戻る",
+    "next": "次へ",
+    "submit": "送信",
+    "otherOption": "その他",
+    "otherOptionDesc": "カスタム回答を入力",
+    "customInputPlaceholder": "回答を入力してください...",
+    "timeoutWarning": "お早めにご回答ください。ダイアログは {{seconds}} 秒後に自動的に閉じます",
+    "expand": "展開",
+    "collapse": "折りたたむ",
+    "clickToAnswer": "クリックして回答",
+    "dshTitle": "DeepSeek Harness has some questions for you",
+    "invalidFormat": "Unsupported question data format. Please cancel and retry.",
+    "loading": "Loading questions...",
+    "planDetail": "Plan details"
+  },
+  "planApproval": {
+    "title": "Plan Ready for Approval",
+    "subtitle": "Qwen has finished planning and is ready to execute.",
+    "executionMode": "Execution Mode",
+    "executionModeDescription": "Select how Qwen should execute the plan:",
+    "approve": "Approve & Execute",
+    "reject": "Reject",
+    "toApprove": "to approve",
+    "toReject": "to reject",
+    "timeoutWarning": "Please make a choice soon, dialog will close in {{seconds}} seconds"
+  },
+  "toast": {
+    "switchSuccess": "切り替えが成功しました",
+    "thinkingEnabled": "思考が有効になりました",
+    "thinkingDisabled": "思考が無効になりました",
+    "saveSuccess": "保存が成功しました",
+    "saveFailed": "Save failed",
+    "operationFailed": "操作失敗",
+    "operationSuccess": "操作が成功しました",
+    "restartRequired": "Please restart IDEA for this setting to take effect"
+  },
+  "config": {
+    "officialDocs": "公式ドキュメント",
+    "switch": "切り替え",
+    "switchProvider": "プロバイダーを切り替え",
+    "nodeProcesses": {
+      "title": "Node プロセス管理",
+      "badge": "{{total}} 個のプロセス",
+      "badgeWithOrphan": "{{total}} 個 · 孤児 {{orphan}} ⚠",
+      "summary": "合計: {{total}} · 孤児: {{orphan}}",
+      "loading": "プロセスを読み込み中...",
+      "empty": "アクティブな Node プロセスはありません",
+      "refresh": "更新",
+      "groups": {
+        "daemon": "デーモンプロセス",
+        "channel": "進行中の会話",
+        "orphan": "孤児プロセス"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "会話",
+        "orphanShort": "孤児"
+      },
+      "kill": "終了",
+      "interrupt": "中断",
+      "restart": "再起動",
+      "killAll": "孤児を全てクリーンアップ ({{count}})",
+      "killAllHint": "検出された孤児プロセスを全て終了",
+      "killConfirmTitle": "このプロセスを終了しますか？",
+      "killConfirm": "PID {{pid}} を終了しますか？進行中の会話は失われる可能性があります。",
+      "restartConfirmTitle": "デーモンを再起動しますか？",
+      "restartConfirm": "デーモンを再起動しますか？進行中の会話は中断されます。",
+      "killAllConfirmTitle": "孤児プロセスを全てクリーンアップしますか？",
+      "killAllConfirm": "孤児プロセス {{count}} 件すべてを終了しますか？",
+      "killSuccess": "プロセスを終了しました",
+      "killAllSuccess": "{{count}} 件の孤児プロセスをクリーンアップしました",
+      "restartSuccess": "デーモンを停止しました。次のメッセージで新しいインスタンスが自動起動します",
+      "killFailed": "終了失敗: {{error}}",
+      "activeRequests": "進行中 {{count}} 件"
+    }
+  },
+  "markdown": {
+    "copyCode": "コードをコピー",
+    "copyMessage": "メッセージをコピー",
+    "copySuccess": "コピーされました!",
+    "quoteMessage": "メッセージを引用",
+    "quoteSuccess": "引用しました!"
+  },
+  "contextMenu": {
+    "copy": "コピー",
+    "quote": "引用",
+    "cut": "Cut",
+    "paste": "Paste",
+    "newline": "Insert Newline"
+  },
+  "usage": {
+    "checkingLabel": "tokentracker-cli を確認しています…",
+    "installingLabel": "tokentracker-cli をインストールしています…",
+    "installingDesc": "少し時間がかかる場合があります。インストール後、アプリが再検出してローカルサーバーを起動します。",
+    "startingLabel": "tokentracker サーバーを起動しています…",
+    "guideTitle": "使用統計を見るには tokentracker-cli をインストール",
+    "guideDesc": "使用統計は tokentracker-cli が提供します。ローカルサーバーを起動し、各 AI ツールのトークン使用量を集約してダッシュボードに表示します。",
+    "guideInstallLabel": "インストールコマンド",
+    "guideCopy": "コピー",
+    "guideCopied": "コピーしました",
+    "guideInstallNow": "今すぐインストール",
+    "guideNoteHooks": "初回起動時、tokentracker サーバーはインストール済みの AI ツールに hooks を書き込みます（これがデータ収集の仕組みです）。",
+    "guideNoteTelemetry": "本アプリでは匿名テレメトリを無効化しています。",
+    "errorTitle": "tokentracker サーバーの起動に失敗しました",
+    "errorRetry": "再試行"
+  },
+  "mcp": {
+    "title": "MCPサーバー",
+    "whatIsMcp": "MCPとは?",
+    "refreshStatus": "サーバーステータスを更新",
+    "add": "追加",
+    "manualConfig": "手動設定",
+    "addFromMarket": "MCPマーケットから追加",
+    "import": {
+      "menuLabel": "GitHub Copilot からインポート",
+      "title": "GitHub Copilot からインポート",
+      "description": "GitHub Copilot の MCP 設定（ルートキー「servers」）を貼り付けてサーバーをインポートします。",
+      "placeholder": "{\n  \"servers\": {\n    \"my-server\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"my-mcp-server\"]\n    }\n  }\n}",
+      "previewButton": "プレビュー",
+      "previewTitle": "インポートするサーバー",
+      "empty": "設定を貼り付けて「プレビュー」をクリックしてください。",
+      "footerHint": "インポートする前にサーバーと名前の変更を確認してください。",
+      "renamedFrom": "{{id}} から名前変更",
+      "renameSummary": "名前の競合により {{count}} 件をリネーム",
+      "confirm": "{{count}} 個のサーバーをインポート"
+    },
+    "market": {
+      "title": "MCP マーケットプレイス",
+      "subtitle": "レジストリソースを参照して、インストール可能な MCP サーバーを追加します。",
+      "searchPlaceholder": "サーバー、発行元、タグを検索",
+      "allSources": "すべてのソース",
+      "refresh": "マーケットプレイスを更新",
+      "loading": "マーケットプレイスの項目を読み込み中…",
+      "empty": "MCP サーバーが見つかりません。",
+      "selectServer": "インストール詳細を表示するにはサーバーを選択してください。",
+      "footerHint": "サーバーを追加する前に、コマンド、URL、ヘッダー、環境変数のプレースホルダーを確認してください。",
+      "addServer": "サーバーを追加",
+      "official": "公式",
+      "installable": "インストール可能",
+      "browseOnly": "閲覧のみ",
+      "repository": "リポジトリ",
+      "docs": "ドキュメント",
+      "homepage": "ホームページ",
+      "installOption": "インストールオプション",
+      "riskWarning": "このオプションはお使いのマシンでコマンドを実行します。追加する前に確認してください。",
+      "riskWarningUnverified": "このオプションは認識されないコマンドを実行します。提供元を信頼できる場合のみ追加してください。",
+      "noInstall": "このソースは検出用メタデータのみを公開しています。リポジトリの手順を確認してから、このサーバーを手動で追加してください。",
+      "configPreview": "設定プレビュー"
+    },
+    "description": "説明",
+    "command": "コマンド",
+    "url": "URL",
+    "homepage": "ホームページ",
+    "docs": "ドキュメント",
+    "delete": "削除",
+    "noServers": "MCPサーバーなし",
+    "addServerHint": "'追加'ボタンをクリックしてサーバーを追加",
+    "loading": "読み込み中...",
+    "deleteTitle": "MCPサーバーを削除",
+    "deleteMessage": "サーバー\"{{name}}\"を削除してもよろしいですか?\n\nこの操作は元に戻せません。",
+    "deleteConfirm": "削除",
+    "cancel": "キャンセル",
+    "enabled": "有効",
+    "disabled": "無効",
+    "deleted": "削除されました",
+    "updated": "更新されました",
+    "saved": "保存されました",
+    "added": "追加されました",
+    "linkCopied": "リンクがコピーされました。ブラウザで開いてください",
+    "configCopied": "Config copied to clipboard",
+    "copyFailed": "コピー失敗。手動でコピーしてください",
+    "connectionStatus": "接続ステータス",
+    "serverVersion": "サーバーバージョン",
+    "statusConnected": "接続済み",
+    "statusFailed": "接続失敗",
+    "statusNeedsAuth": "認証が必要",
+    "statusPending": "接続中...",
+    "statusUnknown": "不明",
+    "logs": {
+      "title": "Connection Logs",
+      "empty": "No logs yet",
+      "clear": "Clear logs",
+      "close": "Close",
+      "count": "{{count}} log entries",
+      "loadingServers": "Loading MCP server list...",
+      "refreshingStatus": "Refreshing MCP server connection status...",
+      "loadedToolsFromCache": "Loaded tools from cache for \"{{name}}\": {{count}} tools",
+      "forceRefreshingTools": "Force refreshing tools for \"{{name}}\"...",
+      "loadingTools": "Loading tools for \"{{name}}\"...",
+      "fastLoadCache": "Fast load from cache: {{count}} servers (cached {{seconds}}s ago)",
+      "loadedToolsFromCacheSimple": "Loaded tools from cache: {{count}} tools",
+      "usingCacheStrategy": "Using cache-first strategy. Click refresh to get latest data",
+      "firstLoad": "First load, fetching server list...",
+      "loadedServersSuccess": "Loaded server list: {{count}} servers found",
+      "loadedServersFailed": "Failed to load server list: {{error}}",
+      "statusUpdateComplete": "Status update complete: {{total}} servers ({{connected}} connected, {{failed}} failed, {{pending}} pending, {{needsAuth}} need auth)",
+      "loadedStatusFailed": "Failed to load server status: {{error}}",
+      "cleared": "Refresh logs cleared",
+      "refreshingAll": "Refreshing all MCP servers...",
+      "startRefresh": "Starting refresh",
+      "forceRefreshingToolsServer": "Force refreshing tools for \"{{name}}\"...",
+      "startRefreshServer": "Starting refresh for \"{{name}}\"...",
+      "checkingConnection": "Checking connection status",
+      "checkingConnectionServer": "Server \"{{name}}\" - Checking connection status...",
+      "refreshComplete": "Server \"{{name}}\" refresh complete",
+      "forceRefreshTools": "Force refresh tools"
+    },
+    "presets": {
+      "fetch": "Webコンテンツ取得ツール、Webページをスクレイピング",
+      "time": "時刻とタイムゾーンユーティリティ",
+      "memory": "ナレッジグラフとメモリストレージツール",
+      "sequentialThinking": "連続思考と推論ツール",
+      "context7": "ドキュメント検索とコンテキスト取得ツール"
+    },
+    "help": {
+      "title": "MCPとは？",
+      "protocol": {
+        "title": "Model Context Protocol",
+        "description": "MCP (Model Context Protocol) は、AI モデルが外部ツールやデータソースへ安全にアクセスするためのオープンプロトコルです。"
+      },
+      "features": {
+        "title": "主な機能",
+        "toolExtension": {
+          "label": "ツール拡張",
+          "description": "ファイルシステムやネットワークアクセスなどの機能をQwenに追加"
+        },
+        "dataConnection": {
+          "label": "データ接続",
+          "description": "データベースやAPIなどの外部データソースに接続"
+        },
+        "security": {
+          "label": "セキュリティと制御",
+          "description": "厳格な権限制御とデータ分離"
+        },
+        "integration": {
+          "label": "簡単な統合",
+          "description": "複数のプログラミング言語とランタイム環境をサポート"
+        }
+      },
+      "configuration": {
+        "title": "設定方法",
+        "description": "2つの設定タイプをサポート：",
+        "stdio": {
+          "description": "標準入出力を介してローカルプロセスと通信",
+          "example": "npx/uvxコマンドで起動"
+        },
+        "httpSse": {
+          "description": "ネットワーク経由でリモートサーバーと通信",
+          "example": "URLアドレス"
+        }
+      },
+      "learnMore": {
+        "title": "詳細を見る",
+        "description": "公式ドキュメントを参照："
+      },
+      "gotIt": "了解"
+    },
+    "serverDialog": {
+      "addTitle": "手動設定",
+      "editTitle": "サーバーを編集",
+      "rawConfig": "生の設定（JSON）",
+      "description": "MCP Servers 設定 JSON を入力してください（NPX または UVX 設定を優先）",
+      "securityWarning": "設定前にソースを確認し、リスクを評価してください",
+      "saving": "保存中...",
+      "errors": {
+        "idExists": "サーバー ID \"{{id}}\" は既に存在します",
+        "unrecognizedFormat": "認識できない設定形式",
+        "jsonParseError": "JSON 解析エラー: {{message}}"
+      }
+    },
+    "tools": "Tools",
+    "loadTools": "Load Tool List",
+    "notConnected": "Not Connected",
+    "loadFailed": "Load Failed",
+    "noTools": "No Tools",
+    "clickToLoad": "Click to Load",
+    "noParams": "No Parameters",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "tools": {
+    "toolCall": "ツール呼び出し",
+    "runCommand": "コマンドを実行",
+    "contextEngine": "コンテキストエンジン",
+    "task": "タスク",
+    "promptLabel": "プロンプト",
+    "readFile": "ファイルを読み取る",
+    "editFile": "ファイルを編集",
+    "writeFile": "ファイルを書き込む",
+    "replaceString": "文字列を置換",
+    "executeCommand": "コマンドを実行",
+    "search": "検索",
+    "fileMatch": "ファイルマッチ",
+    "webFetch": "Web取得",
+    "webSearch": "Web検索",
+    "delete": "削除",
+    "explore": "探索",
+    "createDirectory": "ディレクトリを作成",
+    "moveFile": "ファイルを移動",
+    "copyFile": "ファイルをコピー",
+    "listFiles": "ファイルをリスト",
+    "findFile": "ファイルを検索",
+    "todoList": "Todoリスト",
+    "editFileTitle": "ファイルを編集",
+    "refreshFileInIdea": "IDEAでファイルを更新",
+    "refreshFileInIdeaSuccess": "IDEAでこのファイルを手動で更新しました",
+    "showDiffInIdea": "IDEAで変更を表示",
+    "diffButton": "差分",
+    "editBatchTitle": "ファイル一括編集",
+    "searchBatchTitle": "一括検索",
+    "editPrefix": "編集: {{fileName}}",
+    "lineRange": "{{start}}-{{end}}行目",
+    "lineSingle": "{{line}}行目",
+    "unknownTool": "不明なツール",
+    "bashGroupBatchRun": "Batch Run Commands",
+    "bashGroupCompleted": "completed",
+    "bashGroupAllCompleted": "All Completed",
+    "bashGroupFailed": "failed",
+    "reportFindings": {
+      "title": "レビュー指摘",
+      "findingsCount_one": "{{count}} 件の指摘",
+      "findingsCount_other": "{{count}} 件の指摘",
+      "confirmedCount_one": "確認済み {{count}} 件",
+      "confirmedCount_other": "確認済み {{count}} 件",
+      "plausibleCount_one": "要確認 {{count}} 件",
+      "plausibleCount_other": "要確認 {{count}} 件",
+      "confirmed": "確認済み",
+      "plausible": "要確認",
+      "fixed": "修正済み",
+      "skipped": "スキップ",
+      "noChangeNeeded": "修正不要",
+      "empty": "指摘はありません",
+      "summaryLabel": "レビュー概要",
+      "summary": "概要",
+      "failureScenario": "発生シナリオ",
+      "reviewLevel": "レビューレベル: {{level}}",
+      "openFile": "{{filePath}} を開く",
+      "expandFinding": "指摘の詳細を展開",
+      "collapseFinding": "指摘の詳細を折りたたむ",
+      "expandReport": "レビュー指摘を展開",
+      "collapseReport": "レビュー指摘を折りたたむ",
+      "untitled": "無題の指摘"
+    },
+    "agent": "Agent",
+    "agentGroupToggle": "Toggle agent group details",
+    "editLocationsSuffix": " more",
+    "updatePlan": "Update Plan",
+    "applyPatch": "Apply Patch"
+  },
+  "subagent": {
+    "process": {
+      "title": "エージェントプロセス",
+      "prompt": "プロンプト",
+      "thought": "思考",
+      "filesRead_one": "{{count}} 件のファイルを読む",
+      "filesRead_other": "{{count}} 件のファイルを読む",
+      "otherTools": "その他ツール",
+      "result": "結果",
+      "showFullOutput": "出力全体を表示",
+      "loading": "エージェントプロセスを読み込み中…",
+      "unavailable": "セッションに id ができるまでプロセスログは利用できません。",
+      "reportGenerated": "構造化分析レポートを生成しました",
+      "unitMs": "ミリ秒",
+      "unitS": "秒",
+      "unitTools": "ツール",
+      "unitTokens": "トークン"
+    }
+  },
+  "statusPanel": {
+    "todoTab": "計画",
+    "tasksTab": "タスク",
+    "subagentTab": "サブエージェント",
+    "editsTab": "編集",
+    "noTodos": "実行中のタスクなし",
+    "noSubagents": "実行中のサブエージェントなし",
+    "noFileChanges": "ファイル変更なし",
+    "showDiff": "差分を表示",
+    "expand": "ステータスパネルを展開",
+    "collapse": "ステータスパネルを折りたたむ",
+    "undoChanges": "変更を元に戻す",
+    "undoConfirmTitle": "ファイル変更を元に戻す",
+    "undoWillDelete": "このファイルは新規作成されました。元に戻すとファイルが削除されます。",
+    "undoWillRestore": "Qwen が変更する前の状態にファイルを復元します。",
+    "undoCannotUndo": "この操作は取り消せません。",
+    "confirmUndo": "元に戻す",
+    "undoSuccess": "{{fileName}} の変更を元に戻しました",
+    "undoFailed": "元に戻す失敗: {{error}}",
+    "discardAll": "すべて破棄",
+    "keepAll": "すべて保持",
+    "discardAllConfirmTitle": "すべての変更を破棄",
+    "discardAllConfirmMessage": "すべてのファイルの変更を元に戻します。この操作は取り消せません。",
+    "discardAllSuccess": "すべての変更を元に戻しました",
+    "discardAllFailed": "元に戻す失敗: {{error}}",
+    "keepAllSuccess": "すべて保持しました。変更記録をリセットしました",
+    "multiAgentBadge": "複数エージェント",
+    "multiAgentEdited": "このセッションで {{count}} 個のエージェントがこのファイルを編集しました。ご注意ください",
+    "blockedBy": "Blocked by: {{ids}}"
+  },
+  "skills": {
+    "all": "すべて",
+    "global": "グローバル",
+    "local": "ローカル",
+    "filterEnabled": "有効なスキルをフィルター",
+    "enabled": "有効",
+    "filterDisabled": "無効なスキルをフィルター",
+    "disabled": "無効",
+    "searchPlaceholder": "スキルを検索...",
+    "whatIsSkills": "スキルとは?",
+    "importSkill": "スキルをインポート",
+    "importGlobalSkill": "グローバルスキルをインポート",
+    "importLocalSkill": "ローカルスキルをインポート",
+    "importUserSkill": "ユーザー Skill をインポート",
+    "importRepoSkill": "リポジトリ Skill をインポート",
+    "user": "ユーザー",
+    "repo": "リポジトリ",
+    "description": "説明",
+    "noDescription": "説明なし",
+    "noMatchingSkills": "一致するスキルが見つかりません",
+    "importHint": "+ボタンをクリックしてスキルファイルまたはフォルダーをインポート",
+    "deleteTitle": "スキルを削除",
+    "deleteMessage": "{{scope}}スキル\"{{name}}\"を削除してもよろしいですか?\n\nこの操作は元に戻せません。",
+    "deleteMessageGlobal": "グローバル",
+    "deleteMessageLocal": "ローカル",
+    "deleteMessageUser": "ユーザー",
+    "deleteMessageRepo": "リポジトリ",
+    "importSuccess": "{{count}}個のスキルが正常にインポートされました",
+    "importSuccessOne": "1個のスキルが正常にインポートされました",
+    "importPartialSuccess": "{{count}}/{{total}}個のスキルが正常にインポートされました。一部失敗しました",
+    "importFailed": "スキルのインポートに失敗しました",
+    "deleteSuccess": "スキルが正常に削除されました",
+    "deleteFailed": "Skillの削除に失敗しました",
+    "enableSuccess": "Skillを有効化しました: {{name}}",
+    "disableSuccess": "Skillを無効化しました: {{name}}",
+    "operationFailed": "操作に失敗しました: {{error}}",
+    "operationError": "Skill操作に失敗しました",
+    "refreshed": "Skillsリストを更新しました",
+    "help": {
+      "title": "Skills とは？",
+      "overview": {
+        "title": "概要",
+        "description": "Skills は、特定のタスクに対する Qwen のパフォーマンスを向上させる、動的にロードされる命令セット、スクリプト、リソースフォルダです。Skills は、企業のブランドガイドラインを使用してドキュメントを作成したり、組織固有のワークフローに従ってデータを分析したり、個人的なタスクを自動化したりするなど、特定のタスクを繰り返し可能な方法で完了する方法を Qwen に教えます。"
+      },
+      "structure": {
+        "title": "Skill 構造",
+        "description": "Skill は SKILL.md ファイルを含むフォルダです：",
+        "example": "my-skill/\n├── SKILL.md          # 必須：スキル定義ファイル\n├── templates/        # オプション：テンプレートファイル\n└── references/       # オプション：参考資料"
+      },
+      "format": {
+        "title": "SKILL.md 形式",
+        "description": "SKILL.md ファイルは YAML frontmatter + Markdown 形式を使用します：",
+        "example": "---\nname: my-skill-name\ndescription: スキルの説明と使用時期\n---\n\n# Skill 指示\n\n詳細な指示内容...",
+        "hint": "name と description は必須フィールドです。オプションフィールドには license、allowed-tools、metadata が含まれます"
+      },
+      "configuration": {
+        "title": "設定方法",
+        "description": "Skill を追加する方法：",
+        "localPath": {
+          "label": "ローカルパス",
+          "description": "SKILL.md を含むフォルダパスを指定"
+        },
+        "relativePath": {
+          "label": "相対パス",
+          "description": "プロジェクトルートからの相対、例：./skills/my-skill"
+        },
+        "absolutePath": {
+          "label": "絶対パス",
+          "description": "完全なファイルシステムパス"
+        }
+      },
+      "tips": {
+        "title": "使用のヒント",
+        "item1": "Skill ディレクトリに有効な SKILL.md ファイルが含まれていることを確認してください",
+        "item2": "Skill 名は小文字、数字、ハイフン（hyphen-case）を使用する必要があります",
+        "item3": "Skills はロード後、Qwen セッションで自動的に有効になります",
+        "item4": "有効/無効トグルで個々の Skill のステータスを制御します",
+        "item5": "チャットで Skill 名を言及して使用します。例：\"pdf skill を使用してフォームフィールドを抽出\""
+      },
+      "learnMore": {
+        "title": "詳細を見る",
+        "description": "Skills についての詳細情報：",
+        "link1": "Skills ドキュメント",
+        "link2": "Skills 活用例",
+        "link3": "Qwen Code GitHub リポジトリ"
+      }
+    }
+  },
+  "models": {
+    "addModel": "モデル追加",
+    "searchPlaceholder": "モデルを検索",
+    "noModelsFound": "モデルが見つかりません",
+    "hiddenModelCount": "+ {{count}} 件のモデルがあります。入力して検索してください。",
+    "pinned": "ピン留め",
+    "pin": "ピン留め",
+    "unpin": "ピンを外す",
+    "groups": {
+      "cliConfig": "From CLI config",
+      "custom": "Custom models"
+    },
+    "qwen": {
+      "followCliDefault": {
+        "label": "Default (follow CLI config)",
+        "labelWithModel": "Default (follow CLI config · {{model}})"
+      },
+      "currentConfigured": {
+        "badge": "Current"
+      },
+      "coderPlus": {
+        "label": "Qwen3-Coder-Plus",
+        "description": "Qwen3-Coder-Plus · Coding flagship · Recommended default"
+      },
+      "coderFlash": {
+        "label": "Qwen3-Coder-Flash",
+        "description": "Qwen3-Coder-Flash · Fast coding model for quick answers"
+      },
+      "max": {
+        "label": "Qwen-Max",
+        "description": "Qwen-Max · Strongest general capability"
+      },
+      "plus": {
+        "label": "Qwen-Plus",
+        "description": "Qwen-Plus · Balanced intelligence and cost"
+      },
+      "turbo": {
+        "label": "Qwen-Turbo",
+        "description": "Qwen-Turbo · Optimized for cost-sensitive workloads"
+      }
+    }
+  },
+  "modes": {
+    "plan": {
+      "label": "プラン",
+      "shortLabel": "プラン",
+      "tooltip": "プラン — 読み取り専用分析",
+      "description": "読み取り専用の分析のみ。ファイル編集やシェルコマンドは実行しません"
+    },
+    "default": {
+      "label": "権限を要求",
+      "shortLabel": "要求",
+      "tooltip": "権限を要求 — 変更のたびに確認",
+      "description": "ファイル編集とシェルコマンドの実行前に手動承認が必要"
+    },
+    "auto-edit": {
+      "label": "自動編集",
+      "shortLabel": "自動編集",
+      "tooltip": "自動編集 — シェルは確認",
+      "description": "ファイル編集（edit / write_file / notebook_edit）は自動承認、シェルコマンドは承認が必要"
+    },
+    "auto": {
+      "label": "オート",
+      "shortLabel": "オート",
+      "tooltip": "オート — 分類器による承認",
+      "description": "分類器が各シェルコマンドと編集を評価し、安全な操作を自動承認"
+    },
+    "yolo": {
+      "label": "YOLO",
+      "shortLabel": "YOLO",
+      "tooltip": "YOLO — すべて承認",
+      "description": "ファイル編集とシェルコマンドを含むすべてのツール呼び出しを自動承認 [注意して使用]"
+    }
+  },
+  "promptEnhancer": {
+    "title": "プロンプトエンハンサー",
+    "tooltip": "プロンプトを書き直してより多くのコンテキストを提供し、エージェントの応答を改善",
+    "shortcut": "⌘/",
+    "enhancing": "プロンプトを強化中...",
+    "originalPrompt": "元のプロンプト",
+    "enhancedPrompt": "強化されたプロンプト",
+    "useEnhanced": "強化版を使用",
+    "keepOriginal": "元のままにする",
+    "modeLabel": "モード",
+    "modeAuto": "自動",
+    "modeManual": "手動",
+    "modeUnavailable": "利用不可",
+    "providerLabel": "CLI",
+    "providerUnresolved": "CLI 未解決",
+    "modelLabel": "モデル",
+    "modelUnresolved": "デフォルトモデル",
+    "openSettings": "設定",
+    "openSettingsTooltip": "プロンプト強化の設定を開く",
+    "resolvingUsage": "実行設定を解決中…"
+  },
+  "fileContext": {
+    "placeholder": "ファイルコンテキスト",
+    "enableTitle": "ファイルコンテキストを有効にしますか？",
+    "enableDescription": "有効にすると、エディタで開いているファイルのパスがAIに送信されます。注意：ファイルパスのみが送信され、ファイルの内容は送信されません。",
+    "enable": "有効にする",
+    "cancel": "キャンセル"
+  },
+  "reasoning": {
+    "title": "思考深度を選択",
+    "low": {
+      "label": "低",
+      "description": "基本的な推論による迅速な応答"
+    },
+    "medium": {
+      "label": "中",
+      "description": "バランスの取れた思考（デフォルト）"
+    },
+    "high": {
+      "label": "高",
+      "description": "複雑なタスク向けの深い推論"
+    },
+    "xhigh": {
+      "label": "最大",
+      "description": "最大の推論深度"
+    },
+    "max": {
+      "label": "Max",
+      "description": "Maximum reasoning depth"
+    }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "description": "The application encountered an unexpected error. Please copy the error details below and share them with the developer for troubleshooting.",
+    "possibleCauses": "Possible causes:",
+    "cause1": "Node.js is not installed or not configured correctly",
+    "cause2": "Network connection issues",
+    "cause3": "Plugin or IDE compatibility issues",
+    "cause4": "Insufficient system resources",
+    "errorDetails": "Error Details",
+    "copyError": "Copy Error Info",
+    "copied": "Copied!",
+    "reload": "Reload Application",
+    "helpText": "If the problem persists, please copy the error information and submit it as an issue on GitHub, or share it in the community group.",
+    "componentChain": "Component chain",
+    "debugHints": "Debug hints"
+  },
+  "aiBridge": {
+    "qwenCodeInterrupted": "Qwen Code が中断されました（レスポンスタイムアウトまたはユーザーキャンセルの可能性）：",
+    "qwenCodeError": "Qwen Code エラー：",
+    "errorMessage": "エラーメッセージ",
+    "currentApiKeySource": "現在の API Key ソース",
+    "currentApiKeyPreview": "現在の API Key プレビュー",
+    "currentBaseUrl": "現在の Base URL",
+    "source": "ソース",
+    "notConfigured": "未設定",
+    "notConfiguredEmpty": "未設定（値が空または欠落）",
+    "defaultBaseUrl": "デフォルト（明示的な設定なし）",
+    "configTip": "ヒント：CLI は環境変数または settings.json から読み取れますが、このプラグインは問題を避けるため settings.json からの読み取りのみサポートしています。プラグイン右上の設定 > プロバイダー管理で設定できます",
+    "apiError": "API エラー",
+    "apiErrorCauses": "考えられる原因：\n1. API Key が正しく設定されていない\n2. サードパーティプロキシサービスの設定問題\n3. ~/.qwen/settings.json の設定を確認してください",
+    "codexAuthError": "認証エラー：",
+    "codexAuthErrorChecks": "以下を確認してください：\n1. プラグイン設定の API Key は正しいですか\n2. API Key に十分な権限がありますか\n3. カスタム Base URL を使用している場合、アドレスが正しいか確認してください",
+    "codexAuthTip": "ヒント：有効な API Key が必要です",
+    "codexNetworkError": "ネットワークエラー：",
+    "codexNetworkErrorChecks": "確認してください：\n1. ネットワーク接続は正常ですか\n2. プロキシを使用している場合、プロキシ設定を確認してください\n3. ファイアウォールが接続をブロックしていませんか",
+    "codexError": "エラー：",
+    "codexErrorCheck": "ネットワーク接続と設定を確認してください",
+    "userDeniedPermission": "ユーザーが {{toolName}} ツールの使用権限を拒否しました",
+    "userDidNotProvideAnswers": "ユーザーが回答を提供しませんでした",
+    "dbMissingPath": "データベースファイルパス引数がありません",
+    "dbFileNotExist": "データベースファイルが存在しません",
+    "dbReadFailed": "データベースの読み取りに失敗しました",
+    "dbParseProviderFailed": "プロバイダー設定の解析に失敗しました",
+    "aiResponseEmpty": "AI レスポンスが空です",
+    "enhancementFailed": "強化に失敗しました",
+    "uploadedImages": "{{count}} 枚の画像をアップロードしました",
+    "uploadedAttachments": "添付ファイルをアップロードしました",
+    "emptyMessage": "空のメッセージ",
+    "attachment": "添付ファイル"
+  },
+  "error": {
+    "providerNotConfigured": "プロバイダー未設定",
+    "providerNotConfiguredDesc": "AIプロバイダーがまだ設定されていないか、ローカル設定の使用が許可されていません。会話を開始する前に、プロバイダー管理設定でセットアップを完了してください。",
+    "goToProviderSettings": "設定へ"
+  },
+  "errorDiagnostic": {
+    "copyCommand": "コピー",
+    "copied": "コピー済み",
+    "openDependencySettings": "依存関係管理を開く",
+    "recommended": "推奨",
+    "sdkNativeBinaryMissing": {
+      "title": "SDK のインストールが不完全 — ネイティブバイナリが見つかりません",
+      "intro": "これは Taobao npm ミラーの既知の問題です（プラグインのバグではありません）。ミラーが platform 固有のファイルを完全に同期していません。以下のいずれかの方法で手動で対応できます：",
+      "reason": "Taobao ミラーが同期を完了すると、この問題は自動的に解消されます。心配する必要はありません。",
+      "solutions": {
+        "switchRegistry": {
+          "title": "方法 1：一時的に公式レジストリに切り替えて再インストール",
+          "step0": "1. ターミナルで実行（npm 公式レジストリへ切り替え）：",
+          "step1": "2. プラグインの「依存関係管理」設定を開き、再インストールをクリック：",
+          "step2": "3. 再インストール完了後、Taobao ミラーに戻す："
+        },
+        "downgrade": {
+          "title": "方法 2：バージョンをロールバック",
+          "step0": "「依存関係管理」で SDK バージョンを v0.2.112 以前に切り替えてください。切り替え後は IDEA の再起動が必要です。"
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — 子プロセスの起動に失敗",
+      "intro": "このエラーは通常、Node.js のバージョン不一致または SDK のインストール不完全が原因です。以下の 2 つの方法を順に試してください：",
+      "reason": "EBUSY は Node.js が子プロセスを起動する際にリソースが使用中である場合に発生するシステムエラーです。一般的な原因：Node.js 24 の互換性問題、SDK が古い、または Taobao ミラーからの不完全なインストール。",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "方法 1：Node.js のバージョンを確認する",
+          "step0": "ターミナルで以下のコマンドを実行してバージョンを確認してください。Node 22 または現在の最新 LTS を推奨します — Node 24 では多数のエラー報告があるため、Node 20 または 22 をご利用ください："
+        },
+        "reinstallLatestSdk": {
+          "title": "方法 2：npm 公式レジストリから最新の SDK を再インストール",
+          "step0": "1. npm 公式レジストリに切り替える（Taobao ミラーは最新版に同期されていない可能性があります、使用しないでください）：",
+          "step1": "2. 「依存関係管理」を開いて最新の SDK を再インストール："
+        }
+      }
+    },
+    "codexThreadResume": {
+      "title": "Session resume failed",
+      "intro": "Something went wrong while resuming a previous session.",
+      "reason": "The session thread resume request was rejected — the session may have expired or the server does not support it."
+    }
+  },
+  "modelConfig": {
+    "title": "Model settings",
+    "effort": "Effort",
+    "preset": "Preset"
+  },
+  "providers": {
+    "qwen": {
+      "label": "Qwen Code"
+    },
+    "beta": {
+      "badge": "Beta",
+      "title": "Beta Feature",
+      "message": "This feature is still in Beta. If you encounter any bugs, please report them to the author promptly."
+    },
+    "dsh": {
+      "label": "DeepSeek Harness"
+    },
+    "manageCli": "CLI Settings"
+  },
+  "contextUsage": {
+    "title": "Context Usage",
+    "loading": "Loading context usage...",
+    "autoCompactEnabled": "Auto-compact: enabled",
+    "autoCompactEnabledWithThreshold": "Auto-compact: enabled ({{threshold}}%)",
+    "notAvailable": "N/A",
+    "categories": {
+      "systemPrompt": "System prompt",
+      "systemTools": "System tools",
+      "mcpTools": "MCP tools",
+      "customAgents": "Custom agents",
+      "memoryFiles": "Memory files",
+      "skills": "Skills",
+      "messages": "Messages",
+      "autoCompactBuffer": "Autocompact buffer",
+      "freeSpace": "Free space"
+    },
+    "sections": {
+      "mcpTools": "MCP Tools ({{count}})",
+      "agents": "Agents ({{count}})",
+      "memoryFiles": "Memory Files ({{count}})",
+      "skills": "Skills ({{included}}/{{total}})"
+    },
+    "table": {
+      "tool": "Tool",
+      "server": "Server",
+      "tokens": "Tokens",
+      "agent": "Agent",
+      "source": "Source",
+      "type": "Type",
+      "path": "Path",
+      "skill": "Skill"
+    }
+  },
+  "dshPresets": {
+    "title": "Select DeepSeek Harness agent preset",
+    "none": {
+      "label": "Default",
+      "description": "dsh default headless composition (full toolset)"
+    },
+    "standard": {
+      "label": "Standard",
+      "description": "Full coding agent with the standard toolset"
+    },
+    "code": {
+      "label": "PTC",
+      "description": "Standard capabilities with Code Mode"
+    },
+    "minimal": {
+      "label": "Minimal",
+      "description": "Bash and str_replace_editor only"
+    },
+    "cordis": {
+      "label": "Creator",
+      "description": "Standard capabilities plus composition authoring"
+    },
+    "user": {
+      "description": "Custom preset installed under the DSH home"
+    }
+  }
+}

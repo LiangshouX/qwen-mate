@@ -1,0 +1,24 @@
+<idea-plugin>
+    <!--
+    Terminal-specific features for QwenMate.
+    This configuration is only loaded when the Terminal plugin is available.
+    -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Monitor Terminal Output - Only active when Terminal plugin is installed -->
+        <postStartupActivity implementation="com.qwenmate.terminal.TerminalMonitorService"/>
+    </extensions>
+
+    <actions>
+        <action id="QwenMate.SendTerminalSelectionToInputAction"
+                class="com.qwenmate.terminal.SendTerminalSelectionToInputAction"
+                icon="/icons/logo-16.png">
+            <!-- Only the EditorPopupMenu is registered statically because it exists
+                 across all supported IDE builds. Terminal.OutputContextMenu and
+                 Terminal.PromptContextMenu were introduced in later IDE versions and
+                 are absent from 2023.3 (build 233), so registering them here raises a
+                 PluginException at startup. They are registered dynamically at runtime
+                 instead — see SendTerminalSelectionToInputAction.registerForTerminalContextMenu. -->
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

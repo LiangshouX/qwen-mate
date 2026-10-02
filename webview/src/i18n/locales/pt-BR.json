@@ -1,0 +1,1575 @@
+{
+  "common": {
+    "loading": "Carregando",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "back": "Voltar",
+    "close": "Fechar",
+    "newSession": "Nova Sessão",
+    "newTab": "Nova Aba",
+    "dontAskAgain": "Não perguntar novamente",
+    "history": "Histórico",
+    "settings": "Configurações",
+    "thinking": "Pensando",
+    "thinkingProcess": "Processo de Raciocínio",
+    "seconds": "s",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "gotIt": "Got it"
+  },
+  "chat": {
+    "sendMessage": "Enviar mensagem para {{provider}}",
+    "createNewSession": "Criar Nova Sessão",
+    "confirmNewSession": "A sessão atual possui mensagens. Tem certeza que deseja criar uma nova sessão?",
+    "confirmInterrupt": "Uma conversa está em andamento. Criar uma nova sessão irá interrompê-la. Continuar?",
+    "requestInterrupted": "Requisição interrompida pelo usuário",
+    "uploadedFiles": "Arquivos enviados: {{files}}",
+    "emptyMessage": "Mensagem vazia",
+    "clickToPreview": "Clique para visualizar",
+    "userUploadedImage": "Imagem enviada pelo usuário",
+    "inputPlaceholder": "@referenciar arquivos, #invocar agentes, !inserir prompts, Enter para enviar",
+    "inputPlaceholderEnter": "@referenciar arquivos, #invocar agentes, !inserir prompts, Enter para enviar",
+    "inputPlaceholderCmdEnter": "@referenciar arquivos, #invocar agentes, !inserir prompts, ⌘Enter para enviar",
+    "noThinkingContent": "Sem conteúdo de raciocínio",
+    "parseError": "Falha ao interpretar conteúdo",
+    "sendMessageEnter": "Enviar mensagem (Enter)",
+    "currentMode": "Modo atual: {{mode}}",
+    "currentModel": "Modelo atual: {{model}}",
+    "removeAttachment": "Remover anexo",
+    "closePreview": "Fechar visualização",
+    "loadingDropdown": "Carregando...",
+    "modelsLoadFailed": "Falha ao carregar modelos. Clique para tentar novamente",
+    "stopGeneration": "Parar geração",
+    "generatingResponse": "Gerando resposta",
+    "elapsedTime": "Decorrido {{time}}",
+    "minutesAndSeconds": "{{minutes}}m {{seconds}}s",
+    "imagePreview": "Visualização",
+    "context": "Contexto",
+    "usage": "Uso",
+    "usagePercentage": "Uso: {{percentage}}",
+    "noMatchingFiles": "Nenhum arquivo encontrado",
+    "noMatchingCommands": "Nenhum comando encontrado",
+    "noAvailableAgents": "Nenhum agente disponível",
+    "collapse": "Recolher",
+    "expand": "Expandir",
+    "backToTop": "Voltar ao topo",
+    "backToBottom": "Ir para o final",
+    "refresh": "Atualizar",
+    "clickToDisable": "Clique para desativar",
+    "clickToEnable": "Clique para ativar",
+    "copyHomepageLink": "Copiar link da página inicial",
+    "copyDocsLink": "Copiar link da documentação",
+    "copyConfig": "Copiar configuração",
+    "editConfig": "Editar configuração",
+    "deleteServer": "Excluir servidor",
+    "loadingFailed": "Falha ao carregar",
+    "pleaseCloseAndReopen": "Por favor, feche e reabra",
+    "loadingSlashCommands": "Carregando comandos...",
+    "pleaseWait": "Aguarde...",
+    "retrying": "Tentando novamente ({{count}}/{{max}})...",
+    "global": "Global",
+    "localProject": "Local",
+    "disabled": "Desativado",
+    "sdkNotInstalled": "O SDK de {{provider}} não está instalado. Por favor, instale o SDK para iniciar o chat.",
+    "sdkStatusLoading": "Verificando status do SDK...",
+    "sdkStatusUnavailable": "Não foi possível verificar o status do SDK.",
+    "retrySdkStatus": "Tentar novamente",
+    "openSourceBanner": "Este projeto é garantidamente 100% open source e gratuito (cuidado com projetos piratas)",
+    "openSourceBannerStar": "Star",
+    "openSourceBannerStarAria": "Abrir o repositório no GitHub e dar uma estrela",
+    "goInstallSdk": "Ir para Instalação",
+    "commandNotImplemented": "O recurso `{{command}}` ainda não foi implementado.",
+    "clearCommandDescription": "Limpar histórico de conversa e iniciar uma nova sessão",
+    "unknownFile": "Arquivo desconhecido",
+    "streamingConnected": "{{provider}} conectado, entendendo sua pergunta",
+    "showEarlierTurns": "Mostrar {{count}} turnos anteriores (restam {{remaining}} carregados)",
+    "totalDuration": "Esta resposta levou",
+    "tokenUsage": "{{input}} entrada / {{output}} saída",
+    "tokenUsageDetail": "Total do turno — entrada {{input}} · gravação de cache {{cacheWrite}} · leitura de cache {{cacheRead}} · saída {{output}}",
+    "cacheHitsWithRatio": " ({{tokens}} acertos de cache, {{ratio}})",
+    "search": {
+      "ariaLabel": "Pesquisar na conversa",
+      "placeholder": "Pesquisar na conversa…",
+      "next": "Próxima correspondência (Enter)",
+      "previous": "Correspondência anterior (Shift+Enter)",
+      "close": "Fechar (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "Sem resultados",
+      "searching": "Pesquisando…",
+      "expandedHint": "{{count}} mensagens anteriores expandidas",
+      "matchCase": "Diferenciar maiúsculas (Alt+C)",
+      "wholeWord": "Palavra inteira (Alt+W)",
+      "regex": "Expressão regular (Alt+R)",
+      "invalidRegex": "Regex inválida",
+      "openTooltip": "Pesquisar na conversa (Cmd/Ctrl+F)"
+    },
+    "compactSummary": {
+      "summarizedConversation": "Conversa resumida",
+      "compactSummary": "Resumo compacto",
+      "messagesUpTo": "{{count}} mensagens resumidas até este ponto",
+      "messagesFrom": "{{count}} mensagens resumidas a partir deste ponto",
+      "userContext": "Contexto: \"{{context}}\"",
+      "expand": "Expandir resumo",
+      "collapse": "Recolher resumo"
+    },
+    "bridgeUnavailable": "Bridge is not available right now",
+    "commandProviderOnly": "{{command}} is only available for the {{provider}} provider",
+    "loadEarlierTurns": "Load earlier turns",
+    "loadEarlierTurnsFailed": "Failed to load earlier turns. Click to retry",
+    "loadingEarlierTurns": "Loading earlier turns…",
+    "planModeEnabled": "Plan mode enabled"
+  },
+  "settings": {
+    "title": "Configurações",
+    "basic": {
+      "title": "Configuração Básica",
+      "description": "Configurar tema da página, idioma e ambiente Node.js",
+      "tabs": {
+        "appearance": "Aparência",
+        "behavior": "Comportamento",
+        "environment": "Ambiente"
+      },
+      "theme": {
+        "label": "Tema",
+        "system": "Seguir IDE",
+        "light": "Claro",
+        "dark": "Escuro"
+      },
+      "language": {
+        "label": "Idioma",
+        "followIde": "Seguir IDE",
+        "simplifiedChinese": "简体中文",
+        "traditionalChinese": "繁體中文",
+        "english": "English",
+        "hindi": "हिन्दी",
+        "spanish": "Español",
+        "french": "Français",
+        "japanese": "日本語",
+        "russian": "Русский",
+        "korean": "한국어",
+        "portuguese": "Português (Brasil)"
+      },
+      "nodePath": {
+        "label": "Caminho do Node.js",
+        "placeholder": "ex: C:\\Program Files\\nodejs\\node.exe ou /usr/local/bin/node",
+        "hint": "Execute no terminal",
+        "hintCommand": "node -p \"process.execPath\"",
+        "hintText": "para obter o caminho real do executável Node.js. Deixe vazio para detecção automática.",
+        "versionTooLow": "A versão do Node.js é muito baixa. O plugin requer v{{minVersion}} ou superior para funcionar corretamente"
+      },
+      "workingDirectory": {
+        "label": "Diretório de Trabalho",
+        "placeholder": "ex: projeto1 ou deixe vazio para usar a raiz do projeto",
+        "hint": "Especifique o diretório onde o Qwen trabalha. Pode usar caminho relativo (relativo à raiz do projeto) ou caminho absoluto. Deixe vazio para usar a raiz do projeto."
+      },
+      "fontSize": {
+        "label": "Tamanho da Fonte",
+        "level1": "Pequeno (80%)",
+        "level2": "Menor (90%)",
+        "level3": "Padrão (100%)",
+        "level4": "Maior (110%)",
+        "level5": "Grande (120%)",
+        "level6": "Muito Grande (140%)"
+      },
+      "editorFont": {
+        "label": "Fonte da UI",
+        "followOption": "Seguir a fonte UI do IDEA ({{font}})",
+        "customOption": "Arquivo de fonte da UI personalizado",
+        "customPathLabel": "Caminho do arquivo de fonte da UI",
+        "customPathPlaceholder": "Escolha ou digite o caminho de um arquivo .ttf / .otf para a fonte da UI",
+        "browse": "Procurar",
+        "warningUnavailable": "A fonte da UI está indisponível, usando a fonte da UI do IDEA",
+        "statusFollowEditor": "Usando atualmente a fonte da UI do IDEA: {{font}}",
+        "statusCustom": "Usando atualmente a fonte da UI personalizada: {{font}}"
+      },
+      "codeFont": {
+        "label": "Fonte de código",
+        "followOption": "Seguir a fonte do editor ({{font}})",
+        "customOption": "Arquivo de fonte de código personalizado",
+        "customPathLabel": "Caminho do arquivo de fonte de código",
+        "customPathPlaceholder": "Escolha ou digite o caminho de um arquivo .ttf / .otf para a fonte de código",
+        "browse": "Procurar",
+        "warningUnavailable": "A fonte de código está indisponível, usando a fonte do editor",
+        "statusFollowEditor": "Usando atualmente a fonte do editor: {{font}}",
+        "statusCustom": "Usando atualmente a fonte de código personalizada: {{font}}"
+      },
+      "streaming": {
+        "label": "Streaming",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, as respostas da IA aparecem caractere por caractere em tempo real, em vez de aguardar a resposta completa. Pode consumir mais recursos."
+      },
+      "autoOpenFile": {
+        "label": "Enviar Caminho do Arquivo Aberto",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, selecionar um arquivo na árvore do projeto enviará automaticamente o caminho do arquivo para a IA (atenção: apenas o caminho é enviado, não o conteúdo). Quando desativado, é necessária ação manual."
+      },
+      "promptEnhancer": {
+        "label": "Prompt Enhancer",
+        "modelLabel": "Enhancer Model",
+        "resetToDefault": "Restore Default",
+        "providerAvailable": "Available",
+        "providerUnavailable": "Currently unavailable",
+        "currentProviderAuto": "Currently using automatic selection: {{provider}}",
+        "currentProviderManual": "Currently using manually selected provider: {{provider}}",
+        "currentProviderUnavailable": "The selected provider is currently unavailable: {{provider}}",
+        "modeLabel": "Modo de seleção",
+        "modeAuto": "Auto",
+        "modeManual": "Manual",
+        "autoSummary": "Segue o CLI do chat atual · atualmente {{provider}}",
+        "autoUnavailable": "Nenhum CLI disponível. Mude para Manual para escolher.",
+        "provider": {
+          "dsh": "DeepSeek Harness",
+          "qwen": "Qwen Code"
+        }
+      },
+      "diffExpanded": {
+        "label": "Expandir Diffs por Padrão",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, os diffs de código no chat ficam expandidos por padrão. Quando desativado, os diffs começam recolhidos e podem ser expandidos clicando."
+      },
+      "commitGeneration": {
+        "label": "Geração de Mensagem de Commit com IA",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, exibe o botão 'Gerar Mensagem de Commit com IA' no diálogo de commit. Quando desativado, o botão fica oculto."
+      },
+      "statusBarWidget": {
+        "label": "Exibição de Info na Barra de Status",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, exibe informações do modelo e modo atual na barra de status da IDE (ex: GUI [Qwen-Max] {Auto}). Quando desativado, o widget fica oculto."
+      },
+      "taskCompletionNotification": {
+        "label": "Notificação do sistema de conclusão de tarefa",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, exibe uma notificação do sistema quando a tarefa AI é concluída. Quando desativado, nenhuma notificação aparece."
+      },
+      "askUserQuestionNotification": {
+        "label": "Notificação do sistema de pergunta",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, exibe uma notificação do sistema quando o Qwen faz uma pergunta, para que você não a perca. Quando desativado, nenhuma notificação aparece."
+      },
+      "detailedOutput": {
+        "label": "Informações detalhadas de saída",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, o rodapé das mensagens mostra o custo estimado do turno quando disponível e inclui os acertos de cache no resumo de tokens de entrada. O uso de tokens permanece sempre visível."
+      },
+      "askUserQuestionSoundNotification": {
+        "label": "Som de alerta de pergunta",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, reproduz o som de alerta configurado quando o Qwen faz uma pergunta. Usa a seleção de som e as regras de foco abaixo."
+      },
+      "systemNotificationOnlyWhenUnfocused": {
+        "label": "Mostrar notificações do sistema somente quando a IDE não estiver em foco",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, as notificações do sistema de conclusão de tarefa e pergunta aparecem somente quando a IDE não estiver em foco."
+      },
+      "sendShortcut": {
+        "label": "Atalho de Envio",
+        "enter": "Enter para Enviar",
+        "enterDesc": "Pressione Enter para enviar mensagem, Shift+Enter para nova linha",
+        "cmdEnter": "⌘/Ctrl+Enter para Enviar",
+        "cmdEnterDesc": "Pressione ⌘/Ctrl+Enter para enviar mensagem, Enter para nova linha"
+      },
+      "permissionDialogTimeout": {
+        "label": "Tempo Limite de Diálogos de Permissão e Pergunta",
+        "unit": "segundos",
+        "hint": "Defina o tempo limite para os diálogos de perguntas do Qwen e os diálogos de solicitação de permissão (30~3600 segundos). Após o tempo limite, o diálogo será fechado automaticamente e o Qwen continuará."
+      },
+      "chatBgColor": {
+        "label": "Plano de Fundo do Chat",
+        "custom": "Personalizado",
+        "reset": "Redefinir",
+        "hint": "Personalize a cor de fundo da área de chat. Deixe vazio para seguir o padrão do tema."
+      },
+      "chatBarColor": {
+        "label": "Cor do cabeçalho e da barra de status",
+        "custom": "Personalizada",
+        "reset": "Redefinir",
+        "hint": "Use uma cor de tema para o cabeçalho da sessão e a barra de status das tarefas. Deixe vazio para seguir o tema atual."
+      },
+      "diffTheme": {
+        "label": "Tema do Diff",
+        "follow": "Seguir UI",
+        "followDesc": "Corresponder ao tema claro ou escuro da UI atual",
+        "editor": "Seguir Editor",
+        "editorDesc": "Manter mais próximo ao ambiente de diff do editor da IDE",
+        "light": "Claro",
+        "lightDesc": "Mais limpo e melhor integrado com a página de configurações",
+        "softDark": "Escuro Suave",
+        "softDarkDesc": "Mantém o contraste do código sem o fundo preto intenso"
+      },
+      "soundNotification": {
+        "label": "Som de alerta de conclusão de tarefa",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, um som de notificação será reproduzido quando a IA concluir uma tarefa, para você saber mesmo estando longe da tela.",
+        "onlyWhenUnfocused": "Reproduzir sons de alerta apenas quando a IDE não estiver em foco",
+        "onlyWhenUnfocusedHint": "Quando ativado, os sons de alerta de conclusão de tarefa e pergunta são reproduzidos somente quando a IDE não estiver em foco.",
+        "selectSound": "Som de Notificação",
+        "soundDefault": "Padrão",
+        "soundChime": "Chime",
+        "soundBell": "Bell",
+        "soundDing": "Ding",
+        "soundSuccess": "Sucesso",
+        "soundCustom": "Personalizado...",
+        "customSound": "Arquivo de Som Personalizado",
+        "customSoundPlaceholder": "Selecione ou insira o caminho do arquivo de áudio",
+        "customSoundHint": "Suporta formatos WAV, MP3, AIFF",
+        "testSound": "Testar",
+        "browse": "Procurar"
+      },
+      "userMsgColor": {
+        "label": "Cor da Mensagem do Usuário",
+        "custom": "Personalizado",
+        "reset": "Redefinir",
+        "hint": "Personalize a cor de fundo das suas mensagens. Deixe vazio para seguir o padrão do tema."
+      },
+      "newSessionConfirm": {
+        "label": "Confirmação de Nova Sessão",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando desativado, criar uma nova sessão em uma conversa com mensagens existentes irá pular a caixa de confirmação."
+      }
+    },
+    "providers": "Provedores",
+    "providersDesc": "Gerencie a autenticação do Qwen e as ferramentas de CLI",
+    "promptEnhancer": {
+      "title": "Prompt Enhancer",
+      "description": "Choose which provider and model should be used when enhancing prompts before sending them."
+    },
+    "providerTab": {
+      "cli": "Ferramentas CLI",
+      "qwen": "Qwen Config"
+    },
+    "pluginModels": {
+      "title": "Modelos Personalizados",
+      "description": "Modelos personalizados adicionados aqui serão visíveis em todos os provedores, exibidos no topo do seletor de modelos",
+      "dialogTitle": "Gerenciar Modelos Personalizados",
+      "manage": "Gerenciar Modelos",
+      "pricing": {
+        "title": "Preço (USD por 1M tokens)",
+        "optionalLabel": "Opcional",
+        "hint": "Opcional. Deixe um campo vazio para usar a tarifa padrão desse tipo de token.",
+        "inputLabel": "Entrada",
+        "outputLabel": "Saída",
+        "cacheWriteLabel": "Gravação de cache",
+        "cacheReadLabel": "Leitura de cache",
+        "inputShort": "Entrada",
+        "outputShort": "Saída",
+        "cacheWriteShort": "Gravação de cache",
+        "cacheReadShort": "Leitura de cache",
+        "invalidValue": "O preço deve ser um número não negativo",
+        "defaultPricing": "Usando o preço padrão"
+      },
+      "contextWindow": {
+        "label": "Contexto máximo (K tokens)",
+        "placeholder": "ex.: 500",
+        "hint": "Opcional. Informe um número inteiro de milhares de tokens (500 = 500.000 tokens). Usado apenas para exibir o uso de contexto no plugin.",
+        "invalidValue": "O contexto máximo deve ser um inteiro positivo em unidades K",
+        "summary": "Contexto: {{value}} tokens"
+      },
+      "configuredSectionTitle": "Modelos Qwen configurados",
+      "configuredSectionDesc": "Os modelos do provedor Qwen ativo ou do settings.json já aparecem no seletor. Aqui só é possível alterar o preço.",
+      "configuredEditHint": "Este modelo é gerenciado pelo provedor Qwen ativo ou pelo settings.json. Aqui só é possível alterar o preço.",
+      "customSectionTitle": "Modelos personalizados",
+      "editPricing": "Editar preço"
+    },
+    "dependencies": "Dependências do SDK",
+    "dependency": {
+      "title": "Gerenciamento de Dependências do SDK",
+      "description": "Gerenciar dependências de SDK de IA. Instale o SDK necessário antes do primeiro uso.",
+      "installPolicyTip": "Problemas na instalação? Copie o erro e peça ajuda ao CLI do Qwen Code no seu terminal.",
+      "qwenSdkName": "Qwen Code SDK",
+      "qwenSdkDescription": "Required for Qwen Code. Includes the Qwen Code SDK and its dependencies.",
+      "loading": "Carregando status das dependências...",
+      "install": "Instalar",
+      "installing": "Instalando...",
+      "uninstall": "Desinstalar",
+      "uninstalling": "Desinstalando...",
+      "update": "Atualizar",
+      "installVersion": "Instalar {{version}}",
+      "updateToVersion": "Atualizar para {{version}}",
+      "rollbackToVersion": "Reverter para {{version}}",
+      "currentVersionAction": "Versão atual",
+      "updateAvailable": "Atualização disponível",
+      "installLogs": "Logs de Instalação",
+      "waitingForLogs": "Aguardando saída de log...",
+      "targetVersion": "Versão alvo",
+      "loadingVersions": "Carregando lista de versões",
+      "installedVersion": "Instalado {{version}}",
+      "latestStableVersion": "Estável mais recente {{version}}",
+      "targetVersionValue": "Alvo {{version}}",
+      "versionSourceFallback": "Não foi possível carregar versões remotas. Exibindo versões recomendadas integradas. Você ainda pode inserir uma versão manualmente.",
+      "rollbackWarning": "Esta é uma operação de reversão. Verifique os recursos de IA relacionados após trocar versões.",
+      "nodeNotConfigured": "Node.js não está configurado. Por favor, defina o caminho do Node.js nas Configurações Básicas primeiro.",
+      "installSuccess": "{{name}} instalado com sucesso",
+      "installFailed": "Falha na instalação: {{error}}",
+      "uninstallSuccess": "{{name}} foi desinstalado",
+      "uninstallFailed": "Falha ao desinstalar: {{error}}",
+      "updating": "Atualizando...",
+      "updateSuccess": "{{name}} atualizado com sucesso"
+    },
+    "usage": "Estatísticas de Uso",
+    "usageDesc": "Visualize o consumo de Tokens, estatísticas de custo e análise de tendência de uso",
+    "mcp": "Servidores MCP",
+    "mcpDesc": "Configurar e gerenciar servidores do Model Context Protocol",
+    "permissions": "Permissões",
+    "permissionsDesc": "Gerenciar permissões de acesso a arquivos e operações do Qwen Code",
+    "commit": {
+      "title": "IA para Commits",
+      "description": "Configurar o comportamento de geração de mensagens de commit Git com IA",
+      "providerModel": {
+        "label": "Provedor do modelo de commit",
+        "modelLabel": "Modelo de commit",
+        "resetToDefault": "Redefinir",
+        "providerAvailable": "Disponível",
+        "providerUnavailable": "Indisponível",
+        "currentProviderAuto": "Usando seleção automática atualmente: {{provider}}",
+        "currentProviderManual": "Usando o provedor selecionado manualmente atualmente: {{provider}}",
+        "currentProviderUnavailable": "O provedor selecionado está indisponível no momento: {{provider}}",
+        "modeLabel": "Modo de seleção",
+        "modeAuto": "Auto",
+        "modeManual": "Manual",
+        "autoSummary": "Segue o CLI do chat atual · atualmente {{provider}}",
+        "autoUnavailable": "Nenhum CLI disponível. Mude para Manual para escolher."
+      },
+      "prompt": {
+        "label": "Prompt Adicional",
+        "placeholder": "Adicione seus requisitos extras aqui, ex: gerar commit em português, incluir número do issue, etc...",
+        "hint": "O plugin possui prompts de especificação CCG Commits integrados. O conteúdo que você adicionar aqui será usado como requisitos adicionais, e a IA priorizará suas instruções."
+      },
+      "codeReview": {
+        "label": "Prompt Adicional para Code Review com IA"
+      },
+      "projectPrompt": {
+        "label": "Project-specific Additional Prompt",
+        "placeholder": "Add project-specific requirements here, e.g., scope must use module name, commit body should include impact scope, etc...",
+        "hint": "This prompt only applies to the current project and is appended together with the global additional prompt. When they conflict, the project prompt takes precedence. Different projects can be configured independently."
+      }
+    },
+    "agents": "Agentes",
+    "agentsDesc": "Gerenciar e configurar agentes de IA",
+    "skills": "Skills",
+    "skillsDesc": "Gerenciar e configurar módulos de skill",
+    "other": {
+      "title": "Outras Configurações",
+      "description": "Configurar ajustes diversos",
+      "historyCompletion": {
+        "label": "Completar Entrada com Histórico",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, a caixa de entrada completará automaticamente com base no histórico de entradas. Pressione Tab para aceitar a sugestão.",
+        "manageHistory": "Gerenciar Histórico",
+        "empty": "Sem registros de histórico",
+        "clearAll": "Limpar Tudo",
+        "clearLow": "Limpar Baixa Importância",
+        "clearLowHint": "Excluir registros com importância ≤ 1",
+        "delete": "Excluir",
+        "edit": "Editar",
+        "add": "Adicionar",
+        "importance": "Importância",
+        "editor": {
+          "addTitle": "Adicionar Registro ao Histórico",
+          "editTitle": "Editar Registro do Histórico",
+          "contentLabel": "Conteúdo",
+          "contentPlaceholder": "Insira o conteúdo do registro...",
+          "importanceLabel": "Importância",
+          "importanceHint": "Maior importância significa maior prioridade no completar automático"
+        },
+        "timeAgo": {
+          "yearsAgo_one": "{{count}} ano atrás",
+          "yearsAgo_other": "{{count}} anos atrás",
+          "monthsAgo_one": "{{count}} mês atrás",
+          "monthsAgo_other": "{{count}} meses atrás",
+          "daysAgo_one": "{{count}} dia atrás",
+          "daysAgo_other": "{{count}} dias atrás",
+          "hoursAgo_one": "{{count}} hora atrás",
+          "hoursAgo_other": "{{count}} horas atrás",
+          "minutesAgo_one": "{{count}} minuto atrás",
+          "minutesAgo_other": "{{count}} minutos atrás",
+          "justNow": "agora mesmo",
+          "yearsAgo": "{{count}}年前",
+          "monthsAgo": "{{count}}ヶ月前",
+          "daysAgo": "{{count}}日前",
+          "hoursAgo": "{{count}}時間前",
+          "minutesAgo": "{{count}}分前",
+          "yearsAgo_few": "{{count}} года назад",
+          "yearsAgo_many": "{{count}} лет назад",
+          "monthsAgo_few": "{{count}} месяца назад",
+          "monthsAgo_many": "{{count}} месяцев назад",
+          "daysAgo_few": "{{count}} дня назад",
+          "daysAgo_many": "{{count}} дней назад",
+          "hoursAgo_few": "{{count}} часа назад",
+          "hoursAgo_many": "{{count}} часов назад",
+          "minutesAgo_few": "{{count}} минуты назад",
+          "minutesAgo_many": "{{count}} минут назад"
+        }
+      },
+      "aiTitleGeneration": {
+        "label": "Geração automática de título de sessão por IA",
+        "enabled": "Ativado",
+        "disabled": "Desativado",
+        "hint": "Quando ativado, um título curto é gerado automaticamente após a primeira resposta de uma nova sessão. Quando desativado, as sessões continuam usando a primeira mensagem do usuário como título."
+      },
+      "loadError": "Failed to load settings"
+    },
+    "codexFeatureUnavailable": "Esta seção de configurações não está disponível no modo atual.",
+    "sidebar": {
+      "expand": "Expandir Barra Lateral",
+      "collapse": "Recolher Barra Lateral"
+    },
+    "provider": {
+      "featureComingSoon": "Recurso ainda não implementado, em breve"
+    },
+    "permissionsComingSoon": "Configuração de permissões em breve...",
+    "agentsComingSoon": "Configuração de agentes em breve...",
+    "skillsComingSoon": "Configuração de skills em breve...",
+    "codexProvider": {
+      "dialog": {
+        "noCustomModels": "Sem modelos personalizados",
+        "addModel": "Adicionar Modelo",
+        "modelIdPlaceholder": "ID do modelo (obrigatório, ex: qwen3-coder-plus)",
+        "modelLabelPlaceholder": "Nome de exibição (opcional)",
+        "modelDescPlaceholder": "Descrição do modelo (opcional)",
+        "modelIdRequired": "ID do modelo é obrigatório",
+        "modelIdDuplicate": "ID do modelo já existe"
+      }
+    },
+    "agent": {
+      "title": "Prompts",
+      "create": "Criar",
+      "export": "Exportar",
+      "import": "Importar",
+      "createAgent": "Criar Prompt",
+      "createAgentHint": "Clique para ir à página de configurações de prompts para criar",
+      "customAgents": "Prompts Personalizados",
+      "noAgents": "Sem prompts personalizados",
+      "noAgentsDropdown": "Sem prompts",
+      "loadFailed": "Falha ao carregar",
+      "loading": "Carregando...",
+      "menu": "Menu",
+      "addSuccess": "Prompt criado com sucesso",
+      "updateSuccess": "Prompt atualizado com sucesso",
+      "deleteSuccess": "Prompt excluído com sucesso",
+      "operationSuccess": "Operação bem-sucedida",
+      "deleteConfirmTitle": "Confirmar Exclusão",
+      "deleteConfirmMessage": "Tem certeza que deseja excluir o prompt \"{{name}}\"? Esta ação não pode ser desfeita.",
+      "dialog": {
+        "addTitle": "Criar Prompt",
+        "editTitle": "Editar Prompt",
+        "name": "Nome",
+        "namePlaceholder": "Insira o nome do prompt",
+        "nameRequired": "Por favor, insira o nome do prompt",
+        "prompt": "Prompt",
+        "promptPlaceholder": "Insira o papel, tom, fluxo de trabalho, preferências de ferramentas e regras do prompt. (Opcional)",
+        "promptHint": "O prompt será enviado à IA como instrução de sistema no início da conversa",
+        "confirmAdd": "Criar",
+        "saveChanges": "Salvar"
+      },
+      "importDialog": {
+        "title": "Importar Prompts",
+        "summary": "Total de {{total}} prompts:",
+        "newCount": "{{count}} novos",
+        "updateCount": "{{count}} atualizações",
+        "selectedCount": "{{count}} itens selecionados",
+        "conflictStrategy": "Estratégia de Resolução de Conflito",
+        "strategySkip": "Pular",
+        "strategySkipDesc": "Pular prompts existentes",
+        "strategyOverwrite": "Sobrescrever",
+        "strategyOverwriteDesc": "Sobrescrever prompts existentes",
+        "strategyDuplicate": "Duplicar",
+        "strategyDuplicateDesc": "Criar duplicatas (gerar novos IDs)",
+        "conflictWarning": "{{count}} conflitos detectados",
+        "columnName": "Nome",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "Novo",
+        "statusUpdate": "Atualizar",
+        "importPartialSuccess": "Importados {{imported}}, pulados {{skipped}}, atualizados {{updated}}",
+        "confirmImport": "Confirmar Importação"
+      },
+      "exportDialog": {
+        "title": "Exportar Prompts",
+        "selectHint": "Selecionar prompts para exportar",
+        "confirmExport": "Confirmar Exportação"
+      }
+    },
+    "prompts": "Biblioteca de Prompts",
+    "prompt": {
+      "title": "Biblioteca de Prompts",
+      "create": "Criar",
+      "export": "Exportar",
+      "import": "Importar",
+      "createPrompt": "Criar Prompt",
+      "createPromptHint": "Clique para ir à página de configurações de prompts para criar",
+      "noPrompts": "Sem prompts personalizados",
+      "noPromptsDropdown": "Sem prompts",
+      "loading": "Carregando...",
+      "menu": "Menu",
+      "addSuccess": "Prompt criado com sucesso",
+      "updateSuccess": "Prompt atualizado com sucesso",
+      "deleteSuccess": "Prompt excluído com sucesso",
+      "operationSuccess": "Operação bem-sucedida",
+      "operationFailed": "Operação falhou",
+      "deleteConfirmTitle": "Confirmar Exclusão",
+      "deleteConfirmMessage": "Tem certeza que deseja excluir o prompt \"{{name}}\"? Esta ação não pode ser desfeita.",
+      "description": "Crie templates de prompts comuns. Digite ! na entrada do chat para selecionar e inserir rapidamente",
+      "global": "Prompts Globais",
+      "project": "Prompts do Projeto",
+      "projectScope": "Prompts do Projeto - {{projectName}}",
+      "noProject": "Sem Projeto Ativo",
+      "dialog": {
+        "addTitle": "Criar Prompt",
+        "editTitle": "Editar Prompt",
+        "name": "Nome",
+        "namePlaceholder": "Insira o nome do prompt",
+        "nameRequired": "Por favor, insira o nome do prompt",
+        "content": "Conteúdo",
+        "contentPlaceholder": "Insira o conteúdo do prompt, você pode incluir variáveis como {{variavel}}",
+        "contentHint": "O conteúdo do prompt será inserido diretamente na caixa de entrada quando selecionado",
+        "confirmAdd": "Criar",
+        "saveChanges": "Salvar"
+      },
+      "importDialog": {
+        "title": "Importar Prompts",
+        "summary": "Total de {{total}} prompts:",
+        "newCount": "{{count}} novos",
+        "updateCount": "{{count}} atualizações",
+        "selectedCount": "{{count}} itens selecionados",
+        "conflictStrategy": "Estratégia de Resolução de Conflito",
+        "strategySkip": "Pular",
+        "strategySkipDesc": "Pular prompts existentes",
+        "strategyOverwrite": "Sobrescrever",
+        "strategyOverwriteDesc": "Sobrescrever prompts existentes",
+        "strategyDuplicate": "Duplicar",
+        "strategyDuplicateDesc": "Criar duplicatas (gerar novos IDs)",
+        "conflictWarning": "{{count}} conflitos detectados",
+        "columnName": "Nome",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "Novo",
+        "statusUpdate": "Atualizar",
+        "importPartialSuccess": "Importados {{imported}}, pulados {{skipped}}, atualizados {{updated}}",
+        "confirmImport": "Confirmar Importação"
+      },
+      "exportDialog": {
+        "title": "Exportar Prompts",
+        "selectHint": "Selecionar prompts para exportar",
+        "confirmExport": "Confirmar Exportação"
+      }
+    },
+    "cli": {
+      "hint": "These CLIs must be installed and configured in your system terminal. The plugin only detects installation status and version — it will never install them for you. Confirm each CLI works in the terminal before coming back here to use it.",
+      "refresh": "Re-check",
+      "retry": "Retry",
+      "loading": "Checking CLI installation status…",
+      "loadFailed": "Detection failed. Please try again.",
+      "status": {
+        "installed": "Installed",
+        "notInstalled": "Not installed"
+      },
+      "viewInstallGuide": "Install guide",
+      "howToInstall": "Install guide",
+      "copy": "Copy",
+      "copied": "Copied to clipboard",
+      "copyFailed": "Failed to copy",
+      "tools": {
+        "qwen": {
+          "name": "Qwen Code",
+          "description": "Alibaba Qwen terminal coding agent"
+        },
+        "dsh": {
+          "name": "DeepSeek Harness",
+          "description": "DeepSeek terminal agent CLI (dsh)"
+        }
+      },
+      "installDialog": {
+        "title": "Install {{name}}",
+        "lead": "Install {{name}} in your system terminal first and make sure `{{binary}}` is available, then come back and click Re-check. This plugin will not run the installer for you.",
+        "stepOpenTerminal": "Open your system terminal (Terminal / iTerm / PowerShell, etc.)",
+        "stepRunCommand": "Copy and run the install command below",
+        "stepVerify": "After install, run `{{binary}} --version` to verify",
+        "stepReturn": "Return here and click Re-check",
+        "primaryCommand": "Recommended install command (macOS / Linux)",
+        "windowsCommand": "Windows (PowerShell)",
+        "altCommand": "Alternative install method",
+        "openDocs": "Open official docs"
+      },
+      "listTitle": "Ferramentas CLI locais",
+      "summary": "{{installed}} / {{total}} instaladas",
+      "moreComingSoon": "Em breve, mais suporte",
+      "copyPath": "Copiar caminho",
+      "visibility": {
+        "hide": "Ocultar no seletor de provedor",
+        "show": "Mostrar no seletor de provedor"
+      },
+      "dsh": {
+        "groupTitle": "DeepSeek Harness",
+        "cliRowTitle": "CLI install",
+        "cardTitle": "Local host",
+        "rowHint": "Start or adopt the local dsh web host",
+        "hint": "One persistent local dsh web host serves all sessions; the plugin adopts a running host instead of spawning a second one.",
+        "state": {
+          "checking": "Checking…",
+          "notInstalled": "Not installed",
+          "notRunning": "Not running",
+          "connected": "Connected"
+        },
+        "adopted": "adopted",
+        "adoptedHint": "Adopted an already-running host; it is never stopped by the plugin.",
+        "openWebUi": "Open DSH Web UI",
+        "startHost": "Start host",
+        "stopHost": "Stop host (plugin-spawned only)",
+        "autoStart": "Auto-start when needed",
+        "moreActions": "More"
+      }
+    },
+    "configure": "Configure",
+    "qwenConfig": {
+      "cliModelsTitle": "Da configuração do CLI",
+      "cliModelsDesc": "Lido de modelProviders em ~/.qwen/settings.json; edite esse arquivo para adicionar ou alterar modelos.",
+      "cliModelsEmpty": "Nenhum modelo encontrado na configuração do CLI",
+      "readOnly": "Somente leitura",
+      "contextWindow": "Contexto"
+    },
+    "entrypointLabel": {
+      "sdk-cli": "Sessão SDK",
+      "claude-vscode": "VS Code",
+      "remote": "Remoto"
+    },
+    "entrypointTooltip": {
+      "sdk-cli": "Esta sessão foi criada pelo plugin via SDK e não é exibida por padrão na lista /resume da CLI.",
+      "claude-vscode": "Esta sessão foi criada pela extensão do VS Code e não é exibida por padrão na lista /resume da CLI.",
+      "remote": "Esta sessão foi criada por uma instância remota do Qwen Code"
+    }
+  },
+  "permission": {
+    "allow": "Permitir Uma Vez",
+    "allowAlways": "Sempre Permitir",
+    "deny": "Negar",
+    "userDenied": "Usuário negou a solicitação de permissão",
+    "fromExternalProcess": "Solicitação de processo externo",
+    "tools": {
+      "Write": "Escrever Arquivo",
+      "Edit": "Editar Arquivo",
+      "Read": "Ler Arquivo",
+      "ReadBatch": "Ler Arquivos em Lote",
+      "Bash": "Executar Comando",
+      "TodoWrite": "Escrever Todo",
+      "TodoRead": "Ler Todo",
+      "WebSearch": "Pesquisa Web",
+      "WebFetch": "Buscar Web",
+      "execute": "Executar {{toolName}}",
+      "readDirectory": "Ler Diretório",
+      "timeoutWarning": "Por favor, responda em breve, o diálogo fechará em {{seconds}} segundos"
+    },
+    "timeoutWarning": "Please answer soon — the dialog will close in {{seconds}} seconds"
+  },
+  "askUserQuestion": {
+    "title": "Qwen tem algumas perguntas para você",
+    "progress": "Pergunta {{current}} / {{total}}",
+    "multiSelectHint": "Você pode selecionar múltiplas opções",
+    "cancel": "Cancelar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "submit": "Enviar",
+    "otherOption": "Outro",
+    "otherOptionDesc": "Insira uma resposta personalizada",
+    "customInputPlaceholder": "Insira sua resposta...",
+    "timeoutWarning": "Por favor, responda em breve, o diálogo fechará em {{seconds}} segundos",
+    "expand": "Expandir",
+    "collapse": "Recolher",
+    "clickToAnswer": "Clique para responder",
+    "dshTitle": "DeepSeek Harness has some questions for you",
+    "invalidFormat": "Unsupported question data format. Please cancel and retry.",
+    "loading": "Loading questions...",
+    "planDetail": "Plan details"
+  },
+  "planApproval": {
+    "title": "Plano Pronto para Aprovação",
+    "subtitle": "Qwen terminou o planejamento e está pronto para executar.",
+    "executionMode": "Modo de Execução",
+    "executionModeDescription": "Selecione como o Qwen deve executar o plano:",
+    "approve": "Aprovar e Executar",
+    "reject": "Rejeitar",
+    "toApprove": "para aprovar",
+    "toReject": "para rejeitar",
+    "timeoutWarning": "Por favor, faça uma escolha em breve, o diálogo fechará em {{seconds}} segundos"
+  },
+  "toast": {
+    "switchSuccess": "Alternado com sucesso",
+    "thinkingEnabled": "Raciocínio ativado",
+    "thinkingDisabled": "Raciocínio desativado",
+    "saveSuccess": "Salvo com sucesso",
+    "restartRequired": "Por favor, reinicie o IDEA para que esta configuração entre em vigor",
+    "saveFailed": "Falha ao salvar",
+    "operationFailed": "Operação falhou",
+    "operationSuccess": "Operação bem-sucedida"
+  },
+  "config": {
+    "officialDocs": "Documentação oficial",
+    "switch": "Alternar",
+    "switchProvider": "Alternar provedor",
+    "nodeProcesses": {
+      "title": "Gerenciador de processos Node",
+      "badge": "{{total}} processos",
+      "badgeWithOrphan": "{{total}} · {{orphan}} órfão ⚠",
+      "summary": "Total: {{total}} · Órfãos: {{orphan}}",
+      "loading": "Carregando processos...",
+      "empty": "Nenhum processo Node ativo",
+      "refresh": "Atualizar",
+      "groups": {
+        "daemon": "Processos daemon",
+        "channel": "Conversas em andamento",
+        "orphan": "Processos órfãos"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "Canal",
+        "orphanShort": "Órfão"
+      },
+      "kill": "Encerrar",
+      "interrupt": "Interromper",
+      "restart": "Reiniciar",
+      "killAll": "Limpar órfãos ({{count}})",
+      "killAllHint": "Encerrar todos os processos órfãos detectados",
+      "killConfirmTitle": "Encerrar este processo?",
+      "killConfirm": "Encerrar o processo PID {{pid}}? Conversas em andamento podem ser perdidas.",
+      "restartConfirmTitle": "Reiniciar o daemon?",
+      "restartConfirm": "Reiniciar o daemon? Conversas ativas serão interrompidas.",
+      "killAllConfirmTitle": "Limpar todos os processos órfãos?",
+      "killAllConfirm": "Encerrar todos os {{count}} processos órfãos?",
+      "killSuccess": "Processo encerrado",
+      "killAllSuccess": "{{count}} processo(s) órfão(s) limpos",
+      "restartSuccess": "Daemon parado; uma nova instância iniciará automaticamente na próxima mensagem",
+      "killFailed": "Falha ao encerrar: {{error}}",
+      "activeRequests": "{{count}} em andamento"
+    }
+  },
+  "markdown": {
+    "copyCode": "Copiar código",
+    "copyMessage": "Copiar mensagem",
+    "copySuccess": "Copiado!",
+    "quoteMessage": "Citar mensagem",
+    "quoteSuccess": "Citado!"
+  },
+  "contextMenu": {
+    "copy": "Copiar",
+    "quote": "Citar",
+    "cut": "Cut",
+    "paste": "Paste",
+    "newline": "Insert Newline"
+  },
+  "usage": {
+    "checkingLabel": "Verificando tokentracker-cli…",
+    "installingLabel": "Instalando tokentracker-cli…",
+    "installingDesc": "Isso pode levar um minuto. O app verificará novamente e iniciará o servidor local quando a instalação terminar.",
+    "startingLabel": "Iniciando o servidor tokentracker…",
+    "guideTitle": "Instale o tokentracker-cli para ver as estatísticas de uso",
+    "guideDesc": "As estatísticas de uso são fornecidas pelo tokentracker-cli. Ele executa um servidor local que agrega o uso de tokens das suas ferramentas de IA e as exibe em um painel.",
+    "guideInstallLabel": "Comando de instalação",
+    "guideCopy": "Copiar",
+    "guideCopied": "Copiado",
+    "guideInstallNow": "Instalar agora",
+    "guideNoteHooks": "Na primeira inicialização, o servidor tokentracker grava hooks nas suas ferramentas de IA instaladas (é assim que ele coleta os dados de uso).",
+    "guideNoteTelemetry": "Este aplicativo desativou a telemetria anônima.",
+    "errorTitle": "Falha ao iniciar o servidor tokentracker",
+    "errorRetry": "Tentar novamente"
+  },
+  "mcp": {
+    "title": "Servidores MCP",
+    "whatIsMcp": "O que é MCP?",
+    "refreshStatus": "Atualizar status do servidor",
+    "add": "Adicionar",
+    "manualConfig": "Configuração manual",
+    "addFromMarket": "Adicionar do mercado MCP",
+    "import": {
+      "menuLabel": "Importar do GitHub Copilot",
+      "title": "Importar do GitHub Copilot",
+      "description": "Cole uma configuração MCP do GitHub Copilot (chave raiz \"servers\") para importar seus servidores.",
+      "placeholder": "{\n  \"servers\": {\n    \"my-server\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"my-mcp-server\"]\n    }\n  }\n}",
+      "previewButton": "Pré-visualizar",
+      "previewTitle": "Servidores para importar",
+      "empty": "Cole uma configuração e clique em Pré-visualizar.",
+      "footerHint": "Revise os servidores e as renomeações antes de importar.",
+      "renamedFrom": "renomeado de {{id}}",
+      "renameSummary": "{{count}} renomeados por conflitos de nome",
+      "confirm": "Importar {{count}} servidores"
+    },
+    "market": {
+      "title": "Marketplace MCP",
+      "subtitle": "Navegue pelas fontes de registro e adicione servidores MCP instaláveis.",
+      "searchPlaceholder": "Pesquisar servidores, publicadores ou tags",
+      "allSources": "Todas as fontes",
+      "refresh": "Atualizar marketplace",
+      "loading": "Carregando entradas do marketplace…",
+      "empty": "Nenhum servidor MCP encontrado.",
+      "selectServer": "Selecione um servidor para ver os detalhes de instalação.",
+      "footerHint": "Verifique os comandos, URLs, cabeçalhos e variáveis de ambiente antes de adicionar um servidor.",
+      "addServer": "Adicionar servidor",
+      "official": "oficial",
+      "installable": "instalável",
+      "browseOnly": "somente leitura",
+      "repository": "Repositório",
+      "docs": "Documentação",
+      "homepage": "Página inicial",
+      "installOption": "Opção de instalação",
+      "riskWarning": "Esta opção executa um comando na sua máquina. Revise-a antes de adicionar.",
+      "riskWarningUnverified": "Esta opção executa um comando não reconhecido. Adicione-a apenas se confiar na fonte.",
+      "noInstall": "Esta fonte expõe apenas metadados de descoberta. Adicione este servidor manualmente após verificar as instruções do repositório.",
+      "configPreview": "Pré-visualização da configuração"
+    },
+    "description": "Descrição",
+    "command": "Comando",
+    "url": "URL",
+    "homepage": "Página inicial",
+    "docs": "Documentação",
+    "delete": "Excluir",
+    "noServers": "Sem servidores MCP",
+    "addServerHint": "Clique no botão 'Adicionar' para adicionar um servidor",
+    "loading": "Carregando...",
+    "deleteTitle": "Excluir servidor MCP",
+    "deleteMessage": "Tem certeza que deseja excluir o servidor \"{{name}}\"?\n\nEsta ação não pode ser desfeita.",
+    "deleteConfirm": "Excluir",
+    "cancel": "Cancelar",
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "deleted": "Excluído",
+    "updated": "Atualizado",
+    "saved": "Salvo",
+    "added": "Adicionado",
+    "linkCopied": "Link copiado, por favor abra no navegador",
+    "configCopied": "Configuração copiada para a área de transferência",
+    "copyFailed": "Falha ao copiar, por favor copie manualmente",
+    "connectionStatus": "Status da Conexão",
+    "serverVersion": "Versão do Servidor",
+    "statusConnected": "Conectado",
+    "statusFailed": "Falha na Conexão",
+    "statusNeedsAuth": "Necessita Autenticação",
+    "statusPending": "Conectando...",
+    "statusUnknown": "Desconhecido",
+    "logs": {
+      "title": "Logs de Conexão",
+      "empty": "Sem logs ainda",
+      "clear": "Limpar logs",
+      "close": "Fechar",
+      "count": "{{count}} entradas de log",
+      "loadingServers": "Carregando lista de servidores MCP...",
+      "refreshingStatus": "Atualizando status de conexão dos servidores MCP...",
+      "loadedToolsFromCache": "Ferramentas carregadas do cache para \"{{name}}\": {{count}} ferramentas",
+      "forceRefreshingTools": "Atualizando ferramentas forçadamente para \"{{name}}\"...",
+      "loadingTools": "Carregando ferramentas para \"{{name}}\"...",
+      "fastLoadCache": "Carregamento rápido do cache: {{count}} servidores (em cache há {{seconds}}s)",
+      "loadedToolsFromCacheSimple": "Ferramentas carregadas do cache: {{count}} ferramentas",
+      "usingCacheStrategy": "Usando estratégia cache-first. Clique em atualizar para obter dados mais recentes",
+      "firstLoad": "Primeiro carregamento, buscando lista de servidores...",
+      "loadedServersSuccess": "Lista de servidores carregada: {{count}} servidores encontrados",
+      "loadedServersFailed": "Falha ao carregar lista de servidores: {{error}}",
+      "statusUpdateComplete": "Atualização de status completa: {{total}} servidores ({{connected}} conectados, {{failed}} falhos, {{pending}} pendentes, {{needsAuth}} precisam de auth)",
+      "loadedStatusFailed": "Falha ao carregar status do servidor: {{error}}",
+      "cleared": "Logs de atualização limpos",
+      "refreshingAll": "Atualizando todos os servidores MCP...",
+      "startRefresh": "Iniciando atualização",
+      "forceRefreshingToolsServer": "Atualizando ferramentas forçadamente para \"{{name}}\"...",
+      "startRefreshServer": "Iniciando atualização para \"{{name}}\"...",
+      "checkingConnection": "Verificando status da conexão",
+      "checkingConnectionServer": "Servidor \"{{name}}\" - Verificando status da conexão...",
+      "refreshComplete": "Atualização do servidor \"{{name}}\" concluída",
+      "forceRefreshTools": "Atualizar ferramentas forçadamente"
+    },
+    "presets": {
+      "fetch": "Ferramenta de busca de conteúdo web para raspagem de páginas",
+      "time": "Utilitários de tempo e fuso horário",
+      "memory": "Ferramenta de grafo de conhecimento e armazenamento em memória",
+      "sequentialThinking": "Ferramenta de raciocínio sequencial",
+      "context7": "Ferramenta de busca de documentos e recuperação de contexto"
+    },
+    "help": {
+      "title": "O que é MCP?",
+      "protocol": {
+        "title": "Model Context Protocol",
+        "description": "MCP (Model Context Protocol) é um protocolo aberto que permite que modelos de IA acessem com segurança ferramentas e fontes de dados externas."
+      },
+      "features": {
+        "title": "Principais Recursos",
+        "toolExtension": {
+          "label": "Extensão de Ferramentas",
+          "description": "Adicionar capacidades como acesso ao sistema de arquivos e rede ao Qwen"
+        },
+        "dataConnection": {
+          "label": "Conexão de Dados",
+          "description": "Conectar a fontes de dados externas como bancos de dados e APIs"
+        },
+        "security": {
+          "label": "Segurança e Controle",
+          "description": "Controle rigoroso de permissões e isolamento de dados"
+        },
+        "integration": {
+          "label": "Integração Fácil",
+          "description": "Suporte para múltiplas linguagens de programação e ambientes de execução"
+        }
+      },
+      "configuration": {
+        "title": "Métodos de Configuração",
+        "description": "Dois tipos de configuração suportados:",
+        "stdio": {
+          "description": "Comunicar com processos locais via entrada/saída padrão",
+          "example": "Iniciado com comandos npx/uvx"
+        },
+        "httpSse": {
+          "description": "Comunicar com servidores remotos pela rede",
+          "example": "Endereço URL"
+        }
+      },
+      "learnMore": {
+        "title": "Saiba Mais",
+        "description": "Visite a documentação oficial:"
+      },
+      "gotIt": "Entendido"
+    },
+    "serverDialog": {
+      "addTitle": "Configuração Manual",
+      "editTitle": "Editar Servidor",
+      "rawConfig": "Configuração Bruta (JSON)",
+      "description": "Insira o JSON de configuração dos Servidores MCP (prefira configuração NPX ou UVX)",
+      "securityWarning": "Por favor, verifique a fonte e avalie os riscos antes de configurar",
+      "saving": "Salvando...",
+      "errors": {
+        "idExists": "ID do servidor \"{{id}}\" já existe",
+        "unrecognizedFormat": "Formato de configuração não reconhecido",
+        "jsonParseError": "Erro ao interpretar JSON: {{message}}"
+      }
+    },
+    "tools": "Ferramentas",
+    "loadTools": "Carregar Lista de Ferramentas",
+    "notConnected": "Não Conectado",
+    "loadFailed": "Falha ao Carregar",
+    "noTools": "Sem Ferramentas",
+    "clickToLoad": "Clique para Carregar",
+    "noParams": "Sem Parâmetros",
+    "required": "Obrigatório",
+    "optional": "Opcional"
+  },
+  "tools": {
+    "toolCall": "Chamada de Ferramenta",
+    "runCommand": "Executar Comando",
+    "contextEngine": "Motor de Contexto",
+    "task": "Tarefa",
+    "promptLabel": "Prompt",
+    "readFile": "Ler Arquivo",
+    "editFile": "Editar Arquivo",
+    "writeFile": "Escrever Arquivo",
+    "replaceString": "Substituir String",
+    "executeCommand": "Executar Comando",
+    "search": "Pesquisar",
+    "fileMatch": "Correspondência de Arquivo",
+    "webFetch": "Buscar Web",
+    "webSearch": "Pesquisa Web",
+    "delete": "Excluir",
+    "explore": "Explorar",
+    "createDirectory": "Criar Diretório",
+    "moveFile": "Mover Arquivo",
+    "copyFile": "Copiar Arquivo",
+    "listFiles": "Listar Arquivos",
+    "findFile": "Encontrar Arquivo",
+    "todoList": "Lista de Tarefas",
+    "editFileTitle": "Editar Arquivo",
+    "refreshFileInIdea": "Atualizar arquivo no IDEA",
+    "refreshFileInIdeaSuccess": "Arquivo atualizado manualmente no IDEA",
+    "showDiffInIdea": "Mostrar alterações no IDEA",
+    "diffButton": "Diff",
+    "editBatchTitle": "Edição em Lote de Arquivos",
+    "searchBatchTitle": "Pesquisa em Lote",
+    "editPrefix": "Editar: {{fileName}}",
+    "lineRange": "Linhas {{start}}-{{end}}",
+    "lineSingle": "Linha {{line}}",
+    "editLocationsSuffix": " mais",
+    "unknownTool": "Ferramenta desconhecida",
+    "bashGroupBatchRun": "Executar Comandos em Lote",
+    "bashGroupCompleted": "concluído",
+    "bashGroupAllCompleted": "Todos Concluídos",
+    "bashGroupFailed": "falhou",
+    "updatePlan": "Atualizar Plano",
+    "applyPatch": "Aplicar Patch",
+    "reportFindings": {
+      "title": "Constatações da revisão",
+      "findingsCount_one": "{{count}} constatação",
+      "findingsCount_other": "{{count}} constatações",
+      "confirmedCount_one": "{{count}} confirmada",
+      "confirmedCount_other": "{{count}} confirmadas",
+      "plausibleCount_one": "{{count}} a revisar",
+      "plausibleCount_other": "{{count}} a revisar",
+      "confirmed": "Confirmada",
+      "plausible": "A revisar",
+      "fixed": "Corrigida",
+      "skipped": "Ignorada",
+      "noChangeNeeded": "Nenhuma alteração necessária",
+      "empty": "Nenhuma constatação",
+      "summaryLabel": "Resumo da revisão",
+      "summary": "Resumo",
+      "failureScenario": "Cenário de falha",
+      "reviewLevel": "Nível de revisão: {{level}}",
+      "openFile": "Abrir {{filePath}}",
+      "expandFinding": "Expandir constatação",
+      "collapseFinding": "Recolher constatação",
+      "expandReport": "Expandir constatações",
+      "collapseReport": "Recolher constatações",
+      "untitled": "Constatação sem título"
+    },
+    "agent": "Agent",
+    "agentGroupToggle": "Toggle agent group details"
+  },
+  "subagent": {
+    "process": {
+      "title": "Processo do agente",
+      "prompt": "Prompt",
+      "thought": "Raciocínio",
+      "filesRead_one": "Ler {{count}} arquivo",
+      "filesRead_other": "Ler {{count}} arquivos",
+      "otherTools": "Outras ferramentas",
+      "result": "Resultado",
+      "showFullOutput": "Ver saída completa",
+      "loading": "Carregando processo do agente…",
+      "unavailable": "O log do processo não está disponível até que a sessão tenha um id.",
+      "reportGenerated": "Relatório de análise estruturada gerado",
+      "unitMs": "ms",
+      "unitS": "s",
+      "unitTools": "ferramentas",
+      "unitTokens": "tokens"
+    }
+  },
+  "statusPanel": {
+    "todoTab": "Plano",
+    "tasksTab": "Tarefas",
+    "subagentTab": "Subagente",
+    "editsTab": "Edições",
+    "noTodos": "Sem tarefas em andamento",
+    "noSubagents": "Sem subagentes em andamento",
+    "noFileChanges": "Sem alterações de arquivo",
+    "showDiff": "Mostrar Diff",
+    "expand": "Expandir painel de status",
+    "collapse": "Recolher painel de status",
+    "undoChanges": "Desfazer Alterações",
+    "undoConfirmTitle": "Desfazer Alterações de Arquivo",
+    "undoWillDelete": "Este arquivo foi criado recentemente. Desfazer irá excluí-lo.",
+    "undoWillRestore": "Isso restaurará o arquivo ao estado anterior às modificações do Qwen.",
+    "undoCannotUndo": "Esta ação não pode ser desfeita.",
+    "confirmUndo": "Confirmar Desfazer",
+    "undoSuccess": "Alterações em {{fileName}} desfeitas",
+    "undoFailed": "Falha ao desfazer: {{error}}",
+    "discardAll": "Descartar Tudo",
+    "keepAll": "Manter Tudo",
+    "discardAllConfirmTitle": "Descartar Todas as Alterações",
+    "discardAllConfirmMessage": "Isso desfará todas as alterações de arquivo. Esta ação não pode ser desfeita.",
+    "discardAllSuccess": "Todas as alterações descartadas",
+    "discardAllFailed": "Falha ao descartar: {{error}}",
+    "keepAllSuccess": "Todas as alterações mantidas, rastreamento redefinido",
+    "multiAgentBadge": "Multi-agente",
+    "multiAgentEdited": "{{count}} agentes editaram este arquivo nesta sessão — revise com cuidado",
+    "blockedBy": "Blocked by: {{ids}}"
+  },
+  "skills": {
+    "all": "Todas",
+    "global": "Global",
+    "local": "Local",
+    "filterEnabled": "Filtrar Skills ativadas",
+    "enabled": "Ativado",
+    "filterDisabled": "Filtrar Skills desativadas",
+    "disabled": "Desativado",
+    "searchPlaceholder": "Pesquisar Skills...",
+    "whatIsSkills": "O que são Skills?",
+    "importSkill": "Importar Skill",
+    "importGlobalSkill": "Importar Skill Global",
+    "importLocalSkill": "Importar Skill Local",
+    "importUserSkill": "Importar Skill do Usuário",
+    "importRepoSkill": "Importar Skill do Repositório",
+    "user": "Usuário",
+    "repo": "Repositório",
+    "description": "Descrição",
+    "noDescription": "Sem descrição",
+    "noMatchingSkills": "Nenhuma Skill encontrada",
+    "importHint": "Clique no botão + para importar arquivo ou pasta de Skill",
+    "deleteTitle": "Excluir Skill",
+    "deleteMessage": "Tem certeza que deseja excluir a Skill {{scope}} \"{{name}}\"?\n\nEsta ação não pode ser desfeita.",
+    "deleteMessageGlobal": "global",
+    "deleteMessageLocal": "local",
+    "deleteMessageUser": "do usuário",
+    "deleteMessageRepo": "do repositório",
+    "importSuccess": "{{count}} Skills importadas com sucesso",
+    "importSuccessOne": "1 Skill importada com sucesso",
+    "importPartialSuccess": "{{count}}/{{total}} Skills importadas com sucesso, algumas falharam",
+    "importFailed": "Falha ao importar Skill",
+    "deleteSuccess": "Skill excluída com sucesso",
+    "deleteFailed": "Falha ao excluir Skill",
+    "enableSuccess": "Skill ativada com sucesso: {{name}}",
+    "disableSuccess": "Skill desativada com sucesso: {{name}}",
+    "operationFailed": "Operação falhou: {{error}}",
+    "operationError": "Falha na operação da Skill",
+    "refreshed": "Lista de Skills atualizada",
+    "help": {
+      "title": "O que são Skills?",
+      "overview": {
+        "title": "Visão Geral",
+        "description": "Skills são conjuntos de instruções, scripts e pastas de recursos carregados dinamicamente que melhoram o desempenho do Qwen para tarefas específicas. Skills ensinam o Qwen como completar tarefas específicas de forma repetível, como criar documentos usando diretrizes de marca da empresa, analisar dados seguindo fluxos de trabalho específicos da organização, ou automatizar tarefas pessoais."
+      },
+      "structure": {
+        "title": "Estrutura de uma Skill",
+        "description": "Uma Skill é uma pasta contendo um arquivo SKILL.md:",
+        "example": "my-skill/\n├── SKILL.md          # Obrigatório: arquivo de definição da skill\n├── templates/        # Opcional: arquivos de template\n└── references/       # Opcional: materiais de referência"
+      },
+      "format": {
+        "title": "Formato do SKILL.md",
+        "description": "Arquivos SKILL.md usam formato YAML frontmatter + Markdown:",
+        "example": "---\nname: my-skill-name\ndescription: Descrição da skill e quando usar\n---\n\n# Instruções da Skill\n\nConteúdo detalhado das instruções...",
+        "hint": "name e description são campos obrigatórios. Campos opcionais incluem license, allowed-tools, metadata"
+      },
+      "configuration": {
+        "title": "Métodos de Configuração",
+        "description": "Formas de adicionar uma Skill:",
+        "localPath": {
+          "label": "Caminho Local",
+          "description": "Especificar caminho da pasta contendo SKILL.md"
+        },
+        "relativePath": {
+          "label": "Caminho Relativo",
+          "description": "Relativo à raiz do projeto, ex: ./skills/my-skill"
+        },
+        "absolutePath": {
+          "label": "Caminho Absoluto",
+          "description": "Caminho completo no sistema de arquivos"
+        }
+      },
+      "tips": {
+        "title": "Dicas de Uso",
+        "item1": "Certifique-se de que o diretório da Skill contém um arquivo SKILL.md válido",
+        "item2": "Nomes de Skills devem usar letras minúsculas, números e hífens (hyphen-case)",
+        "item3": "Skills entram em vigor automaticamente nas sessões do Qwen após o carregamento",
+        "item4": "Controle o status de cada Skill individualmente com os botões de ativar/desativar",
+        "item5": "Mencione o nome da Skill no chat para usá-la, ex: \"Use a skill de pdf para extrair campos do formulário\""
+      },
+      "learnMore": {
+        "title": "Saiba Mais",
+        "description": "Mais informações sobre Skills:",
+        "link1": "Documentação de Skills",
+        "link2": "Casos de uso de Skills",
+        "link3": "Repositório GitHub do Qwen Code"
+      }
+    }
+  },
+  "models": {
+    "addModel": "Adicionar Modelo",
+    "searchPlaceholder": "Pesquisar modelos",
+    "noModelsFound": "Nenhum modelo encontrado",
+    "hiddenModelCount": "+ {{count}} modelos adicionais. Digite para pesquisar.",
+    "pinned": "Fixados",
+    "pin": "Fixar",
+    "unpin": "Desafixar",
+    "groups": {
+      "cliConfig": "From CLI config",
+      "custom": "Custom models"
+    },
+    "qwen": {
+      "followCliDefault": {
+        "label": "Default (follow CLI config)",
+        "labelWithModel": "Default (follow CLI config · {{model}})"
+      },
+      "currentConfigured": {
+        "badge": "Current"
+      },
+      "coderPlus": {
+        "label": "Qwen3-Coder-Plus",
+        "description": "Qwen3-Coder-Plus · Coding flagship · Recommended default"
+      },
+      "coderFlash": {
+        "label": "Qwen3-Coder-Flash",
+        "description": "Qwen3-Coder-Flash · Fast coding model for quick answers"
+      },
+      "max": {
+        "label": "Qwen-Max",
+        "description": "Qwen-Max · Strongest general capability"
+      },
+      "plus": {
+        "label": "Qwen-Plus",
+        "description": "Qwen-Plus · Balanced intelligence and cost"
+      },
+      "turbo": {
+        "label": "Qwen-Turbo",
+        "description": "Qwen-Turbo · Optimized for cost-sensitive workloads"
+      }
+    }
+  },
+  "modes": {
+    "plan": {
+      "label": "Plano",
+      "shortLabel": "Plano",
+      "tooltip": "Plano — análise somente leitura",
+      "description": "Somente análise de leitura; sem edições de arquivos ou comandos shell"
+    },
+    "default": {
+      "label": "Pedir permissão",
+      "shortLabel": "Pedir",
+      "tooltip": "Pedir permissão — confirmar cada mudança",
+      "description": "Requer aprovação manual antes de edições de arquivos e comandos shell"
+    },
+    "auto-edit": {
+      "label": "Edição automática",
+      "shortLabel": "Edição auto",
+      "tooltip": "Edição automática — shell ainda pergunta",
+      "description": "Aprova automaticamente edições de arquivos (edit / write_file / notebook_edit); comandos shell ainda pedem aprovação"
+    },
+    "auto": {
+      "label": "Auto",
+      "shortLabel": "Auto",
+      "tooltip": "Auto — aprovações avaliadas por classificador",
+      "description": "Um classificador avalia cada comando shell e edição, aprovando operações seguras automaticamente"
+    },
+    "yolo": {
+      "label": "YOLO",
+      "shortLabel": "YOLO",
+      "tooltip": "YOLO — aprovar tudo",
+      "description": "Aprova automaticamente todas as chamadas de ferramentas, incluindo edições de arquivos e comandos shell [use com cautela]"
+    }
+  },
+  "promptEnhancer": {
+    "title": "Melhorador de Prompt",
+    "tooltip": "Melhorar Prompt",
+    "shortcut": "⌘/",
+    "enhancing": "Melhorando prompt...",
+    "originalPrompt": "Prompt Original",
+    "enhancedPrompt": "Prompt Melhorado",
+    "useEnhanced": "Usar Melhorado",
+    "keepOriginal": "Manter Original",
+    "modeLabel": "Modo",
+    "modeAuto": "Auto",
+    "modeManual": "Manual",
+    "modeUnavailable": "Indisponível",
+    "providerLabel": "CLI",
+    "providerUnresolved": "CLI não resolvido",
+    "modelLabel": "Modelo",
+    "modelUnresolved": "Modelo padrão",
+    "openSettings": "Configurar",
+    "openSettingsTooltip": "Abrir configurações do aprimorador de prompt",
+    "resolvingUsage": "Resolvendo configuração…"
+  },
+  "fileContext": {
+    "placeholder": "Contexto do Arquivo",
+    "enableTitle": "Ativar Contexto do Arquivo?",
+    "enableDescription": "Quando ativado, o caminho do arquivo atualmente aberto no editor será enviado à IA. Atenção: apenas o caminho do arquivo é transmitido, não o conteúdo.",
+    "enable": "Ativar",
+    "cancel": "Cancelar"
+  },
+  "reasoning": {
+    "title": "Selecionar profundidade de raciocínio",
+    "low": {
+      "label": "Baixo",
+      "description": "Respostas rápidas com raciocínio básico"
+    },
+    "medium": {
+      "label": "Médio",
+      "description": "Raciocínio equilibrado (padrão)"
+    },
+    "high": {
+      "label": "Alto",
+      "description": "Raciocínio profundo para tarefas complexas"
+    },
+    "xhigh": {
+      "label": "Máximo",
+      "description": "Profundidade máxima de raciocínio"
+    },
+    "max": {
+      "label": "Max",
+      "description": "Maximum reasoning depth"
+    }
+  },
+  "errorBoundary": {
+    "title": "Algo deu errado",
+    "description": "A aplicação encontrou um erro inesperado. Por favor, copie os detalhes do erro abaixo e compartilhe com o desenvolvedor para solução de problemas.",
+    "possibleCauses": "Possíveis causas:",
+    "cause1": "Node.js não está instalado ou não está configurado corretamente",
+    "cause2": "Problemas de conexão de rede",
+    "cause3": "Problemas de compatibilidade do plugin ou IDE",
+    "cause4": "Recursos do sistema insuficientes",
+    "errorDetails": "Detalhes do Erro",
+    "copyError": "Copiar Informações do Erro",
+    "copied": "Copiado!",
+    "reload": "Recarregar Aplicação",
+    "helpText": "Se o problema persistir, por favor copie as informações do erro e envie como issue no GitHub, ou compartilhe no grupo da comunidade.",
+    "componentChain": "Component chain",
+    "debugHints": "Debug hints"
+  },
+  "aiBridge": {
+    "qwenCodeInterrupted": "Qwen Code foi interrompido (possivelmente timeout de resposta ou cancelamento do usuário):",
+    "qwenCodeError": "Erro do Qwen Code:",
+    "errorMessage": "Mensagem de erro",
+    "currentApiKeySource": "Fonte atual da Chave API",
+    "currentApiKeyPreview": "Prévia da Chave API atual",
+    "currentBaseUrl": "URL Base atual",
+    "source": "fonte",
+    "notConfigured": "Não configurado",
+    "notConfiguredEmpty": "Não configurado (valor vazio ou ausente)",
+    "defaultBaseUrl": "Padrão (não configurado explicitamente)",
+    "configTip": "Dica: O CLI pode ler de variáveis de ambiente ou settings.json; este plugin suporta apenas leitura do settings.json para evitar problemas. Você pode configurar nas Configurações → Gerenciamento de Provedores",
+    "apiError": "Erro de API",
+    "apiErrorCauses": "Possíveis causas:\n1. Chave API não configurada corretamente\n2. Problema de configuração do serviço proxy de terceiros\n3. Por favor, verifique a configuração em ~/.qwen/settings.json",
+    "codexAuthError": "Erro de autenticação:",
+    "codexAuthErrorChecks": "Por favor, verifique o seguinte:\n1. A Chave API nas configurações do plugin está correta\n2. A Chave API possui permissões suficientes\n3. Se estiver usando uma Base URL personalizada, confirme que o endereço está correto",
+    "codexAuthTip": "Dica: É necessária uma Chave API válida",
+    "codexNetworkError": "Erro de rede:",
+    "codexNetworkErrorChecks": "Por favor, verifique:\n1. A conexão de rede está funcionando\n2. Se estiver usando um proxy, confirme a configuração do proxy\n3. O firewall está bloqueando a conexão",
+    "codexError": "Erro:",
+    "codexErrorCheck": "Por favor, verifique a conexão de rede e a configuração",
+    "userDeniedPermission": "Usuário negou permissão para a ferramenta {{toolName}}",
+    "userDidNotProvideAnswers": "Usuário não forneceu respostas",
+    "dbMissingPath": "Argumento de caminho do banco de dados ausente",
+    "dbFileNotExist": "Arquivo de banco de dados não existe",
+    "dbReadFailed": "Falha ao ler banco de dados",
+    "dbParseProviderFailed": "Falha ao interpretar configuração do provedor",
+    "aiResponseEmpty": "Resposta da IA está vazia",
+    "enhancementFailed": "Falha no aprimoramento",
+    "uploadedImages": "{{count}} imagem(ns) enviada(s)",
+    "uploadedAttachments": "Anexo(s) enviado(s)",
+    "emptyMessage": "Mensagem vazia",
+    "attachment": "Anexo"
+  },
+  "error": {
+    "providerNotConfigured": "Provedor Não Configurado",
+    "providerNotConfiguredDesc": "Nenhum provedor de IA está configurado ainda, ou o acesso à configuração local não foi autorizado. Por favor, complete a configuração em Gerenciamento de Provedores antes de iniciar uma conversa.",
+    "goToProviderSettings": "Ir para Configurações"
+  },
+  "errorDiagnostic": {
+    "copyCommand": "Copiar",
+    "copied": "Copiado",
+    "openDependencySettings": "Abrir Gerenciamento de Dependências",
+    "recommended": "Recomendado",
+    "sdkNativeBinaryMissing": {
+      "title": "Instalação do SDK incompleta — binário nativo ausente",
+      "intro": "Este é um problema conhecido do mirror npm da Taobao (não é um bug do plugin). O mirror não sincronizou completamente os arquivos específicos da plataforma. Você pode resolver isso manualmente com qualquer uma das opções abaixo:",
+      "reason": "Este problema desaparecerá automaticamente quando o mirror da Taobao concluir a sincronização — nenhuma ação adicional é necessária.",
+      "solutions": {
+        "switchRegistry": {
+          "title": "Opção 1: alterne temporariamente para o registro oficial e reinstale",
+          "step0": "1. Execute em seu terminal (alternar para o registro npm oficial):",
+          "step1": "2. Abra as configurações de Gerenciamento de Dependências do plugin e clique em Reinstalar:",
+          "step2": "3. Após a conclusão da reinstalação, retorne ao mirror da Taobao:"
+        },
+        "downgrade": {
+          "title": "Opção 2: reverter para uma versão anterior",
+          "step0": "Em Gerenciamento de Dependências, altere a versão do SDK para v0.2.112 ou anterior. Reinicie o IDEA após a alteração."
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — falha ao iniciar o processo filho",
+      "intro": "Este erro geralmente é causado por uma versão incompatível do Node.js ou uma instalação incompleta do SDK. Tente as duas opções abaixo na ordem:",
+      "reason": "EBUSY é um erro de sistema lançado pelo Node.js quando um processo filho não pode ser iniciado devido a um recurso ocupado. Causas comuns: problemas de compatibilidade com Node.js 24, SDK desatualizado ou instalação incompleta a partir do mirror da Taobao.",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "Opção 1: Verifique sua versão do Node.js",
+          "step0": "Execute o comando abaixo em um terminal para ver sua versão. Node 22 ou a LTS atual é recomendado — usuários relataram muitos problemas no Node 24, então prefira Node 20 ou 22:"
+        },
+        "reinstallLatestSdk": {
+          "title": "Opção 2: Reinstale o SDK mais recente a partir do registro npm oficial",
+          "step0": "1. Mude para o registro npm oficial (evite o mirror da Taobao — pode não ter a versão mais recente):",
+          "step1": "2. Abra Gerenciamento de Dependências e reinstale o SDK mais recente:"
+        }
+      }
+    },
+    "codexThreadResume": {
+      "title": "Session resume failed",
+      "intro": "Something went wrong while resuming a previous session.",
+      "reason": "The session thread resume request was rejected — the session may have expired or the server does not support it."
+    }
+  },
+  "modelConfig": {
+    "title": "Model settings",
+    "effort": "Effort",
+    "preset": "Preset"
+  },
+  "providers": {
+    "qwen": {
+      "label": "Qwen Code"
+    },
+    "beta": {
+      "badge": "Beta",
+      "title": "Beta Feature",
+      "message": "This feature is still in Beta. If you encounter any bugs, please report them to the author promptly."
+    },
+    "dsh": {
+      "label": "DeepSeek Harness"
+    },
+    "manageCli": "CLI Settings"
+  },
+  "contextUsage": {
+    "title": "Context Usage",
+    "loading": "Loading context usage...",
+    "autoCompactEnabled": "Auto-compact: enabled",
+    "autoCompactEnabledWithThreshold": "Auto-compact: enabled ({{threshold}}%)",
+    "notAvailable": "N/A",
+    "categories": {
+      "systemPrompt": "System prompt",
+      "systemTools": "System tools",
+      "mcpTools": "MCP tools",
+      "customAgents": "Custom agents",
+      "memoryFiles": "Memory files",
+      "skills": "Skills",
+      "messages": "Messages",
+      "autoCompactBuffer": "Autocompact buffer",
+      "freeSpace": "Free space"
+    },
+    "sections": {
+      "mcpTools": "MCP Tools ({{count}})",
+      "agents": "Agents ({{count}})",
+      "memoryFiles": "Memory Files ({{count}})",
+      "skills": "Skills ({{included}}/{{total}})"
+    },
+    "table": {
+      "tool": "Tool",
+      "server": "Server",
+      "tokens": "Tokens",
+      "agent": "Agent",
+      "source": "Source",
+      "type": "Type",
+      "path": "Path",
+      "skill": "Skill"
+    }
+  },
+  "dshPresets": {
+    "title": "Select DeepSeek Harness agent preset",
+    "none": {
+      "label": "Default",
+      "description": "dsh default headless composition (full toolset)"
+    },
+    "standard": {
+      "label": "Standard",
+      "description": "Full coding agent with the standard toolset"
+    },
+    "code": {
+      "label": "PTC",
+      "description": "Standard capabilities with Code Mode"
+    },
+    "minimal": {
+      "label": "Minimal",
+      "description": "Bash and str_replace_editor only"
+    },
+    "cordis": {
+      "label": "Creator",
+      "description": "Standard capabilities plus composition authoring"
+    },
+    "user": {
+      "description": "Custom preset installed under the DSH home"
+    }
+  }
+}

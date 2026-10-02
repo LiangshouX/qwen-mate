@@ -1,0 +1,362 @@
+package com.qwenmate.util;
+
+import com.qwenmate.handler.SettingsHandler;
+import com.qwenmate.handler.core.HandlerContext;
+import com.qwenmate.session.QwenMateSession;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.intellij.openapi.diagnostic.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Converts session messages to JSON for webview transport.
+ * Handles error content truncation and tool_result size limits.
+ */
+public class MessageJsonConverter {
+
+    private static final Logger LOG = Logger.getInstance(MessageJsonConverter.class);
+
+    private static final int MAX_ERROR_CONTENT_CHARS = 1000;
+    private static final String[] ERROR_CONTENT_PREFIXES = {
+        "API Error", "API error", "Error:", "Error "
+    };
+    private static final int MAX_TOOL_RESULT_CHARS = 20000;
+
+    /**
+     * Convert a list of session messages to JSON string for webview transport.
+     */
+    public static String convertMessagesToJson(List<QwenMateSession.Message> messages) {
+        Gson gson = new Gson();
+        JsonArray messagesArray = new JsonArray();
+        for (QwenMateSession.Message msg : messages) {
+            JsonObject msgObj = new JsonObject();
+            msgObj.addProperty("type", msg.type.toString().toLowerCase());
+            msgObj.addProperty("timestamp", msg.timestamp);
+            msgObj.addProperty("content", truncateErrorContent(msg.content != null ? msg.content : ""));
+            if (msg.raw != null) {
+                msgObj.add("raw", truncateRawForTransport(msg.raw));
+            }
+            messagesArray.add(msgObj);
+        }
+        return gson.toJson(messagesArray);
+    }
+
+    /**
+     * Truncate content only if it looks like an error message.
+     * Normal assistant responses are never truncated.
+     */
+    public static String truncateErrorContent(String content) {
+        if (content == null || content.length() <= MAX_ERROR_CONTENT_CHARS) {
+            return content;
+        }
+        for (String prefix : ERROR_CONTENT_PREFIXES) {
+            if (content.startsWith(prefix)) {
+                return content.substring(0, MAX_ERROR_CONTENT_CHARS)
+                    + "... [truncated, total " + content.length() + " chars]";
+            }
+        }
+        return content;
+    }
+
+    /**
+     * Check if content starts with a known error prefix.
+     */
+    public static boolean isErrorContent(String content) {
+        if (content == null) { return false; }
+        for (String prefix : ERROR_CONTENT_PREFIXES) {
+            if (content.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Truncate oversized raw JSON for transport.
+     * Handles tool_result and error text blocks.
+     */
+    public static JsonObject truncateRawForTransport(JsonObject raw) {
+        JsonObject transport = buildTransportRaw(raw);
+        JsonElement contentEl = findContentElement(transport);
+
+        if (contentEl == null) {
+            return transport;
+        }
+
+        // Handle string content (frontend normalizeBlocks also handles this case)
+        if (contentEl.isJsonPrimitive() && contentEl.getAsJsonPrimitive().isString()) {
+            String s = contentEl.getAsString();
+            if (s.length() > MAX_ERROR_CONTENT_CHARS && isErrorContent(s)) {
+                JsonObject copied = transport.deepCopy();
+                String truncated = truncateErrorContent(s);
+                if (copied.has("content")) {
+                    copied.addProperty("content", truncated);
+                } else if (copied.has("message") && copied.get("message").isJsonObject()) {
+                    copied.getAsJsonObject("message").addProperty("content", truncated);
+                }
+                return copied;
+            }
+            return transport;
+        }
+
+        if (!contentEl.isJsonArray()) {
+            return transport;
+        }
+
+        JsonArray contentArr = contentEl.getAsJsonArray();
+        boolean needsCopy = false;
+        for (JsonElement el : contentArr) {
+            if (!el.isJsonObject()) { continue; }
+            JsonObject block = el.getAsJsonObject();
+            if (!block.has("type") || block.get("type").isJsonNull()) { continue; }
+            String blockType = block.get("type").getAsString();
+            // Check tool_result blocks for oversized content
+            if ("tool_result".equals(blockType)) {
+                if (!block.has("content") || block.get("content").isJsonNull()) { continue; }
+                JsonElement c = block.get("content");
+                if (c.isJsonPrimitive() && c.getAsJsonPrimitive().isString()) {
+                    if (c.getAsString().length() > MAX_TOOL_RESULT_CHARS) {
+                        needsCopy = true;
+                        break;
+                    }
+                }
+            }
+            // Check text blocks for oversized error content
+            if ("text".equals(blockType) && block.has("text") && !block.get("text").isJsonNull()) {
+                JsonElement t = block.get("text");
+                if (t.isJsonPrimitive() && t.getAsJsonPrimitive().isString()) {
+                    String s = t.getAsString();
+                    if (s.length() > MAX_ERROR_CONTENT_CHARS && isErrorContent(s)) {
+                        needsCopy = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!needsCopy) {
+            return transport;
+        }
+
+        JsonObject copied = transport.deepCopy();
+        JsonElement copiedContentEl = findContentElement(copied);
+
+        if (copiedContentEl == null || !copiedContentEl.isJsonArray()) {
+            return copied;
+        }
+
+        JsonArray copiedArr = copiedContentEl.getAsJsonArray();
+        for (JsonElement el : copiedArr) {
+            if (!el.isJsonObject()) { continue; }
+            JsonObject block = el.getAsJsonObject();
+            if (!block.has("type") || block.get("type").isJsonNull()) { continue; }
+            String blockType = block.get("type").getAsString();
+            // Truncate oversized tool_result content
+            if ("tool_result".equals(blockType)) {
+                if (!block.has("content") || block.get("content").isJsonNull()) { continue; }
+                JsonElement c = block.get("content");
+                if (c.isJsonPrimitive() && c.getAsJsonPrimitive().isString()) {
+                    String s = c.getAsString();
+                    if (s.length() > MAX_TOOL_RESULT_CHARS) {
+                        block.addProperty("content", truncateString(s));
+                    }
+                }
+            }
+            // Truncate error content in text blocks
+            if ("text".equals(blockType) && block.has("text") && !block.get("text").isJsonNull()) {
+                JsonElement t = block.get("text");
+                if (t.isJsonPrimitive() && t.getAsJsonPrimitive().isString()) {
+                    String s = t.getAsString();
+                    if (s.length() > MAX_ERROR_CONTENT_CHARS && isErrorContent(s)) {
+                        block.addProperty("text", truncateErrorContent(s));
+                    }
+                }
+            }
+        }
+
+        return copied;
+    }
+
+    private static JsonObject buildTransportRaw(JsonObject raw) {
+        JsonObject transport = new JsonObject();
+        copyFieldIfPresent(raw, transport, "uuid");
+        copyFieldIfPresent(raw, transport, "type");
+        copyFieldIfPresent(raw, transport, "isMeta");
+        copyFieldIfPresent(raw, transport, "text");
+        // Compact-related fields for filtering compact summary messages
+        copyFieldIfPresent(raw, transport, "isCompactSummary");
+        copyFieldIfPresent(raw, transport, "isVisibleInTranscriptOnly");
+        copyFieldIfPresent(raw, transport, "summarizeMetadata");
+        // Origin field for distinguishing human input from synthetic messages
+        copyFieldIfPresent(raw, transport, "origin");
+        // Whole-turn aggregated usage stamped by QwenMessageHandler.handleResult /
+        // the message handler's handleResultMessage, for the per-turn token display.
+        // Whole-turn estimated cost is calculated by the backend from the same pricing
+        // configuration used by Usage Statistics; the frontend only formats it.
+        // Deliberately NOT copying the top-level usage or message.usage fields:
+        // those carry per-call / session-cumulative values for the status bar and
+        // would be misleading if rendered per message.
+        copyFieldIfPresent(raw, transport, "turnUsage");
+        copyFieldIfPresent(raw, transport, "turnCostUsd");
+        // Agent/Task tool metadata (agentId, totalDurationMs, totalTokens,
+        // toolStats, ...) stamped by the SDK on tool_result messages. The
+        // frontend's SubagentList / AgentGroupBlock read this to render
+        // subagent usage and status; without it sync subagents show no metadata.
+        copyToolUseResultIfPresent(raw, transport);
+
+        if (raw.has("content")) {
+            transport.add("content", raw.get("content").deepCopy());
+        }
+
+        if (raw.has("message") && raw.get("message").isJsonObject()) {
+            JsonObject sourceMessage = raw.getAsJsonObject("message");
+            JsonObject transportMessage = new JsonObject();
+            if (sourceMessage.has("content")) {
+                transportMessage.add("content", sourceMessage.get("content").deepCopy());
+            }
+            if (transportMessage.size() > 0) {
+                transport.add("message", transportMessage);
+            }
+        }
+
+        if (transport.size() > 0) {
+            return transport;
+        }
+        LOG.warn("buildTransportRaw: no recognized fields in raw JSON, returning empty object");
+        return new JsonObject();
+    }
+
+    private static JsonElement findContentElement(JsonObject raw) {
+        if (raw.has("content")) {
+            return raw.get("content");
+        }
+        if (raw.has("message") && raw.get("message").isJsonObject()) {
+            JsonObject message = raw.getAsJsonObject("message");
+            if (message.has("content")) {
+                return message.get("content");
+            }
+        }
+        return null;
+    }
+
+    private static void copyFieldIfPresent(JsonObject source, JsonObject target, String fieldName) {
+        if (source.has(fieldName)) {
+            target.add(fieldName, source.get(fieldName).deepCopy());
+        }
+    }
+
+    /**
+     * Copy the toolUseResult metadata field, truncating any oversized string
+     * values so a chatty subagent result cannot blow up the transport payload.
+     * The SDK may stamp toolUseResult as a raw error string, a usage object, or
+     * an object holding nested arrays of content blocks, so truncation must
+     * walk every shape rather than only the top-level object.
+     */
+    private static void copyToolUseResultIfPresent(JsonObject source, JsonObject target) {
+        if (!source.has("toolUseResult") || source.get("toolUseResult").isJsonNull()) {
+            return;
+        }
+        JsonElement toolUseResult = source.get("toolUseResult").deepCopy();
+        target.add("toolUseResult", truncateStringFields(toolUseResult));
+    }
+
+    /**
+     * Recursively truncate oversized strings inside any JSON shape (primitive,
+     * object, or array) so no single field can exceed the transport budget.
+     */
+    private static JsonElement truncateStringFields(JsonElement el) {
+        if (el == null || el.isJsonNull()) {
+            return el;
+        }
+        if (el.isJsonPrimitive()) {
+            JsonPrimitive primitive = el.getAsJsonPrimitive();
+            if (primitive.isString()) {
+                String s = primitive.getAsString();
+                return s.length() > MAX_TOOL_RESULT_CHARS
+                        ? new JsonPrimitive(truncateString(s)) : el;
+            }
+            // Non-string primitives (number, boolean) pass through unchanged.
+            return el;
+        }
+        if (el.isJsonObject()) {
+            JsonObject obj = el.getAsJsonObject();
+            for (String key : new ArrayList<>(obj.keySet())) {
+                obj.add(key, truncateStringFields(obj.get(key)));
+            }
+            return obj;
+        }
+        if (el.isJsonArray()) {
+            JsonArray arr = el.getAsJsonArray();
+            for (int i = 0; i < arr.size(); i++) {
+                arr.set(i, truncateStringFields(arr.get(i)));
+            }
+            return arr;
+        }
+        return el;
+    }
+
+    /**
+     * Truncate a string to fit within {@link #MAX_TOOL_RESULT_CHARS}, preserving
+     * both the head and the tail and inserting a marker that records the original
+     * length. The marker's overhead is reserved up front so the returned string
+     * never exceeds the budget (naive head/tail split ignores the marker and can
+     * overshoot by the marker length).
+     */
+    private static String truncateString(String s) {
+        if (s.length() <= MAX_TOOL_RESULT_CHARS) {
+            return s;
+        }
+        String marker = "\n...\n(truncated, original length: " + s.length() + " chars)\n...\n";
+        int available = Math.max(0, MAX_TOOL_RESULT_CHARS - marker.length());
+        int head = available * 2 / 3;
+        int tail = available - head;
+        return s.substring(0, head) + marker + s.substring(s.length() - tail);
+    }
+
+    /**
+     * Build the current usage payload from session messages.
+     *
+     * @param messages session messages
+     * @param handlerContext current provider and model context
+     * @return JSON payload, or null when no usage is available
+     */
+    public static String buildUsageUpdateJson(
+            List<QwenMateSession.Message> messages,
+            HandlerContext handlerContext
+    ) {
+        if (messages == null || handlerContext == null) {
+            return null;
+        }
+        try {
+            LOG.debug("buildUsageUpdateJson called with " + messages.size() + " messages");
+            String currentProvider = handlerContext.getCurrentProvider();
+            JsonObject lastUsage = TokenUsageUtils.findLastUsageFromSessionMessages(messages, currentProvider);
+            if (lastUsage == null) {
+                LOG.debug("No usage info found in messages");
+                return null;
+            }
+
+            int usedTokens = TokenUsageUtils.extractContextTokens(lastUsage, currentProvider);
+            int fallbackMaxTokens = SettingsHandler.getModelContextLimit(
+                    currentProvider, handlerContext.getCurrentModel());
+            int maxTokens = TokenUsageUtils.extractMaxTokens(lastUsage, fallbackMaxTokens);
+            int percentage = Math.min(100, maxTokens > 0 ? (int) ((usedTokens * 100.0) / maxTokens) : 0);
+
+            JsonObject usageUpdate = new JsonObject();
+            usageUpdate.addProperty("percentage", percentage);
+            usageUpdate.addProperty("totalTokens", usedTokens);
+            usageUpdate.addProperty("limit", maxTokens);
+            usageUpdate.addProperty("usedTokens", usedTokens);
+            usageUpdate.addProperty("maxTokens", maxTokens);
+            return new Gson().toJson(usageUpdate);
+        } catch (Exception e) {
+            LOG.warn("Failed to build usage update: " + e.getMessage(), e);
+            return null;
+        }
+    }
+}

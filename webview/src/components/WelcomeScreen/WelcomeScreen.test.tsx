@@ -1,0 +1,69 @@
+import { render, screen } from '@testing-library/react';
+import type { TFunction } from 'i18next';
+import { describe, expect, it, vi } from 'vitest';
+
+import { WelcomeScreen } from './WelcomeScreen';
+
+vi.mock('../BlinkingLogo', () => ({
+  BlinkingLogo: () => <div data-testid="blinking-logo" />,
+}));
+
+vi.mock('../AnimatedText', () => ({
+  AnimatedText: ({ text }: { text: string }) => <div>{text}</div>,
+}));
+
+vi.mock('../../version/version', () => ({
+  APP_VERSION: '0.0.0-test',
+}));
+
+describe('WelcomeScreen', () => {
+  const t = ((key: string, options?: Record<string, unknown>) => {
+    if (key === 'chat.sendMessage') {
+      return `给 ${String(options?.provider ?? '')} 发送消息`;
+    }
+    if (key === 'providers.qwen.label') {
+      return 'Qwen Code';
+    }
+    if (key === 'providers.dsh.label') {
+      return 'DSH';
+    }
+    return typeof options?.defaultValue === 'string' ? options.defaultValue : key;
+  }) as unknown as TFunction;
+
+  it('uses the translated Qwen provider label in the welcome copy', () => {
+    render(
+      <WelcomeScreen
+        currentProvider="qwen"
+        t={t}
+        onProviderChange={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText('给 Qwen Code 发送消息')).toBeTruthy();
+    expect(screen.queryByText('给 qwen 发送消息')).toBeNull();
+  });
+
+  it('keeps the DSH provider label in the welcome copy', () => {
+    render(
+      <WelcomeScreen
+        currentProvider="dsh"
+        t={t}
+        onProviderChange={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText('给 DSH 发送消息')).toBeTruthy();
+  });
+
+  it('falls back to the raw provider id for unknown providers', () => {
+    render(
+      <WelcomeScreen
+        currentProvider="other-cli"
+        t={t}
+        onProviderChange={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText('给 other-cli 发送消息')).toBeTruthy();
+  });
+});

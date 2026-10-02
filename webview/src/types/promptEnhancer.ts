@@ -1,0 +1,26 @@
+import type { AiFeatureConfig, AiFeatureProvider, AiFeatureResolutionSource } from './aiFeatureConfig';
+import {
+  DEFAULT_AI_FEATURE_MODELS,
+  normalizeAiFeatureConfig,
+} from './aiFeatureConfig';
+
+export type PromptEnhancerProvider = AiFeatureProvider;
+export type PromptEnhancerResolutionSource = AiFeatureResolutionSource;
+export type PromptEnhancerConfig = AiFeatureConfig;
+
+export const DEFAULT_PROMPT_ENHANCER_CONFIG: PromptEnhancerConfig = {
+  provider: null,
+  effectiveProvider: 'qwen',
+  resolutionSource: 'auto',
+  models: { ...DEFAULT_AI_FEATURE_MODELS },
+  availability: {
+    qwen: false,
+    dsh: false,
+  },
+};
+
+export function normalizePromptEnhancerConfig(
+  raw: Partial<PromptEnhancerConfig> | null | undefined,
+): PromptEnhancerConfig {
+  return normalizeAiFeatureConfig(raw, DEFAULT_PROMPT_ENHANCER_CONFIG);
+}

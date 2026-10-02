@@ -1,0 +1,230 @@
+<idea-plugin>
+    <id>com.qwenmate</id>
+    <name>QwenMate</name>
+    <vendor>QwenMate Contributors</vendor>
+
+    <!-- Resource bundle for i18n -->
+    <resource-bundle>messages.QwenMateBundle</resource-bundle>
+
+    <description><![CDATA[
+        <h2>QwenMate — visual GUI for Qwen Code on JetBrains IDEs</h2>
+        <h2>Qwen Code 可视化 GUI —— JetBrains IDE 插件，MIT 100% 开源</h2>
+        <p>支持的引擎 / Supported engines:</p>
+        <ul>
+            <li><strong>Qwen Code</strong> - 通义千问 AI 编程助手（官方 TypeScript SDK 驱动，支持 qwen3-coder 等多模型）</li>
+            <li><strong>DeepSeek Harness</strong> <em>(Beta)</em></li>
+        </ul>
+
+        <p><strong>Connection &amp; proxy disclosure / 连接与代理说明：</strong></p>
+        <ul>
+            <li>Requests are sent to the Qwen-compatible endpoint configured in <em>Settings → Qwen 配置</em> (API key / Base URL / environment variables). The plugin UI labels the active request route before it is used.</li>
+            <li>请求发送至【设置 → Qwen 配置】中配置的 Qwen 兼容端点（API Key / Base URL / 环境变量三种认证方式）。插件 UI 会在使用前明确标注请求路由方式。</li>
+        </ul>
+
+        <p><strong>Credential &amp; file-access disclosure / 凭证与文件访问说明：</strong></p>
+        <ul>
+            <li><strong>No silent credential scanning.</strong> The plugin never silently scans your disk for API keys or tokens. All credential sources require <strong>explicit user authorization</strong> via a confirmation dialog in the plugin UI.</li>
+            <li><strong>MCP server configuration</strong>: When the user opens the MCP settings page, the plugin reads MCP server definitions (server names, commands, arguments) from <code>~/.qwen/settings.json</code>. This file contains <strong>no credentials or tokens</strong> — only MCP server configuration metadata.</li>
+        </ul>
+        <p>插件不会静默扫描磁盘上的凭证。所有凭证来源均需用户在 UI 中显式授权确认。MCP 服务器配置仅在用户打开 MCP 设置页面时读取，该文件仅含服务器定义，不含任何凭证或令牌。</p>
+
+        <h2>核心功能</h2>
+        <ul>
+            <li><strong>上下文感知助手</strong>：智能编程助手，支持 @文件引用</li>
+            <li><strong>图片支持</strong>：发送图片可视化描述需求</li>
+            <li><strong>Agent 系统</strong>：内置智能体自动化执行复杂任务</li>
+            <li><strong>Skills 命令</strong>：斜杠命令系统（/init, /review 等）</li>
+            <li><strong>MCP 服务器</strong>：通过 MCP 协议扩展 AI 能力</li>
+            <li><strong>代码 DIFF</strong>：可视化代码对比和文件导航</li>
+            <li><strong>会话管理</strong>：历史记录、收藏、搜索和导出</li>
+            <li><strong>主题支持</strong>：深色/浅色主题，支持 IDE 字体同步</li>
+            <li><strong>权限控制</strong>：完善的安全管理</li>
+            <li><strong>Qwen 配置管理</strong>：认证方式 / API Key / Base URL 一站式配置</li>
+        </ul>
+
+        <h2>使用方法</h2>
+        <ul>
+            <li>从右侧边栏打开 QwenMate 工具窗口</li>
+            <li>选中代码后使用 <kbd>Ctrl+Alt+K</kbd>（Win/Linux）或 <kbd>Cmd+Alt+K</kbd>（Mac）发送给 AI</li>
+            <li>即时获得 AI 驱动的代码辅助和智能建议</li>
+        </ul>
+
+        <p><em>Keywords: Qwen, Qwen Code, Qwen3, DashScope, DeepSeek Harness, Code Generation, AI Coding, AI Coding Assistant</em></p>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <!-- Git support — optional: Commit AI (real git4idea `git diff` + commit toolbar action)
+         lives in git-features.xml and only loads when Git4Idea is present.
+         Git4Idea is bundled in all JetBrains IDEs that support Git. -->
+    <depends optional="true" config-file="git-features.xml">Git4Idea</depends>
+    <!-- JCEF is a separate platform module in IntelliJ IDEA 2026.2+, but older
+         IDEs may provide JCEF from the platform without exposing this module. -->
+    <depends optional="true" config-file="jcef-features.xml">com.intellij.modules.jcef</depends>
+    <!-- Optional: Terminal support for terminal output monitoring -->
+    <depends optional="true" config-file="terminal-features.xml">org.jetbrains.plugins.terminal</depends>
+    <!-- Optional: Java support for enhanced context collection in Java/Kotlin IDEs -->
+    <depends optional="true" config-file="java-features.xml">com.intellij.java</depends>
+    <!-- Optional: Python support for enhanced context collection in PyCharm/IDEA with Python plugin -->
+    <depends optional="true" config-file="python-features.xml">com.intellij.modules.python</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- QwenMate tool window (includes history feature) -->
+        <toolWindow id="QwenMate"
+                    anchor="right"
+                    factoryClass="com.qwenmate.ui.toolwindow.QwenMateToolWindow"
+                    icon="/icons/logo-16.png"
+                    canCloseContents="true"/>
+
+        <!-- Pre-extract AI Bridge on project open to avoid EDT freeze -->
+        <postStartupActivity implementation="com.qwenmate.startup.BridgePreloader"/>
+
+        <!-- Cleanup old ai-bridge cache when plugin version changes -->
+        <postStartupActivity implementation="com.qwenmate.startup.PluginUpdateListener"/>
+
+        <!-- Monitor Run/Debug Service Output -->
+        <postStartupActivity implementation="com.qwenmate.service.RunConfigMonitorService"/>
+
+        <!-- StatusBar widget for task notification -->
+        <statusBarWidgetFactory id="QwenMateStatusBarWidget"
+                                implementation="com.qwenmate.notifications.QwenMateStatusBarWidget$Factory"/>
+
+        <!-- Notification group for DevTools and other balloon notifications -->
+        <notificationGroup id="QwenMate Notifications" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <!-- Action to send selected code to QwenMate -->
+        <action id="QwenMate.SendSelectionToTerminalAction"
+                class="com.qwenmate.action.editor.SendSelectionToTerminalAction"
+                icon="/icons/logo-16.png">
+            <!-- Add to editor context menu (displayed at the top) -->
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt K"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="meta alt K"/>
+            <keyboard-shortcut keymap="macOS" first-keystroke="meta alt K"/>
+        </action>
+
+        <!-- Copy AI Reference Action -->
+        <action id="QwenMate.CopySelectionReferenceAction"
+                class="com.qwenmate.action.editor.CopySelectionReferenceAction"
+                icon="/icons/logo-16.png">
+            <add-to-group group-id="EditorPopupMenu"
+                           anchor="after"
+                           relative-to-action="QwenMate.SendSelectionToTerminalAction"/>
+        </action>
+
+        <!-- Quick Fix with Claude Action -->
+        <action id="QwenMate.QuickFixWithQwenMateAction"
+                class="com.qwenmate.action.editor.QuickFixWithQwenMateAction"
+                icon="/icons/logo-16.png">
+            <add-to-group group-id="EditorPopupMenu"
+                           anchor="after"
+                           relative-to-action="QwenMate.SendSelectionToTerminalAction"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift Q"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="meta shift Q"/>
+            <keyboard-shortcut keymap="macOS" first-keystroke="meta shift Q"/>
+        </action>
+
+        <!-- Create New Tab Action (can be invoked via Find Action or programmatically) -->
+        <action id="QwenMate.CreateNewTabAction"
+                class="com.qwenmate.action.tab.CreateNewTabAction"
+                icon="AllIcons.General.Add"/>
+
+        <!-- Rename Tab Action -->
+        <action id="QwenMate.RenameTabAction"
+                class="com.qwenmate.action.tab.RenameTabAction"
+                icon="AllIcons.Actions.Edit"/>
+
+        <!-- Detach Tab Action -->
+        <action id="QwenMate.DetachTabAction"
+                class="com.qwenmate.action.tab.DetachTabAction"
+                icon="AllIcons.Actions.MoveToWindow"/>
+
+        <!-- Save As Template Action -->
+        <action id="QwenMate.SaveAsTemplateAction"
+                class="com.qwenmate.action.SaveAsTemplateAction"
+                icon="/icons/logo-16.png"/>
+
+        <!-- Create From Template Action -->
+        <action id="QwenMate.CreateFromTemplateAction"
+                class="com.qwenmate.action.CreateFromTemplateAction"
+                icon="AllIcons.Actions.AddMulticaret"/>
+
+        <!-- Open DevTools Action for JCEF debugging -->
+        <action id="QwenMate.OpenDevToolsAction"
+                class="com.qwenmate.action.dev.OpenDevToolsAction"
+                icon="AllIcons.Xml.Browsers.Chromium"/>
+
+        <!-- Action to send file path from the file tree to the input box -->
+        <action id="QwenMate.SendFilePathToInputAction"
+                class="com.qwenmate.action.editor.SendFilePathToInputAction"
+                icon="/icons/logo-16.png">
+            <!-- Add to project file tree and editor tab context menus -->
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <add-to-group group-id="EditorTabPopupMenu" anchor="first"/>
+        </action>
+
+        <!-- Action to send the selected console text to QwenMate -->
+        <action id="QwenMate.SendConsoleSelectionToInputAction"
+                class="com.qwenmate.action.console.SendConsoleSelectionToInputAction"
+                icon="/icons/logo-16.png">
+            <add-to-group group-id="ConsoleView.PopupMenu" anchor="last"/>
+        </action>
+
+        <!-- Chat tool window clipboard actions (scoped to the QwenMate tool window) -->
+        <action id="QwenMate.ChatCopyAction"
+                class="com.qwenmate.action.ChatCopyAction"
+                text="Copy (Chat Window)"
+                description="Copy selected text in chat window">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl C"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="meta C"/>
+            <keyboard-shortcut keymap="macOS" first-keystroke="meta C"/>
+        </action>
+        <action id="QwenMate.ChatCutAction"
+                class="com.qwenmate.action.ChatCutAction"
+                text="Cut (Chat Window)"
+                description="Cut selected text in chat window">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl X"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="meta X"/>
+            <keyboard-shortcut keymap="macOS" first-keystroke="meta X"/>
+        </action>
+        <action id="QwenMate.ChatPasteAction"
+                class="com.qwenmate.action.ChatPasteAction"
+                text="Paste (Chat Window)"
+                description="Paste clipboard text in chat window">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl V"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="meta V"/>
+            <keyboard-shortcut keymap="macOS" first-keystroke="meta V"/>
+        </action>
+
+        <!-- Chat tool window send action (no default shortcut; dynamically managed by SendShortcutSync) -->
+        <action id="QwenMate.ChatSendAction"
+                class="com.qwenmate.action.ChatSendAction"
+                text="Send Message (Chat Window)"
+                description="Send message in chat window"/>
+
+        <!-- Chat tool window newline action (Shift+Enter always newline; Ctrl+Enter dynamically managed by SendShortcutSync) -->
+        <action id="QwenMate.ChatNewlineAction"
+                class="com.qwenmate.action.ChatNewlineAction"
+                text="Insert Newline (Chat Window)"
+                description="Insert newline in chat window input">
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ENTER"/>
+            <keyboard-shortcut keymap="Mac OS X" first-keystroke="shift ENTER"/>
+            <keyboard-shortcut keymap="macOS" first-keystroke="shift ENTER"/>
+        </action>
+
+        <!--
+          Hide QwenMate Panel. A standalone action with NO default keyboard shortcut: users may bind one
+          in Settings | Keymap to hide the tool window while focus is in the IDE (e.g. the editor).
+          NOTE: The Shift+Esc shortcut that hides the panel while focus is INSIDE the webview is
+          implemented separately in WebviewInitializer via a JS keydown listener
+          (document.addEventListener -> JBCefJSQuery -> ToolWindow.hide()); it does NOT go through this
+          action. Shift+Esc is intentionally not registered here to avoid clashing with the IDE's
+          built-in HideActiveWindow shortcut.
+        -->
+        <action id="QwenMate.HidePanelAction"
+                class="com.qwenmate.action.HidePanelAction"
+                text="Hide QwenMate Panel"
+                description="Hide the QwenMate tool window panel"/>
+    </actions>
+</idea-plugin>

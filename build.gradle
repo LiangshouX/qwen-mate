@@ -1,0 +1,698 @@
+plugins {
+    id 'java'
+    id 'checkstyle'
+    id 'org.jetbrains.intellij.platform' version '2.10.5'
+}
+
+// Load local properties file (not committed to git)
+def localPropertiesFile = rootProject.file('local.properties')
+def localProperties = new Properties()
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+    println "Loaded local.properties"
+}
+
+// Print Java version info
+println "Java version: ${System.getProperty('java.version')}"
+println "Java home: ${System.getProperty('java.home')}"
+
+// Helper method: prioritize local.properties, fallback to gradle.properties
+ext.getLocalProperty = { String key, String defaultValue = null ->
+    return localProperties.getProperty(key) ?: project.findProperty(key) ?: defaultValue
+}
+
+// Get custom JDK path from local properties (support both property names)
+def localJavaHome = getLocalProperty('java.home') ?: getLocalProperty('org.gradle.java.home')
+
+checkstyle {
+    toolVersion = '10.12.5'
+    configFile = file('checkstyle.xml')
+    // Quality gate covers production sources only. Test code legitimately breaks
+    // these rules: fixture child-process mains must write to System.out so the
+    // parent can capture stdout, and single-element-array lambda captures are a
+    // common, harmless test idiom.
+    sourceSets = [project.sourceSets.main]
+}
+
+// sourceSets above unhooks checkstyleTest from the check lifecycle; disabling the
+// task as well makes an explicit `gradlew checkstyleTest` a SKIPPED no-op instead
+// of a failure.
+tasks.named('checkstyleTest') {
+    enabled = false
+}
+
+group = 'com.qwenmate'
+version = '0.1.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+
+    // Use Java Toolchain for consistent JDK across all tasks
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+// Configure custom JDK path if specified in local.properties
+if (localJavaHome) {
+    def javaHomeDir = file(localJavaHome)
+    if (javaHomeDir.exists()) {
+        println "Using custom Java home: ${localJavaHome}"
+
+        // Set the Java launcher for all JavaExec and Test tasks (except runIde)
+        tasks.withType(JavaCompile).configureEach {
+            options.fork = true
+            options.forkOptions.javaHome = javaHomeDir
+        }
+
+        tasks.withType(JavaExec).configureEach {
+            // Skip runIde task to use JBR for JCEF support
+            if (it.name != 'runIde') {
+                javaLauncher = javaToolchains.launcherFor {
+                    languageVersion = JavaLanguageVersion.of(17)
+                }
+            }
+        }
+    } else {
+        println "WARNING: Configured java.home does not exist: ${localJavaHome}"
+    }
+}
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.tomlj:tomlj:1.1.1'
+    implementation 'javazoom:jlayer:1.0.1'
+    implementation 'org.snakeyaml:snakeyaml-engine:3.0.1'
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.12.0'
+    // OpenCode 1.x stores sessions in ~/.local/share/opencode/opencode.db
+    implementation 'org.xerial:sqlite-jdbc:3.46.1.3'
+    testImplementation 'junit:junit:4.13.2'
+
+    intellijPlatform {
+        def targetIde = project.findProperty('targetIde') ?: 'IC'
+        if (targetIde == 'PC') {
+            pycharmCommunity('2024.3')
+            bundledPlugin('PythonCore')
+        } else if (targetIde == 'PY') {
+            pycharmProfessional('2024.3')
+            bundledPlugin('Pythonid')
+        } else if (targetIde == 'RD') {
+            // Rider 2025.3.2
+            rider('2025.3.2')
+            // Enable Terminal Plugin support
+            bundledPlugin('org.jetbrains.plugins.terminal')
+        } else {
+            intellijIdeaCommunity('2024.3.1')
+            bundledPlugin('com.intellij.java')
+            // Add Python plugin to support compiling PythonContextCollector
+            plugin('PythonCore', '243.22562.145')
+            // Enable Terminal Plugin support
+            bundledPlugin('org.jetbrains.plugins.terminal')
+        }
+
+        // Compile-time dependency only. Git4Idea is bundled in all JetBrains
+        // IDEs that support Git (IC/PC/PY/RD); plugin.xml declares it as an
+        // optional <depends> (git-features.xml) so the plugin also installs in
+        // Git-less IDE configurations. Used for real `git diff` via
+        // git4idea.commands.* in the Commit AI feature.
+        bundledPlugin('Git4Idea')
+
+        instrumentationTools()
+
+        // IDEs to verify the plugin against (used by `verifyPlugin` task).
+        // Mirrors what JetBrains Marketplace runs so we can catch binary
+        // incompatibility (e.g. new abstract methods in JCEF) before upload.
+        pluginVerifier()
+    }
+}
+
+intellijPlatform {
+    pluginVerification {
+        // Keep local verification focused on binary/internal API compatibility
+        // issues that match Marketplace rejection criteria.
+        failureLevel = [
+            org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel.COMPATIBILITY_PROBLEMS,
+            org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel.INTERNAL_API_USAGES
+        ]
+
+        // PythonCore is pinned to 243.x for compileOnly use across the
+        // sinceBuild=233 .. untilBuild=263.* range. Verifier on 262.x EAP
+        // cannot resolve com.jetbrains.python classes from a 243.x PythonCore,
+        // so we mark the package as external — references from the optional
+        // python-features.xml content module are guarded by the optional
+        // dependency on com.intellij.modules.python at runtime.
+        externalPrefixes = ['com.jetbrains.python']
+
+        ides {
+            // 2026.2.1 EAP build 262.9437.22 – the exact build that surfaced
+            // the CefResourceHandler / PluginManagerCore issues during
+            // marketplace verification.
+            ide('IU', '262.9437.22')
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            def targetIde = project.findProperty('targetIde') ?: 'IC'
+            // PyCharm: exclude Java context collector
+            if (targetIde == 'PC' || targetIde == 'PY') {
+                exclude '**/JavaContextCollector.java'
+                exclude '**/JavaClassNavigationSupport.java'
+            }
+            // Rider: exclude both Java and Python context collectors (no PSI support)
+            if (targetIde == 'RD') {
+                exclude '**/JavaContextCollector.java'
+                exclude '**/JavaClassNavigationSupport.java'
+                exclude '**/PythonContextCollector.java'
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    // Ensure consistent source/target compatibility
+    options.release.set(17)
+}
+
+// Ensure plugin.xml is patched with the correct since/until build and change notes
+patchPluginXml {
+    // plugin compatibility range
+    sinceBuild = '233'
+    untilBuild = '263.*'
+
+    // Release notes shown in plugin repositories
+    // Dynamically load the latest changelog entry from CHANGELOG.md and convert to simple HTML.
+    def changelogFile = file('CHANGELOG.md')
+    def computedChangeNotes = ''
+    if (changelogFile.exists()) {
+        def lines = changelogFile.readLines('UTF-8')
+        // Find first section header (lines starting with '#####')
+        def start = -1
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines[i].trim().startsWith('#####')) {
+                start = i
+                break
+            }
+        }
+
+        if (start >= 0) {
+            def sb = new StringBuilder()
+            boolean inList = false
+            int i = start + 1
+            while (i < lines.size() && !lines[i].trim().startsWith('#####')) {
+                def line = lines[i]
+                def t = line.trim()
+
+                if (t.startsWith('- ')) {
+                    if (!inList) { sb.append('<ul>'); inList = true }
+                    def item = t.substring(2)
+                    // remove checkbox markers like [x] or [ ]
+                    if (item.startsWith('[') && item.length() > 3 && item.charAt(2) == ']') {
+                        item = item.substring(3).trim()
+                    }
+                    item = item.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    sb.append('<li>' + item + '</li>')
+                } else if (t.startsWith('![') || t.startsWith('<img')) {
+                    // skip images
+                } else if (t.length() == 0) {
+                    if (inList) { sb.append('</ul>'); inList = false }
+                    sb.append('<br/>')
+                } else {
+                    if (inList) { sb.append('</ul>'); inList = false }
+                    // paragraph
+                    def para = t.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+                    sb.append('<p>' + para + '</p>')
+                }
+
+                i++
+            }
+            if (inList) { sb.append('</ul>') }
+            computedChangeNotes = sb.toString()
+        }
+    }
+
+    changeNotes = computedChangeNotes ?: '<p>No changelog found.</p>'
+}
+
+// macOS: Finder may recreate .DS_Store inside build/ while Gradle's Delete task is
+// removing it, which fails with "New files were found". Bypass Gradle's strict
+// directory-delete check and remove build/ with a tolerant strategy instead.
+tasks.named('clean', Delete) {
+    // Clear targets registered by the Java plugin so the strict Delete action is a no-op.
+    delete = []
+    doLast {
+        def buildDir = layout.buildDirectory.get().asFile
+        if (!buildDir.exists()) {
+            return
+        }
+        // Prefer shell rm on macOS — more resilient to concurrent .DS_Store writes.
+        def isMac = System.getProperty('os.name', '').toLowerCase().contains('mac')
+        if (isMac) {
+            providers.exec {
+                commandLine 'rm', '-rf', buildDir.absolutePath
+            }.result.get()
+        } else {
+            ant.delete(dir: buildDir, failonerror: false)
+        }
+        if (buildDir.exists()) {
+            // One more attempt after stripping junk metadata files
+            buildDir.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+                if (f.name == '.DS_Store' || f.name == 'Thumbs.db') {
+                    f.delete()
+                }
+            }
+            ant.delete(dir: buildDir, failonerror: false)
+        }
+        if (buildDir.exists()) {
+            throw new GradleException("Unable to delete build directory: ${buildDir}")
+        }
+    }
+}
+
+// Disable product-specific searchable options/instrument tasks if present
+// Use matching to cover task name variants like buildSearchableOptionsIC / buildSearchableOptionsIU etc.
+tasks.matching { it.name.startsWith('buildSearchableOptions') }.configureEach {
+    enabled = false
+}
+
+tasks.named('buildSearchableOptions') {
+    enabled = false
+}
+
+tasks.named('instrumentCode') {
+    enabled = false
+}
+
+tasks.named('jarSearchableOptions') {
+    enabled = false
+}
+
+tasks.named('runIde') {
+    jvmArgumentProviders.add({
+        [
+            '-Djcef.sandbox.enable=false',
+            // Disable automatic plugin unloading (prevents unloading when file changes are detected)
+            '-Didea.auto.reload.plugins=false',
+            // Disable dynamic plugin unloading
+            '-Didea.dynamic.plugins.allowed=false',
+            // Enable internal mode
+            '-Didea.is.internal=true',
+            // Disable file system event monitoring (optional)
+            // '-Didea.filewatcher.disabled=true',
+            // Increase plugin loading timeout
+            '-Didea.plugins.load.timeout=60000'
+        ]
+    } as CommandLineArgumentProvider)
+
+    // Set system properties
+    systemProperty 'idea.auto.reload.plugins', 'false'
+    systemProperty 'idea.dynamic.plugins.allowed', 'false'
+    systemProperty 'idea.is.internal', 'true'
+    systemProperty 'idea.plugin.in.sandbox.mode', 'true'
+
+    // Configure log output to console
+    systemProperty 'idea.log.debug.categories', '#com.qwenmate'
+
+    // Point bridge resolver to pre-extracted ai-bridge with node_modules (dev only)
+    def stableBridge = layout.buildDirectory.dir("stable-ai-bridge").get().asFile
+    if (stableBridge.exists()) {
+        systemProperty 'qwenmate.bridge.path', stableBridge.absolutePath
+    }
+
+    // Redirect standard output
+    standardOutput = System.out
+    errorOutput = System.err
+
+    // Copy custom configuration to sandbox
+    doFirst {
+        def sandboxConfig = file('sandbox-idea.properties')
+        if (sandboxConfig.exists()) {
+            def sandboxDir = layout.buildDirectory.dir("idea-sandbox").get().asFile
+            def configDir = new File(sandboxDir, 'config')
+            configDir.mkdirs()
+
+            copy {
+                from sandboxConfig
+                into configDir
+                rename { 'idea.properties' }
+            }
+            println "Copied sandbox config to: ${configDir}/idea.properties"
+        }
+    }
+}
+
+// Unified AI Bridge (qwen + dsh)
+def aiBridgeDir = file("ai-bridge")
+def aiBridgePackDir = layout.buildDirectory.dir('ai-bridge-pack').get().asFile
+def aiBridgeArchive = new File(aiBridgePackDir, 'ai-bridge.zip')
+def aiBridgeHashFile = new File(aiBridgePackDir, 'ai-bridge.hash')
+
+// Build webview automatically
+def webviewDir = file('webview')
+def requestedTasks = gradle.startParameter.taskNames.collect { it.toLowerCase() }
+def enableVConsoleInWebview = requestedTasks.any { it.contains('runide') }
+def skipWebviewBuild = (project.findProperty('skipWebview') ?: 'false').toString().toBoolean()
+
+// Get custom Node.js path from local properties
+def localNodePath = getLocalProperty('node.path')
+
+tasks.register('buildWebview', Exec) {
+    workingDir webviewDir
+    environment 'VITE_ENABLE_VCONSOLE', enableVConsoleInWebview ? 'true' : 'false'
+
+    // Determine npm command path with robust detection
+    def npmCommand = 'npm'
+    if (localNodePath) {
+        def nodeFile = file(localNodePath)
+        def npmExecutable = null
+        def pathToAdd = null
+
+        if (nodeFile.isFile()) {
+            // localNodePath points to node executable (e.g., /usr/local/bin/node)
+            // npm should be in the same directory
+            def binDir = nodeFile.parentFile
+            def npmInSameDir = new File(binDir, 'npm')
+            if (npmInSameDir.exists()) {
+                npmExecutable = npmInSameDir
+                pathToAdd = binDir.absolutePath
+            }
+        } else if (nodeFile.isDirectory()) {
+            // localNodePath points to a directory, check multiple possible locations
+            // Case 1: bin/npm (standard installation like /usr/local/node/bin/npm)
+            def npmInBin = new File(nodeFile, 'bin/npm')
+            // Case 2: npm directly in directory (e.g., /usr/local/bin/npm)
+            def npmInDir = new File(nodeFile, 'npm')
+
+            if (npmInBin.exists()) {
+                npmExecutable = npmInBin
+                pathToAdd = new File(nodeFile, 'bin').absolutePath
+            } else if (npmInDir.exists()) {
+                npmExecutable = npmInDir
+                pathToAdd = nodeFile.absolutePath
+            }
+        }
+
+        if (npmExecutable != null) {
+            npmCommand = npmExecutable.absolutePath
+            println "Using npm executable: ${npmCommand}"
+        }
+
+        if (pathToAdd != null) {
+            def currentPath = System.getenv('PATH') ?: ''
+            environment 'PATH', "${pathToAdd}${File.pathSeparator}${currentPath}"
+        }
+
+        println "Using custom Node.js path: ${localNodePath}"
+    }
+
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        commandLine 'cmd', '/c', npmCommand, 'run', 'build'
+    } else {
+        commandLine npmCommand, 'run', 'build'
+    }
+
+    onlyIf { webviewDir.exists() && !skipWebviewBuild }
+    if (skipWebviewBuild) {
+        println "Skipping webview build because -PskipWebview=true"
+    }
+    doFirst { println "Building webview..." }
+    doLast { println "Webview build completed." }
+}
+
+// Ensure processResources runs after buildWebview
+// Use mustRunAfter for execution order, trigger buildWebview before compileJava
+tasks.named('compileJava') {
+    dependsOn('buildWebview')
+}
+
+tasks.named('processResources') {
+    mustRunAfter('buildWebview')
+}
+
+// Use system zip command to package ai-bridge, preserving file permissions
+tasks.register('packageAiBridge', Exec) {
+    onlyIf { aiBridgeDir.exists() }
+
+    // Switch to ai-bridge directory for packaging, avoiding inclusion of top-level directory
+    workingDir aiBridgeDir
+
+    // Ensure output directory exists and dependencies are installed
+    doFirst {
+        aiBridgePackDir.mkdirs()
+        // Delete old zip file
+        if (aiBridgeArchive.exists()) {
+            aiBridgeArchive.delete()
+        }
+        // Install npm dependencies if node_modules doesn't exist
+        if (!new File(aiBridgeDir, 'node_modules').exists()) {
+            println 'Installing ai-bridge npm dependencies...'
+            String npmCmd = System.getProperty('os.name').toLowerCase().contains('windows') ? 'npm.cmd' : 'npm'
+            exec { commandLine npmCmd, 'install', '--silent', '--loglevel=error'; workingDir = aiBridgeDir }
+            println 'ai-bridge npm dependencies installed.'
+        }
+    }
+
+    // Use system zip command, -r for recursive, -y to preserve symlinks
+    // Exclude SDK packages (they will be installed on-demand by users to ~/.qwenmate/dependencies/)
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        // Windows: Use PowerShell to exclude SDK packages
+        // Create temporary PowerShell script file to avoid escaping issues
+        def tempScript = File.createTempFile('ai-bridge-pack', '.ps1')
+        tempScript.deleteOnExit()
+
+        def scriptContent = '''
+            $excludePatterns = @(
+                '*node_modules\\.pnpm*',
+                '*node_modules\\@anthropic-ai*',
+                '*node_modules\\@openai*'
+            )
+            $tempDir = Join-Path $env:TEMP "ai-bridge-temp-$(Get-Random)"
+            New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
+            try {
+                Get-ChildItem -Path . -Recurse -Force | Where-Object {
+                    $itemPath = $_.FullName
+                    $shouldExclude = $false
+                    foreach ($pattern in $excludePatterns) {
+                        if ($itemPath -like $pattern) {
+                            $shouldExclude = $true
+                            break
+                        }
+                    }
+                    -not $shouldExclude
+                } | ForEach-Object {
+                    $relativePath = $_.FullName.Substring((Get-Location).Path.Length + 1)
+                    $dest = Join-Path $tempDir $relativePath
+                    if ($_.PSIsContainer) {
+                        if (-not (Test-Path $dest)) {
+                            New-Item -ItemType Directory -Path $dest -Force | Out-Null
+                        }
+                    } else {
+                        $destDir = Split-Path $dest -Parent
+                        if (-not (Test-Path $destDir)) {
+                            New-Item -ItemType Directory -Path $destDir -Force | Out-Null
+                        }
+                        Copy-Item $_.FullName -Destination $dest -Force
+                    }
+                }
+                # Zip entries must use forward slashes per the zip spec;
+                # Compress-Archive writes Windows separators that break
+                # strict extractors and cross-platform unzip tools.
+                Add-Type -AssemblyName System.IO.Compression.FileSystem
+                $zipPath = "''' + aiBridgeArchive.absolutePath.replace('\\', '\\\\') + '''"
+                if (Test-Path $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
+                $zip = [System.IO.Compression.ZipFile]::Open($zipPath, 'Create')
+                try {
+                    Get-ChildItem -LiteralPath $tempDir -Recurse -File | ForEach-Object {
+                        $rel = $_.FullName.Substring($tempDir.Length + 1).Replace('\\', '/')
+                        $entry = $zip.CreateEntry($rel)
+                        $entryStream = $entry.Open()
+                        try {
+                            $fileStream = [System.IO.File]::OpenRead($_.FullName)
+                            try { $fileStream.CopyTo($entryStream) } finally { $fileStream.Dispose() }
+                        } finally { $entryStream.Dispose() }
+                    }
+                } finally { $zip.Dispose() }
+            } finally {
+                if (Test-Path $tempDir) {
+                    Remove-Item -Path $tempDir -Recurse -Force
+                }
+            }
+            '''
+        tempScript.text = scriptContent
+        commandLine 'powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', tempScript.absolutePath
+    } else {
+        // Unix/Linux/macOS: Use zip command to preserve permissions
+        // Exclude SDK package directories
+        commandLine 'zip', '-r', '-y', aiBridgeArchive.absolutePath,
+            '.',
+            '-x', '*/node_modules/.pnpm/*',
+            '-x', '*/node_modules/@anthropic-ai/*',
+            '-x', '*/node_modules/@openai/*'
+    }
+
+    doLast {
+        if (aiBridgeArchive.exists()) {
+            println "✓ ai-bridge.zip created: ${aiBridgeArchive.absolutePath}"
+            println "  Size: ${aiBridgeArchive.length() / 1024 / 1024} MB"
+
+            // Generate ai-bridge.hash file (SHA-256)
+            def digest = java.security.MessageDigest.getInstance('SHA-256')
+            aiBridgeArchive.withInputStream { is ->
+                byte[] buffer = new byte[8192]
+                int read
+                while ((read = is.read(buffer)) != -1) {
+                    digest.update(buffer, 0, read)
+                }
+            }
+            def hashHex = digest.digest().collect { String.format('%02x', it) }.join('')
+            aiBridgeHashFile.text = hashHex
+            println "✓ ai-bridge.hash created: ${hashHex}"
+        } else {
+            throw new GradleException("Packaging failed: ai-bridge.zip was not generated")
+        }
+    }
+}
+
+// Extract plugin name
+def pluginName = project.name
+
+tasks.matching { it.name.startsWith('prepareSandbox') }.configureEach {
+    dependsOn('buildWebview', 'packageAiBridge')
+    // Declare ai-bridge files as task inputs so changes to JS source
+    // invalidate the UP-TO-DATE check and ensure doLast (copy/cleanup) runs.
+    inputs.files(aiBridgeArchive, aiBridgeHashFile)
+    def sandboxRootProvider = layout.buildDirectory.dir('idea-sandbox')
+    // Capture needed file references during configuration phase
+    def archiveSource = aiBridgeArchive
+    def hashSource = aiBridgeHashFile
+    def bridgeDir = aiBridgeDir
+
+    doLast {
+        if (!bridgeDir.exists() && !archiveSource.exists()) {
+            throw new GradleException('ai-bridge directory does not exist. Please ensure it has been pulled and dependencies installed.')
+        }
+        def sandboxRoot = sandboxRootProvider.get().asFile
+
+        // Find all plugin directories (including versioned ones like IC-2024.3.1/plugins/)
+        def pluginDirs = []
+
+        // Direct plugins directory
+        def directPluginDir = new File(sandboxRoot, "plugins/${pluginName}")
+        if (directPluginDir.exists() || directPluginDir.parentFile.exists()) {
+            pluginDirs.add(directPluginDir)
+        }
+
+        // Versioned plugin directories (IC-*/plugins/, PC-*/plugins/, etc.)
+        sandboxRoot.listFiles()?.each { file ->
+            if (file.isDirectory() && file.name.matches(/[A-Z]+-\d+\.\d+\.\d+/)) {
+                def versionedPluginDir = new File(file, "plugins/${pluginName}")
+                if (versionedPluginDir.exists() || versionedPluginDir.parentFile.exists()) {
+                    pluginDirs.add(versionedPluginDir)
+                }
+            }
+        }
+
+        if (pluginDirs.isEmpty()) {
+            println "Warning: No plugin directories found in sandbox"
+        }
+
+        // Copy ai-bridge.zip to all found plugin directories
+        pluginDirs.each { pluginDir ->
+            println "Copying ai-bridge to: ${pluginDir.absolutePath}"
+
+            def extractedDir = new File(pluginDir, 'ai-bridge')
+            def archiveTarget = new File(pluginDir, 'ai-bridge.zip')
+            def hashTarget = new File(pluginDir, 'ai-bridge.hash')
+
+            // Ensure plugin directory exists
+            pluginDir.mkdirs()
+
+            // Use ant tasks for delete and copy, avoiding project.* methods
+            ant.delete(dir: extractedDir, failonerror: false)
+            ant.delete(file: archiveTarget, failonerror: false)
+            ant.delete(file: hashTarget, failonerror: false)
+            ant.copy(file: archiveSource, todir: pluginDir)
+            if (hashSource.exists()) {
+                ant.copy(file: hashSource, todir: pluginDir)
+            }
+
+            println "✓ ai-bridge.zip copied to: ${archiveTarget.absolutePath}"
+        }
+    }
+}
+
+// Configure tasks after prepareSandbox to ensure ai-bridge.zip is included
+tasks.matching { it.name == 'preparePluginForDistribution' || it.name == 'composedJar' }.configureEach {
+    dependsOn('packageAiBridge')
+}
+
+tasks.named('buildPlugin') {
+    dependsOn('packageAiBridge', 'checkstyleMain')
+    // Invalidate UP-TO-DATE when ai-bridge.zip content changes.
+    inputs.files(aiBridgeArchive, aiBridgeHashFile)
+
+    doLast {
+        // Unzip the plugin zip, add ai-bridge.zip and ai-bridge.hash, then repackage
+        def distributionFile = archiveFile.get().asFile
+        if (distributionFile.exists() && aiBridgeArchive.exists()) {
+            def tempDir = file("${layout.buildDirectory.get()}/tmp/plugin-repack")
+            delete(tempDir)
+
+            // Unzip
+            copy {
+                from zipTree(distributionFile)
+                into tempDir
+            }
+
+            // Find the plugin directory and add ai-bridge.zip and ai-bridge.hash
+            def pluginDir = new File(tempDir, pluginName)
+            if (pluginDir.exists()) {
+                copy {
+                    from aiBridgeArchive
+                    from aiBridgeHashFile
+                    into pluginDir
+                }
+
+                // Copy offline SDK packages if present
+                def sdkPackagesDir = file('sdk-packages')
+                if (sdkPackagesDir.exists()) {
+                    copy {
+                        from sdkPackagesDir
+                        into new File(pluginDir, 'sdk-packages')
+                    }
+                    println "Added sdk-packages/ to plugin package"
+                }
+
+                // Delete searchableOptions jar if present
+                fileTree(new File(pluginDir, 'lib')).matching {
+                    include '**/*searchableOptions*.jar'
+                }.each { jarFile ->
+                    delete(jarFile)
+                    println "Deleted searchableOptions jar: ${jarFile.name}"
+                }
+
+                // Repackage
+                delete(distributionFile)
+                ant.zip(destfile: distributionFile) {
+                    fileset(dir: tempDir)
+                }
+                println "Added ai-bridge.zip and ai-bridge.hash to plugin package and removed searchableOptions jar"
+            }
+
+            delete(tempDir)
+        }
+    }
+}

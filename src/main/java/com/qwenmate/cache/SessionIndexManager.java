@@ -1,0 +1,520 @@
+package com.qwenmate.cache;
+
+import com.qwenmate.bridge.NodeDetector;
+import com.qwenmate.util.TextSanitizer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.intellij.openapi.diagnostic.Logger;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.UncheckedIOException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import com.qwenmate.settings.LegacyDataDirMigrator;
+
+/**
+ * Session index file manager.
+ * Handles reading, writing, and incremental updates of index files.
+ * Index file location: ~/.qwenmate/cache/
+ */
+public class SessionIndexManager {
+
+    private static final Logger LOG = Logger.getInstance(SessionIndexManager.class);
+
+    private static final String CLAUDE_INDEX_FILE = "claude-session-index.json";
+    private static final int INDEX_REPLACE_MAX_ATTEMPTS = 5;
+    // Linear backoff base. Sleeps happen while holding indexFileLock, so keep the worst-case
+    // total (sum 1..N-1 * base) within ~100ms to avoid blocking concurrent index reads/writes.
+    private static final long INDEX_REPLACE_RETRY_DELAY_MS = 10L;
+    private static final Pattern CLAUDE_SESSION_FILE_PATTERN = Pattern.compile(
+            "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\.jsonl$",
+            Pattern.CASE_INSENSITIVE
+    );
+
+    // v9 (2026-09): qwen transcript chain-walking initially skipped the system
+    // records (attribution snapshots / telemetry) that real parentUuid chains run
+    // through, under-counting every qwen session. Bump so cached counts rebuild.
+    // v8 (2026-09): Codex CLI injects a <recommended_plugins> context block as the first
+    // user message of a session. It was not stripped, so extractFirstUserMessageTitle()
+    // picked it as the session title (every session showed "<recommended_plugins> Here
+    // is a list of plugi..."). The sanitizer now strips the tag; bump so cached wrong
+    // titles are rebuilt from the JSONL files.
+    // v7 (2026-08): Codex 0.148+ CLI rollouts persist the user prompt as
+    // response_item/role=user instead of event_msg/user_message. v6 indexes can
+    // store an empty session list for those files; bump so they rebuild.
+    // v6 (2026-07): Codex subagent rollouts could be persisted as regular history sessions.
+    // Rebuild the indexes once so stale Codex entries do not survive the parser fix.
+    // v5 (2026-06): entrypoint (added in v4) could be persisted as null by interim v4
+    // builds that bumped the version before the extraction pipeline was fully wired.
+    // Restore paths trust index entries while the file mtime is unchanged, so those
+    // nulls would never self-heal. Bumping once more forces a clean rebuild that
+    // populates entrypoint for every session.
+    private static final int INDEX_VERSION = 9;
+
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Path qwenmateCacheDir;
+    private final Object indexFileLock = new Object();
+
+    private static Path defaultCacheDir() {
+        LegacyDataDirMigrator.migrateHomeOnce();
+        return Paths.get(NodeDetector.resolveHomeForFileOps(), ".qwenmate", "cache");
+    }
+
+    private SessionIndexManager() {
+        this(defaultCacheDir());
+    }
+
+    /**
+     * Creates an index manager that stores files under the given cache directory.
+     *
+     * @param qwenmateCacheDir cache directory for index files
+     */
+    public SessionIndexManager(Path qwenmateCacheDir) {
+        this.qwenmateCacheDir = qwenmateCacheDir;
+        ensureCacheDir();
+    }
+
+    private static final class Holder {
+        private static final SessionIndexManager INSTANCE = new SessionIndexManager();
+    }
+
+    public static SessionIndexManager getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    /**
+     * Index file structure.
+     */
+    public static class SessionIndex {
+        public int version = INDEX_VERSION;
+        public long lastUpdated;
+        public Map<String, ProjectIndex> projects = new HashMap<>();
+    }
+
+    /**
+     * Project index structure.
+     */
+    public static class ProjectIndex {
+        public long lastDirScanTime;
+        public int fileCount;
+        public List<SessionIndexEntry> sessions = new ArrayList<>();
+
+        /**
+         * Returns the set of already-indexed session IDs.
+         */
+        public Set<String> getIndexedSessionIds() {
+            Set<String> ids = new HashSet<>();
+            for (SessionIndexEntry entry : sessions) {
+                ids.add(entry.sessionId);
+            }
+            return ids;
+        }
+    }
+
+    /**
+     * Update type enumeration.
+     */
+    public enum UpdateType {
+        NONE,           // No update needed
+        INCREMENTAL,    // Incremental update (new or modified files)
+        FULL            // Full rebuild
+    }
+
+    /**
+     * Session index entry.
+     */
+    public static class SessionIndexEntry {
+        public String sessionId;
+        public String title;
+        public int messageCount;
+        public long lastTimestamp;
+        public long firstTimestamp;
+        public long fileSize;
+        public String cwd;
+        // Session entrypoint ("cli", "sdk-cli", ...). "" records that extraction ran
+        // and the file carries none; null means it was never extracted (pre-v5 data or
+        // a writer bug) and the incremental scan re-reads the file to heal it.
+        public String entrypoint;
+
+        // Model recorded on the transcript (qwen sessions), or null when unknown.
+        // Purely additive: older index files decode with this field null.
+        public String model;
+
+        // Used to detect whether the file has changed
+        public long fileLastModified;
+
+        // Path relative to the project dir. Enables sessionId -> file lookup during
+        // incremental rescan even when the session ID does not equal the file basename.
+        public String fileRelativePath;
+    }
+
+    /**
+     * Ensures the cache directory exists.
+     */
+    private void ensureCacheDir() {
+        try {
+            if (!Files.exists(qwenmateCacheDir)) {
+                Files.createDirectories(qwenmateCacheDir);
+                LOG.info("[SessionIndexManager] Created cache directory: " + qwenmateCacheDir);
+            }
+        } catch (IOException e) {
+            LOG.error("[SessionIndexManager] Failed to create cache directory: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Returns the file path for the Claude index.
+     */
+    public Path getClaudeIndexPath() {
+        return qwenmateCacheDir.resolve(CLAUDE_INDEX_FILE);
+    }
+
+    /**
+     * Reads the Claude index.
+     */
+    public SessionIndex readClaudeIndex() {
+        synchronized (indexFileLock) {
+            return readIndex(getClaudeIndexPath());
+        }
+    }
+
+    /**
+     * Saves one Claude project entry while preserving concurrent updates to other projects.
+     *
+     * @param projectPath  the Claude project path used as the index key
+     * @param projectIndex the refreshed project index
+     */
+    public void saveClaudeProjectIndex(String projectPath, ProjectIndex projectIndex) {
+        synchronized (indexFileLock) {
+            SessionIndex index = readIndex(getClaudeIndexPath());
+            index.projects.put(projectPath, projectIndex);
+            saveIndex(getClaudeIndexPath(), index);
+        }
+    }
+
+    /**
+     * Reads an index file from disk.
+     */
+    private SessionIndex readIndex(Path indexPath) {
+        if (!Files.exists(indexPath)) {
+            LOG.info("[SessionIndexManager] Index file not found: " + indexPath);
+            return new SessionIndex();
+        }
+
+        try (Reader reader = Files.newBufferedReader(indexPath, StandardCharsets.UTF_8)) {
+            SessionIndex index = this.gson.fromJson(reader, SessionIndex.class);
+            if (index == null) {
+                return new SessionIndex();
+            }
+            // Version check
+            if (index.version != INDEX_VERSION) {
+                LOG.info("[SessionIndexManager] Index version mismatch (disk=" + index.version
+                        + ", current=" + INDEX_VERSION + "), rebuilding");
+                return new SessionIndex();
+            }
+            LOG.info("[SessionIndexManager] Loaded index from " + indexPath + ", projects: " + index.projects.size());
+            return index;
+        } catch (Exception e) {
+            LOG.error("[SessionIndexManager] Failed to read index: " + e.getMessage(), e);
+            return new SessionIndex();
+        }
+    }
+
+    /**
+     * Saves an index file to disk.
+     */
+    private void saveIndex(Path indexPath, SessionIndex index) {
+        ensureCacheDir();
+        index.lastUpdated = System.currentTimeMillis();
+        sanitizeIndex(index);
+
+        Path parent = indexPath.getParent();
+        if (parent == null) {
+            LOG.warn("[SessionIndexManager] Failed to save index because parent directory is null: " + indexPath);
+            return;
+        }
+
+        String prefix = indexPath.getFileName() != null ? indexPath.getFileName() + "-" : "session-index-";
+        Path tmp = null;
+        try {
+            tmp = Files.createTempFile(parent, prefix, ".tmp");
+            try (Writer writer = Files.newBufferedWriter(tmp, StandardCharsets.UTF_8)) {
+                gson.toJson(index, writer);
+            }
+            replaceIndexFile(tmp, indexPath);
+            LOG.info("[SessionIndexManager] Saved index to " + indexPath);
+        } catch (Exception e) {
+            LOG.error("[SessionIndexManager] Failed to save index: " + e.getMessage(), e);
+        } finally {
+            if (tmp != null) {
+                try {
+                    Files.deleteIfExists(tmp);
+                } catch (IOException e) {
+                    LOG.debug("[SessionIndexManager] Failed to cleanup temp file: " + tmp + " (" + e.getMessage() + ")");
+                }
+            }
+        }
+    }
+
+    private void replaceIndexFile(Path tmp, Path indexPath) throws IOException {
+        IOException lastFailure = null;
+        boolean atomicMoveSupported = true;
+
+        for (int attempt = 1; attempt <= INDEX_REPLACE_MAX_ATTEMPTS; attempt++) {
+            try {
+                if (atomicMoveSupported) {
+                    Files.move(tmp, indexPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                } else {
+                    Files.move(tmp, indexPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+                return;
+            } catch (AtomicMoveNotSupportedException e) {
+                atomicMoveSupported = false;
+                lastFailure = e;
+            } catch (AccessDeniedException e) {
+                lastFailure = e;
+            }
+
+            if (attempt < INDEX_REPLACE_MAX_ATTEMPTS) {
+                sleepBeforeRetry(attempt);
+            }
+        }
+
+        throw lastFailure;
+    }
+
+    private void sleepBeforeRetry(int attempt) {
+        try {
+            Thread.sleep(INDEX_REPLACE_RETRY_DELAY_MS * attempt);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private void sanitizeIndex(SessionIndex index) {
+        if (index == null || index.projects == null || index.projects.isEmpty()) {
+            return;
+        }
+        Map<String, ProjectIndex> sanitizedProjects = new HashMap<>();
+        for (Map.Entry<String, ProjectIndex> projectEntry : index.projects.entrySet()) {
+            String sanitizedProjectPath = TextSanitizer.sanitizeInvalidSurrogates(projectEntry.getKey());
+            ProjectIndex projectIndex = projectEntry.getValue();
+            if (projectIndex != null && projectIndex.sessions != null) {
+                for (SessionIndexEntry sessionEntry : projectIndex.sessions) {
+                    if (sessionEntry == null) {
+                        continue;
+                    }
+                    sessionEntry.sessionId = TextSanitizer.sanitizeInvalidSurrogates(sessionEntry.sessionId);
+                    sessionEntry.title = TextSanitizer.sanitizeInvalidSurrogates(sessionEntry.title);
+                    sessionEntry.cwd = TextSanitizer.sanitizeInvalidSurrogates(sessionEntry.cwd);
+                }
+            }
+            sanitizedProjects.put(sanitizedProjectPath, projectIndex);
+        }
+        index.projects = sanitizedProjects;
+    }
+
+    /**
+     * Checks whether the project index needs to be updated.
+     *
+     * @param projectIndex the project index
+     * @param projectDir   the project directory
+     * @return true if an update is needed
+     */
+    public boolean needsUpdate(ProjectIndex projectIndex, Path projectDir) {
+        return getUpdateType(projectIndex, projectDir) != UpdateType.NONE;
+    }
+
+    /**
+     * Determines the type of update required.
+     *
+     * @param projectIndex the project index
+     * @param projectDir   the project directory
+     * @return the update type
+     */
+    public UpdateType getUpdateType(ProjectIndex projectIndex, Path projectDir) {
+        if (projectIndex == null || projectIndex.sessions == null) {
+            return UpdateType.FULL;
+        }
+        if (projectDir == null || !Files.isDirectory(projectDir)) {
+            return UpdateType.FULL;
+        }
+
+        try {
+            List<Path> currentFiles = new ArrayList<>();
+            try (Stream<Path> paths = Files.list(projectDir)) {
+                paths.filter(Files::isRegularFile)
+                        .filter(p -> p.toString().endsWith(".jsonl"))
+                        .forEach(currentFiles::add);
+            }
+
+            long currentFileCount = currentFiles.size();
+            if (currentFileCount > projectIndex.fileCount) {
+                // New files can be added without re-reading unchanged sessions.
+                LOG.info("[SessionIndexManager] File count increased: " + projectIndex.fileCount
+                        + " -> " + currentFileCount + ", incremental update");
+                return UpdateType.INCREMENTAL;
+            }
+            if (currentFileCount < projectIndex.fileCount) {
+                // A deleted file must be removed from the index, so rebuild the project.
+                LOG.info("[SessionIndexManager] File count decreased: " + projectIndex.fileCount
+                        + " -> " + currentFileCount + ", full update");
+                return UpdateType.FULL;
+            }
+
+            Map<String, BasicFileAttributes> currentFileAttributes = new HashMap<>();
+            for (Path currentFile : currentFiles) {
+                String relativePath = normalizeRelativePath(currentFile.getFileName().toString());
+                currentFileAttributes.put(
+                        relativePath,
+                        Files.readAttributes(currentFile, BasicFileAttributes.class)
+                );
+            }
+
+            Set<String> indexedPaths = new HashSet<>();
+            boolean hasChangedFile = false;
+            for (SessionIndexEntry entry : projectIndex.sessions) {
+                if (entry == null || entry.sessionId == null || entry.sessionId.isEmpty()) {
+                    return UpdateType.FULL;
+                }
+
+                String indexedPath = entry.fileRelativePath;
+                if (indexedPath == null || indexedPath.isEmpty()) {
+                    indexedPath = entry.sessionId + ".jsonl";
+                }
+                indexedPath = normalizeRelativePath(indexedPath);
+                indexedPaths.add(indexedPath);
+
+                BasicFileAttributes currentAttributes = currentFileAttributes.get(indexedPath);
+                if (currentAttributes == null) {
+                    // Rebuild the index when a session file disappears, matching a reduced file count.
+                    return UpdateType.FULL;
+                }
+                if (entry.fileLastModified <= 0
+                        || entry.fileLastModified != currentAttributes.lastModifiedTime().toMillis()
+                        || entry.fileSize != currentAttributes.size()
+                        || entry.entrypoint == null) {
+                    hasChangedFile = true;
+                }
+            }
+
+            if (hasChangedFile) {
+                // Claude appends to existing JSONL files, which changes file metadata but not
+                // the project directory mtime. Let the existing incremental scanner refresh them.
+                return UpdateType.INCREMENTAL;
+            }
+
+            long currentDirModified = Files.getLastModifiedTime(projectDir).toMillis();
+            if (currentDirModified > projectIndex.lastDirScanTime) {
+                // Detect a new Claude session that replaced another file while the total file
+                // count stayed constant. Non-UUID JSONL files are intentionally ignored by
+                // Claude's reader. Gated on the directory mtime so a file that exists but never
+                // produces an index entry (single-message, warmup, or truncated session) does
+                // not trigger a rescan on every read.
+                for (String currentPath : currentFileAttributes.keySet()) {
+                    if (!indexedPaths.contains(currentPath)
+                            && isQwenMateSessionFile(currentPath)
+                            && currentFileAttributes.get(currentPath).size() > 0) {
+                        return UpdateType.INCREMENTAL;
+                    }
+                }
+                // A directory change not explained by a known session requires a full rebuild.
+                return UpdateType.FULL;
+            }
+            return UpdateType.NONE;
+        } catch (UncheckedIOException e) {
+            LOG.warn("[SessionIndexManager] Failed to check update type: " + e.getMessage());
+            return UpdateType.FULL;
+        } catch (IOException e) {
+            LOG.warn("[SessionIndexManager] Failed to check update type: " + e.getMessage());
+            return UpdateType.FULL;
+        }
+    }
+
+    private static String normalizeRelativePath(String path) {
+        return path.replace('\\', '/').toLowerCase(Locale.ROOT);
+    }
+
+    private static boolean isQwenMateSessionFile(String relativePath) {
+        int separator = relativePath.lastIndexOf('/');
+        String fileName = separator >= 0 ? relativePath.substring(separator + 1) : relativePath;
+        return CLAUDE_SESSION_FILE_PATTERN.matcher(fileName).matches();
+    }
+
+    /**
+     * Converts an index entry to a SessionInfo-style map.
+     */
+    public static Object toQwenMateSessionInfo(SessionIndexEntry entry) {
+        // Returns a Map for the caller to convert (avoids reflection dependency)
+        Map<String, Object> info = new HashMap<>();
+        info.put("sessionId", entry.sessionId);
+        info.put("title", entry.title);
+        info.put("messageCount", entry.messageCount);
+        info.put("lastTimestamp", entry.lastTimestamp);
+        info.put("firstTimestamp", entry.firstTimestamp);
+        return info;
+    }
+
+    /**
+     * Creates a new index entry.
+     *
+     * @param entrypoint session entrypoint (e.g., "cli", "sdk-cli", "claude-vscode")
+     */
+    public static SessionIndexEntry createEntry(
+            String sessionId,
+            String title,
+            int messageCount,
+            long lastTimestamp,
+            long firstTimestamp,
+            long fileSize,
+            long fileLastModified,
+            String cwd,
+            String entrypoint
+    ) {
+        SessionIndexEntry entry = new SessionIndexEntry();
+        entry.sessionId = sessionId;
+        entry.title = title;
+        entry.messageCount = messageCount;
+        entry.lastTimestamp = lastTimestamp;
+        entry.firstTimestamp = firstTimestamp;
+        entry.fileSize = fileSize;
+        entry.fileLastModified = fileLastModified;
+        entry.cwd = cwd;
+        entry.entrypoint = entrypoint;
+        return entry;
+    }
+
+    /**
+     * Clears all indexes.
+     */
+    public void clearAllIndexes() {
+        synchronized (indexFileLock) {
+            try {
+                Files.deleteIfExists(getClaudeIndexPath());
+                LOG.info("[SessionIndexManager] All indexes cleared");
+            } catch (IOException e) {
+                LOG.error("[SessionIndexManager] Failed to clear indexes: " + e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * Clears the index for a specific project.
+     * All kept providers (and any legacy provider value) share the single
+     * per-project session index, so the provider value is only used for logging.
+     */
+    public void clearProjectIndex(String provider, String projectPath) {
+        synchronized (indexFileLock) {
+            SessionIndex index = readIndex(getClaudeIndexPath());
+            index.projects.remove(projectPath);
+            saveIndex(getClaudeIndexPath(), index);
+        }
+        LOG.info("[SessionIndexManager] Cleared index for " + provider + " project: " + projectPath);
+    }
+}

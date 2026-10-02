@@ -1,0 +1,727 @@
+/* 工具块标题样式 - 支持亮色/暗色主题 */
+.tool-title-icon {
+    color: var(--text-primary);
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+.tool-title-text {
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.tool-title-summary {
+    color: var(--text-tertiary);
+    margin-left: 8px;
+    white-space: nowrap;
+}
+
+/* 可点击的文件名样式 */
+.clickable-file {
+    cursor: pointer;
+    color: var(--color-link);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.15s ease;
+}
+
+.clickable-file:hover {
+    text-decoration-color: var(--color-link);
+}
+
+/* Bash命令块样式 */
+.bash-tool-header {
+    border-bottom: none;
+    background: var(--bg-primary);
+}
+
+.bash-tool-header.expanded {
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.bash-tool-icon {
+    color: var(--text-primary);
+    font-size: 16px;
+    margin-right: 6px;
+}
+
+.bash-tool-title {
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.bash-tool-description {
+    color: var(--text-tertiary);
+    font-style: normal;
+    margin-left: 12px;
+    white-space: nowrap;
+}
+
+.bash-tool-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+.bash-tool-status.pending {
+    background-color: var(--text-tertiary);
+}
+
+.bash-tool-status.completed {
+    background-color: var(--color-success);
+}
+
+.bash-tool-status.error {
+    background-color: var(--color-error);
+}
+
+/* 工具调用状态指示器 */
+.tool-status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-left: auto;
+    margin-right: 8px;
+}
+
+/* Pending: render a rotating ring spinner instead of a solid pulsing dot,
+   so users immediately recognize "the tool is executing" rather than
+   misreading it as a static dot stuck at the bottom of the message list. */
+.tool-status-indicator.pending {
+    width: 12px;
+    height: 12px;
+    background-color: transparent;
+    border: 2px solid var(--color-warning);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: tool-status-spin 0.85s linear infinite;
+}
+
+.tool-status-indicator.completed {
+    background-color: var(--color-success);
+}
+
+.tool-status-indicator.error {
+    background-color: var(--color-error);
+}
+
+@keyframes tool-status-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Streaming list-item entrance — each freshly appended tool item fades and
+   settles into place so the batch tool list grows smoothly instead of
+   snapping in. The keyframe fires once on element mount; because group items
+   keep stable keys across streaming appends, only the genuinely new item
+   animates while earlier items sit still. Scoped to items inside the group
+   list containers so unrelated file-list-items are untouched. */
+@keyframes toolItemEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Let the list container breathe as it grows: the per-item maxHeight is
+   computed from the item count, so animating max-height turns a hard height
+   jump (which shoves everything below) into a gentle expand. */
+.task-details.file-list-container,
+.bash-group-timeline {
+    transition: max-height 0.2s ease;
+}
+
+.task-details.file-list-container .file-list-item,
+.bash-group-timeline .bash-timeline-item {
+    animation: toolItemEnter 0.18s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .task-details.file-list-container,
+    .bash-group-timeline {
+        transition: none;
+    }
+    .task-details.file-list-container .file-list-item,
+    .bash-group-timeline .bash-timeline-item {
+        animation: none;
+    }
+}
+
+/* Legacy keyframe retained — referenced by .waiting-indicator and other
+   subtle-pulse callers; do not remove. */
+@keyframes breathing {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.85);
+    }
+}
+
+.bash-tool-content {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+    position: relative;
+}
+
+.bash-tool-line {
+    position: absolute;
+    left: 21px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--border-primary);
+    z-index: 0;
+}
+
+.bash-command-block {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--qwen-mate-code-font-family, var(--idea-editor-font-family, 'JetBrains Mono', 'Consolas', monospace));
+    font-size: 13px;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.bash-output-block {
+    margin-top: 8px;
+    font-family: var(--qwen-mate-code-font-family, var(--idea-editor-font-family, 'JetBrains Mono', 'Consolas', monospace));
+    font-size: 12px;
+    white-space: pre-wrap;
+    display: flex;
+    gap: 6px;
+    min-width: 0;
+}
+
+.bash-output-text {
+    min-width: 0;
+    white-space: inherit;
+    word-break: inherit;
+    overflow-wrap: inherit;
+    /* Declare the code font directly on this leaf text node. The global
+       `* { font-family }` in base.less directly matches this <span> and would
+       otherwise win over the code font merely inherited from .bash-output-block
+       (a directly-matched rule always beats an inherited value). */
+    font-family: var(--qwen-mate-code-font-family, var(--idea-editor-font-family, 'JetBrains Mono', 'Consolas', monospace));
+}
+
+.bash-output-block.normal {
+    color: var(--text-tertiary);
+}
+
+.bash-output-block.error {
+    color: var(--color-error);
+}
+
+/* ==================== 亮色模式适配 ==================== */
+[data-theme="light"] .tool-block {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .tool-name {
+    color: #0078d4;
+}
+
+[data-theme="light"] .tool-icon {
+    color: #106ebe;
+}
+
+[data-theme="light"] .tool-summary {
+    color: #666666;
+}
+
+[data-theme="light"] .tool-file-link {
+    color: #107c10;
+}
+
+[data-theme="light"] .tool-params {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* 亮色模式下工具块摘要使用更深的颜色 */
+[data-theme="light"] .tool-title-summary {
+    color: #444444;
+}
+
+/* 亮色模式下可点击文件名样式 */
+[data-theme="light"] .clickable-file {
+    color: var(--color-link);
+}
+
+[data-theme="light"] .clickable-file:hover {
+    text-decoration-color: var(--color-link);
+}
+
+/* 亮色模式下 Bash 块的额外适配 */
+[data-theme="light"] .bash-command-block {
+    background: #f5f5f5;
+    border: 1px solid #d0d0d0;
+}
+
+/* ==================== Bash Group 时间线样式 ==================== */
+.bash-group-container {
+    margin: 8px 0;
+}
+
+.bash-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-bottom: none;
+}
+
+.bash-group-count {
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+.bash-group-summary {
+    display: flex;
+    align-items: center;
+}
+
+.bash-group-progress {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+}
+
+.bash-group-progress.completed {
+    color: var(--color-success);
+}
+
+.bash-group-progress.error {
+    color: var(--color-error);
+}
+
+/* 时间线列表容器 */
+.bash-group-timeline {
+    padding: 8px 12px 8px 16px;
+    overflow-x: hidden;
+}
+
+/* 自定义滚动条 */
+.bash-group-timeline::-webkit-scrollbar {
+    width: 6px;
+}
+
+.bash-group-timeline::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.bash-group-timeline::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, 0.4);
+    border-radius: 3px;
+}
+
+.bash-group-timeline::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(128, 128, 128, 0.6);
+}
+
+/* 时间线单项 */
+.bash-timeline-item {
+    display: flex;
+    position: relative;
+    min-height: 32px;
+}
+
+/* 时间线连接器 */
+.bash-timeline-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+/* 时间线垂直线 */
+.bash-timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: var(--border-primary);
+    transform: translateX(-50%);
+}
+
+.bash-timeline-line.last {
+    height: 10px;
+}
+
+/* 时间线节点 */
+.bash-timeline-node {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--text-tertiary);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    margin-top: 12px;
+}
+
+.bash-timeline-node.pending {
+    background-color: var(--color-warning);
+    animation: breathing 1.5s ease-in-out infinite;
+}
+
+.bash-timeline-node.completed {
+    background-color: var(--color-success);
+}
+
+.bash-timeline-node.error {
+    background-color: var(--color-error);
+}
+
+/* 时间线内容 */
+.bash-timeline-content {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 8px;
+    margin-left: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.bash-timeline-content:hover {
+    background-color: var(--bg-secondary);
+}
+
+.bash-timeline-content.expanded {
+    background-color: var(--bg-secondary);
+}
+
+/* 时间线行 */
+.bash-timeline-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bash-timeline-description {
+    flex: 1;
+    min-width: 0;
+    font-size: 12px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bash-timeline-description-command {
+    font-family: var(--qwen-mate-code-font-family, var(--idea-editor-font-family, 'JetBrains Mono', 'Consolas', monospace));
+}
+
+/* 展开的详情 */
+.bash-timeline-detail {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-primary);
+}
+
+.bash-timeline-detail .bash-command-block {
+    font-size: 12px;
+    padding: 8px 10px;
+}
+
+.bash-timeline-detail .bash-output-block {
+    margin-top: 6px;
+    font-size: 11px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.bash-timeline-detail .bash-output-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* 亮色模式适配 */
+[data-theme="light"] .bash-timeline-content:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .bash-timeline-content.expanded {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Report findings card: keep the review actionable without exposing its raw JSON payload. */
+.report-findings-container {
+    border-color: var(--color-link);
+}
+
+.report-findings-header {
+    width: 100%;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+}
+
+.report-findings-header:focus-visible,
+.report-finding-toggle:focus-visible,
+.report-finding-location:focus-visible {
+    outline: 1px solid var(--color-link);
+    outline-offset: -2px;
+}
+
+.report-findings-count {
+    margin-left: 8px;
+    color: var(--text-tertiary);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.report-findings-chevron {
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+.report-findings-content {
+    background: var(--bg-primary);
+}
+
+.report-findings-summary {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-tertiary);
+    font-size: 12px;
+}
+
+.report-findings-summary-item,
+.report-findings-level {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 20px;
+    padding: 2px 6px;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+}
+
+.report-findings-summary-item.confirmed {
+    color: var(--color-success);
+}
+
+.report-findings-summary-item.plausible {
+    color: var(--color-warning);
+}
+
+.report-findings-level {
+    color: var(--text-tertiary);
+    margin-left: auto;
+}
+
+.report-findings-empty {
+    padding: 8px 12px;
+    color: var(--color-success);
+}
+
+.report-findings-list {
+    max-height: 520px;
+    overflow-y: auto;
+    padding: 4px 8px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb, rgba(128, 128, 128, 0.4)) transparent;
+}
+
+.report-findings-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.report-findings-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.report-findings-list::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb, rgba(128, 128, 128, 0.4));
+    border-radius: 3px;
+}
+
+.report-finding-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 9px 4px;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.report-finding-row:last-child {
+    border-bottom: 0;
+}
+
+.report-finding-main {
+    min-width: 0;
+}
+
+.report-finding-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+    line-height: 1.35;
+}
+
+.report-finding-verdict-icon {
+    flex: 0 0 auto;
+    font-size: 14px;
+}
+
+.report-finding-row.confirmed .report-finding-verdict-icon,
+.report-finding-verdict-confirmed {
+    color: var(--color-success);
+}
+
+.report-finding-row.plausible .report-finding-verdict-icon,
+.report-finding-verdict-plausible {
+    color: var(--color-warning);
+}
+
+.report-finding-row.unverified .report-finding-verdict-icon {
+    color: var(--text-tertiary);
+}
+
+.report-finding-title {
+    min-width: 0;
+    flex: 1 1 180px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.report-finding-category,
+.report-finding-verdict,
+.report-finding-outcome {
+    display: inline-flex;
+    align-items: center;
+    min-height: 18px;
+    padding: 1px 5px;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    color: var(--text-tertiary);
+    font-size: 11px;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.report-finding-category {
+    color: var(--text-secondary);
+}
+
+.report-finding-verdict,
+.report-finding-outcome-fixed {
+    border-color: transparent;
+}
+
+.report-finding-outcome-fixed {
+    color: var(--color-success);
+}
+
+.report-finding-outcome-skipped,
+.report-finding-outcome-no_change_needed {
+    color: var(--text-tertiary);
+}
+
+.report-finding-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    margin-top: 5px;
+    padding: 2px 0 2px 20px;
+    border: 0;
+    background: transparent;
+    color: var(--color-link);
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    text-align: left;
+}
+
+.report-finding-location:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.report-finding-path {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.report-finding-line {
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    font-family: var(--qwen-mate-code-font-family, var(--idea-editor-font-family, 'JetBrains Mono', 'Consolas', monospace));
+}
+
+.report-finding-toggle {
+    align-self: start;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+}
+
+.report-finding-toggle:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.report-finding-details {
+    grid-column: 1 / -1;
+    margin: 2px 0 0 20px;
+    padding: 8px 0 0;
+    border-top: 1px solid var(--border-primary);
+}
+
+.report-finding-detail + .report-finding-detail {
+    margin-top: 8px;
+}
+
+.report-finding-detail-label {
+    margin-bottom: 3px;
+    color: var(--text-tertiary);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.report-finding-detail .markdown-content {
+    color: var(--text-primary);
+    font-size: 12px;
+    line-height: 1.5;
+}

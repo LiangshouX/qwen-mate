@@ -1,0 +1,248 @@
+package com.qwenmate.ui.toolwindow;
+
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentManager;
+import com.intellij.util.concurrency.AppExecutorUtil;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Manages code snippet delivery to chat windows across tabs.
+ * Handles external code snippet injection (from context menu),
+ * tab selection routing, and retry logic.
+ */
+public class CodeSnippetManager {
+
+    private static final Logger LOG = Logger.getInstance(CodeSnippetManager.class);
+
+    private final Map<Project, QwenMateChatWindow> instances;
+    private final Map<Content, QwenMateChatWindow> contentToWindowMap;
+
+    public CodeSnippetManager(
+            Map<Project, QwenMateChatWindow> instances,
+            Map<Content, QwenMateChatWindow> contentToWindowMap
+    ) {
+        this.instances = instances;
+        this.contentToWindowMap = contentToWindowMap;
+    }
+
+    /**
+     * Add code snippet from external source (context menu).
+     * Sends code to the currently selected tab.
+     */
+    public void addSelectionFromExternal(Project project, String selectionInfo) {
+        if (project == null) {
+            LOG.error("project is null");
+            return;
+        }
+
+        // Try to get the currently selected tab's window first
+        QwenMateChatWindow window = getSelectedTabWindow(project);
+
+        // Fallback to instances map if no selected tab window found
+        if (window == null) {
+            window = instances.get(project);
+        }
+
+        if (window == null) {
+            // If no window instance exists, open the tool window automatically
+            LOG.info("Window instance not found, opening tool window automatically: " + project.getName());
+            ApplicationManager.getApplication().invokeLater(() -> {
+                try {
+                    ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("QwenMate");
+                    if (toolWindow != null) {
+                        toolWindow.show(null);
+                        scheduleCodeSnippetRetry(project, selectionInfo, 3);
+                    } else {
+                        LOG.error("Cannot find CCG tool window");
+                    }
+                } catch (Exception e) {
+                    LOG.error("Error opening tool window: " + e.getMessage());
+                }
+            });
+            return;
+        }
+
+        if (window.isDisposed()) {
+            if (window.getParentContent() != null) {
+                contentToWindowMap.remove(window.getParentContent());
+            }
+            instances.remove(project);
+            return;
+        }
+
+        if (!window.isInitialized()) {
+            scheduleCodeSnippetRetry(project, selectionInfo, 3);
+            return;
+        }
+
+        window.addCodeSnippetFromExternal(selectionInfo);
+    }
+
+    /**
+     * Add structured file references from the project tree to the selected tab.
+     * This route never serializes the paths through the generic code-snippet
+     * bridge, so spaces in a path remain part of that one reference.
+     */
+    public void addFileReferencesFromExternal(Project project, List<String> filePaths) {
+        if (project == null) {
+            LOG.error("project is null");
+            return;
+        }
+
+        List<String> snapshot = new ArrayList<>();
+        if (filePaths != null) {
+            for (String filePath : filePaths) {
+                if (filePath != null && !filePath.trim().isEmpty()) {
+                    snapshot.add(filePath);
+                }
+            }
+        }
+        if (snapshot.isEmpty()) {
+            return;
+        }
+        List<String> immutablePaths = Collections.unmodifiableList(snapshot);
+
+        QwenMateChatWindow window = getSelectedTabWindow(project);
+        if (window == null) {
+            window = instances.get(project);
+        }
+
+        if (window == null) {
+            LOG.info("Window instance not found, opening tool window automatically: " + project.getName());
+            ApplicationManager.getApplication().invokeLater(() -> {
+                try {
+                    ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("QwenMate");
+                    if (toolWindow != null) {
+                        toolWindow.show(null);
+                        scheduleFileReferencesRetry(project, immutablePaths, 3);
+                    } else {
+                        LOG.error("Cannot find CCG tool window");
+                    }
+                } catch (Exception e) {
+                    LOG.error("Error opening tool window: " + e.getMessage());
+                }
+            });
+            return;
+        }
+
+        if (window.isDisposed()) {
+            if (window.getParentContent() != null) {
+                contentToWindowMap.remove(window.getParentContent());
+            }
+            instances.remove(project);
+            return;
+        }
+
+        if (!window.isInitialized()) {
+            scheduleFileReferencesRetry(project, immutablePaths, 3);
+            return;
+        }
+
+        window.addFileReferencesFromExternal(immutablePaths);
+    }
+
+    /**
+     * Get the QwenMateChatWindow for the currently selected tab.
+     */
+    private QwenMateChatWindow getSelectedTabWindow(Project project) {
+        if (project == null || project.isDisposed()) {
+            return null;
+        }
+
+        try {
+            ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("QwenMate");
+            if (toolWindow == null) {
+                return null;
+            }
+
+            ContentManager contentManager = toolWindow.getContentManager();
+            Content selectedContent = contentManager.getSelectedContent();
+
+            if (selectedContent != null) {
+                QwenMateChatWindow window = contentToWindowMap.get(selectedContent);
+                if (window != null) {
+                    LOG.debug("[MultiTab] Found window for selected tab: " + selectedContent.getDisplayName());
+                    return window;
+                }
+            }
+        } catch (Exception e) {
+            LOG.debug("[MultiTab] Failed to get selected tab window: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Schedule code snippet addition with retry mechanism.
+     * Uses exponential backoff (200ms, 400ms, 800ms).
+     */
+    private void scheduleCodeSnippetRetry(Project project, String selectionInfo, int retriesLeft) {
+        if (retriesLeft <= 0) {
+            LOG.warn("Failed to add code snippet after max retries");
+            return;
+        }
+
+        int delay = 200 * (int) Math.pow(2, 3 - retriesLeft);
+
+        AppExecutorUtil.getAppScheduledExecutorService().schedule(() -> {
+            ApplicationManager.getApplication().invokeLater(() -> {
+                if (project.isDisposed()) {
+                    return;
+                }
+
+                QwenMateChatWindow retryWindow = getSelectedTabWindow(project);
+
+                if (retryWindow == null) {
+                    retryWindow = instances.get(project);
+                }
+
+                if (retryWindow != null && retryWindow.isInitialized() && !retryWindow.isDisposed()) {
+                    retryWindow.addCodeSnippetFromExternal(selectionInfo);
+                } else {
+                    LOG.debug("Window not ready, retrying (retries left: " + (retriesLeft - 1) + ")");
+                    scheduleCodeSnippetRetry(project, selectionInfo, retriesLeft - 1);
+                }
+            });
+        }, delay, java.util.concurrent.TimeUnit.MILLISECONDS);
+    }
+
+    /** Schedule structured file-reference delivery while the selected tab initializes. */
+    private void scheduleFileReferencesRetry(Project project, List<String> filePaths, int retriesLeft) {
+        if (retriesLeft <= 0) {
+            LOG.warn("Failed to add file references after max retries");
+            return;
+        }
+
+        int delay = 200 * (int) Math.pow(2, 3 - retriesLeft);
+
+        AppExecutorUtil.getAppScheduledExecutorService().schedule(() -> {
+            ApplicationManager.getApplication().invokeLater(() -> {
+                if (project.isDisposed()) {
+                    return;
+                }
+
+                QwenMateChatWindow retryWindow = getSelectedTabWindow(project);
+                if (retryWindow == null) {
+                    retryWindow = instances.get(project);
+                }
+
+                if (retryWindow != null && retryWindow.isInitialized() && !retryWindow.isDisposed()) {
+                    retryWindow.addFileReferencesFromExternal(filePaths);
+                } else {
+                    LOG.debug("Window not ready, retrying file references (retries left: "
+                            + (retriesLeft - 1) + ")");
+                    scheduleFileReferencesRetry(project, filePaths, retriesLeft - 1);
+                }
+            });
+        }, delay, java.util.concurrent.TimeUnit.MILLISECONDS);
+    }
+}

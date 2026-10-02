@@ -1,0 +1,1575 @@
+{
+  "common": {
+    "loading": "Загрузка",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "add": "Добавить",
+    "back": "Назад",
+    "close": "Закрыть",
+    "newSession": "Новый чат",
+    "newTab": "Новая вкладка",
+    "dontAskAgain": "Больше не спрашивать",
+    "history": "История",
+    "settings": "Настройки",
+    "thinking": "Размышляю",
+    "thinkingProcess": "Процесс размышления",
+    "seconds": "с",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "gotIt": "Got it"
+  },
+  "chat": {
+    "sendMessage": "Отправить сообщение в {{provider}}",
+    "createNewSession": "Начать новый чат",
+    "confirmNewSession": "В текущем чате есть сообщения. Начать новый?",
+    "confirmInterrupt": "Идёт диалог. Новый чат прервёт его. Продолжить?",
+    "requestInterrupted": "Запрос прерван пользователем",
+    "uploadedFiles": "Загруженные файлы: {{files}}",
+    "emptyMessage": "Пустое сообщение",
+    "clickToPreview": "Нажмите для просмотра",
+    "userUploadedImage": "Загружено изображение",
+    "inputPlaceholder": "@файлы, #агенты, Enter — отправить",
+    "inputPlaceholderEnter": "@файлы, #агенты, Enter — отправить",
+    "inputPlaceholderCmdEnter": "@файлы, #агенты, ⌘Enter — отправить",
+    "noThinkingContent": "Нет данных о размышлениях",
+    "parseError": "Не удалось разобрать содержимое",
+    "sendMessageEnter": "Отправить сообщение (Enter)",
+    "currentMode": "Текущий режим: {{mode}}",
+    "currentModel": "Текущая модель: {{model}}",
+    "removeAttachment": "Удалить вложение",
+    "closePreview": "Закрыть предпросмотр",
+    "loadingDropdown": "Загрузка...",
+    "modelsLoadFailed": "Не удалось загрузить модели. Нажмите, чтобы повторить",
+    "stopGeneration": "Остановить генерацию",
+    "generatingResponse": "Генерирую ответ",
+    "elapsedTime": "Прошло {{time}}",
+    "minutesAndSeconds": "{{minutes}}м {{seconds}}с",
+    "imagePreview": "Предпросмотр",
+    "context": "Контекст",
+    "usage": "Использование",
+    "usagePercentage": "Использование: {{percentage}}",
+    "noMatchingFiles": "Файлы не найдены",
+    "noMatchingCommands": "Команды не найдены",
+    "noAvailableAgents": "Нет доступных агентов",
+    "collapse": "Свернуть",
+    "expand": "Развернуть",
+    "backToTop": "Наверх",
+    "backToBottom": "Вниз",
+    "refresh": "Обновить",
+    "clickToDisable": "Нажмите, чтобы отключить",
+    "clickToEnable": "Нажмите, чтобы включить",
+    "copyHomepageLink": "Копировать ссылку на сайт",
+    "copyDocsLink": "Копировать ссылку на документацию",
+    "copyConfig": "Копировать конфигурацию",
+    "editConfig": "Редактировать конфигурацию",
+    "deleteServer": "Удалить сервер",
+    "loadingFailed": "Ошибка загрузки",
+    "pleaseCloseAndReopen": "Пожалуйста, закройте и откройте снова",
+    "loadingSlashCommands": "Загружаю команды...",
+    "pleaseWait": "Подождите...",
+    "retrying": "Повтор ({{count}}/{{max}})...",
+    "global": "Глобальный",
+    "localProject": "Локальный",
+    "disabled": "Отключено",
+    "sdkNotInstalled": "SDK {{provider}} не установлен. Установите SDK для начала работы.",
+    "sdkStatusLoading": "Проверка статуса SDK...",
+    "sdkStatusUnavailable": "Не удалось проверить состояние SDK.",
+    "retrySdkStatus": "Повторить",
+    "openSourceBanner": "Этот проект гарантированно 100% с открытым исходным кодом и бесплатный (остерегайтесь пиратских проектов)",
+    "openSourceBannerStar": "Star",
+    "openSourceBannerStarAria": "Открыть репозиторий на GitHub и поставить звезду",
+    "goInstallSdk": "Перейти к установке",
+    "commandNotImplemented": "Функция `{{command}}` ещё не реализована.",
+    "clearCommandDescription": "Очистить историю и начать новый чат",
+    "unknownFile": "Неизвестный файл",
+    "streamingConnected": "{{provider}} обрабатывает запрос",
+    "showEarlierTurns": "Показать предыдущие ходы: {{count}} (загружено, осталось: {{remaining}})",
+    "totalDuration": "Этот ответ занял",
+    "tokenUsage": "вход {{input}} / выход {{output}}",
+    "tokenUsageDetail": "Итог хода — вход {{input}} · запись кэша {{cacheWrite}} · чтение кэша {{cacheRead}} · выход {{output}}",
+    "cacheHitsWithRatio": " (попадания в кэш {{tokens}}, {{ratio}})",
+    "search": {
+      "ariaLabel": "Поиск в беседе",
+      "placeholder": "Поиск в беседе…",
+      "next": "Следующее совпадение (Enter)",
+      "previous": "Предыдущее совпадение (Shift+Enter)",
+      "close": "Закрыть (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "Нет результатов",
+      "searching": "Поиск…",
+      "expandedHint": "Развёрнуто {{count}} ранних сообщений",
+      "matchCase": "Учитывать регистр (Alt+C)",
+      "wholeWord": "Слово целиком (Alt+W)",
+      "regex": "Регулярное выражение (Alt+R)",
+      "invalidRegex": "Недопустимое регулярное выражение",
+      "openTooltip": "Поиск в беседе (Cmd/Ctrl+F)"
+    },
+    "compactSummary": {
+      "summarizedConversation": "Сводка беседы",
+      "compactSummary": "Краткое резюме",
+      "messagesUpTo": "Сведено {{count}} сообщений до этого момента",
+      "messagesFrom": "Сведено {{count}} сообщений начиная с этого момента",
+      "userContext": "Контекст: «{{context}}»",
+      "expand": "Развернуть сводку",
+      "collapse": "Свернуть сводку"
+    },
+    "bridgeUnavailable": "Bridge is not available right now",
+    "commandProviderOnly": "{{command}} is only available for the {{provider}} provider",
+    "loadEarlierTurns": "Load earlier turns",
+    "loadEarlierTurnsFailed": "Failed to load earlier turns. Click to retry",
+    "loadingEarlierTurns": "Loading earlier turns…",
+    "planModeEnabled": "Plan mode enabled"
+  },
+  "settings": {
+    "title": "Настройки",
+    "basic": {
+      "title": "Основные настройки",
+      "description": "Тема, язык и окружение Node.js",
+      "tabs": {
+        "appearance": "Внешний вид",
+        "behavior": "Поведение",
+        "environment": "Окружение"
+      },
+      "theme": {
+        "label": "Тема",
+        "system": "Как в IDE",
+        "light": "Светлая",
+        "dark": "Тёмная"
+      },
+      "language": {
+        "label": "Язык",
+        "followIde": "Следовать IDE",
+        "simplifiedChinese": "简体中文",
+        "traditionalChinese": "繁體中文",
+        "english": "English",
+        "hindi": "हिन्दी",
+        "spanish": "Español",
+        "french": "Français",
+        "japanese": "日本語",
+        "russian": "Русский",
+        "korean": "한국어",
+        "portuguese": "Português (Brasil)"
+      },
+      "nodePath": {
+        "label": "Путь к Node.js",
+        "placeholder": "например, C:\\Program Files\\nodejs\\node.exe или /usr/local/bin/node",
+        "hint": "Выполните в терминале",
+        "hintCommand": "node -p \"process.execPath\"",
+        "hintText": "чтобы узнать путь к исполняемому файлу Node.js. Оставьте пустым для автоопределения.",
+        "versionTooLow": "Версия Node.js слишком старая. Плагин требует v{{minVersion}} или выше"
+      },
+      "workingDirectory": {
+        "label": "Рабочая директория",
+        "placeholder": "например, project1 или оставьте пустым для корня проекта",
+        "hint": "Укажите директорию, в которой будет работать Qwen. Можно использовать относительный (от корня проекта) или абсолютный путь. Оставьте пустым для корня проекта."
+      },
+      "fontSize": {
+        "label": "Размер шрифта",
+        "level1": "Маленький (80%)",
+        "level2": "Уменьшенный (90%)",
+        "level3": "Стандартный (100%)",
+        "level4": "Увеличенный (110%)",
+        "level5": "Большой (120%)",
+        "level6": "Максимальный (140%)"
+      },
+      "editorFont": {
+        "label": "UI-шрифт",
+        "followOption": "Использовать UI-шрифт IDEA ({{font}})",
+        "customOption": "Пользовательский файл UI-шрифта",
+        "customPathLabel": "Путь к файлу UI-шрифта",
+        "customPathPlaceholder": "Выберите или введите путь к файлу .ttf / .otf для UI-шрифта",
+        "browse": "Обзор",
+        "warningUnavailable": "UI-шрифт недоступен, сейчас используется UI-шрифт IDEA",
+        "statusFollowEditor": "Сейчас используется UI-шрифт IDEA: {{font}}",
+        "statusCustom": "Сейчас используется пользовательский UI-шрифт: {{font}}"
+      },
+      "codeFont": {
+        "label": "Шрифт кода",
+        "followOption": "Следовать шрифту редактора ({{font}})",
+        "customOption": "Пользовательский файл шрифта кода",
+        "customPathLabel": "Путь к файлу шрифта кода",
+        "customPathPlaceholder": "Выберите или введите путь к файлу .ttf / .otf для шрифта кода",
+        "browse": "Обзор",
+        "warningUnavailable": "Шрифт кода недоступен, сейчас используется шрифт редактора",
+        "statusFollowEditor": "Сейчас используется шрифт редактора: {{font}}",
+        "statusCustom": "Сейчас используется пользовательский шрифт кода: {{font}}"
+      },
+      "streaming": {
+        "label": "Потоковый вывод",
+        "enabled": "Включено",
+        "disabled": "Отключено",
+        "hint": "Ответы будут появляться посимвольно в реальном времени. Может потреблять чуть больше ресурсов."
+      },
+      "autoOpenFile": {
+        "label": "Отправить путь открытого файла",
+        "enabled": "Включено",
+        "disabled": "Отключено",
+        "hint": "При включении выбор файла в дереве проекта автоматически отправит его путь в AI (примечание: отправляется только путь к файлу, а не его содержимое). При отключении требуется ручное действие."
+      },
+      "promptEnhancer": {
+        "label": "Prompt Enhancer",
+        "modelLabel": "Enhancer Model",
+        "resetToDefault": "Restore Default",
+        "providerAvailable": "Available",
+        "providerUnavailable": "Currently unavailable",
+        "currentProviderAuto": "Currently using automatic selection: {{provider}}",
+        "currentProviderManual": "Currently using manually selected provider: {{provider}}",
+        "currentProviderUnavailable": "The selected provider is currently unavailable: {{provider}}",
+        "modeLabel": "Режим выбора",
+        "modeAuto": "Авто",
+        "modeManual": "Вручную",
+        "autoSummary": "Следует текущему чат CLI · сейчас {{provider}}",
+        "autoUnavailable": "Нет доступного CLI. Переключитесь на ручной выбор.",
+        "provider": {
+          "dsh": "DeepSeek Harness",
+          "qwen": "Qwen Code"
+        }
+      },
+      "diffExpanded": {
+        "label": "Разворачивать diff по умолчанию",
+        "enabled": "Включено",
+        "disabled": "Выключено",
+        "hint": "Diff-блоки в чате будут сразу развёрнуты. Можно свернуть кликом."
+      },
+      "taskCompletionNotification": {
+        "label": "Системное уведомление о завершении задачи",
+        "enabled": "Включено",
+        "disabled": "Выключено",
+        "hint": "При включении показывает системное уведомление при завершении задачи AI. При выключении уведомление не появляется."
+      },
+      "askUserQuestionNotification": {
+        "label": "Системное уведомление о вопросе",
+        "enabled": "Включено",
+        "disabled": "Выключено",
+        "hint": "При включении показывает системное уведомление, когда Qwen задаёт вопрос, чтобы вы его не пропустили. При выключении уведомление не появляется."
+      },
+      "detailedOutput": {
+        "label": "Подробная информация о выводе",
+        "enabled": "Включено",
+        "disabled": "Отключено",
+        "hint": "Если включено, внизу сообщений при наличии данных показывается оценочная стоимость хода, а попадания в кэш отображаются внутри сводки входных Token. Расход Token всегда остаётся видимым."
+      },
+      "askUserQuestionSoundNotification": {
+        "label": "Звуковой сигнал при вопросе",
+        "enabled": "Включено",
+        "disabled": "Выключено",
+        "hint": "При включении воспроизводит настроенный звуковой сигнал, когда Qwen задаёт вопрос. Использует выбор звука и правила фокуса ниже."
+      },
+      "systemNotificationOnlyWhenUnfocused": {
+        "label": "Показывать системные уведомления только когда IDE не в фокусе",
+        "enabled": "Включено",
+        "disabled": "Выключено",
+        "hint": "При включении системные уведомления о завершении задачи и вопросе показываются только когда IDE не в фокусе."
+      },
+      "soundNotification": {
+        "label": "Звуковой сигнал завершения задачи",
+        "enabled": "Включено",
+        "disabled": "Выключено",
+        "hint": "При включении звук уведомления воспроизводится, когда ИИ завершает задачу, чтобы вы узнали об этом даже вдали от экрана.",
+        "onlyWhenUnfocused": "Воспроизводить звуковые сигналы только когда IDE не в фокусе",
+        "onlyWhenUnfocusedHint": "При включении звуковые сигналы о завершении задачи и вопросе воспроизводятся только когда IDE не в фокусе.",
+        "selectSound": "Звук уведомления",
+        "soundDefault": "По умолчанию",
+        "soundChime": "Перезвон",
+        "soundBell": "Колокол",
+        "soundDing": "Динь",
+        "soundSuccess": "Успех",
+        "soundCustom": "Пользовательский...",
+        "customSound": "Пользовательский звуковой файл",
+        "customSoundPlaceholder": "Выберите или введите путь к аудиофайлу",
+        "customSoundHint": "Поддерживаются форматы WAV, MP3, AIFF",
+        "testSound": "Проверить",
+        "browse": "Обзор"
+      },
+      "sendShortcut": {
+        "label": "Клавиша отправки",
+        "enter": "Enter для отправки",
+        "enterDesc": "Enter для отправки сообщения, Shift+Enter для новой строки",
+        "cmdEnter": "⌘/Ctrl+Enter для отправки",
+        "cmdEnterDesc": "⌘/Ctrl+Enter для отправки сообщения, Enter для новой строки"
+      },
+      "permissionDialogTimeout": {
+        "label": "Таймаут диалогов разрешений и вопросов",
+        "unit": "секунд",
+        "hint": "Установите таймаут для диалогов вопросов Qwen и диалогов запроса разрешений (30~3600 секунд). После таймаута диалог закроется автоматически, и Qwen продолжит работу."
+      },
+      "chatBgColor": {
+        "label": "Цвет фона чата",
+        "custom": "Пользовательский",
+        "reset": "Сбросить",
+        "hint": "Цвет фона чата. Оставьте пустым для цвета по умолчанию."
+      },
+      "chatBarColor": {
+        "label": "Цвет заголовка и строки состояния",
+        "custom": "Свой цвет",
+        "reset": "Сбросить",
+        "hint": "Используйте общий цвет темы для заголовка сеанса и строки состояния задач. Оставьте пустым, чтобы следовать текущей теме интерфейса."
+      },
+      "userMsgColor": {
+        "label": "Цвет сообщений пользователя",
+        "custom": "Пользовательский",
+        "reset": "Сбросить",
+        "hint": "Цвет фона ваших сообщений. Оставьте пустым для цвета по умолчанию."
+      },
+      "newSessionConfirm": {
+        "label": "Подтверждение создания нового чата",
+        "enabled": "Включено",
+        "disabled": "Отключено",
+        "hint": "При отключении создание нового чата в существующем диалоге будет происходить напрямую, без подтверждения."
+      },
+      "commitGeneration": {
+        "label": "AI Commit Message Generation",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, shows the 'AI Generate Commit Message' button in the commit dialog. When disabled, the button is hidden."
+      },
+      "statusBarWidget": {
+        "label": "Status Bar Info Display",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, shows current model and mode info in the IDE status bar (e.g. GUI [Qwen-Max] {Auto}). When disabled, the widget is hidden."
+      },
+      "diffTheme": {
+        "label": "Diff Theme",
+        "follow": "Follow UI",
+        "followDesc": "Match the current chat UI light or dark theme",
+        "editor": "Follow Editor",
+        "editorDesc": "Stay closer to the IDE editor diff atmosphere",
+        "light": "Light",
+        "lightDesc": "Cleaner and better integrated with the settings page",
+        "softDark": "Soft Dark",
+        "softDarkDesc": "Keep code contrast without the harsh black background"
+      }
+    },
+    "providers": "Провайдеры",
+    "providersDesc": "Управление авторизацией Qwen и CLI-инструментами",
+    "providerTab": {
+      "cli": "Инструменты CLI",
+      "qwen": "Qwen Config"
+    },
+    "pluginModels": {
+      "title": "Пользовательские модели",
+      "description": "Добавленные здесь пользовательские модели будут видны у всех провайдеров и отображаться в начале списка выбора моделей",
+      "dialogTitle": "Управление пользовательскими моделями",
+      "manage": "Управление моделями",
+      "pricing": {
+        "title": "Стоимость (USD за 1M токенов)",
+        "optionalLabel": "Необязательно",
+        "hint": "Необязательно. Оставьте поле пустым, чтобы использовать ставку по умолчанию для этого типа токенов.",
+        "inputLabel": "Ввод",
+        "outputLabel": "Вывод",
+        "cacheWriteLabel": "Запись кэша",
+        "cacheReadLabel": "Чтение кэша",
+        "inputShort": "Ввод",
+        "outputShort": "Вывод",
+        "cacheWriteShort": "Запись кэша",
+        "cacheReadShort": "Чтение кэша",
+        "invalidValue": "Стоимость должна быть неотрицательным числом",
+        "defaultPricing": "Используется цена по умолчанию"
+      },
+      "contextWindow": {
+        "label": "Максимальный контекст (K токенов)",
+        "placeholder": "например, 500",
+        "hint": "Необязательно. Укажите целое число тысяч токенов (500 = 500 000 токенов). Используется только для отображения контекста в плагине.",
+        "invalidValue": "Максимальный контекст должен быть положительным целым числом в единицах K",
+        "summary": "Контекст: {{value}} токенов"
+      },
+      "configuredSectionTitle": "Настроенные модели Qwen",
+      "configuredSectionDesc": "Модели активного провайдера Qwen или settings.json уже отображаются в списке выбора. Здесь можно изменить только стоимость.",
+      "configuredEditHint": "Эта модель управляется активным провайдером Qwen или settings.json. Здесь можно изменить только стоимость.",
+      "customSectionTitle": "Пользовательские модели",
+      "editPricing": "Изменить стоимость"
+    },
+    "dependencies": "Зависимости SDK",
+    "dependency": {
+      "title": "Управление зависимостями SDK",
+      "description": "Управление зависимостями AI SDK. Установите необходимый SDK перед первым использованием.",
+      "installPolicyTip": "Проблемы с установкой? Скопируйте ошибку и спросите помощи у Qwen Code CLI в терминале.",
+      "qwenSdkName": "Qwen Code SDK",
+      "qwenSdkDescription": "Required for Qwen Code. Includes the Qwen Code SDK and its dependencies.",
+      "loading": "Загрузка статуса зависимостей...",
+      "install": "Установить",
+      "installing": "Установка...",
+      "uninstall": "Удалить",
+      "uninstalling": "Удаление...",
+      "update": "Обновить",
+      "updateAvailable": "Доступно обновление",
+      "installLogs": "Журнал установки",
+      "waitingForLogs": "Ожидание вывода журнала...",
+      "nodeNotConfigured": "Node.js не настроен. Укажите путь в основных настройках.",
+      "installSuccess": "{{name}} успешно установлен",
+      "installFailed": "Ошибка установки: {{error}}",
+      "uninstallSuccess": "{{name}} удалён",
+      "uninstallFailed": "Ошибка удаления: {{error}}",
+      "updating": "Обновление...",
+      "updateSuccess": "{{name}} успешно обновлён",
+      "installVersion": "Install {{version}}",
+      "updateToVersion": "Update to {{version}}",
+      "rollbackToVersion": "Rollback to {{version}}",
+      "currentVersionAction": "Current version",
+      "targetVersion": "Target version",
+      "loadingVersions": "Version list loading",
+      "installedVersion": "Installed {{version}}",
+      "latestStableVersion": "Latest stable {{version}}",
+      "targetVersionValue": "Target {{version}}",
+      "versionSourceFallback": "Remote versions could not be loaded. Showing the built-in recommended versions instead. You can still enter a version manually.",
+      "rollbackWarning": "This is a rollback operation. Re-check the related AI features after switching versions."
+    },
+    "usage": "Статистика использования",
+    "usageDesc": "Просмотр потребления токенов, статистики затрат и анализа тенденций",
+    "mcp": "MCP-серверы",
+    "mcpDesc": "Настройка и управление серверами Model Context Protocol",
+    "permissions": "Разрешения",
+    "permissionsDesc": "Управление правами доступа Qwen Code к файлам и операциям",
+    "promptEnhancer": {
+      "title": "Prompt Enhancer",
+      "description": "Choose which provider and model should be used when enhancing prompts before sending them."
+    },
+    "commit": {
+      "title": "Commit AI",
+      "description": "Настройка AI-генерации сообщений Git-коммитов",
+      "providerModel": {
+        "label": "Провайдер модели коммитов",
+        "modelLabel": "Модель коммитов",
+        "resetToDefault": "Сбросить",
+        "providerAvailable": "Доступно",
+        "providerUnavailable": "Недоступно",
+        "currentProviderAuto": "Сейчас используется автоматический выбор: {{provider}}",
+        "currentProviderManual": "Сейчас используется выбранный вручную провайдер: {{provider}}",
+        "currentProviderUnavailable": "Выбранный провайдер сейчас недоступен: {{provider}}",
+        "modeLabel": "Режим выбора",
+        "modeAuto": "Авто",
+        "modeManual": "Вручную",
+        "autoSummary": "Следует текущему чат CLI · сейчас {{provider}}",
+        "autoUnavailable": "Нет доступного CLI. Переключитесь на ручной выбор."
+      },
+      "prompt": {
+        "label": "Дополнительный промпт",
+        "placeholder": "Добавьте дополнительные требования, например, генерировать коммит на английском, включать номер issue и т.д...",
+        "hint": "Плагин содержит встроенные промпты для CCG Commits. Ваш текст будет использован как дополнительные требования, и AI отдаст приоритет вашим указаниям."
+      },
+      "projectPrompt": {
+        "label": "Дополнительный промпт для проекта",
+        "placeholder": "Добавьте здесь требования, специфичные для проекта, например: scope должен содержать имя модуля, body коммита должен включать область влияния и т.д...",
+        "hint": "Этот промпт применяется только к текущему проекту и объединяется с глобальным дополнительным промптом. При противоречии приоритет отдаётся промпту проекта. Разные проекты можно настраивать независимо."
+      },
+      "codeReview": {
+        "label": "Дополнительный промпт Code Review AI"
+      }
+    },
+    "agents": "Агенты",
+    "agentsDesc": "Управление и настройка AI-агентов",
+    "skills": "Навыки",
+    "skillsDesc": "Управление и настройка модулей навыков",
+    "other": {
+      "title": "Прочие настройки",
+      "description": "Дополнительные настройки",
+      "historyCompletion": {
+        "label": "Автодополнение из истории",
+        "enabled": "Включено",
+        "disabled": "Отключено",
+        "hint": "При включении поле ввода будет предлагать автодополнение на основе истории ввода. Нажмите Tab для принятия.",
+        "manageHistory": "Управление историей",
+        "empty": "Нет записей истории",
+        "clearAll": "Очистить всё",
+        "clearLow": "Очистить малозначимые",
+        "clearLowHint": "Удалить записи с важностью ≤ 1",
+        "delete": "Удалить",
+        "edit": "Редактировать",
+        "add": "Добавить",
+        "importance": "Важность",
+        "editor": {
+          "addTitle": "Добавить запись истории",
+          "editTitle": "Редактировать запись истории",
+          "contentLabel": "Содержимое",
+          "contentPlaceholder": "Введите содержимое записи...",
+          "importanceLabel": "Важность",
+          "importanceHint": "Чем выше важность, тем выше приоритет в автодополнении"
+        },
+        "timeAgo": {
+          "yearsAgo_one": "{{count}} год назад",
+          "yearsAgo_other": "{{count}} лет назад",
+          "monthsAgo_one": "{{count}} месяц назад",
+          "monthsAgo_other": "{{count}} месяцев назад",
+          "daysAgo_one": "{{count}} день назад",
+          "daysAgo_other": "{{count}} дней назад",
+          "hoursAgo_one": "{{count}} час назад",
+          "hoursAgo_other": "{{count}} часов назад",
+          "minutesAgo_one": "{{count}} минуту назад",
+          "minutesAgo_other": "{{count}} минут назад",
+          "justNow": "только что",
+          "yearsAgo_few": "{{count}} года назад",
+          "yearsAgo_many": "{{count}} лет назад",
+          "monthsAgo_few": "{{count}} месяца назад",
+          "monthsAgo_many": "{{count}} месяцев назад",
+          "daysAgo_few": "{{count}} дня назад",
+          "daysAgo_many": "{{count}} дней назад",
+          "hoursAgo_few": "{{count}} часа назад",
+          "hoursAgo_many": "{{count}} часов назад",
+          "minutesAgo_few": "{{count}} минуты назад",
+          "minutesAgo_many": "{{count}} минут назад",
+          "yearsAgo": "{{count}}年前",
+          "monthsAgo": "{{count}}ヶ月前",
+          "daysAgo": "{{count}}日前",
+          "hoursAgo": "{{count}}時間前",
+          "minutesAgo": "{{count}}分前"
+        }
+      },
+      "aiTitleGeneration": {
+        "label": "Автогенерация заголовка сессии ИИ",
+        "enabled": "Включено",
+        "disabled": "Выключено",
+        "hint": "Если включено, после первого ответа новой сессии автоматически создаётся короткий заголовок. Если выключено, сессии используют первое сообщение пользователя как заголовок."
+      },
+      "loadError": "Failed to load settings"
+    },
+    "codexFeatureUnavailable": "Этот раздел настроек недоступен в текущем режиме.",
+    "sidebar": {
+      "expand": "Развернуть боковую панель",
+      "collapse": "Свернуть боковую панель"
+    },
+    "provider": {
+      "featureComingSoon": "Функция ещё не реализована, скоро будет"
+    },
+    "permissionsComingSoon": "Настройка разрешений скоро...",
+    "agentsComingSoon": "Настройка агентов скоро...",
+    "skillsComingSoon": "Настройка навыков скоро...",
+    "codexProvider": {
+      "dialog": {
+        "noCustomModels": "Нет пользовательских моделей",
+        "addModel": "Добавить модель",
+        "modelIdPlaceholder": "ID модели (обязательно, например, qwen3-coder-plus)",
+        "modelLabelPlaceholder": "Отображаемое имя (необязательно)",
+        "modelDescPlaceholder": "Описание модели (необязательно)",
+        "modelIdRequired": "ID модели обязателен",
+        "modelIdDuplicate": "ID модели уже существует"
+      }
+    },
+    "agent": {
+      "title": "Промпты",
+      "create": "Создать",
+      "createAgent": "Создать промпта",
+      "createAgentHint": "Нажмите для перехода на страницу настройки промптов",
+      "customAgents": "Пользовательские промпты",
+      "noAgents": "Нет пользовательских промптов",
+      "noAgentsDropdown": "Нет промптов",
+      "loadFailed": "Ошибка загрузки",
+      "loading": "Загрузка...",
+      "menu": "Меню",
+      "addSuccess": "Промпт успешно создан",
+      "updateSuccess": "Промпт успешно обновлён",
+      "deleteSuccess": "Промпт успешно удалён",
+      "operationSuccess": "Операция выполнена успешно",
+      "deleteConfirmTitle": "Подтвердить удаление",
+      "deleteConfirmMessage": "Вы уверены, что хотите удалить промпта «{{name}}»? Это действие необратимо.",
+      "dialog": {
+        "addTitle": "Создать промпта",
+        "editTitle": "Редактировать промпта",
+        "name": "Имя",
+        "namePlaceholder": "Введите имя промпта",
+        "nameRequired": "Введите имя промпта",
+        "prompt": "Промпт",
+        "promptPlaceholder": "Введите роль, тон, рабочий процесс, предпочтения по инструментам и правила промпта. (Необязательно)",
+        "promptHint": "Промпт будет отправлен AI как системные инструкции в начале диалога",
+        "confirmAdd": "Создать",
+        "saveChanges": "Сохранить"
+      },
+      "export": "Export",
+      "import": "Import",
+      "importDialog": {
+        "title": "Import Prompts",
+        "summary": "Total {{total}} prompts:",
+        "newCount": "{{count}} new",
+        "updateCount": "{{count}} updates",
+        "selectedCount": "{{count}} items selected",
+        "conflictStrategy": "Conflict Resolution Strategy",
+        "strategySkip": "Skip",
+        "strategySkipDesc": "Skip existing prompts",
+        "strategyOverwrite": "Overwrite",
+        "strategyOverwriteDesc": "Overwrite existing prompts",
+        "strategyDuplicate": "Duplicate",
+        "strategyDuplicateDesc": "Create duplicates (generate new IDs)",
+        "conflictWarning": "{{count}} conflicts detected",
+        "columnName": "Name",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "New",
+        "statusUpdate": "Update",
+        "importPartialSuccess": "Imported {{imported}}, skipped {{skipped}}, updated {{updated}}",
+        "confirmImport": "Confirm Import"
+      },
+      "exportDialog": {
+        "title": "Export Prompts",
+        "selectHint": "Select prompts to export",
+        "confirmExport": "Confirm Export"
+      }
+    },
+    "prompts": "Библиотека промптов",
+    "prompt": {
+      "title": "Библиотека промптов",
+      "create": "Создать",
+      "createPrompt": "Создать промпт",
+      "createPromptHint": "Перейти в настройки промптов",
+      "noPrompts": "Нет промптов",
+      "noPromptsDropdown": "Нет промптов",
+      "loading": "Загрузка...",
+      "menu": "Меню",
+      "addSuccess": "Промпт создан",
+      "updateSuccess": "Промпт обновлён",
+      "deleteSuccess": "Промпт удалён",
+      "operationSuccess": "Операция выполнена",
+      "operationFailed": "Ошибка операции",
+      "deleteConfirmTitle": "Подтвердить удаление",
+      "deleteConfirmMessage": "Удалить промпт «{{name}}»? Это действие необратимо.",
+      "description": "Создавайте шаблоны промптов. Введите ! в чате, чтобы выбрать и вставить",
+      "dialog": {
+        "addTitle": "Создать промпт",
+        "editTitle": "Редактировать промпт",
+        "name": "Название",
+        "namePlaceholder": "Введите название промпта",
+        "nameRequired": "Введите название промпта",
+        "content": "Содержимое",
+        "contentPlaceholder": "Введите текст промпта, можно использовать переменные вида {{variable}}",
+        "contentHint": "Содержимое промпта будет вставлено прямо в поле ввода при выборе",
+        "confirmAdd": "Создать",
+        "saveChanges": "Сохранить"
+      },
+      "export": "Export",
+      "import": "Import",
+      "global": "Global Prompts",
+      "project": "Project Prompts",
+      "projectScope": "Project Prompts - {{projectName}}",
+      "noProject": "No Active Project",
+      "importDialog": {
+        "title": "Import Prompts",
+        "summary": "Total {{total}} prompts:",
+        "newCount": "{{count}} new",
+        "updateCount": "{{count}} updates",
+        "selectedCount": "{{count}} items selected",
+        "conflictStrategy": "Conflict Resolution Strategy",
+        "strategySkip": "Skip",
+        "strategySkipDesc": "Skip existing prompts",
+        "strategyOverwrite": "Overwrite",
+        "strategyOverwriteDesc": "Overwrite existing prompts",
+        "strategyDuplicate": "Duplicate",
+        "strategyDuplicateDesc": "Create duplicates (generate new IDs)",
+        "conflictWarning": "{{count}} conflicts detected",
+        "columnName": "Name",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "New",
+        "statusUpdate": "Update",
+        "importPartialSuccess": "Imported {{imported}}, skipped {{skipped}}, updated {{updated}}",
+        "confirmImport": "Confirm Import"
+      },
+      "exportDialog": {
+        "title": "Export Prompts",
+        "selectHint": "Select prompts to export",
+        "confirmExport": "Confirm Export"
+      }
+    },
+    "cli": {
+      "hint": "These CLIs must be installed and configured in your system terminal. The plugin only detects installation status and version — it will never install them for you. Confirm each CLI works in the terminal before coming back here to use it.",
+      "refresh": "Re-check",
+      "retry": "Retry",
+      "loading": "Checking CLI installation status…",
+      "loadFailed": "Detection failed. Please try again.",
+      "status": {
+        "installed": "Installed",
+        "notInstalled": "Not installed"
+      },
+      "viewInstallGuide": "Install guide",
+      "howToInstall": "Install guide",
+      "copy": "Copy",
+      "copied": "Copied to clipboard",
+      "copyFailed": "Failed to copy",
+      "tools": {
+        "qwen": {
+          "name": "Qwen Code",
+          "description": "Alibaba Qwen terminal coding agent"
+        },
+        "dsh": {
+          "name": "DeepSeek Harness",
+          "description": "DeepSeek terminal agent CLI (dsh)"
+        }
+      },
+      "installDialog": {
+        "title": "Install {{name}}",
+        "lead": "Install {{name}} in your system terminal first and make sure `{{binary}}` is available, then come back and click Re-check. This plugin will not run the installer for you.",
+        "stepOpenTerminal": "Open your system terminal (Terminal / iTerm / PowerShell, etc.)",
+        "stepRunCommand": "Copy and run the install command below",
+        "stepVerify": "After install, run `{{binary}} --version` to verify",
+        "stepReturn": "Return here and click Re-check",
+        "primaryCommand": "Recommended install command (macOS / Linux)",
+        "windowsCommand": "Windows (PowerShell)",
+        "altCommand": "Alternative install method",
+        "openDocs": "Open official docs"
+      },
+      "listTitle": "Локальные CLI-инструменты",
+      "summary": "{{installed}} / {{total}} установлено",
+      "moreComingSoon": "Скоро будет больше",
+      "copyPath": "Копировать путь",
+      "visibility": {
+        "hide": "Скрыть в меню выбора провайдера",
+        "show": "Показать в меню выбора провайдера"
+      },
+      "dsh": {
+        "groupTitle": "DeepSeek Harness",
+        "cliRowTitle": "CLI install",
+        "cardTitle": "Local host",
+        "rowHint": "Start or adopt the local dsh web host",
+        "hint": "One persistent local dsh web host serves all sessions; the plugin adopts a running host instead of spawning a second one.",
+        "state": {
+          "checking": "Checking…",
+          "notInstalled": "Not installed",
+          "notRunning": "Not running",
+          "connected": "Connected"
+        },
+        "adopted": "adopted",
+        "adoptedHint": "Adopted an already-running host; it is never stopped by the plugin.",
+        "openWebUi": "Open DSH Web UI",
+        "startHost": "Start host",
+        "stopHost": "Stop host (plugin-spawned only)",
+        "autoStart": "Auto-start when needed",
+        "moreActions": "More"
+      }
+    },
+    "configure": "Configure",
+    "qwenConfig": {
+      "cliModelsTitle": "Из конфигурации CLI",
+      "cliModelsDesc": "Читается из modelProviders в ~/.qwen/settings.json; редактируйте этот файл, чтобы добавить или изменить модели.",
+      "cliModelsEmpty": "В конфигурации CLI модели не найдены",
+      "readOnly": "Только чтение",
+      "contextWindow": "Контекст"
+    },
+    "entrypointLabel": {
+      "sdk-cli": "SDK сеанс",
+      "claude-vscode": "VS Code",
+      "remote": "Удаленный"
+    },
+    "entrypointTooltip": {
+      "sdk-cli": "Этот сеанс создан плагином через SDK и по умолчанию не отображается в списке /resume CLI.",
+      "claude-vscode": "Этот сеанс создан расширением VS Code и по умолчанию не отображается в списке /resume CLI.",
+      "remote": "Этот сеанс был создан удаленным экземпляром Qwen Code"
+    }
+  },
+  "permission": {
+    "allow": "Разрешить однократно",
+    "allowAlways": "Разрешить всегда",
+    "deny": "Отклонить",
+    "userDenied": "Пользователь отклонил запрос разрешения",
+    "fromExternalProcess": "Запрос от внешнего процесса",
+    "tools": {
+      "Write": "Записываю файл",
+      "Edit": "Редактирую файл",
+      "Read": "Читаю файл",
+      "ReadBatch": "Читаю файлы",
+      "Bash": "Выполняю команду",
+      "TodoWrite": "Записываю задачу",
+      "TodoRead": "Читаю задачи",
+      "WebSearch": "Ищу в интернете",
+      "WebFetch": "Загружаю из сети",
+      "execute": "Выполняю {{toolName}}",
+      "readDirectory": "Читаю директорию",
+      "timeoutWarning": "Ответьте в течение {{seconds}} сек, иначе диалог закроется"
+    },
+    "timeoutWarning": "Please answer soon — the dialog will close in {{seconds}} seconds"
+  },
+  "askUserQuestion": {
+    "title": "У Qwen есть вопросы к вам",
+    "progress": "Вопрос {{current}} / {{total}}",
+    "multiSelectHint": "Можно выбрать несколько вариантов",
+    "cancel": "Отмена",
+    "back": "Назад",
+    "next": "Далее",
+    "submit": "Отправить",
+    "otherOption": "Другое",
+    "otherOptionDesc": "Введите свой ответ",
+    "customInputPlaceholder": "Введите ваш ответ...",
+    "timeoutWarning": "Ответьте в течение {{seconds}} сек, иначе диалог закроется",
+    "expand": "Развернуть",
+    "collapse": "Свернуть",
+    "clickToAnswer": "Нажмите, чтобы ответить",
+    "dshTitle": "DeepSeek Harness has some questions for you",
+    "invalidFormat": "Unsupported question data format. Please cancel and retry.",
+    "loading": "Loading questions...",
+    "planDetail": "Plan details"
+  },
+  "planApproval": {
+    "title": "План готов к утверждению",
+    "subtitle": "Qwen составил план и ждёт одобрения.",
+    "executionMode": "Режим выполнения",
+    "executionModeDescription": "Как Qwen будет выполнять план:",
+    "approve": "Утвердить и выполнить",
+    "reject": "Отклонить",
+    "toApprove": "чтобы утвердить",
+    "toReject": "чтобы отклонить",
+    "timeoutWarning": "Выберите в течение {{seconds}} сек, иначе диалог закроется"
+  },
+  "toast": {
+    "switchSuccess": "Переключено",
+    "thinkingEnabled": "Размышление включено",
+    "thinkingDisabled": "Размышление отключено",
+    "saveSuccess": "Сохранено",
+    "saveFailed": "Ошибка сохранения",
+    "operationFailed": "Ошибка операции",
+    "operationSuccess": "Операция выполнена",
+    "restartRequired": "Please restart IDEA for this setting to take effect"
+  },
+  "config": {
+    "officialDocs": "Официальная документация",
+    "switch": "Переключить",
+    "switchProvider": "Переключить провайдер",
+    "nodeProcesses": {
+      "title": "Менеджер процессов Node",
+      "badge": "{{total}} процессов",
+      "badgeWithOrphan": "{{total}} · {{orphan}} осиротевших ⚠",
+      "summary": "Всего: {{total}} · Сироты: {{orphan}}",
+      "loading": "Загрузка процессов...",
+      "empty": "Нет активных процессов Node",
+      "refresh": "Обновить",
+      "groups": {
+        "daemon": "Процессы-демоны",
+        "channel": "Активные беседы",
+        "orphan": "Осиротевшие процессы"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "Канал",
+        "orphanShort": "Сирота"
+      },
+      "kill": "Завершить",
+      "interrupt": "Прервать",
+      "restart": "Перезапустить",
+      "killAll": "Очистить сирот ({{count}})",
+      "killAllHint": "Завершить все обнаруженные осиротевшие процессы",
+      "killConfirmTitle": "Завершить этот процесс?",
+      "killConfirm": "Завершить процесс PID {{pid}}? Активные беседы могут быть потеряны.",
+      "restartConfirmTitle": "Перезапустить демон?",
+      "restartConfirm": "Перезапустить демон? Активные беседы будут прерваны.",
+      "killAllConfirmTitle": "Очистить все осиротевшие процессы?",
+      "killAllConfirm": "Завершить все {{count}} осиротевших процессов?",
+      "killSuccess": "Процесс завершён",
+      "killAllSuccess": "Очищено осиротевших процессов: {{count}}",
+      "restartSuccess": "Демон остановлен; новый экземпляр запустится автоматически при следующем сообщении",
+      "killFailed": "Ошибка завершения: {{error}}",
+      "activeRequests": "В работе: {{count}}"
+    }
+  },
+  "markdown": {
+    "copyCode": "Копировать код",
+    "copyMessage": "Копировать сообщение",
+    "copySuccess": "Скопировано!",
+    "quoteMessage": "Цитировать сообщение",
+    "quoteSuccess": "Процитировано!"
+  },
+  "contextMenu": {
+    "copy": "Копировать",
+    "quote": "Цитировать",
+    "cut": "Cut",
+    "paste": "Paste",
+    "newline": "Insert Newline"
+  },
+  "usage": {
+    "checkingLabel": "Проверка tokentracker-cli…",
+    "installingLabel": "Установка tokentracker-cli…",
+    "installingDesc": "Это может занять минуту. После установки приложение снова выполнит проверку и запустит локальный сервер.",
+    "startingLabel": "Запуск сервера tokentracker…",
+    "guideTitle": "Установите tokentracker-cli, чтобы видеть статистику использования",
+    "guideDesc": "Статистику использования предоставляет tokentracker-cli. Он запускает локальный сервер, который собирает данные об использовании токенов из ваших AI-инструментов и показывает их на дашборде.",
+    "guideInstallLabel": "Команда установки",
+    "guideCopy": "Копировать",
+    "guideCopied": "Скопировано",
+    "guideInstallNow": "Установить",
+    "guideNoteHooks": "При первом запуске сервер tokentracker записывает hooks в установленные AI-инструменты (так он собирает данные об использовании).",
+    "guideNoteTelemetry": "Это приложение отключило анонимную телеметрию.",
+    "errorTitle": "Не удалось запустить сервер tokentracker",
+    "errorRetry": "Повторить"
+  },
+  "mcp": {
+    "title": "MCP-серверы",
+    "whatIsMcp": "Что такое MCP?",
+    "refreshStatus": "Обновить статус серверов",
+    "add": "Добавить",
+    "manualConfig": "Ручная настройка",
+    "addFromMarket": "Добавить из маркета MCP",
+    "import": {
+      "menuLabel": "Импорт из GitHub Copilot",
+      "title": "Импорт из GitHub Copilot",
+      "description": "Вставьте конфигурацию MCP из GitHub Copilot (корневой ключ «servers»), чтобы импортировать её серверы.",
+      "placeholder": "{\n  \"servers\": {\n    \"my-server\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"my-mcp-server\"]\n    }\n  }\n}",
+      "previewButton": "Предпросмотр",
+      "previewTitle": "Серверы для импорта",
+      "empty": "Вставьте конфигурацию и нажмите «Предпросмотр».",
+      "footerHint": "Перед импортом проверьте серверы и переименования.",
+      "renamedFrom": "переименован из {{id}}",
+      "renameSummary": "{{count}} переименовано из-за конфликтов имён",
+      "confirm": "Импортировать {{count}} серверов"
+    },
+    "market": {
+      "title": "Маркетплейс MCP",
+      "subtitle": "Просматривайте источники реестра и добавляйте устанавливаемые серверы MCP.",
+      "searchPlaceholder": "Поиск серверов, издателей или тегов",
+      "allSources": "Все источники",
+      "refresh": "Обновить маркетплейс",
+      "loading": "Загрузка элементов маркетплейса…",
+      "empty": "Серверы MCP не найдены.",
+      "selectServer": "Выберите сервер, чтобы просмотреть сведения об установке.",
+      "footerHint": "Проверьте команды, URL-адреса, заголовки и подстановки переменных окружения перед добавлением сервера.",
+      "addServer": "Добавить сервер",
+      "official": "официальный",
+      "installable": "устанавливаемый",
+      "browseOnly": "только просмотр",
+      "repository": "Репозиторий",
+      "docs": "Документация",
+      "homepage": "Домашняя страница",
+      "installOption": "Вариант установки",
+      "riskWarning": "Этот вариант выполняет команду на вашем компьютере. Проверьте её перед добавлением.",
+      "riskWarningUnverified": "Этот вариант выполняет нераспознанную команду. Добавляйте только если доверяете источнику.",
+      "noInstall": "Этот источник предоставляет только метаданные обнаружения. Добавьте этот сервер вручную после проверки инструкций в его репозитории.",
+      "configPreview": "Предварительный просмотр конфигурации"
+    },
+    "description": "Описание",
+    "command": "Команда",
+    "url": "URL",
+    "homepage": "Домашняя страница",
+    "docs": "Документация",
+    "delete": "Удалить",
+    "noServers": "Нет MCP-серверов",
+    "addServerHint": "Нажмите кнопку «Добавить» для добавления сервера",
+    "loading": "Загрузка...",
+    "deleteTitle": "Удаление MCP-сервера",
+    "deleteMessage": "Вы уверены, что хотите удалить сервер «{{name}}»?\n\nЭто действие необратимо.",
+    "deleteConfirm": "Удалить",
+    "cancel": "Отмена",
+    "enabled": "Включён",
+    "disabled": "Отключён",
+    "deleted": "Удалён",
+    "updated": "Обновлён",
+    "saved": "Сохранён",
+    "added": "Добавлен",
+    "linkCopied": "Ссылка скопирована, откройте в браузере",
+    "configCopied": "Конфигурация скопирована в буфер обмена",
+    "copyFailed": "Ошибка копирования, скопируйте вручную",
+    "connectionStatus": "Статус подключения",
+    "serverVersion": "Версия сервера",
+    "statusConnected": "Подключён",
+    "statusFailed": "Ошибка подключения",
+    "statusNeedsAuth": "Требуется аутентификация",
+    "statusPending": "Подключение...",
+    "statusUnknown": "Неизвестно",
+    "logs": {
+      "title": "Журнал подключений",
+      "empty": "Пока нет записей",
+      "clear": "Очистить журнал",
+      "close": "Закрыть",
+      "count": "{{count}} записей",
+      "loadingServers": "Загрузка списка MCP-серверов...",
+      "refreshingStatus": "Обновление статуса подключений MCP-серверов...",
+      "loadedToolsFromCache": "Инструменты загружены из кэша для «{{name}}»: {{count}} инструментов",
+      "forceRefreshingTools": "Принудительное обновление инструментов для «{{name}}»...",
+      "loadingTools": "Загрузка инструментов для «{{name}}»...",
+      "fastLoadCache": "Быстрая загрузка из кэша: {{count}} серверов (кэшировано {{seconds}}с назад)",
+      "loadedToolsFromCacheSimple": "Инструменты загружены из кэша: {{count}} инструментов",
+      "usingCacheStrategy": "Используется стратегия кэша. Нажмите обновить для получения актуальных данных",
+      "firstLoad": "Первая загрузка, получение списка серверов...",
+      "loadedServersSuccess": "Список серверов загружен: {{count}} серверов найдено",
+      "loadedServersFailed": "Ошибка загрузки списка серверов: {{error}}",
+      "statusUpdateComplete": "Обновление статуса завершено: {{total}} серверов ({{connected}} подключены, {{failed}} с ошибками, {{pending}} ожидают, {{needsAuth}} требуют аутентификации)",
+      "loadedStatusFailed": "Ошибка загрузки статуса серверов: {{error}}",
+      "cleared": "Журнал обновлений очищен",
+      "refreshingAll": "Обновление всех MCP-серверов...",
+      "startRefresh": "Начало обновления",
+      "forceRefreshingToolsServer": "Принудительное обновление инструментов для «{{name}}»...",
+      "startRefreshServer": "Начало обновления для «{{name}}»...",
+      "checkingConnection": "Проверка статуса подключения",
+      "checkingConnectionServer": "Сервер «{{name}}» — Проверка статуса подключения...",
+      "refreshComplete": "Обновление сервера «{{name}}» завершено",
+      "forceRefreshTools": "Принудительное обновление инструментов"
+    },
+    "presets": {
+      "fetch": "Инструмент для получения веб-контента и парсинга веб-страниц",
+      "time": "Утилиты времени и часовых поясов",
+      "memory": "Инструмент графа знаний и хранения памяти",
+      "sequentialThinking": "Инструмент последовательного мышления и рассуждений",
+      "context7": "Инструмент поиска документов и получения контекста"
+    },
+    "help": {
+      "title": "Что такое MCP?",
+      "protocol": {
+        "title": "Model Context Protocol",
+        "description": "MCP (Model Context Protocol) — открытый протокол, позволяющий моделям ИИ безопасно обращаться к внешним инструментам и источникам данных."
+      },
+      "features": {
+        "title": "Ключевые возможности",
+        "toolExtension": {
+          "label": "Расширение инструментов",
+          "description": "Добавление возможностей доступа к файловой системе и сети для Qwen"
+        },
+        "dataConnection": {
+          "label": "Подключение данных",
+          "description": "Подключение к внешним источникам данных — базам данных и API"
+        },
+        "security": {
+          "label": "Безопасность и контроль",
+          "description": "Строгий контроль разрешений и изоляция данных"
+        },
+        "integration": {
+          "label": "Простая интеграция",
+          "description": "Поддержка множества языков программирования и сред выполнения"
+        }
+      },
+      "configuration": {
+        "title": "Способы настройки",
+        "description": "Поддерживаются два типа конфигурации:",
+        "stdio": {
+          "description": "Взаимодействие с локальными процессами через стандартный ввод/вывод",
+          "example": "Запуск через команды npx/uvx"
+        },
+        "httpSse": {
+          "description": "Взаимодействие с удалёнными серверами по сети",
+          "example": "URL-адрес"
+        }
+      },
+      "learnMore": {
+        "title": "Узнать больше",
+        "description": "Посетите официальную документацию:"
+      },
+      "gotIt": "Понятно"
+    },
+    "serverDialog": {
+      "addTitle": "Ручная настройка",
+      "editTitle": "Редактировать сервер",
+      "rawConfig": "Конфигурация (JSON)",
+      "description": "Введите JSON-конфигурацию MCP Servers (предпочтительно NPX или UVX)",
+      "securityWarning": "Проверьте источник и оцените риски перед настройкой",
+      "saving": "Сохранение...",
+      "errors": {
+        "idExists": "ID сервера «{{id}}» уже существует",
+        "unrecognizedFormat": "Нераспознанный формат конфигурации",
+        "jsonParseError": "Ошибка разбора JSON: {{message}}"
+      }
+    },
+    "tools": "Инструменты",
+    "loadTools": "Загрузить список инструментов",
+    "notConnected": "Не подключено",
+    "loadFailed": "Ошибка загрузки",
+    "noTools": "Нет инструментов",
+    "clickToLoad": "Нажмите для загрузки",
+    "noParams": "Без параметров",
+    "required": "Обязательно",
+    "optional": "Необязательно"
+  },
+  "tools": {
+    "toolCall": "Вызываю инструмент",
+    "runCommand": "Выполняю команду",
+    "contextEngine": "Анализирую контекст",
+    "task": "Выполняю задачу",
+    "readFile": "Читаю файл",
+    "editFile": "Редактирую файл",
+    "writeFile": "Записываю файл",
+    "replaceString": "Заменяю строку",
+    "executeCommand": "Выполняю команду",
+    "search": "Ищу",
+    "fileMatch": "Ищу файлы",
+    "webFetch": "Загружаю из сети",
+    "webSearch": "Ищу в интернете",
+    "delete": "Удаляю",
+    "explore": "Изучаю",
+    "createDirectory": "Создаю директорию",
+    "moveFile": "Перемещаю файл",
+    "copyFile": "Копирую файл",
+    "listFiles": "Просматриваю файлы",
+    "findFile": "Ищу файл",
+    "todoList": "Список задач",
+    "editFileTitle": "Редактирую файл",
+    "refreshFileInIdea": "Обновить файл в IDEA",
+    "refreshFileInIdeaSuccess": "Файл обновлён в IDEA вручную",
+    "showDiffInIdea": "Показать изменения в IDEA",
+    "diffButton": "Diff",
+    "editBatchTitle": "Редактирую файлы",
+    "searchBatchTitle": "Ищу",
+    "editPrefix": "Редактирую: {{fileName}}",
+    "lineRange": "Строки {{start}}-{{end}}",
+    "lineSingle": "Строка {{line}}",
+    "unknownTool": "Неизвестный инструмент",
+    "bashGroupBatchRun": "Выполняю команды",
+    "bashGroupCompleted": "завершено",
+    "bashGroupAllCompleted": "Все завершены",
+    "bashGroupFailed": "ошибка",
+    "promptLabel": "Промпт",
+    "reportFindings": {
+      "title": "Результаты ревью",
+      "findingsCount_one": "{{count}} замечание",
+      "findingsCount_other": "{{count}} замечаний",
+      "confirmedCount_one": "{{count}} подтверждено",
+      "confirmedCount_other": "{{count}} подтверждено",
+      "plausibleCount_one": "{{count}} требует проверки",
+      "plausibleCount_other": "{{count}} требует проверки",
+      "confirmed": "Подтверждено",
+      "plausible": "Требует проверки",
+      "fixed": "Исправлено",
+      "skipped": "Пропущено",
+      "noChangeNeeded": "Изменения не требуются",
+      "empty": "Замечаний нет",
+      "summaryLabel": "Сводка ревью",
+      "summary": "Описание",
+      "failureScenario": "Сценарий сбоя",
+      "reviewLevel": "Уровень ревью: {{level}}",
+      "openFile": "Открыть {{filePath}}",
+      "expandFinding": "Развернуть замечание",
+      "collapseFinding": "Свернуть замечание",
+      "expandReport": "Развернуть результаты ревью",
+      "collapseReport": "Свернуть результаты ревью",
+      "untitled": "Замечание без названия"
+    },
+    "agent": "Agent",
+    "agentGroupToggle": "Toggle agent group details",
+    "editLocationsSuffix": " more",
+    "updatePlan": "Update Plan",
+    "applyPatch": "Apply Patch"
+  },
+  "subagent": {
+    "process": {
+      "title": "Процесс агента",
+      "prompt": "Промпт",
+      "thought": "Размышление",
+      "filesRead_one": "Прочитан {{count}} файл",
+      "filesRead_other": "Прочитано {{count}} файлов",
+      "otherTools": "Другие инструменты",
+      "result": "Результат",
+      "showFullOutput": "Показать полный вывод",
+      "loading": "Загрузка процесса агента…",
+      "unavailable": "Журнал процесса недоступен, пока у сессии нет id.",
+      "reportGenerated": "Сформирован структурированный аналитический отчёт",
+      "unitMs": "мс",
+      "unitS": "с",
+      "unitTools": "инструментов",
+      "unitTokens": "токенов"
+    }
+  },
+  "statusPanel": {
+    "todoTab": "План",
+    "tasksTab": "Задачи",
+    "subagentTab": "Субагент",
+    "editsTab": "Правки",
+    "noTodos": "Нет активных задач",
+    "noSubagents": "Нет активных субагентов",
+    "noFileChanges": "Нет изменений файлов",
+    "showDiff": "Показать Diff",
+    "expand": "Развернуть панель статуса",
+    "collapse": "Свернуть панель статуса",
+    "undoChanges": "Отменить изменения",
+    "undoConfirmTitle": "Отмена изменений файла",
+    "undoWillDelete": "Файл был создан Qwen. Отмена удалит его.",
+    "undoWillRestore": "Файл вернётся к состоянию до изменений Qwen.",
+    "undoCannotUndo": "Это действие необратимо.",
+    "confirmUndo": "Подтвердить отмену",
+    "undoSuccess": "Изменения {{fileName}} отменены",
+    "undoFailed": "Ошибка отмены: {{error}}",
+    "discardAll": "Отменить всё",
+    "keepAll": "Сохранить всё",
+    "discardAllConfirmTitle": "Отменить все изменения",
+    "discardAllConfirmMessage": "Все изменения файлов будут отменены. Это действие необратимо.",
+    "discardAllSuccess": "Все изменения отменены",
+    "discardAllFailed": "Ошибка отмены: {{error}}",
+    "keepAllSuccess": "Все изменения сохранены, отслеживание сброшено",
+    "multiAgentBadge": "Несколько агентов",
+    "multiAgentEdited": "{{count}} агентов изменили этот файл в сессии — проверьте внимательно",
+    "blockedBy": "Blocked by: {{ids}}"
+  },
+  "skills": {
+    "all": "Все",
+    "global": "Глобальные",
+    "local": "Локальные",
+    "filterEnabled": "Фильтр: включённые навыки",
+    "enabled": "Включено",
+    "filterDisabled": "Фильтр: отключённые навыки",
+    "disabled": "Отключено",
+    "searchPlaceholder": "Поиск навыков...",
+    "whatIsSkills": "Что такое навыки?",
+    "importSkill": "Импорт навыка",
+    "importGlobalSkill": "Импорт глобального навыка",
+    "importLocalSkill": "Импорт локального навыка",
+    "importUserSkill": "Импортировать навык пользователя",
+    "importRepoSkill": "Импортировать навык репозитория",
+    "user": "Пользователь",
+    "repo": "Репозиторий",
+    "description": "Описание",
+    "noDescription": "Без описания",
+    "noMatchingSkills": "Совпадающие навыки не найдены",
+    "importHint": "Нажмите кнопку + для импорта файла или папки навыка",
+    "deleteTitle": "Удалить навык",
+    "deleteMessage": "Вы уверены, что хотите удалить {{scope}} навык «{{name}}»?\n\nЭто действие необратимо.",
+    "deleteMessageGlobal": "глобальный",
+    "deleteMessageLocal": "локальный",
+    "deleteMessageUser": "пользовательский",
+    "deleteMessageRepo": "репозитория",
+    "importSuccess": "Успешно импортировано {{count}} навыков",
+    "importSuccessOne": "Успешно импортирован 1 навык",
+    "importPartialSuccess": "Успешно импортировано {{count}}/{{total}} навыков, часть не удалась",
+    "importFailed": "Ошибка импорта навыка",
+    "deleteSuccess": "Навык успешно удалён",
+    "deleteFailed": "Не удалось удалить навык",
+    "enableSuccess": "Навык успешно включён: {{name}}",
+    "disableSuccess": "Навык успешно отключён: {{name}}",
+    "operationFailed": "Ошибка операции: {{error}}",
+    "operationError": "Ошибка операции с навыком",
+    "refreshed": "Список навыков обновлён",
+    "help": {
+      "title": "Что такое навыки?",
+      "overview": {
+        "title": "Обзор",
+        "description": "Навыки — это динамически загружаемые наборы инструкций, скрипты и папки ресурсов, которые улучшают работу Qwen для конкретных задач. Навыки учат Qwen выполнять определённые задачи воспроизводимым способом — например, создавать документы по бренд-гайдлайнам, анализировать данные по корпоративным процессам или автоматизировать личные задачи."
+      },
+      "structure": {
+        "title": "Структура навыка",
+        "description": "Навык — это папка, содержащая файл SKILL.md:",
+        "example": "my-skill/\n├── SKILL.md          # Обязательно: файл определения навыка\n├── templates/        # Необязательно: файлы шаблонов\n└── references/       # Необязательно: справочные материалы"
+      },
+      "format": {
+        "title": "Формат SKILL.md",
+        "description": "Файлы SKILL.md используют формат YAML frontmatter + Markdown:",
+        "example": "---\nname: my-skill-name\ndescription: Описание навыка и когда его использовать\n---\n\n# Инструкции навыка\n\nПодробное содержание инструкций...",
+        "hint": "name и description — обязательные поля. Необязательные: license, allowed-tools, metadata"
+      },
+      "configuration": {
+        "title": "Способы настройки",
+        "description": "Способы добавления навыка:",
+        "localPath": {
+          "label": "Локальный путь",
+          "description": "Укажите путь к папке, содержащей SKILL.md"
+        },
+        "relativePath": {
+          "label": "Относительный путь",
+          "description": "Относительно корня проекта, например, ./skills/my-skill"
+        },
+        "absolutePath": {
+          "label": "Абсолютный путь",
+          "description": "Полный путь в файловой системе"
+        }
+      },
+      "tips": {
+        "title": "Советы по использованию",
+        "item1": "Убедитесь, что директория навыка содержит валидный файл SKILL.md",
+        "item2": "Имена навыков должны использовать строчные буквы, цифры и дефисы (kebab-case)",
+        "item3": "Навыки автоматически применяются в чатах Qwen после загрузки",
+        "item4": "Управляйте статусом отдельных навыков с помощью переключателей",
+        "item5": "Упомяните имя навыка в чате для использования, например, «Используй навык pdf для извлечения полей формы»"
+      },
+      "learnMore": {
+        "title": "Узнать больше",
+        "description": "Больше информации о навыках:",
+        "link1": "Документация Skills",
+        "link2": "Примеры использования Skills",
+        "link3": "Репозиторий Qwen Code на GitHub"
+      }
+    }
+  },
+  "models": {
+    "addModel": "Добавить модель",
+    "searchPlaceholder": "Поиск моделей",
+    "noModelsFound": "Модели не найдены",
+    "hiddenModelCount": "+ {{count}} дополнительных моделей. Введите текст для поиска.",
+    "pinned": "Закреплённые",
+    "pin": "Закрепить",
+    "unpin": "Открепить",
+    "groups": {
+      "cliConfig": "From CLI config",
+      "custom": "Custom models"
+    },
+    "qwen": {
+      "followCliDefault": {
+        "label": "Default (follow CLI config)",
+        "labelWithModel": "Default (follow CLI config · {{model}})"
+      },
+      "currentConfigured": {
+        "badge": "Current"
+      },
+      "coderPlus": {
+        "label": "Qwen3-Coder-Plus",
+        "description": "Qwen3-Coder-Plus · Coding flagship · Recommended default"
+      },
+      "coderFlash": {
+        "label": "Qwen3-Coder-Flash",
+        "description": "Qwen3-Coder-Flash · Fast coding model for quick answers"
+      },
+      "max": {
+        "label": "Qwen-Max",
+        "description": "Qwen-Max · Strongest general capability"
+      },
+      "plus": {
+        "label": "Qwen-Plus",
+        "description": "Qwen-Plus · Balanced intelligence and cost"
+      },
+      "turbo": {
+        "label": "Qwen-Turbo",
+        "description": "Qwen-Turbo · Optimized for cost-sensitive workloads"
+      }
+    }
+  },
+  "modes": {
+    "plan": {
+      "label": "План",
+      "shortLabel": "План",
+      "tooltip": "План — анализ только для чтения",
+      "description": "Только анализ; без правок файлов и shell-команд"
+    },
+    "default": {
+      "label": "Запрос разрешения",
+      "shortLabel": "Спросить",
+      "tooltip": "Запрос разрешения — подтверждение каждого изменения",
+      "description": "Требуется ручное одобрение перед правкой файлов и запуском shell-команд"
+    },
+    "auto-edit": {
+      "label": "Авто-правка",
+      "shortLabel": "Авто-правка",
+      "tooltip": "Авто-правка — shell всё ещё спрашивает",
+      "description": "Автоматически одобряет правки файлов (edit / write_file / notebook_edit); shell-команды всё ещё требуют подтверждения"
+    },
+    "auto": {
+      "label": "Авто",
+      "shortLabel": "Авто",
+      "tooltip": "Авто — одобрения проверяются классификатором",
+      "description": "Классификатор оценивает каждую shell-команду и правку, автоматически одобряя безопасные операции"
+    },
+    "yolo": {
+      "label": "YOLO",
+      "shortLabel": "YOLO",
+      "tooltip": "YOLO — одобрять всё",
+      "description": "Автоматически одобряет все вызовы инструментов, включая правки файлов и shell-команды [используйте с осторожностью]"
+    }
+  },
+  "promptEnhancer": {
+    "title": "Улучшение промпта",
+    "tooltip": "Улучшить промпт",
+    "shortcut": "⌘/",
+    "enhancing": "Улучшаю промпт...",
+    "originalPrompt": "Исходный промпт",
+    "enhancedPrompt": "Улучшенный промпт",
+    "useEnhanced": "Использовать улучшенный",
+    "keepOriginal": "Оставить исходный",
+    "modeLabel": "Режим",
+    "modeAuto": "Авто",
+    "modeManual": "Вручную",
+    "modeUnavailable": "Недоступно",
+    "providerLabel": "CLI",
+    "providerUnresolved": "CLI не определён",
+    "modelLabel": "Модель",
+    "modelUnresolved": "Модель по умолчанию",
+    "openSettings": "Настроить",
+    "openSettingsTooltip": "Открыть настройки улучшения промпта",
+    "resolvingUsage": "Определение конфигурации…"
+  },
+  "fileContext": {
+    "placeholder": "Файловый контекст",
+    "enableTitle": "Включить файловый контекст?",
+    "enableDescription": "При включении путь к открытому в редакторе файлу будет отправлен ИИ. Примечание: передаётся только путь к файлу, а не его содержимое.",
+    "enable": "Включить",
+    "cancel": "Отмена"
+  },
+  "reasoning": {
+    "title": "Выберите глубину рассуждений",
+    "low": {
+      "label": "Низкая",
+      "description": "Быстрые ответы с базовыми рассуждениями"
+    },
+    "medium": {
+      "label": "Средняя",
+      "description": "Сбалансированное мышление (по умолчанию)"
+    },
+    "high": {
+      "label": "Высокая",
+      "description": "Глубокие рассуждения для сложных задач"
+    },
+    "xhigh": {
+      "label": "Максимальная",
+      "description": "Максимальная глубина рассуждений"
+    },
+    "max": {
+      "label": "Max",
+      "description": "Maximum reasoning depth"
+    }
+  },
+  "errorBoundary": {
+    "title": "Что-то пошло не так",
+    "description": "Произошла непредвиденная ошибка. Скопируйте детали ниже и отправьте разработчику.",
+    "possibleCauses": "Возможные причины:",
+    "cause1": "Node.js не установлен или неправильно настроен",
+    "cause2": "Проблемы с сетью",
+    "cause3": "Несовместимость плагина или IDE",
+    "cause4": "Нехватка системных ресурсов",
+    "errorDetails": "Детали ошибки",
+    "copyError": "Копировать информацию об ошибке",
+    "copied": "Скопировано!",
+    "reload": "Перезагрузить приложение",
+    "helpText": "Если проблема не уходит — скопируйте ошибку и создайте issue на GitHub.",
+    "componentChain": "Component chain",
+    "debugHints": "Debug hints"
+  },
+  "aiBridge": {
+    "qwenCodeInterrupted": "Qwen Code прерван (таймаут или отмена):",
+    "qwenCodeError": "Ошибка Qwen Code:",
+    "errorMessage": "Сообщение об ошибке",
+    "currentApiKeySource": "Источник API-ключа",
+    "currentApiKeyPreview": "Превью API-ключа",
+    "currentBaseUrl": "Текущий Base URL",
+    "source": "источник",
+    "notConfigured": "Не настроено",
+    "notConfiguredEmpty": "Не настроено (пусто или отсутствует)",
+    "defaultBaseUrl": "Значение по умолчанию (не настроено явно)",
+    "configTip": "CLI может читать из env или settings.json, но плагин поддерживает только settings.json. Настроить: Настройки → Управление провайдерами",
+    "apiError": "Ошибка API",
+    "apiErrorCauses": "Возможные причины:\n1. Неверный API-ключ\n2. Проблема прокси-сервиса\n3. Проверьте ~/.qwen/settings.json",
+    "codexAuthError": "Ошибка аутентификации:",
+    "codexAuthErrorChecks": "Проверьте:\n1. API-ключ в настройках\n2. Разрешения ключа\n3. Правильность Base URL (если кастомный)",
+    "codexAuthTip": "Совет: требуется действующий API-ключ",
+    "codexNetworkError": "Сетевая ошибка:",
+    "codexNetworkErrorChecks": "Проверьте:\n1. Сетевое подключение\n2. Настройки прокси\n3. Не блокирует ли файрвол",
+    "codexError": "Ошибка:",
+    "codexErrorCheck": "Проверьте сеть и настройки",
+    "userDeniedPermission": "Пользователь отклонил разрешение для {{toolName}}",
+    "userDidNotProvideAnswers": "Пользователь не ответил",
+    "dbMissingPath": "Не указан путь к БД",
+    "dbFileNotExist": "Файл БД не найден",
+    "dbReadFailed": "Не удалось прочитать БД",
+    "dbParseProviderFailed": "Не удалось разобрать конфигурацию провайдера",
+    "aiResponseEmpty": "Пустой ответ AI",
+    "enhancementFailed": "Ошибка улучшения",
+    "uploadedImages": "Загружено {{count}} изображений",
+    "uploadedAttachments": "Вложения загружены",
+    "emptyMessage": "Пустое сообщение",
+    "attachment": "Вложение"
+  },
+  "error": {
+    "providerNotConfigured": "Провайдер не настроен",
+    "providerNotConfiguredDesc": "Провайдер ИИ ещё не настроен или доступ к локальной конфигурации не авторизован. Перед началом диалога завершите настройку в разделе управления провайдерами.",
+    "goToProviderSettings": "Перейти к настройкам"
+  },
+  "errorDiagnostic": {
+    "copyCommand": "Копировать",
+    "copied": "Скопировано",
+    "openDependencySettings": "Открыть управление зависимостями",
+    "recommended": "Рекомендуется",
+    "sdkNativeBinaryMissing": {
+      "title": "Установка SDK не завершена — отсутствует нативный бинарник",
+      "intro": "Это известная проблема зеркала npm Taobao (не баг плагина). Зеркало не полностью синхронизировало платформо-зависимые файлы. Вы можете решить это вручную одним из способов ниже:",
+      "reason": "Эта проблема исчезнет автоматически, когда зеркало Taobao завершит синхронизацию — никаких дополнительных действий не требуется.",
+      "solutions": {
+        "switchRegistry": {
+          "title": "Вариант 1: временно переключиться на официальный реестр и переустановить",
+          "step0": "1. Выполните в терминале (переключение на официальный реестр npm):",
+          "step1": "2. Откройте настройки управления зависимостями плагина и нажмите «Переустановить»:",
+          "step2": "3. После завершения переустановки переключитесь обратно на зеркало Taobao:"
+        },
+        "downgrade": {
+          "title": "Вариант 2: откатить на более раннюю версию",
+          "step0": "В управлении зависимостями переключите версию SDK на v0.2.112 или более раннюю. После переключения перезапустите IDEA."
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — не удалось запустить дочерний процесс",
+      "intro": "Эта ошибка обычно вызвана несовместимой версией Node.js или неполной установкой SDK. Попробуйте два варианта ниже по порядку:",
+      "reason": "EBUSY — это системная ошибка, возникающая в Node.js, когда дочерний процесс не может быть запущен из-за занятого ресурса. Распространённые причины: проблемы совместимости с Node.js 24, устаревший SDK или неполная установка с зеркала Taobao.",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "Вариант 1: Проверьте версию Node.js",
+          "step0": "Выполните команду ниже в терминале, чтобы увидеть свою версию. Рекомендуется Node 22 или текущая LTS — пользователи сообщили о многих проблемах с Node 24, поэтому отдавайте предпочтение Node 20 или 22:"
+        },
+        "reinstallLatestSdk": {
+          "title": "Вариант 2: Переустановите последний SDK из официального реестра npm",
+          "step0": "1. Переключитесь на официальный реестр npm (избегайте зеркала Taobao — у него может не быть последней версии):",
+          "step1": "2. Откройте управление зависимостями и переустановите последний SDK:"
+        }
+      }
+    },
+    "codexThreadResume": {
+      "title": "Session resume failed",
+      "intro": "Something went wrong while resuming a previous session.",
+      "reason": "The session thread resume request was rejected — the session may have expired or the server does not support it."
+    }
+  },
+  "modelConfig": {
+    "title": "Model settings",
+    "effort": "Effort",
+    "preset": "Preset"
+  },
+  "providers": {
+    "qwen": {
+      "label": "Qwen Code"
+    },
+    "beta": {
+      "badge": "Beta",
+      "title": "Beta Feature",
+      "message": "This feature is still in Beta. If you encounter any bugs, please report them to the author promptly."
+    },
+    "dsh": {
+      "label": "DeepSeek Harness"
+    },
+    "manageCli": "CLI Settings"
+  },
+  "contextUsage": {
+    "title": "Context Usage",
+    "loading": "Loading context usage...",
+    "autoCompactEnabled": "Auto-compact: enabled",
+    "autoCompactEnabledWithThreshold": "Auto-compact: enabled ({{threshold}}%)",
+    "notAvailable": "N/A",
+    "categories": {
+      "systemPrompt": "System prompt",
+      "systemTools": "System tools",
+      "mcpTools": "MCP tools",
+      "customAgents": "Custom agents",
+      "memoryFiles": "Memory files",
+      "skills": "Skills",
+      "messages": "Messages",
+      "autoCompactBuffer": "Autocompact buffer",
+      "freeSpace": "Free space"
+    },
+    "sections": {
+      "mcpTools": "MCP Tools ({{count}})",
+      "agents": "Agents ({{count}})",
+      "memoryFiles": "Memory Files ({{count}})",
+      "skills": "Skills ({{included}}/{{total}})"
+    },
+    "table": {
+      "tool": "Tool",
+      "server": "Server",
+      "tokens": "Tokens",
+      "agent": "Agent",
+      "source": "Source",
+      "type": "Type",
+      "path": "Path",
+      "skill": "Skill"
+    }
+  },
+  "dshPresets": {
+    "title": "Select DeepSeek Harness agent preset",
+    "none": {
+      "label": "Default",
+      "description": "dsh default headless composition (full toolset)"
+    },
+    "standard": {
+      "label": "Standard",
+      "description": "Full coding agent with the standard toolset"
+    },
+    "code": {
+      "label": "PTC",
+      "description": "Standard capabilities with Code Mode"
+    },
+    "minimal": {
+      "label": "Minimal",
+      "description": "Bash and str_replace_editor only"
+    },
+    "cordis": {
+      "label": "Creator",
+      "description": "Standard capabilities plus composition authoring"
+    },
+    "user": {
+      "description": "Custom preset installed under the DSH home"
+    }
+  }
+}

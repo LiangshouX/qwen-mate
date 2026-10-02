@@ -1,0 +1,1575 @@
+{
+  "common": {
+    "loading": "載入中",
+    "save": "儲存",
+    "cancel": "取消",
+    "confirm": "確定",
+    "delete": "刪除",
+    "edit": "編輯",
+    "add": "新增",
+    "back": "返回",
+    "close": "關閉",
+    "newSession": "新會話",
+    "newTab": "新標籤頁",
+    "dontAskAgain": "不再詢問",
+    "history": "歷史記錄",
+    "settings": "設定",
+    "thinking": "思考",
+    "thinkingProcess": "思考過程",
+    "seconds": "秒",
+    "collapse": "收合",
+    "expand": "展開",
+    "gotIt": "Got it"
+  },
+  "chat": {
+    "sendMessage": "給 {{provider}} 發送訊息",
+    "createNewSession": "建立新會話",
+    "confirmNewSession": "目前會話已有訊息，確定要建立新會話嗎？",
+    "confirmInterrupt": "目前正在對話中，建立新會話將中斷目前對話，是否繼續？",
+    "requestInterrupted": "請求已被使用者中斷",
+    "uploadedFiles": "已上傳附件: {{files}}",
+    "emptyMessage": "空訊息",
+    "clickToPreview": "點選預覽大圖",
+    "userUploadedImage": "使用者上傳的圖片",
+    "inputPlaceholder": "@引用檔案，#喚起智能體，Enter 發送",
+    "inputPlaceholderEnter": "@引用檔案，#喚起智能體，Enter 發送",
+    "inputPlaceholderCmdEnter": "@引用檔案，#喚起智能體，⌘Enter 發送",
+    "noThinkingContent": "無思考內容",
+    "parseError": "無法解析內容",
+    "sendMessageEnter": "發送訊息 (Enter)",
+    "currentMode": "目前模式: {{mode}}",
+    "currentModel": "目前模型: {{model}}",
+    "removeAttachment": "移除附件",
+    "closePreview": "關閉預覽",
+    "loadingDropdown": "載入中...",
+    "modelsLoadFailed": "模型列表載入失敗，點擊重試",
+    "stopGeneration": "停止生成",
+    "generatingResponse": "正在生成響應",
+    "elapsedTime": "已用 {{time}}",
+    "minutesAndSeconds": "{{minutes}} 分 {{seconds}} 秒",
+    "imagePreview": "預覽",
+    "context": "上下文",
+    "usage": "上下文",
+    "usagePercentage": "上下文: {{percentage}}",
+    "noMatchingFiles": "無匹配檔案",
+    "noMatchingCommands": "無匹配指令",
+    "noAvailableAgents": "無可用代理程式",
+    "collapse": "收起",
+    "expand": "展開",
+    "backToTop": "回到頂部",
+    "backToBottom": "回到底部",
+    "refresh": "重新整理",
+    "clickToDisable": "點選停用",
+    "clickToEnable": "點選啟用",
+    "copyHomepageLink": "複製首頁連結",
+    "copyDocsLink": "複製文件連結",
+    "copyConfig": "Copy config",
+    "editConfig": "編輯設定",
+    "deleteServer": "刪除伺服器",
+    "loadingFailed": "載入失敗",
+    "pleaseCloseAndReopen": "請關閉並重新開啟",
+    "loadingSlashCommands": "正在載入斜線指令...",
+    "pleaseWait": "請稍候...",
+    "retrying": "正在重試 ({{count}}/{{max}})...",
+    "global": "全域",
+    "localProject": "本地專案",
+    "disabled": "已停用",
+    "sdkNotInstalled": "{{provider}} SDK 尚未安裝，請先安裝 SDK 才能開始對話",
+    "sdkStatusLoading": "Checking SDK status...",
+    "sdkStatusUnavailable": "無法檢查 SDK 狀態。",
+    "retrySdkStatus": "重試",
+    "openSourceBanner": "本專案保證100%開源和免費（謹防盜版項目）",
+    "openSourceBannerStar": "點個 Star",
+    "openSourceBannerStarAria": "前往 GitHub 點 Star",
+    "goInstallSdk": "前往安裝",
+    "commandNotImplemented": "`{{command}}` 功能尚未實現。",
+    "clearCommandDescription": "清除對話歷史並新建會話",
+    "unknownFile": "Unknown file",
+    "streamingConnected": "AI 已成功連接，正在理解問題",
+    "showEarlierTurns": "顯示更早的 {{count}} 輪對話（目前已載入尚餘 {{remaining}} 輪）",
+    "totalDuration": "本次耗時",
+    "tokenUsage": "輸入 {{input}} / 輸出 {{output}}",
+    "tokenUsageDetail": "本輪合計 — 輸入 {{input}} · 快取寫入 {{cacheWrite}} · 快取讀取 {{cacheRead}} · 輸出 {{output}}",
+    "cacheHitsWithRatio": "（快取命中 {{tokens}}，{{ratio}}）",
+    "search": {
+      "ariaLabel": "在對話中搜尋",
+      "placeholder": "在對話中搜尋...",
+      "next": "下一個符合 (Enter)",
+      "previous": "上一個符合 (Shift+Enter)",
+      "close": "關閉 (Esc)",
+      "counter": "{{current}}/{{total}}",
+      "noResults": "無結果",
+      "searching": "搜尋中...",
+      "expandedHint": "已展開 {{count}} 則早期訊息",
+      "matchCase": "區分大小寫 (Alt+C)",
+      "wholeWord": "全字符合 (Alt+W)",
+      "regex": "正規表達式 (Alt+R)",
+      "invalidRegex": "正規表達式無效",
+      "openTooltip": "在對話中搜尋 (Cmd/Ctrl+F)"
+    },
+    "compactSummary": {
+      "summarizedConversation": "已總結的對話",
+      "compactSummary": "對話摘要",
+      "messagesUpTo": "已總結此節點之前的 {{count}} 則訊息",
+      "messagesFrom": "已總結此節點之後的 {{count}} 則訊息",
+      "userContext": "補充說明：「{{context}}」",
+      "expand": "展開摘要",
+      "collapse": "摺疊摘要"
+    },
+    "bridgeUnavailable": "橋接服務目前不可用",
+    "commandProviderOnly": "{{command}} 僅在 {{provider}} 提供商下可用",
+    "loadEarlierTurns": "載入更早訊息",
+    "loadEarlierTurnsFailed": "載入更早訊息失敗，點擊重試",
+    "loadingEarlierTurns": "正在載入更早訊息…",
+    "planModeEnabled": "已啟用計畫模式"
+  },
+  "settings": {
+    "title": "設定",
+    "basic": {
+      "title": "基礎配置",
+      "description": "配置頁面主題、語言和 Node.js 執行環境",
+      "tabs": {
+        "appearance": "外觀",
+        "behavior": "行為",
+        "environment": "環境"
+      },
+      "theme": {
+        "label": "介面主題",
+        "system": "跟隨 IDE",
+        "light": "亮色",
+        "dark": "暗色"
+      },
+      "language": {
+        "label": "介面語言",
+        "followIde": "跟隨 IDE",
+        "simplifiedChinese": "简体中文",
+        "traditionalChinese": "繁體中文",
+        "english": "English",
+        "hindi": "हिन्दी",
+        "spanish": "Español",
+        "french": "Français",
+        "japanese": "日本語",
+        "russian": "Русский",
+        "korean": "한국어",
+        "portuguese": "Português (Brasil)"
+      },
+      "nodePath": {
+        "label": "Node.js 路徑",
+        "placeholder": "例如 C:\\Program Files\\nodejs\\node.exe 或 /usr/local/bin/node",
+        "hint": "在終端中執行",
+        "hintCommand": "node -p \"process.execPath\"",
+        "hintText": "獲取實際的 Node.js 可執行檔案路徑。為空時外掛會自動嘗試檢測 Node.js。",
+        "versionTooLow": "Node.js 版本過低，外掛需要 v{{minVersion}} 或更高版本才能正常運行"
+      },
+      "workingDirectory": {
+        "label": "Working Directory",
+        "placeholder": "e.g. project1 or leave empty to use project root",
+        "hint": "Specify the directory where Qwen works. Can use relative path (relative to project root) or absolute path. Leave empty to use project root."
+      },
+      "fontSize": {
+        "label": "字體大小",
+        "level1": "小（80%）",
+        "level2": "較小（90%）",
+        "level3": "標準（100%）",
+        "level4": "較大（110%）",
+        "level5": "大（120%）",
+        "level6": "最大（140%）"
+      },
+      "editorFont": {
+        "label": "UI 字體",
+        "followOption": "跟隨 IDEA UI 字體（{{font}}）",
+        "customOption": "自訂 UI 字體檔案",
+        "customPathLabel": "UI 字體檔案路徑",
+        "customPathPlaceholder": "選擇或輸入 .ttf / .otf UI 字體檔案路徑",
+        "browse": "瀏覽",
+        "warningUnavailable": "UI 字體不可用，目前已回退到 IDEA UI 字體",
+        "statusFollowEditor": "目前跟隨 IDEA UI 字體：{{font}}",
+        "statusCustom": "目前使用自訂 UI 字體：{{font}}"
+      },
+      "codeFont": {
+        "label": "程式碼字體",
+        "followOption": "跟隨編輯器字體（{{font}}）",
+        "customOption": "自訂程式碼字體檔案",
+        "customPathLabel": "程式碼字體檔案路徑",
+        "customPathPlaceholder": "選擇或輸入 .ttf / .otf 程式碼字體檔案路徑",
+        "browse": "瀏覽",
+        "warningUnavailable": "程式碼字體不可用，目前已回退到編輯器字體",
+        "statusFollowEditor": "目前跟隨編輯器字體：{{font}}",
+        "statusCustom": "目前使用自訂程式碼字體：{{font}}"
+      },
+      "streaming": {
+        "label": "Streaming",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, AI responses will appear character by character in real-time, instead of waiting for the complete response. May consume more resources."
+      },
+      "autoOpenFile": {
+        "label": "發送已開啟的檔案路徑",
+        "enabled": "已啟用",
+        "disabled": "已停用",
+        "hint": "開啟後，在專案樹選擇檔案時會自動將檔案路徑告訴 AI（注意：只傳遞檔案路徑，不傳檔案內容）。關閉後需要手動操作。"
+      },
+      "promptEnhancer": {
+        "label": "增強提示詞",
+        "modelLabel": "增強模型",
+        "resetToDefault": "恢復預設",
+        "providerAvailable": "可用",
+        "providerUnavailable": "目前不可用",
+        "currentProviderAuto": "目前使用自動選擇：{{provider}}",
+        "currentProviderManual": "目前使用手動選擇的 provider：{{provider}}",
+        "currentProviderUnavailable": "目前所選 provider 不可用：{{provider}}",
+        "modeLabel": "使用方式",
+        "modeAuto": "自動",
+        "modeManual": "手動",
+        "autoSummary": "自動跟隨目前聊天 CLI · 現在解析為 {{provider}}",
+        "autoUnavailable": "目前沒有可用的 CLI，請切換到手動並選擇。",
+        "provider": {
+          "dsh": "DeepSeek Harness",
+          "qwen": "Qwen Code"
+        }
+      },
+      "diffExpanded": {
+        "label": "預設展開差異",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，聊天中的程式碼差異將預設展開顯示。關閉後，差異預設摺疊，可點擊展開。"
+      },
+      "taskCompletionNotification": {
+        "label": "任務完成系統通知",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，當 AI 任務完成時顯示系統通知。關閉後不顯示系統通知。"
+      },
+      "askUserQuestionNotification": {
+        "label": "提問系統通知",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，當 Qwen 向你提問時顯示系統通知提醒，避免錯過。關閉後不顯示通知。"
+      },
+      "detailedOutput": {
+        "label": "詳細輸出資訊",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，訊息底部會在可用時顯示本輪預估費用，並在輸入 Token 中標明快取命中。Token 消耗資訊始終保持顯示。"
+      },
+      "askUserQuestionSoundNotification": {
+        "label": "提問提示音",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，當 Qwen 向你提問時播放已設定的提示音。會使用下方的音效選擇與焦點規則。"
+      },
+      "systemNotificationOnlyWhenUnfocused": {
+        "label": "僅在 IDE 未聚焦時顯示系統通知",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，僅在 IDE 視窗未聚焦時顯示任務完成與提問系統通知。"
+      },
+      "soundNotification": {
+        "label": "任務完成提示音",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，AI 完成任務時會播放提示音，方便你離開螢幕時也能知道任務已完成。",
+        "onlyWhenUnfocused": "僅在 IDE 未聚焦時播放提示音",
+        "onlyWhenUnfocusedHint": "開啟後，僅在 IDE 視窗未聚焦時播放任務完成與提問提示音。",
+        "selectSound": "提示音",
+        "soundDefault": "預設",
+        "soundChime": "清脆鈴聲",
+        "soundBell": "鐘聲",
+        "soundDing": "叮咚",
+        "soundSuccess": "成功音",
+        "soundCustom": "自訂...",
+        "customSound": "自訂聲音檔",
+        "customSoundPlaceholder": "選擇或輸入音訊檔路徑",
+        "customSoundHint": "支援 WAV、MP3、AIFF 格式",
+        "testSound": "測試",
+        "browse": "瀏覽"
+      },
+      "sendShortcut": {
+        "label": "發送快捷鍵",
+        "enter": "Enter 發送",
+        "enterDesc": "按 Enter 發送訊息，Shift+Enter 換行",
+        "cmdEnter": "⌘/Ctrl+Enter 發送",
+        "cmdEnterDesc": "按 ⌘/Ctrl+Enter 發送訊息，Enter 換行"
+      },
+      "permissionDialogTimeout": {
+        "label": "權限與提問對話框超時時間",
+        "unit": "秒",
+        "hint": "設定 Qwen 提問對話框和權限請求對話框的超時時間（30~3600 秒）。超時後對話框將自動關閉，Qwen 會繼續執行。"
+      },
+      "chatBgColor": {
+        "label": "聊天背景色",
+        "custom": "自訂",
+        "reset": "恢復預設",
+        "hint": "自訂聊天區域的背景顏色，留空則跟隨主題預設顏色"
+      },
+      "chatBarColor": {
+        "label": "標題列與狀態列顏色",
+        "custom": "自訂",
+        "reset": "恢復預設",
+        "hint": "統一設定會話標題列與工作狀態列的主題顏色，留空則跟隨目前介面主題"
+      },
+      "userMsgColor": {
+        "label": "使用者訊息顏色",
+        "custom": "自訂",
+        "reset": "恢復預設",
+        "hint": "自訂您的訊息背景顏色，留空則跟隨主題預設顏色"
+      },
+      "newSessionConfirm": {
+        "label": "建立新會話時二次確認",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "關閉後，在已有訊息的會話中點選新建將直接建立，不再彈出確認視窗"
+      },
+      "commitGeneration": {
+        "label": "AI Commit Message Generation",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, shows the 'AI Generate Commit Message' button in the commit dialog. When disabled, the button is hidden."
+      },
+      "statusBarWidget": {
+        "label": "Status Bar Info Display",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "hint": "When enabled, shows current model and mode info in the IDE status bar (e.g. GUI [Qwen-Max] {Auto}). When disabled, the widget is hidden."
+      },
+      "diffTheme": {
+        "label": "Diff Theme",
+        "follow": "Follow UI",
+        "followDesc": "Match the current chat UI light or dark theme",
+        "editor": "Follow Editor",
+        "editorDesc": "Stay closer to the IDE editor diff atmosphere",
+        "light": "Light",
+        "lightDesc": "Cleaner and better integrated with the settings page",
+        "softDark": "Soft Dark",
+        "softDarkDesc": "Keep code contrast without the harsh black background"
+      }
+    },
+    "providers": "供應商管理",
+    "providersDesc": "管理 Qwen 認證設定與 CLI 工具",
+    "providerTab": {
+      "cli": "CLI 工具",
+      "qwen": "Qwen Config"
+    },
+    "pluginModels": {
+      "title": "自訂模型",
+      "description": "在此新增的自訂模型將在所有供應商下可見，顯示在模型選擇清單的最前面",
+      "dialogTitle": "管理自訂模型",
+      "manage": "管理模型",
+      "pricing": {
+        "title": "價格（美元/百萬 tokens）",
+        "optionalLabel": "非必填",
+        "hint": "選填。留空某項會使用該 token 類型的預設費率。",
+        "inputLabel": "輸入",
+        "outputLabel": "輸出",
+        "cacheWriteLabel": "快取寫入",
+        "cacheReadLabel": "快取讀取",
+        "inputShort": "輸入",
+        "outputShort": "輸出",
+        "cacheWriteShort": "快取寫入",
+        "cacheReadShort": "快取讀取",
+        "invalidValue": "價格必須是非負數字",
+        "defaultPricing": "使用預設價格"
+      },
+      "contextWindow": {
+        "label": "最大上下文（K tokens）",
+        "placeholder": "例如 500",
+        "hint": "選填。請輸入整數 K 值（500 = 500,000 tokens），僅用於外掛顯示上下文用量。",
+        "invalidValue": "最大上下文必須是正整數（單位 K）",
+        "summary": "上下文：{{value}} tokens"
+      },
+      "configuredSectionTitle": "已設定的 Qwen 模型",
+      "configuredSectionDesc": "這些模型來自目前 Qwen 供應商或 settings.json，已經會顯示在模型選擇器中。這裡只能修改價格。",
+      "configuredEditHint": "此模型由目前 Qwen 供應商或 settings.json 管理，只能在這裡修改價格。",
+      "customSectionTitle": "自訂模型",
+      "editPricing": "編輯價格"
+    },
+    "dependencies": "SDK 依賴",
+    "dependency": {
+      "title": "SDK 依賴管理",
+      "description": "管理 AI SDK 依賴套件。首次使用時需要安裝對應的 SDK。",
+      "installPolicyTip": "安裝遇到問題？可複製報錯資訊，交給終端裡的 Qwen Code 協助排查",
+      "qwenSdkName": "Qwen Code SDK",
+      "qwenSdkDescription": "Qwen Code 執行所需。包含 Qwen Code SDK 及相關依賴。",
+      "loading": "正在載入依賴狀態...",
+      "install": "安裝",
+      "installing": "安裝中...",
+      "uninstall": "解除安裝",
+      "uninstalling": "解除安裝中...",
+      "update": "更新",
+      "updateAvailable": "有更新",
+      "installLogs": "安裝日誌",
+      "waitingForLogs": "等待日誌輸出...",
+      "nodeNotConfigured": "Node.js 未配置，請先在基礎配置中設定 Node.js 路徑。",
+      "installSuccess": "{{name}} 安裝成功",
+      "installFailed": "安裝失敗: {{error}}",
+      "uninstallSuccess": "{{name}} 已解除安裝",
+      "uninstallFailed": "解除安裝失敗: {{error}}",
+      "updating": "更新中...",
+      "updateSuccess": "{{name}} 更新成功",
+      "installVersion": "Install {{version}}",
+      "updateToVersion": "Update to {{version}}",
+      "rollbackToVersion": "Rollback to {{version}}",
+      "currentVersionAction": "Current version",
+      "targetVersion": "Target version",
+      "loadingVersions": "Version list loading",
+      "installedVersion": "Installed {{version}}",
+      "latestStableVersion": "Latest stable {{version}}",
+      "targetVersionValue": "Target {{version}}",
+      "versionSourceFallback": "Remote versions could not be loaded. Showing the built-in recommended versions instead. You can still enter a version manually.",
+      "rollbackWarning": "This is a rollback operation. Re-check the related AI features after switching versions."
+    },
+    "usage": "使用統計",
+    "usageDesc": "檢視您的 Token 消耗、費用統計和使用趨勢分析",
+    "mcp": "MCP 伺服器",
+    "mcpDesc": "配置和管理 Model Context Protocol 伺服器",
+    "permissions": "權限配置",
+    "permissionsDesc": "管理 Qwen Code 的檔案存取和操作權限",
+    "promptEnhancer": {
+      "title": "增強提示詞",
+      "description": "設定增強提示詞功能使用的 provider 與模型，在訊息送出前先重寫並增強輸入內容。"
+    },
+    "commit": {
+      "title": "Commit AI",
+      "description": "Configure AI-generated Git commit message behavior",
+      "providerModel": {
+        "label": "Commit 生成 Provider",
+        "modelLabel": "Commit 生成模型",
+        "resetToDefault": "恢復預設",
+        "providerAvailable": "可用",
+        "providerUnavailable": "當前不可用",
+        "currentProviderAuto": "當前使用自動選擇：{{provider}}",
+        "currentProviderManual": "當前使用手動選擇的 provider：{{provider}}",
+        "currentProviderUnavailable": "當前所選 provider 不可用：{{provider}}",
+        "modeLabel": "使用方式",
+        "modeAuto": "自動",
+        "modeManual": "手動",
+        "autoSummary": "自動跟隨目前聊天 CLI · 現在解析為 {{provider}}",
+        "autoUnavailable": "目前沒有可用的 CLI，請切換到手動並選擇。"
+      },
+      "prompt": {
+        "label": "Additional Prompt",
+        "placeholder": "Add your extra requirements here, e.g., generate commit in English, include issue number, etc...",
+        "hint": "The plugin has built-in CCG Commits specification prompts. Content you add here will be used as additional requirements, and AI will prioritize your instructions."
+      },
+      "projectPrompt": {
+        "label": "專案級附加提示詞",
+        "placeholder": "在此新增當前專案的專屬要求，例如：scope 必須使用模組名、commit body 需包含影響範圍等...",
+        "hint": "此提示詞僅對當前專案生效，與全域附加提示詞同時拼接。當兩者內容矛盾時，以專案提示詞為準。不同專案可獨立配置。"
+      },
+      "codeReview": {
+        "label": "Code Review AI Additional Prompt"
+      }
+    },
+    "agents": "Agents",
+    "agentsDesc": "管理和配置AI代理",
+    "skills": "Skills",
+    "skillsDesc": "管理和配置技能模組",
+    "other": {
+      "title": "其他設定",
+      "description": "配置其他雜項設定",
+      "historyCompletion": {
+        "label": "歷史輸入補全",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，輸入框會根據歷史輸入自動補全，按 Tab 鍵接受建議",
+        "manageHistory": "管理歷史記錄",
+        "empty": "暫無歷史記錄",
+        "clearAll": "清空全部",
+        "clearLow": "清空低重要度",
+        "clearLowHint": "刪除重要度 ≤ 1 的記錄",
+        "delete": "刪除",
+        "edit": "編輯",
+        "add": "新增",
+        "importance": "重要度",
+        "editor": {
+          "addTitle": "新增歷史記錄",
+          "editTitle": "編輯歷史記錄",
+          "contentLabel": "內容",
+          "contentPlaceholder": "輸入歷史記錄內容...",
+          "importanceLabel": "重要度",
+          "importanceHint": "重要度越高，自動補全時越靠前"
+        },
+        "timeAgo": {
+          "yearsAgo_one": "{{count}} year ago",
+          "yearsAgo_other": "{{count}} years ago",
+          "monthsAgo_one": "{{count}} month ago",
+          "monthsAgo_other": "{{count}} months ago",
+          "daysAgo_one": "{{count}} day ago",
+          "daysAgo_other": "{{count}} days ago",
+          "hoursAgo_one": "{{count}} hour ago",
+          "hoursAgo_other": "{{count}} hours ago",
+          "minutesAgo_one": "{{count}} minute ago",
+          "minutesAgo_other": "{{count}} minutes ago",
+          "justNow": "剛剛",
+          "yearsAgo": "{{count}}年前",
+          "monthsAgo": "{{count}}個月前",
+          "daysAgo": "{{count}}天前",
+          "hoursAgo": "{{count}}小時前",
+          "minutesAgo": "{{count}}分鐘前",
+          "yearsAgo_few": "{{count}} года назад",
+          "yearsAgo_many": "{{count}} лет назад",
+          "monthsAgo_few": "{{count}} месяца назад",
+          "monthsAgo_many": "{{count}} месяцев назад",
+          "daysAgo_few": "{{count}} дня назад",
+          "daysAgo_many": "{{count}} дней назад",
+          "hoursAgo_few": "{{count}} часа назад",
+          "hoursAgo_many": "{{count}} часов назад",
+          "minutesAgo_few": "{{count}} минуты назад",
+          "minutesAgo_many": "{{count}} минут назад"
+        }
+      },
+      "aiTitleGeneration": {
+        "label": "AI 會話標題自動生成",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "開啟後，新會話首次回覆完成時將呼叫輕量模型自動產生簡短標題；關閉後工作階段仍按使用者首則訊息顯示"
+      },
+      "loadError": "設定載入失敗"
+    },
+    "codexFeatureUnavailable": "目前模式下該設定頁不可用。",
+    "sidebar": {
+      "expand": "Expand Sidebar",
+      "collapse": "Collapse Sidebar"
+    },
+    "provider": {
+      "featureComingSoon": "功能暫未實現，敬請期待"
+    },
+    "permissionsComingSoon": "權限配置功能即將推出...",
+    "agentsComingSoon": "Agents配置功能即將推出...",
+    "skillsComingSoon": "Skills配置功能即將推出...",
+    "codexProvider": {
+      "dialog": {
+        "noCustomModels": "No custom models",
+        "addModel": "Add Model",
+        "modelIdPlaceholder": "Model ID (required, e.g., qwen3-coder-plus)",
+        "modelLabelPlaceholder": "Display name (optional)",
+        "modelDescPlaceholder": "Model description (optional)",
+        "modelIdRequired": "Model ID is required",
+        "modelIdDuplicate": "Model ID already exists"
+      }
+    },
+    "agent": {
+      "title": "提示詞",
+      "create": "建立",
+      "createAgent": "建立提示詞",
+      "createAgentHint": "點選跳轉到提示詞設定頁面進行建立",
+      "customAgents": "自訂提示詞",
+      "noAgents": "暫無自訂提示詞",
+      "noAgentsDropdown": "暫無提示詞",
+      "loadFailed": "載入失敗",
+      "loading": "載入中...",
+      "menu": "選單",
+      "addSuccess": "提示詞建立成功",
+      "updateSuccess": "提示詞更新成功",
+      "deleteSuccess": "提示詞刪除成功",
+      "operationSuccess": "操作成功",
+      "deleteConfirmTitle": "確認刪除",
+      "deleteConfirmMessage": "確定要刪除提示詞 \"{{name}}\" 嗎？此操作無法撤銷。",
+      "dialog": {
+        "addTitle": "建立提示詞",
+        "editTitle": "編輯提示詞",
+        "name": "名稱",
+        "namePlaceholder": "請輸入提示詞名稱",
+        "nameRequired": "請輸入提示詞名稱",
+        "prompt": "提示詞",
+        "promptPlaceholder": "請輸入提示詞的角色、語氣、工作流程、工具偏好及規則規範等。（選填）",
+        "promptHint": "提示詞會在對話開始時作為系統指令傳送給AI",
+        "confirmAdd": "建立",
+        "saveChanges": "儲存"
+      },
+      "export": "Export",
+      "import": "Import",
+      "importDialog": {
+        "title": "Import Prompts",
+        "summary": "Total {{total}} prompts:",
+        "newCount": "{{count}} new",
+        "updateCount": "{{count}} updates",
+        "selectedCount": "{{count}} items selected",
+        "conflictStrategy": "Conflict Resolution Strategy",
+        "strategySkip": "Skip",
+        "strategySkipDesc": "Skip existing prompts",
+        "strategyOverwrite": "Overwrite",
+        "strategyOverwriteDesc": "Overwrite existing prompts",
+        "strategyDuplicate": "Duplicate",
+        "strategyDuplicateDesc": "Create duplicates (generate new IDs)",
+        "conflictWarning": "{{count}} conflicts detected",
+        "columnName": "Name",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "New",
+        "statusUpdate": "Update",
+        "importPartialSuccess": "Imported {{imported}}, skipped {{skipped}}, updated {{updated}}",
+        "confirmImport": "Confirm Import"
+      },
+      "exportDialog": {
+        "title": "Export Prompts",
+        "selectHint": "Select prompts to export",
+        "confirmExport": "Confirm Export"
+      }
+    },
+    "prompts": "Prompt Library",
+    "prompt": {
+      "title": "Prompt Library",
+      "create": "Create",
+      "createPrompt": "Create Prompt",
+      "createPromptHint": "Click to go to prompt settings page to create",
+      "noPrompts": "No custom prompts",
+      "noPromptsDropdown": "No prompts",
+      "loading": "Loading...",
+      "menu": "Menu",
+      "addSuccess": "Prompt created successfully",
+      "updateSuccess": "Prompt updated successfully",
+      "deleteSuccess": "Prompt deleted successfully",
+      "operationSuccess": "Operation successful",
+      "operationFailed": "Operation failed",
+      "deleteConfirmTitle": "Confirm Delete",
+      "deleteConfirmMessage": "Are you sure you want to delete prompt \"{{name}}\"? This action cannot be undone.",
+      "description": "Create common prompt templates. Type ! in the chat input to quickly select and insert",
+      "dialog": {
+        "addTitle": "Create Prompt",
+        "editTitle": "Edit Prompt",
+        "name": "Name",
+        "namePlaceholder": "Enter prompt name",
+        "nameRequired": "Please enter prompt name",
+        "content": "Content",
+        "contentPlaceholder": "Enter prompt content, you can include variables like {{variable}}",
+        "contentHint": "Prompt content will be inserted directly into the input box when selected",
+        "confirmAdd": "Create",
+        "saveChanges": "Save"
+      },
+      "export": "Export",
+      "import": "Import",
+      "global": "Global Prompts",
+      "project": "Project Prompts",
+      "projectScope": "Project Prompts - {{projectName}}",
+      "noProject": "No Active Project",
+      "importDialog": {
+        "title": "Import Prompts",
+        "summary": "Total {{total}} prompts:",
+        "newCount": "{{count}} new",
+        "updateCount": "{{count}} updates",
+        "selectedCount": "{{count}} items selected",
+        "conflictStrategy": "Conflict Resolution Strategy",
+        "strategySkip": "Skip",
+        "strategySkipDesc": "Skip existing prompts",
+        "strategyOverwrite": "Overwrite",
+        "strategyOverwriteDesc": "Overwrite existing prompts",
+        "strategyDuplicate": "Duplicate",
+        "strategyDuplicateDesc": "Create duplicates (generate new IDs)",
+        "conflictWarning": "{{count}} conflicts detected",
+        "columnName": "Name",
+        "columnId": "ID",
+        "columnStatus": "Status",
+        "statusNew": "New",
+        "statusUpdate": "Update",
+        "importPartialSuccess": "Imported {{imported}}, skipped {{skipped}}, updated {{updated}}",
+        "confirmImport": "Confirm Import"
+      },
+      "exportDialog": {
+        "title": "Export Prompts",
+        "selectHint": "Select prompts to export",
+        "confirmExport": "Confirm Export"
+      }
+    },
+    "cli": {
+      "hint": "以下 CLI 需在系統終端自行安裝並完成設定。外掛只負責偵測是否已安裝及版本號，不會替你自動安裝。請先在終端確認可正常使用，再回到此處使用。",
+      "refresh": "Re-check",
+      "retry": "Retry",
+      "loading": "Checking CLI installation status…",
+      "loadFailed": "Detection failed. Please try again.",
+      "status": {
+        "installed": "Installed",
+        "notInstalled": "Not installed"
+      },
+      "viewInstallGuide": "Install guide",
+      "howToInstall": "Install guide",
+      "copy": "Copy",
+      "copied": "Copied to clipboard",
+      "copyFailed": "Failed to copy",
+      "tools": {
+        "dsh": {
+          "name": "DeepSeek Harness",
+          "description": "DeepSeek 終端智慧體 CLI（dsh）"
+        },
+        "qwen": {
+          "name": "Qwen Code",
+          "description": "Alibaba Qwen terminal coding agent"
+        }
+      },
+      "installDialog": {
+        "title": "Install {{name}}",
+        "lead": "Install {{name}} in your system terminal first and make sure `{{binary}}` is available, then come back and click Re-check. This plugin will not run the installer for you.",
+        "stepOpenTerminal": "Open your system terminal (Terminal / iTerm / PowerShell, etc.)",
+        "stepRunCommand": "Copy and run the install command below",
+        "stepVerify": "After install, run `{{binary}} --version` to verify",
+        "stepReturn": "Return here and click Re-check",
+        "primaryCommand": "Recommended install command (macOS / Linux)",
+        "windowsCommand": "Windows (PowerShell)",
+        "altCommand": "Alternative install method",
+        "openDocs": "Open official docs"
+      },
+      "listTitle": "本機 CLI 工具",
+      "summary": "{{installed}} / {{total}} 已安裝",
+      "moreComingSoon": "即將支援更多",
+      "copyPath": "複製路徑",
+      "visibility": {
+        "hide": "在切換選單中隱藏",
+        "show": "在切換選單中顯示"
+      },
+      "dsh": {
+        "groupTitle": "DeepSeek Harness",
+        "cliRowTitle": "CLI 安裝",
+        "cardTitle": "本機宿主",
+        "rowHint": "啟動或接管本機 dsh web",
+        "hint": "DSH 由本機一個常駐 dsh web 宿主承載所有工作階段；外掛會接管已在執行的宿主，而不會重複啟動。",
+        "state": {
+          "checking": "檢測中…",
+          "notInstalled": "未安裝",
+          "notRunning": "未執行",
+          "connected": "已連線"
+        },
+        "adopted": "已接管",
+        "adoptedHint": "已接管正在執行的宿主；外掛不會停止它。",
+        "openWebUi": "開啟 DSH Web UI",
+        "startHost": "立即啟動",
+        "stopHost": "關閉（僅限外掛啟動的宿主）",
+        "autoStart": "需要時自動啟動",
+        "moreActions": "更多"
+      }
+    },
+    "configure": "設定",
+    "qwenConfig": {
+      "cliModelsTitle": "來自 CLI 設定",
+      "cliModelsDesc": "讀取 ~/.qwen/settings.json 的 modelProviders 設定；如需增改請直接編輯該檔案。",
+      "cliModelsEmpty": "未在 CLI 設定中發現模型",
+      "readOnly": "唯讀",
+      "contextWindow": "上下文"
+    },
+    "entrypointLabel": {
+      "sdk-cli": "SDK會話",
+      "claude-vscode": "VS Code",
+      "remote": "遠程"
+    },
+    "entrypointTooltip": {
+      "sdk-cli": "此外掛程式透過 SDK 建立的工作階段，CLI 的 /resume 清單預設不顯示。",
+      "claude-vscode": "此工作階段由 VS Code 外掛程式建立，CLI 的 /resume 清單預設不顯示。",
+      "remote": "此會話由遠程 Qwen Code 實例創建"
+    }
+  },
+  "permission": {
+    "allow": "允許一次",
+    "allowAlways": "總是允許",
+    "deny": "拒絕",
+    "userDenied": "使用者拒絕了權限請求",
+    "fromExternalProcess": "來自外部處理程序的請求",
+    "tools": {
+      "Write": "寫入檔案",
+      "Edit": "編輯檔案",
+      "Read": "讀取檔案",
+      "ReadBatch": "批量讀取檔案",
+      "Bash": "執行命令",
+      "TodoWrite": "寫入待辦",
+      "TodoRead": "讀取待辦",
+      "WebSearch": "網頁搜尋",
+      "WebFetch": "獲取網頁",
+      "execute": "執行 {{toolName}}",
+      "readDirectory": "讀取目錄",
+      "timeoutWarning": "請儘快回答，對話框將在 {{seconds}} 秒後自動關閉"
+    },
+    "timeoutWarning": "請盡快操作，對話框將在 {{seconds}} 秒後自動關閉"
+  },
+  "askUserQuestion": {
+    "title": "Qwen 有一些問題想問你",
+    "progress": "問題 {{current}} / {{total}}",
+    "multiSelectHint": "可以選擇多個選項",
+    "cancel": "取消",
+    "back": "上一步",
+    "next": "下一步",
+    "submit": "提交",
+    "otherOption": "其他",
+    "otherOptionDesc": "輸入自訂答案",
+    "customInputPlaceholder": "請輸入您的答案...",
+    "timeoutWarning": "請儘快回答，對話框將在 {{seconds}} 秒後自動關閉",
+    "expand": "展開",
+    "collapse": "收起",
+    "clickToAnswer": "點擊回答",
+    "dshTitle": "DeepSeek Harness 有一些問題想問你",
+    "invalidFormat": "問題資料格式不支援，請取消後重試。",
+    "loading": "正在載入問題...",
+    "planDetail": "計畫內容"
+  },
+  "planApproval": {
+    "title": "Plan Ready for Approval",
+    "subtitle": "Qwen has finished planning and is ready to execute.",
+    "executionMode": "Execution Mode",
+    "executionModeDescription": "Select how Qwen should execute the plan:",
+    "approve": "Approve & Execute",
+    "reject": "Reject",
+    "toApprove": "to approve",
+    "toReject": "to reject",
+    "timeoutWarning": "Please make a choice soon, dialog will close in {{seconds}} seconds"
+  },
+  "toast": {
+    "switchSuccess": "切換成功",
+    "thinkingEnabled": "思考已開啟",
+    "thinkingDisabled": "思考已關閉",
+    "saveSuccess": "儲存成功",
+    "saveFailed": "Save failed",
+    "operationFailed": "操作失敗",
+    "operationSuccess": "操作成功",
+    "restartRequired": "Please restart IDEA for this setting to take effect"
+  },
+  "config": {
+    "officialDocs": "官方文件",
+    "switch": "切換",
+    "switchProvider": "切換供應商",
+    "nodeProcesses": {
+      "title": "Node 進程管理",
+      "badge": "{{total}} 個進程",
+      "badgeWithOrphan": "{{total}} 個 · {{orphan}} 孤立 ⚠",
+      "summary": "共 {{total}} 個 · 孤立 {{orphan}} 個",
+      "loading": "正在載入進程資訊...",
+      "empty": "目前沒有作用中的 Node 進程",
+      "refresh": "重新整理",
+      "groups": {
+        "daemon": "常駐進程",
+        "channel": "進行中對話",
+        "orphan": "孤立進程"
+      },
+      "kind": {
+        "daemonShort": "Daemon",
+        "channelShort": "對話",
+        "orphanShort": "孤立"
+      },
+      "kill": "終止",
+      "interrupt": "中斷",
+      "restart": "重啟",
+      "killAll": "清理所有孤立進程 ({{count}})",
+      "killAllHint": "一鍵清理所有失控的孤立進程",
+      "killConfirmTitle": "終止此進程？",
+      "killConfirm": "確認終止 PID {{pid}}？當前對話可能遺失。",
+      "restartConfirmTitle": "重啟常駐進程？",
+      "restartConfirm": "確認重啟常駐進程？正在進行的對話會被中斷。",
+      "killAllConfirmTitle": "清理所有孤立進程？",
+      "killAllConfirm": "確認終止全部 {{count}} 個孤立進程？",
+      "killSuccess": "進程已終止",
+      "killAllSuccess": "已清理 {{count}} 個孤立進程",
+      "restartSuccess": "常駐進程已關閉，下一則訊息會自動啟動新實例",
+      "killFailed": "終止失敗：{{error}}",
+      "activeRequests": "{{count}} 個進行中"
+    }
+  },
+  "markdown": {
+    "copyCode": "複製程式碼",
+    "copyMessage": "複製訊息",
+    "copySuccess": "複製成功",
+    "quoteMessage": "引用訊息",
+    "quoteSuccess": "已引用！"
+  },
+  "contextMenu": {
+    "copy": "複製",
+    "quote": "引用",
+    "cut": "剪下",
+    "paste": "貼上",
+    "newline": "插入換行"
+  },
+  "usage": {
+    "checkingLabel": "正在偵測 tokentracker-cli…",
+    "installingLabel": "正在安裝 tokentracker-cli…",
+    "installingDesc": "可能需要一點時間。安裝完成後，應用程式會自動重新偵測並啟動本機服務。",
+    "startingLabel": "正在啟動 tokentracker 服務…",
+    "guideTitle": "安裝 tokentracker-cli 以檢視使用統計",
+    "guideDesc": "使用統計由 tokentracker-cli 提供。它會在本機執行一個本地服務，彙整各 AI 工具的 token 用量，並以儀表板呈現。",
+    "guideInstallLabel": "安裝指令",
+    "guideCopy": "複製",
+    "guideCopied": "已複製",
+    "guideInstallNow": "一鍵安裝",
+    "guideNoteHooks": "首次啟動時，tokentracker 服務會向已安裝的 AI 工具寫入 hooks（這是它的資料蒐集機制）。",
+    "guideNoteTelemetry": "本應用已為其關閉匿名遥測。",
+    "errorTitle": "tokentracker 服務啟動失敗",
+    "errorRetry": "重試"
+  },
+  "mcp": {
+    "title": "MCP 伺服器",
+    "whatIsMcp": "什麼是 MCP?",
+    "refreshStatus": "重新整理伺服器狀態",
+    "add": "新增",
+    "manualConfig": "手動配置",
+    "addFromMarket": "從 MCP市場 新增",
+    "import": {
+      "menuLabel": "從 GitHub Copilot 匯入",
+      "title": "從 GitHub Copilot 匯入",
+      "description": "貼上 GitHub Copilot 的 MCP 設定（根鍵「servers」）以匯入其伺服器。",
+      "placeholder": "{\n  \"servers\": {\n    \"my-server\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"my-mcp-server\"]\n    }\n  }\n}",
+      "previewButton": "預覽",
+      "previewTitle": "待匯入的伺服器",
+      "empty": "貼上設定並點選預覽。",
+      "footerHint": "匯入前請檢查伺服器與重新命名情況。",
+      "renamedFrom": "從 {{id}} 重新命名",
+      "renameSummary": "因名稱衝突重新命名了 {{count}} 個",
+      "confirm": "匯入 {{count}} 個伺服器"
+    },
+    "market": {
+      "title": "MCP 市集",
+      "subtitle": "瀏覽登錄來源並新增可安裝的 MCP 伺服器。",
+      "searchPlaceholder": "搜尋伺服器、發布者或標籤",
+      "allSources": "所有來源",
+      "refresh": "重新整理市集",
+      "loading": "正在載入市集項目…",
+      "empty": "找不到 MCP 伺服器。",
+      "selectServer": "選擇一個伺服器以檢視安裝詳情。",
+      "footerHint": "在新增伺服器之前，請核實命令、URL、標頭和環境變數佔位符。",
+      "addServer": "新增伺服器",
+      "official": "官方",
+      "installable": "可安裝",
+      "browseOnly": "僅瀏覽",
+      "repository": "程式碼儲存庫",
+      "docs": "文件",
+      "homepage": "首頁",
+      "installOption": "安裝選項",
+      "riskWarning": "此選項會在你的裝置上執行命令。新增前請仔細核對。",
+      "riskWarningUnverified": "此選項會執行無法識別的命令。僅在你信任來源時才新增。",
+      "noInstall": "此來源僅提供探索中繼資料。請在檢視其儲存庫說明後手動新增此伺服器。",
+      "configPreview": "設定預覽"
+    },
+    "description": "描述",
+    "command": "命令",
+    "url": "URL",
+    "homepage": "主頁",
+    "docs": "文件",
+    "delete": "刪除",
+    "noServers": "暫無 MCP 伺服器",
+    "addServerHint": "點選「新增」按鈕新增伺服器",
+    "loading": "載入中...",
+    "deleteTitle": "刪除 MCP 伺服器",
+    "deleteMessage": "確定要刪除伺服器 \"{{name}}\" 嗎？\n\n此操作無法撤銷。",
+    "deleteConfirm": "刪除",
+    "cancel": "取消",
+    "enabled": "已啟用",
+    "disabled": "已停用",
+    "deleted": "已刪除",
+    "updated": "已更新",
+    "saved": "已儲存",
+    "added": "已新增",
+    "linkCopied": "連結已複製，請到瀏覽器開啟",
+    "configCopied": "Config copied to clipboard",
+    "copyFailed": "複製失敗，請手動複製",
+    "connectionStatus": "Connection Status",
+    "serverVersion": "Server Version",
+    "statusConnected": "Connected",
+    "statusFailed": "Connection Failed",
+    "statusNeedsAuth": "Needs Authentication",
+    "statusPending": "Connecting...",
+    "statusUnknown": "Unknown",
+    "logs": {
+      "title": "Connection Logs",
+      "empty": "No logs yet",
+      "clear": "Clear logs",
+      "close": "Close",
+      "count": "{{count}} log entries",
+      "loadingServers": "Loading MCP server list...",
+      "refreshingStatus": "Refreshing MCP server connection status...",
+      "loadedToolsFromCache": "Loaded tools from cache for \"{{name}}\": {{count}} tools",
+      "forceRefreshingTools": "Force refreshing tools for \"{{name}}\"...",
+      "loadingTools": "Loading tools for \"{{name}}\"...",
+      "fastLoadCache": "Fast load from cache: {{count}} servers (cached {{seconds}}s ago)",
+      "loadedToolsFromCacheSimple": "Loaded tools from cache: {{count}} tools",
+      "usingCacheStrategy": "Using cache-first strategy. Click refresh to get latest data",
+      "firstLoad": "First load, fetching server list...",
+      "loadedServersSuccess": "Loaded server list: {{count}} servers found",
+      "loadedServersFailed": "Failed to load server list: {{error}}",
+      "statusUpdateComplete": "Status update complete: {{total}} servers ({{connected}} connected, {{failed}} failed, {{pending}} pending, {{needsAuth}} need auth)",
+      "loadedStatusFailed": "Failed to load server status: {{error}}",
+      "cleared": "Refresh logs cleared",
+      "refreshingAll": "Refreshing all MCP servers...",
+      "startRefresh": "Starting refresh",
+      "forceRefreshingToolsServer": "Force refreshing tools for \"{{name}}\"...",
+      "startRefreshServer": "Starting refresh for \"{{name}}\"...",
+      "checkingConnection": "Checking connection status",
+      "checkingConnectionServer": "Server \"{{name}}\" - Checking connection status...",
+      "refreshComplete": "Server \"{{name}}\" refresh complete",
+      "forceRefreshTools": "Force refresh tools"
+    },
+    "presets": {
+      "fetch": "Web content fetching tool for scraping web pages",
+      "time": "Time and timezone utilities",
+      "memory": "Knowledge graph and memory storage tool",
+      "sequentialThinking": "Sequential thinking and reasoning tool",
+      "context7": "Document search and context retrieval tool"
+    },
+    "help": {
+      "title": "什麼是 MCP?",
+      "protocol": {
+        "title": "Model Context Protocol",
+        "description": "MCP (Model Context Protocol) 是一個開放協定，讓 AI 模型能夠安全地存取外部工具和資料來源。"
+      },
+      "features": {
+        "title": "主要特性",
+        "toolExtension": {
+          "label": "工具擴充",
+          "description": "為 Qwen 新增檔案系統、網路存取等能力"
+        },
+        "dataConnection": {
+          "label": "資料連接",
+          "description": "連接資料庫、API 等外部資料來源"
+        },
+        "security": {
+          "label": "安全可控",
+          "description": "嚴格的權限控制和資料隔離"
+        },
+        "integration": {
+          "label": "易於整合",
+          "description": "支援多種程式語言和執行環境"
+        }
+      },
+      "configuration": {
+        "title": "配置方式",
+        "description": "支援兩種配置類型：",
+        "stdio": {
+          "description": "透過標準輸入輸出與本地行程通訊",
+          "example": "npx/uvx 命令啟動"
+        },
+        "httpSse": {
+          "description": "透過網路與遠端伺服器通訊",
+          "example": "URL 位址"
+        }
+      },
+      "learnMore": {
+        "title": "了解更多",
+        "description": "造訪官方文件："
+      },
+      "gotIt": "知道了"
+    },
+    "serverDialog": {
+      "addTitle": "手動配置",
+      "editTitle": "編輯伺服器",
+      "rawConfig": "原始配置（JSON）",
+      "description": "請輸入 MCP Servers 配置 JSON（優先使用 NPX 或 UVX 配置）",
+      "securityWarning": "配置前請自行確認來源，甄別風險",
+      "saving": "保存中...",
+      "errors": {
+        "idExists": "伺服器 ID \"{{id}}\" 已存在",
+        "unrecognizedFormat": "無法識別的配置格式",
+        "jsonParseError": "JSON 解析錯誤: {{message}}"
+      }
+    },
+    "tools": "Tools",
+    "loadTools": "Load Tool List",
+    "notConnected": "Not Connected",
+    "loadFailed": "Load Failed",
+    "noTools": "No Tools",
+    "clickToLoad": "Click to Load",
+    "noParams": "No Parameters",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "tools": {
+    "toolCall": "工具調用",
+    "runCommand": "運行命令",
+    "contextEngine": "上下文引擎",
+    "task": "任務",
+    "promptLabel": "提示詞",
+    "readFile": "讀取文件",
+    "editFile": "編輯文件",
+    "writeFile": "寫入文件",
+    "replaceString": "替換字符串",
+    "executeCommand": "執行命令",
+    "search": "搜索",
+    "fileMatch": "文件匹配",
+    "webFetch": "網頁獲取",
+    "webSearch": "網頁搜索",
+    "delete": "刪除",
+    "explore": "探索",
+    "createDirectory": "創建目錄",
+    "moveFile": "移動文件",
+    "copyFile": "複製文件",
+    "listFiles": "列出文件",
+    "findFile": "查找文件",
+    "todoList": "任務列表",
+    "editFileTitle": "編輯文件",
+    "refreshFileInIdea": "在 IDEA 中重新整理檔案",
+    "refreshFileInIdeaSuccess": "已手動重新整理本檔案在 IDEA 中的內容",
+    "showDiffInIdea": "在 IDEA 中顯示變更",
+    "diffButton": "Diff",
+    "editBatchTitle": "批量編輯檔案",
+    "searchBatchTitle": "批量搜尋",
+    "editPrefix": "編輯: {{fileName}}",
+    "lineRange": "第 {{start}}-{{end}} 行",
+    "lineSingle": "第 {{line}} 行",
+    "unknownTool": "未知工具",
+    "bashGroupBatchRun": "Batch Run Commands",
+    "bashGroupCompleted": "completed",
+    "bashGroupAllCompleted": "All Completed",
+    "bashGroupFailed": "failed",
+    "reportFindings": {
+      "title": "審查發現",
+      "findingsCount_one": "{{count}} 項發現",
+      "findingsCount_other": "{{count}} 項發現",
+      "confirmedCount_one": "{{count}} 項已確認",
+      "confirmedCount_other": "{{count}} 項已確認",
+      "plausibleCount_one": "{{count}} 項待複核",
+      "plausibleCount_other": "{{count}} 項待複核",
+      "confirmed": "已確認",
+      "plausible": "待複核",
+      "fixed": "已修復",
+      "skipped": "已略過",
+      "noChangeNeeded": "無需修改",
+      "empty": "未發現問題",
+      "summaryLabel": "審查摘要",
+      "summary": "問題摘要",
+      "failureScenario": "觸發情境",
+      "reviewLevel": "審查層級：{{level}}",
+      "openFile": "開啟 {{filePath}}",
+      "expandFinding": "展開問題詳情",
+      "collapseFinding": "收合問題詳情",
+      "expandReport": "展開審查發現",
+      "collapseReport": "收合審查發現",
+      "untitled": "未命名問題"
+    },
+    "agent": "Agent",
+    "agentGroupToggle": "Toggle agent group details",
+    "editLocationsSuffix": " more",
+    "updatePlan": "Update Plan",
+    "applyPatch": "Apply Patch"
+  },
+  "subagent": {
+    "process": {
+      "title": "Agent 程序",
+      "prompt": "提示詞",
+      "thought": "思考",
+      "filesRead_one": "讀取 {{count}} 個檔案",
+      "filesRead_other": "讀取 {{count}} 個檔案",
+      "otherTools": "其他工具",
+      "result": "結果",
+      "showFullOutput": "檢視完整輸出",
+      "loading": "正在載入 Agent 程序…",
+      "unavailable": "本次工作階段未產生程序記錄（需要工作階段 ID）。",
+      "reportGenerated": "已產生結構化分析報告",
+      "unitMs": "毫秒",
+      "unitS": "秒",
+      "unitTools": "個工具",
+      "unitTokens": "tokens"
+    }
+  },
+  "statusPanel": {
+    "todoTab": "計畫",
+    "tasksTab": "任務",
+    "subagentTab": "子代理",
+    "editsTab": "編輯",
+    "noTodos": "暫無任務運行",
+    "noSubagents": "暫無子代理運行",
+    "noFileChanges": "暫無檔案改動",
+    "showDiff": "查看差異",
+    "expand": "展開狀態面板",
+    "collapse": "收起狀態面板",
+    "undoChanges": "撤銷更改",
+    "undoConfirmTitle": "撤銷檔案更改",
+    "undoWillDelete": "此檔案是新建立的，撤銷將刪除該檔案。",
+    "undoWillRestore": "將恢復此檔案到 Qwen 修改之前的狀態。",
+    "undoCannotUndo": "此操作無法撤銷。",
+    "confirmUndo": "確認撤銷",
+    "undoSuccess": "已撤銷 {{fileName}} 的更改",
+    "undoFailed": "撤銷失敗: {{error}}",
+    "discardAll": "回撤全部",
+    "keepAll": "保存全部",
+    "discardAllConfirmTitle": "回撤全部更改",
+    "discardAllConfirmMessage": "將撤銷所有檔案的更改，此操作無法恢復。",
+    "discardAllSuccess": "已撤銷所有檔案更改",
+    "discardAllFailed": "撤銷失敗: {{error}}",
+    "keepAllSuccess": "已保存全部，改動記錄已重置",
+    "multiAgentBadge": "多 Agent",
+    "multiAgentEdited": "本會話有 {{count}} 個 Agent 修改過此檔案，請留意合併衝突",
+    "blockedBy": "Blocked by: {{ids}}"
+  },
+  "skills": {
+    "all": "全部",
+    "global": "全局",
+    "local": "本項目",
+    "filterEnabled": "Filter enabled Skills",
+    "enabled": "Enabled",
+    "filterDisabled": "Filter disabled Skills",
+    "disabled": "Disabled",
+    "searchPlaceholder": "Search Skills...",
+    "whatIsSkills": "What are Skills?",
+    "importSkill": "Import Skill",
+    "importGlobalSkill": "Import Global Skill",
+    "importLocalSkill": "Import Local Skill",
+    "importUserSkill": "匯入使用者 Skill",
+    "importRepoSkill": "匯入儲存庫 Skill",
+    "user": "使用者",
+    "repo": "儲存庫",
+    "description": "描述",
+    "noDescription": "暫無描述",
+    "noMatchingSkills": "未找到匹配的技能",
+    "importHint": "Click + button to import Skill file or folder",
+    "deleteTitle": "Delete Skill",
+    "deleteMessage": "Are you sure you want to delete {{scope}} Skill \"{{name}}\"?\n\nThis action cannot be undone.",
+    "deleteMessageGlobal": "global",
+    "deleteMessageLocal": "local",
+    "deleteMessageUser": "使用者",
+    "deleteMessageRepo": "儲存庫",
+    "importSuccess": "Successfully imported {{count}} Skills",
+    "importSuccessOne": "Successfully imported 1 Skill",
+    "importPartialSuccess": "Successfully imported {{count}}/{{total}} Skills, some failed",
+    "importFailed": "Failed to import Skill",
+    "deleteSuccess": "Successfully deleted Skill",
+    "deleteFailed": "刪除 Skill 失敗",
+    "enableSuccess": "已成功啟用 Skill: {{name}}",
+    "disableSuccess": "已成功停用 Skill: {{name}}",
+    "operationFailed": "操作失敗: {{error}}",
+    "operationError": "操作 Skill 失敗",
+    "refreshed": "已重新整理 Skills 清單",
+    "help": {
+      "title": "什麼是 Skills?",
+      "overview": {
+        "title": "概述",
+        "description": "Skills 是 Qwen 動態載入的指令、腳本和資源資料夾，用於提升特定任務的表現。Skills 可以教會 Qwen 以可重複的方式完成特定任務，例如使用公司品牌指南建立文件、按照組織特定的工作流程分析資料，或自動化個人任務。"
+      },
+      "structure": {
+        "title": "Skill 結構",
+        "description": "一個 Skill 是包含 SKILL.md 檔案的資料夾：",
+        "example": "my-skill/\n├── SKILL.md          # 必須：技能定義檔案\n├── templates/        # 可選：範本檔案\n└── references/       # 可選：參考資料"
+      },
+      "format": {
+        "title": "SKILL.md 格式",
+        "description": "SKILL.md 檔案使用 YAML frontmatter + Markdown 格式：",
+        "example": "---\nname: my-skill-name\ndescription: 技能描述和使用時機\n---\n\n# 技能指令\n\n詳細的指令內容...",
+        "hint": "name 和 description 是必填欄位，可選欄位包括 license、allowed-tools、metadata"
+      },
+      "configuration": {
+        "title": "配置方式",
+        "description": "新增 Skill 的方式：",
+        "localPath": {
+          "label": "本地路徑",
+          "description": "指定包含 SKILL.md 的資料夾路徑"
+        },
+        "relativePath": {
+          "label": "相對路徑",
+          "description": "相對於專案根目錄，如 ./skills/my-skill"
+        },
+        "absolutePath": {
+          "label": "絕對路徑",
+          "description": "完整的檔案系統路徑"
+        }
+      },
+      "tips": {
+        "title": "使用提示",
+        "item1": "確保 Skill 目錄包含有效的 SKILL.md 檔案",
+        "item2": "Skill 名稱必須使用小寫字母、數字和連字符（hyphen-case）",
+        "item3": "Skill 載入後會在 Qwen 會話中自動生效",
+        "item4": "可以透過啟用/停用開關控制單個 Skill 的狀態",
+        "item5": "在聊天中提及 Skill 名稱即可使用，如：「使用 pdf skill 提取表單欄位」"
+      },
+      "learnMore": {
+        "title": "了解更多",
+        "description": "更多關於 Skills 的資訊：",
+        "link1": "Skills 官方文件",
+        "link2": "Skills 實戰案例",
+        "link3": "Qwen Code GitHub 儲存庫"
+      }
+    }
+  },
+  "models": {
+    "addModel": "新增模型",
+    "searchPlaceholder": "搜尋模型",
+    "noModelsFound": "找不到模型",
+    "hiddenModelCount": "+ 還有 {{count}} 個模型。輸入以搜尋。",
+    "pinned": "置頂",
+    "pin": "置頂",
+    "unpin": "取消置頂",
+    "groups": {
+      "cliConfig": "來自 CLI 設定",
+      "custom": "自訂模型"
+    },
+    "qwen": {
+      "followCliDefault": {
+        "label": "預設（跟隨 CLI 設定）",
+        "labelWithModel": "預設（跟隨 CLI 設定 · {{model}}）"
+      },
+      "currentConfigured": {
+        "badge": "目前"
+      },
+      "coderPlus": {
+        "label": "Qwen3-Coder-Plus",
+        "description": "Qwen3-Coder-Plus · 編碼旗艦 · 推薦預設模型"
+      },
+      "coderFlash": {
+        "label": "Qwen3-Coder-Flash",
+        "description": "Qwen3-Coder-Flash · 快速編碼模型，回應迅捷"
+      },
+      "max": {
+        "label": "Qwen-Max",
+        "description": "Qwen-Max · 通用能力最強"
+      },
+      "plus": {
+        "label": "Qwen-Plus",
+        "description": "Qwen-Plus · 能力與成本均衡"
+      },
+      "turbo": {
+        "label": "Qwen-Turbo",
+        "description": "Qwen-Turbo · 面向成本敏感場景"
+      }
+    }
+  },
+  "modelConfig": {
+    "title": "模型設定",
+    "effort": "思考強度",
+    "preset": "預設組合"
+  },
+  "modes": {
+    "plan": {
+      "label": "規劃模式",
+      "shortLabel": "規劃",
+      "tooltip": "規劃模式——唯讀分析",
+      "description": "僅進行唯讀分析，不執行檔案編輯或 Shell 命令"
+    },
+    "default": {
+      "label": "請求授權",
+      "shortLabel": "授權",
+      "tooltip": "請求授權——變更前逐一確認",
+      "description": "檔案編輯和 Shell 命令執行前需要手動批准"
+    },
+    "auto-edit": {
+      "label": "自動接受編輯",
+      "shortLabel": "自動編輯",
+      "tooltip": "自動接受編輯——Shell 仍需確認",
+      "description": "自動批准檔案編輯（edit / write_file / notebook_edit），Shell 命令仍需手動批准"
+    },
+    "auto": {
+      "label": "自動模式",
+      "shortLabel": "自動",
+      "tooltip": "自動模式——分類器審查",
+      "description": "由分類器評估每個 Shell 命令和編輯操作，自動批准安全操作、阻止高風險操作"
+    },
+    "yolo": {
+      "label": "YOLO 模式",
+      "shortLabel": "YOLO",
+      "tooltip": "YOLO 模式——自動批准全部",
+      "description": "自動批准所有工具呼叫（含檔案編輯和 Shell 命令）【謹慎使用】"
+    }
+  },
+  "providers": {
+    "beta": {
+      "badge": "Beta",
+      "title": "Beta 功能",
+      "message": "此功能仍處於 Beta 階段。如果遇到使用 Bug，請及時回饋給作者。"
+    },
+    "dsh": {
+      "label": "DeepSeek Harness"
+    },
+    "manageCli": "CLI 設定管理",
+    "qwen": {
+      "label": "Qwen Code"
+    }
+  },
+  "promptEnhancer": {
+    "title": "Prompt Enhancer",
+    "tooltip": "Enhance Prompt",
+    "shortcut": "⌘/",
+    "enhancing": "Enhancing prompt...",
+    "originalPrompt": "Original Prompt",
+    "enhancedPrompt": "Enhanced Prompt",
+    "useEnhanced": "Use Enhanced",
+    "keepOriginal": "Keep Original",
+    "modeLabel": "模式",
+    "modeAuto": "自動",
+    "modeManual": "手動",
+    "modeUnavailable": "不可用",
+    "providerLabel": "CLI",
+    "providerUnresolved": "未解析 CLI",
+    "modelLabel": "模型",
+    "modelUnresolved": "預設模型",
+    "openSettings": "設定",
+    "openSettingsTooltip": "開啟增強提示詞設定",
+    "resolvingUsage": "正在解析執行設定…"
+  },
+  "fileContext": {
+    "placeholder": "檔案上下文",
+    "enableTitle": "開啟檔案上下文？",
+    "enableDescription": "開啟後，編輯器中當前打開的檔案路徑將發送給 AI。注意：僅傳遞檔案路徑，不會傳遞檔案內容。",
+    "enable": "開啟",
+    "cancel": "取消"
+  },
+  "reasoning": {
+    "title": "選擇思考深度",
+    "low": {
+      "label": "較少",
+      "description": "快速響應，基礎推理"
+    },
+    "medium": {
+      "label": "中等",
+      "description": "平衡思考（預設）"
+    },
+    "high": {
+      "label": "較多",
+      "description": "深度推理，適合複雜任務"
+    },
+    "xhigh": {
+      "label": "最多",
+      "description": "最深推理，最高精度"
+    },
+    "max": {
+      "label": "Max",
+      "description": "Maximum reasoning depth"
+    }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "description": "The application encountered an unexpected error. Please copy the error details below and share them with the developer for troubleshooting.",
+    "possibleCauses": "Possible causes:",
+    "cause1": "Node.js is not installed or not configured correctly",
+    "cause2": "Network connection issues",
+    "cause3": "Plugin or IDE compatibility issues",
+    "cause4": "Insufficient system resources",
+    "errorDetails": "Error Details",
+    "copyError": "Copy Error Info",
+    "copied": "Copied!",
+    "reload": "Reload Application",
+    "helpText": "If the problem persists, please copy the error information and submit it as an issue on GitHub, or share it in the community group.",
+    "componentChain": "元件鏈",
+    "debugHints": "偵錯提示"
+  },
+  "aiBridge": {
+    "qwenCodeInterrupted": "Qwen Code 運行被中斷（可能是響應超時或用戶取消）：",
+    "qwenCodeError": "Qwen Code 出現錯誤：",
+    "errorMessage": "錯誤訊息",
+    "currentApiKeySource": "目前 API Key 來源",
+    "currentApiKeyPreview": "目前 API Key 預覽",
+    "currentBaseUrl": "目前 Base URL",
+    "source": "來源",
+    "notConfigured": "未配置",
+    "notConfiguredEmpty": "未配置（值為空或缺失）",
+    "defaultBaseUrl": "預設值（未顯式設定）",
+    "configTip": "提示：CLI 可以讀取環境變數或 settings.json 兩種方式；本外掛為了避免產生問題，只支援讀取 settings.json 內容，您可以在本外掛右上角設定 - 供應商管理配置下即可使用",
+    "apiError": "API 錯誤",
+    "apiErrorCauses": "可能的原因：\n1. API Key 配置不正確\n2. 第三方代理服務配置問題\n3. 請檢查 ~/.qwen/settings.json 中的配置",
+    "codexAuthError": "認證錯誤：",
+    "codexAuthErrorChecks": "請檢查以下配置：\n1. 外掛設定中的 API Key 是否正確\n2. API Key 是否有足夠的權限\n3. 如果使用自訂 Base URL，請確認地址正確",
+    "codexAuthTip": "提示：需要有效的 API Key",
+    "codexNetworkError": "網路錯誤：",
+    "codexNetworkErrorChecks": "請檢查：\n1. 網路連線是否正常\n2. 如果使用代理，請確認代理配置\n3. 防火牆是否阻止了連線",
+    "codexError": "錯誤：",
+    "codexErrorCheck": "請檢查網路連線和相關配置",
+    "userDeniedPermission": "用戶拒絕了 {{toolName}} 工具的使用權限",
+    "userDidNotProvideAnswers": "用戶未提供問題答案",
+    "dbMissingPath": "缺少資料庫檔案路徑參數",
+    "dbFileNotExist": "資料庫檔案不存在",
+    "dbReadFailed": "讀取資料庫失敗",
+    "dbParseProviderFailed": "解析供應商配置失敗",
+    "aiResponseEmpty": "AI 響應為空",
+    "enhancementFailed": "增強失敗",
+    "uploadedImages": "已上傳 {{count}} 張圖片",
+    "uploadedAttachments": "已上傳附件",
+    "emptyMessage": "空訊息",
+    "attachment": "附件"
+  },
+  "dshPresets": {
+    "title": "選擇 DeepSeek Harness Agent 預設",
+    "none": {
+      "label": "預設",
+      "description": "dsh 預設 headless 組合（完整工具集）"
+    },
+    "standard": {
+      "label": "標準模式",
+      "description": "功能完整的標準編碼工具集"
+    },
+    "code": {
+      "label": "PTC 模式",
+      "description": "標準能力加 Code Mode"
+    },
+    "minimal": {
+      "label": "極簡模式",
+      "description": "僅提供 bash 與 str_replace_editor"
+    },
+    "cordis": {
+      "label": "創造模式",
+      "description": "標準能力加組合編排能力"
+    },
+    "user": {
+      "description": "安裝在 DSH 主目錄中的自訂預設"
+    }
+  },
+  "error": {
+    "providerNotConfigured": "供應商未設定",
+    "providerNotConfiguredDesc": "尚未設定 AI 供應商或未授權使用本機設定，請先在供應商管理設定中完成設定後再開始對話。",
+    "goToProviderSettings": "前往設定"
+  },
+  "errorDiagnostic": {
+    "copyCommand": "複製",
+    "copied": "已複製",
+    "openDependencySettings": "開啟相依性管理",
+    "recommended": "推薦",
+    "sdkNativeBinaryMissing": {
+      "title": "SDK 安裝不完整 — 缺少 native 二進位檔",
+      "intro": "這是淘寶 npm 鏡像源的已知問題（非外掛 bug）。鏡像源未完整同步 platform 檔案。可手動按以下方案處理：",
+      "reason": "淘寶源同步完成後此問題會自動消失，無需擔心。",
+      "solutions": {
+        "switchRegistry": {
+          "title": "方案一：暫時切換官方源重新安裝",
+          "step0": "1. 在終端機執行（切換到 npm 官方源）：",
+          "step1": "2. 開啟外掛設定中的「相依性管理」，點選重新安裝：",
+          "step2": "3. 重新安裝完成後，切回淘寶源："
+        },
+        "downgrade": {
+          "title": "方案二：版本回退",
+          "step0": "在「相依性管理」中將 SDK 版本切換到 v0.2.112 或更早版本，切換後需要重新啟動 IDEA。"
+        }
+      }
+    },
+    "spawnEbusy": {
+      "title": "spawn EBUSY — 子處理程序啟動失敗",
+      "intro": "此錯誤通常由 Node.js 版本不相容或 SDK 安裝不完整引起，按以下兩個方向排查通常可解決：",
+      "reason": "EBUSY 是 Node.js 啟動子處理程序時遇到資源忙碌的系統錯誤。常見原因：Node.js 24 相容性問題、SDK 版本過舊，或使用淘寶源安裝時同步不完整。",
+      "solutions": {
+        "checkNodeVersion": {
+          "title": "方案一：檢查 Node.js 版本",
+          "step0": "在終端機執行以下指令查看版本號。建議使用 Node 22 或目前最新 LTS 版本 — 使用者反饋 Node 24 報錯較多，請優先使用 20 或 22："
+        },
+        "reinstallLatestSdk": {
+          "title": "方案二：用 npm 官方源重新安裝最新版 SDK",
+          "step0": "1. 切換到 npm 官方源（淘寶源可能未同步最新版本，請勿使用淘寶源安裝）：",
+          "step1": "2. 開啟「相依性管理」重新安裝最新版 SDK："
+        }
+      }
+    },
+    "codexThreadResume": {
+      "title": "工作階段還原失敗",
+      "intro": "嘗試還原歷史工作階段時出錯。",
+      "reason": "工作階段執行緒還原請求被拒絕，可能是工作階段已過期或伺服器不支援該操作。"
+    }
+  },
+  "contextUsage": {
+    "title": "Context Usage",
+    "loading": "Loading context usage...",
+    "autoCompactEnabled": "Auto-compact: enabled",
+    "autoCompactEnabledWithThreshold": "Auto-compact: enabled ({{threshold}}%)",
+    "notAvailable": "N/A",
+    "categories": {
+      "systemPrompt": "System prompt",
+      "systemTools": "System tools",
+      "mcpTools": "MCP tools",
+      "customAgents": "Custom agents",
+      "memoryFiles": "Memory files",
+      "skills": "Skills",
+      "messages": "Messages",
+      "autoCompactBuffer": "Autocompact buffer",
+      "freeSpace": "Free space"
+    },
+    "sections": {
+      "mcpTools": "MCP Tools ({{count}})",
+      "agents": "Agents ({{count}})",
+      "memoryFiles": "Memory Files ({{count}})",
+      "skills": "Skills ({{included}}/{{total}})"
+    },
+    "table": {
+      "tool": "Tool",
+      "server": "Server",
+      "tokens": "Tokens",
+      "agent": "Agent",
+      "source": "Source",
+      "type": "Type",
+      "path": "Path",
+      "skill": "Skill"
+    }
+  }
+}

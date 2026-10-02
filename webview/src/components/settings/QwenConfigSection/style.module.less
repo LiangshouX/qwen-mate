@@ -1,0 +1,128 @@
+.qwenConfigSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.modelsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--dropdown-border, rgba(128, 128, 128, 0.25));
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(128, 128, 128, 0.08);
+  }
+}
+
+.modelsLabel {
+  font-size: 13px;
+}
+
+.modelsBadge {
+  min-width: 18px;
+  padding: 0 6px;
+  border-radius: 9px;
+  background: rgba(64, 158, 255, 0.18);
+  color: #409eff;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.modelsManageBtn {
+  padding: 3px 10px;
+  border: 1px solid var(--dropdown-border, rgba(128, 128, 128, 0.35));
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+
+  &:hover {
+    background: rgba(128, 128, 128, 0.12);
+  }
+}
+
+
+
+
+
+
+
+.cliModelsHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.readOnlyBadge {
+  padding: 1px 8px;
+  border-radius: 9px;
+  background: rgba(128, 128, 128, 0.15);
+  font-size: 11px;
+  line-height: 18px;
+  opacity: 0.75;
+}
+
+.cliModelsDesc {
+  font-size: 12px;
+  opacity: 0.65;
+  margin-top: -4px;
+}
+
+.cliModelsEmpty {
+  padding: 12px;
+  border: 1px dashed var(--dropdown-border, rgba(128, 128, 128, 0.35));
+  border-radius: 8px;
+  font-size: 12px;
+  opacity: 0.65;
+  text-align: center;
+}
+
+.cliModelList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--dropdown-border, rgba(128, 128, 128, 0.25));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cliModelRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+
+  & + .cliModelRow {
+    border-top: 1px solid var(--dropdown-border, rgba(128, 128, 128, 0.18));
+  }
+}
+
+.cliModelName {
+  font-weight: 500;
+}
+
+.currentBadge {
+  padding: 0 6px;
+  border-radius: 9px;
+  background: rgba(64, 158, 255, 0.18);
+  color: #409eff;
+  font-size: 11px;
+  line-height: 18px;
+}
+
+.cliModelMeta {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.cliModelProvider {
+  font-size: 11px;
+  opacity: 0.55;
+}
