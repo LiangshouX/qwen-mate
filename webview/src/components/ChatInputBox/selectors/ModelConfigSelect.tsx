@@ -27,7 +27,6 @@ interface ModelConfigSelectProps {
   loading?: boolean;
   error?: string | null;
   onRetry?: () => void;
-  onAddModel?: () => void;
   reasoningEffort?: ReasoningEffort;
   onReasoningChange?: (effort: ReasoningEffort) => void;
   dshPreset?: string;
@@ -48,7 +47,6 @@ export const ModelConfigSelect = ({
   loading = false,
   error = null,
   onRetry,
-  onAddModel,
   reasoningEffort = 'high',
   onReasoningChange,
   dshPreset = '',
@@ -183,7 +181,6 @@ export const ModelConfigSelect = ({
           loading={loading}
           error={error}
           onRetry={onRetry}
-          onAddModel={onAddModel}
           showDivider={showDivider}
           showPreset={showPreset}
           dshPreset={dshPreset}

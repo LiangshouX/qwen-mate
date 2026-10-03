@@ -25,7 +25,6 @@ interface ModelSelectProps {
   error?: string | null;
   /** Retries the model catalog fetch for the current provider. */
   onRetry?: () => void;
-  onAddModel?: () => void;
   /** Render only the dropdown, positioned as a fly-out from triggerRef. */
   embedded?: boolean;
   /** Render the list flat inside a parent popover: no positioning, no close-on-select. */
@@ -35,8 +34,7 @@ interface ModelSelectProps {
 }
 
 /**
- * ModelSelect - Qwen-style model selector with search, pinning, and a
- * custom-model shortcut (opens the shared CustomModelDialog flow).
+ * ModelSelect - Qwen-style model selector with search and pinning.
  */
 export const ModelSelect = ({
   value,
@@ -46,7 +44,6 @@ export const ModelSelect = ({
   loading = false,
   error = null,
   onRetry,
-  onAddModel,
   embedded = false,
   inline = false,
   triggerRef,
@@ -88,7 +85,6 @@ export const ModelSelect = ({
     handleToggle,
     handleSelect,
     handleTogglePin,
-    handleAddModel,
     resetSearchAndClose,
   } = useModelSelectHandlers({
     isOpen,
@@ -97,7 +93,6 @@ export const ModelSelect = ({
     recalculate,
     onChange,
     onClose,
-    onAddModel,
     setIsOpen,
     setSearchQuery,
     setPinnedIds,
@@ -125,7 +120,6 @@ export const ModelSelect = ({
       onTogglePin={handleTogglePin}
       visibleModelCount={visibleModelCount}
       hiddenModelCount={hiddenModelCount}
-      onAddModelClick={onAddModel ? handleAddModel : undefined}
     />
   );
 

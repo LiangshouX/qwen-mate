@@ -86,7 +86,6 @@ interface UseModelSelectHandlersArgs {
   recalculate: () => void;
   onChange: (modelId: string) => void;
   onClose?: () => void;
-  onAddModel?: () => void;
   setIsOpen: (open: boolean) => void;
   setSearchQuery: (query: string) => void;
   setPinnedIds: (ids: string[]) => void;
@@ -102,7 +101,6 @@ export function useModelSelectHandlers({
   recalculate,
   onChange,
   onClose,
-  onAddModel,
   setIsOpen,
   setSearchQuery,
   setPinnedIds,
@@ -143,13 +141,7 @@ export function useModelSelectHandlers({
     setPinnedIds(togglePinnedModelId(currentProvider, modelId));
   }, [currentProvider, setPinnedIds]);
 
-  const handleAddModel = useCallback(() => {
-    onAddModel?.();
-    resetSearchAndClose();
-    onClose?.();
-  }, [onAddModel, onClose, resetSearchAndClose]);
-
-  return { handleToggle, handleSelect, handleTogglePin, handleAddModel, resetSearchAndClose };
+  return { handleToggle, handleSelect, handleTogglePin, resetSearchAndClose };
 }
 
 const isOutsideDropdown = (

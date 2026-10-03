@@ -4,6 +4,7 @@ import {
   CHAT_BAR_COLOR_STORAGE_KEY,
   isValidHexColor,
 } from '../utils/chatBarTheme';
+import { applyDocumentTheme, clearInjectedPageBackground } from '../utils/documentTheme';
 import { FONT_SIZE_LEVEL_STORAGE_KEY, fontSizeLevelToScale, parseFontSizeLevel } from '../utils/fontScale';
 
 /**
@@ -22,6 +23,10 @@ export function useThemeInit() {
 
   // Initialize theme and font scaling
   useEffect(() => {
+    // The page-load background injected by Java is frozen at build-time theme
+    // detection; drop it now that CSS is loaded and data-theme is authoritative.
+    clearInjectedPageBackground();
+
     // Register IDE theme received callback
     window.onIdeThemeReceived = (jsonStr: string) => {
       try {
@@ -113,7 +118,7 @@ export function useThemeInit() {
 
     // If user selected "Follow IDE" mode
     if (savedTheme === null || savedTheme === 'system') {
-      document.documentElement.setAttribute('data-theme', ideTheme);
+      applyDocumentTheme(ideTheme);
     }
   }, [ideTheme]);
 

@@ -30,7 +30,6 @@ interface ModelConfigDropdownProps {
   loading: boolean;
   error: string | null;
   onRetry?: () => void;
-  onAddModel?: () => void;
   // Function rows below the model list.
   showDivider: boolean;
   showPreset: boolean;
@@ -66,7 +65,6 @@ export const ModelConfigDropdown = ({
   loading,
   error,
   onRetry,
-  onAddModel,
   showDivider,
   showPreset,
   dshPreset,
@@ -104,7 +102,6 @@ export const ModelConfigDropdown = ({
           loading={loading}
           error={error}
           onRetry={onRetry}
-          onAddModel={onAddModel}
           inline
           onClose={onClose}
         />

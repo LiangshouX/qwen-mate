@@ -162,7 +162,6 @@ export const ChatScreen = ({
   const {
     setSettingsInitialTab, setCurrentView, setSettingsProviderSubTab,
     contextInfo, setContextInfo,
-    setAddModelDialogOpen,
     addToast,
     draftInput, setDraftInput,
     searchOpen, setSearchOpen,
@@ -350,9 +349,6 @@ export const ChatScreen = ({
           onOpenPromptSettings={() => {
             setSettingsInitialTab('prompts');
             setCurrentView('settings');
-          }}
-          onOpenModelSettings={() => {
-            setAddModelDialogOpen(true);
           }}
           statusPanelExpanded={statusPanelExpanded}
           onToggleStatusPanel={() => {

@@ -7,9 +7,6 @@ const FLEX_1_STYLE: React.CSSProperties = { flex: 1 };
 
 interface QwenConfigSectionProps {
   addToast: (message: string, type?: 'info' | 'success' | 'warning' | 'error') => void;
-  /** Custom-model management entry (shared CustomModelDialog lives in ProviderTabSection). */
-  customModelCount?: number;
-  onManageCustomModels?: () => void;
   /** Read-only view of the models configured in ~/.qwen/settings.json (modelProviders). */
   qwenModelOptions?: QwenModelOptions;
 }
@@ -24,14 +21,12 @@ function formatContextWindow(tokens?: number): string | null {
 
 /**
  * Settings → Qwen 配置: a read-only view of the models configured in the Qwen
- * Code CLI settings (~/.qwen/settings.json modelProviders), plus the
- * custom-model management entry. Auth is owned by the CLI settings (API key /
- * Base URL / environment variables live there), so this panel never edits it.
+ * Code CLI settings (~/.qwen/settings.json modelProviders). Auth is owned by
+ * the CLI settings (API key / Base URL / environment variables live there),
+ * so this panel never edits it.
  */
 const QwenConfigSection = ({
   addToast: _addToast,
-  customModelCount = 0,
-  onManageCustomModels,
   qwenModelOptions,
 }: QwenConfigSectionProps) => {
   const { t } = useTranslation();
@@ -40,31 +35,6 @@ const QwenConfigSection = ({
 
   return (
     <div className={styles.qwenConfigSection}>
-      {onManageCustomModels && (
-        <div
-          className={styles.modelsRow}
-          onClick={onManageCustomModels}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onManageCustomModels(); }}
-        >
-          <span className="codicon codicon-symbol-misc" style={ICON_14_STYLE} />
-          <span className={styles.modelsLabel}>
-            {t('settings.pluginModels.title')}
-          </span>
-          {customModelCount > 0 && (
-            <span className={styles.modelsBadge}>{customModelCount}</span>
-          )}
-          <span style={FLEX_1_STYLE} />
-          <button
-            className={styles.modelsManageBtn}
-            onClick={(e) => { e.stopPropagation(); onManageCustomModels(); }}
-          >
-            {t('settings.pluginModels.manage')}
-          </button>
-        </div>
-      )}
-
       <div className={styles.cliModelsHeader}>
         <span className="codicon codicon-terminal" style={ICON_14_STYLE} />
         <span className={styles.modelsLabel}>

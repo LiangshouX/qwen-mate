@@ -1,6 +1,7 @@
 // hooks/useSettingsThemeSync.ts
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { applyDiffTheme, getStoredDiffTheme, type DiffThemeMode } from '../../../utils/diffTheme';
+import { applyDocumentTheme } from '../../../utils/documentTheme';
 import {
   applyChatBarThemeColor,
   CHAT_BAR_COLOR_STORAGE_KEY,
@@ -113,10 +114,10 @@ export function useSettingsThemeSync(): UseSettingsThemeSyncReturn {
         if (ideTheme === null) {
           return; // Wait for ideTheme to load
         }
-        document.documentElement.setAttribute('data-theme', ideTheme);
+        applyDocumentTheme(ideTheme);
       } else {
         // Explicit light/dark selection, apply immediately
-        document.documentElement.setAttribute('data-theme', preference);
+        applyDocumentTheme(preference);
       }
     };
 
@@ -124,6 +125,17 @@ export function useSettingsThemeSync(): UseSettingsThemeSyncReturn {
     // Save to localStorage
     localStorage.setItem('theme', themePreference);
   }, [themePreference, ideTheme]);
+
+  // Entering "Follow IDE" must resolve against the live IDE theme: the cached
+  // page-load value can be stale after an IDE theme switch, and applying it
+  // would jump the UI to the wrong scheme. The response lands in ideTheme and
+  // the effect above re-applies it.
+  useEffect(() => {
+    if (themePreference !== 'system') return;
+    if (typeof window.sendToJava === 'function') {
+      window.sendToJava('get_ide_theme:');
+    }
+  }, [themePreference]);
 
   // Font size scaling handler
   useEffect(() => {

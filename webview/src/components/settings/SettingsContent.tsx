@@ -6,13 +6,9 @@ import {
   BasicPanel,
   ProvidersPanel,
   DependenciesPanel,
-  UsagePanel,
   McpPanel,
-  PermissionsPanel,
   PromptEnhancerPanel,
   CommitPanel,
-  AgentsPanel,
-  PromptsPanel,
   SkillsPanel,
   OtherPanel,
   type SettingsTabPanelProps,
@@ -24,17 +20,16 @@ import type {
 } from './hooks';
 import styles from './style.module.less';
 
-const TAB_PANELS: Record<SettingsTab, ComponentType<SettingsTabPanelProps>> = {
+// The usage/permissions/agents/prompts pages are hidden (menu entries removed
+// with them) and await a redo; their panels stay exported from SettingsTabPanels
+// as reference implementations.
+const TAB_PANELS: Partial<Record<SettingsTab, ComponentType<SettingsTabPanelProps>>> = {
   basic: BasicPanel,
   providers: ProvidersPanel,
   dependencies: DependenciesPanel,
-  usage: UsagePanel,
   mcp: McpPanel,
-  permissions: PermissionsPanel,
   promptEnhancer: PromptEnhancerPanel,
   commit: CommitPanel,
-  agents: AgentsPanel,
-  prompts: PromptsPanel,
   skills: SkillsPanel,
   other: OtherPanel,
 };
@@ -64,14 +59,16 @@ const SettingsContent = ({
   const ActivePanel = TAB_PANELS[currentTab];
   return (
     <div className={`${styles.settingsContent} ${currentTab === 'providers' ? styles.providerSettingsContent : ''}`}>
-      <ActivePanel
-        currentProvider={currentProvider}
-        initialProviderSubTab={initialProviderSubTab}
-        addToast={addToast}
-        themeSync={themeSync}
-        basicActions={basicActions}
-        agentManagement={agentManagement}
-      />
+      {ActivePanel && (
+        <ActivePanel
+          currentProvider={currentProvider}
+          initialProviderSubTab={initialProviderSubTab}
+          addToast={addToast}
+          themeSync={themeSync}
+          basicActions={basicActions}
+          agentManagement={agentManagement}
+        />
+      )}
     </div>
   );
 };

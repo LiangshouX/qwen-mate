@@ -4,38 +4,10 @@ import ConfirmDialog from './ConfirmDialog';
 import PermissionDialog from './PermissionDialog';
 import AskUserQuestionDialog from './AskUserQuestionDialog';
 import PlanApprovalDialog from './PlanApprovalDialog';
-import CustomModelDialog from './settings/CustomModelDialog';
-import { usePluginModels } from './settings/hooks/usePluginModels';
-import { STORAGE_KEYS } from '../types/provider';
 import { useDialogs } from '../contexts/DialogContext';
-import { useUIState } from '../contexts/UIStateContext';
 import ContextUsageDialog from './ContextUsageDialog';
 import { DEFAULT_PERMISSION_DIALOG_TIMEOUT_SECONDS } from '../utils/permissionDialogTimeout';
 import { setSkipNewSessionConfirm } from '../utils/skipNewSessionConfirm';
-
-/**
- * Wrapper that manages plugin-level custom Qwen models for the add-model dialog.
- * Uses the shared usePluginModels hook for localStorage persistence.
- */
-const AddModelDialogWrapper = ({
-  isOpen,
-  onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const { models, updateModels } = usePluginModels(STORAGE_KEYS.QWEN_CUSTOM_MODELS);
-  return (
-    <CustomModelDialog
-      isOpen={isOpen}
-      models={models}
-      onModelsChange={updateModels}
-      onClose={onClose}
-      contextWindowEnabled
-      initialAddMode
-    />
-  );
-};
 
 export interface AppDialogsProps {
   /** Session-management dialogs come from useSessionManagement, still passed as props. */
@@ -53,9 +25,8 @@ export interface AppDialogsProps {
 
 /**
  * Renders all top-level dialogs.
- * Permission / ask-user / plan / add-model state is read from
- * DialogContext and UIStateContext directly to avoid prop drilling 25+ fields
- * from App.tsx (stage 4-5 of TASK-P1-01).
+ * Permission / ask-user / plan state is read from DialogContext directly to
+ * avoid prop drilling 25+ fields from App.tsx (stage 4-5 of TASK-P1-01).
  */
 export const AppDialogs = ({
   showNewSessionConfirm,
@@ -77,9 +48,6 @@ export const AppDialogs = ({
     handlePlanApprovalApprove, handlePlanApprovalReject,
     contextUsageDialogOpen, contextUsageIsLoading, contextUsageData, closeContextUsageDialog,
   } = useDialogs();
-  const {
-    addModelDialogOpen, setAddModelDialogOpen,
-  } = useUIState();
 
   // "Don't ask again" checkbox state for the new-session confirm dialog.
   // Resets to unchecked every time the dialog re-opens so the user re-affirms
@@ -159,10 +127,6 @@ export const AppDialogs = ({
         }}
         onReject={handlePlanApprovalReject}
         timeoutSeconds={permissionDialogTimeoutSeconds}
-      />
-      <AddModelDialogWrapper
-        isOpen={addModelDialogOpen}
-        onClose={() => setAddModelDialogOpen(false)}
       />
       {contextUsageDialogOpen ? (
         <ContextUsageDialog

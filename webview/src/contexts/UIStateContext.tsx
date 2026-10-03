@@ -21,10 +21,6 @@ export interface UIStateContextValue {
   dismissToast: (id: string) => void;
   clearToasts: () => void;
 
-  // Misc dialogs that don't belong to useDialogManagement
-  addModelDialogOpen: boolean;
-  setAddModelDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-
   // Active editor context (file + selection)
   contextInfo: ContextInfo | null;
   setContextInfo: React.Dispatch<React.SetStateAction<ContextInfo | null>>;
@@ -51,7 +47,6 @@ export function UIStateProvider({ children }: { children: ReactNode }) {
   const [settingsInitialTab, setSettingsInitialTab] = useState<SettingsTab | undefined>(undefined);
   const [settingsProviderSubTab, setSettingsProviderSubTab] = useState<ProviderManageTab | undefined>(undefined);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const [addModelDialogOpen, setAddModelDialogOpen] = useState<boolean>(false);
   const [contextInfo, setContextInfo] = useState<ContextInfo | null>(null);
   const [draftInput, setDraftInput] = useState<string>('');
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
@@ -74,7 +69,6 @@ export function UIStateProvider({ children }: { children: ReactNode }) {
       settingsInitialTab, setSettingsInitialTab,
       settingsProviderSubTab, setSettingsProviderSubTab,
       toasts, addToast, dismissToast, clearToasts,
-      addModelDialogOpen, setAddModelDialogOpen,
       contextInfo, setContextInfo,
       draftInput, setDraftInput,
       searchOpen, setSearchOpen,
@@ -83,7 +77,6 @@ export function UIStateProvider({ children }: { children: ReactNode }) {
       currentView, settingsInitialTab,
       settingsProviderSubTab,
       toasts, addToast, dismissToast, clearToasts,
-      addModelDialogOpen,
       contextInfo, draftInput,
       searchOpen,
     ],

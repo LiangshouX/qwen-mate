@@ -13,13 +13,9 @@ const sidebarItems: SidebarItem[] = [
   { key: 'basic', icon: 'codicon-settings-gear', labelKey: 'settings.basic.title' },
   { key: 'providers', icon: 'codicon-vm-connect', labelKey: 'settings.providers' },
   { key: 'dependencies', icon: 'codicon-extensions', labelKey: 'settings.dependencies' },
-  { key: 'usage', icon: 'codicon-graph', labelKey: 'settings.usage' },
   { key: 'mcp', icon: 'codicon-server', labelKey: 'settings.mcp' },
-  { key: 'permissions', icon: 'codicon-shield', labelKey: 'settings.permissions' },
   { key: 'promptEnhancer', icon: 'codicon-sparkle', labelKey: 'settings.promptEnhancer.title' },
   { key: 'commit', icon: 'codicon-git-commit', labelKey: 'settings.commit.title' },
-  { key: 'agents', icon: 'codicon-robot', labelKey: 'settings.agents' },
-  { key: 'prompts', icon: 'codicon-notebook', labelKey: 'settings.prompts' },
   { key: 'skills', icon: 'codicon-book', labelKey: 'settings.skills' },
   { key: 'other', icon: 'codicon-ellipsis', labelKey: 'settings.other.title' },
 ];

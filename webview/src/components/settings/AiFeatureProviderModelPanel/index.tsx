@@ -3,10 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { AVAILABLE_PROVIDERS } from '../../ChatInputBox/types';
 import type { ModelInfo } from '../../ChatInputBox/types';
 import { resolveProviderModels } from '../../ChatInputBox/resolveProviderModels';
-import { usePluginModels } from '../hooks/usePluginModels';
 import { useCliModels } from '../../../hooks/providers/useCliModels';
 import { useQwenModelOptions } from '../../../hooks/providers/useQwenModelOptions';
-import { STORAGE_KEYS } from '../../../types/provider';
 import type { AiFeatureConfig, AiFeatureProvider } from '../../../types/aiFeatureConfig';
 import { AI_FEATURE_PROVIDERS, isAiFeatureProvider } from '../../../types/aiFeatureConfig';
 import { type SelectOption } from './FeatureSelect';
@@ -62,22 +60,15 @@ const AiFeatureProviderModelPanel = ({
   // ~/.qwen/settings.json, so an empty saved model resolves to the follow-CLI
   // entry instead of a concrete id.
   const qwenModelOptions = useQwenModelOptions();
-  const qwenCustomModels = usePluginModels(STORAGE_KEYS.QWEN_CUSTOM_MODELS).models;
   const availableModels = useMemo<ModelInfo[]>(() => {
-    const toModelInfo = (m: { id: string; label?: string; description?: string }): ModelInfo => ({
-      id: m.id,
-      label: m.label || m.id,
-      description: m.description,
-    });
     return resolveProviderModels({
       provider: selectedProvider,
       cliModels,
       cliCatalogHasEntries,
-      qwenCustomModels: qwenCustomModels.map(toModelInfo),
       qwenModelOptions,
       t,
     });
-  }, [selectedProvider, qwenCustomModels, cliModels, cliCatalogHasEntries, qwenModelOptions, t]);
+  }, [selectedProvider, cliModels, cliCatalogHasEntries, qwenModelOptions, t]);
 
   const currentModel = config.models?.[selectedProvider] ?? '';
   const currentModelInList = availableModels.some((m) => m.id === currentModel);

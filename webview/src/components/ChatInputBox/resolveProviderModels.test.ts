@@ -88,29 +88,29 @@ describe('resolveProviderModels', () => {
 
   it('does not merge the built-in Qwen catalog', () => {
     // Regression: the dropdown used to append QWEN_MODELS as an
-    // "内置模型（可选）" group; only CLI-configured and custom models show now.
+    // "内置模型（可选）" group; only CLI-configured models show now.
     const result = resolveProviderModels({ provider: 'qwen', cliModels: [], t });
     expect(result.some((m) => m.id === 'qwen3-coder-plus')).toBe(false);
     expect(result.some((m) => m.id === 'qwen-max')).toBe(false);
   });
 
-  it('dedupes by id across CLI-config and custom groups (first wins)', () => {
+  it('dedupes by id across CLI-config entries (first wins)', () => {
     const result = resolveProviderModels({
       provider: 'qwen',
       cliModels: [],
       qwenModelOptions: {
         configuredModel: '',
-        models: [{ id: 'qwen-max', label: '[Custom] renamed max' }],
+        models: [
+          { id: 'qwen-max', label: '[Custom] renamed max' },
+          { id: 'qwen-max', label: 'Renamed Max' }, // duplicate id — first wins
+          { id: 'my-model', label: 'My Model' },
+        ],
       },
-      qwenCustomModels: [
-        { id: 'qwen-max', label: 'Renamed Max' }, // duplicate id with CLI-config entry
-        { id: 'my-model', label: 'My Model' },
-      ],
       t,
     });
     expect(result.map((m) => m.id)).toEqual([
       '',
-      'qwen-max', // CLI-config entry wins over the custom of the same id
+      'qwen-max',
       'my-model',
     ]);
     expect(result.find((m) => m.id === 'qwen-max')?.label).toBe('[Custom] renamed max');
@@ -124,24 +124,24 @@ describe('resolveProviderModels', () => {
         configuredModel: '',
         models: [{ id: 'deepseek-v4-pro', label: '[DeepSeek] deepseek-v4-pro' }],
       },
-      qwenCustomModels: [{ id: 'my-model', label: 'My Model' }],
       t,
     });
     expect(result.find((m) => m.id === '')?.source).toBe('cli-config');
     expect(result.find((m) => m.id === 'deepseek-v4-pro')?.source).toBe('cli-config');
-    expect(result.find((m) => m.id === 'my-model')?.source).toBe('custom');
   });
 
-  it('collapses duplicate ids and labels when merging qwen customs', () => {
-    const customs = [
-      { id: 'my-model', label: 'My Model' },
-      { id: 'my-model-2', label: 'my model' }, // duplicate label (case-insensitive)
-      { id: 'other-model', label: 'Other Model' },
-    ];
+  it('collapses duplicate ids and labels across CLI-config models', () => {
     const result = resolveProviderModels({
       provider: 'qwen',
       cliModels: [],
-      qwenCustomModels: customs,
+      qwenModelOptions: {
+        configuredModel: '',
+        models: [
+          { id: 'my-model', label: 'My Model' },
+          { id: 'my-model-2', label: 'my model' }, // duplicate label (case-insensitive)
+          { id: 'other-model', label: 'Other Model' },
+        ],
+      },
       t,
     });
     expect(result.filter((m) => m.id === 'my-model')).toHaveLength(1);

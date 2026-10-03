@@ -611,8 +611,6 @@ export interface ChatInputBoxProps {
   onOpenAgentSettings?: () => void;
   /** Open prompt settings callback */
   onOpenPromptSettings?: () => void;
-  /** Open model settings (navigate to provider management to add models) */
-  onOpenModelSettings?: () => void;
   /** Open CLI management settings (Settings → Providers → CLI) */
   onOpenCliSettings?: () => void;
 
@@ -698,8 +696,6 @@ export interface ButtonAreaProps {
   onClearAgent?: () => void;
   /** Open agent settings callback */
   onOpenAgentSettings?: () => void;
-  /** Navigate to model management to add models */
-  onAddModel?: () => void;
   /** Open CLI management settings (Settings → Providers → CLI) */
   onOpenCliSettings?: () => void;
 }

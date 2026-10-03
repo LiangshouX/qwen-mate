@@ -27,7 +27,6 @@ export interface ResolveProviderModelsInput {
    * When false, cliModels is the static fallback.
    */
   cliCatalogHasEntries?: boolean;
-  qwenCustomModels?: ModelInfo[];
   /** Models the user configured in the Qwen CLI settings. */
   qwenModelOptions?: QwenModelOptions;
   /** Translator for the follow-CLI entry and the "current" badge (inline defaults). */
@@ -48,7 +47,6 @@ const fallbackTranslate: Translate = (_key, options) => String(options?.defaultV
 export function resolveProviderModels({
   provider,
   cliModels,
-  qwenCustomModels = [],
   qwenModelOptions = EMPTY_QWEN_MODEL_OPTIONS,
   t = fallbackTranslate,
 }: ResolveProviderModelsInput): ModelInfo[] {
@@ -60,7 +58,6 @@ export function resolveProviderModels({
   // Qwen (default), in order:
   //   1. "Default (follow CLI config)" — empty id, never overrides the CLI
   //   2. models configured in ~/.qwen/settings.json (modelProviders)
-  //   3. custom models configured in Settings
   // The built-in catalog is intentionally not merged: the CLI config is the
   // single source of truth for selectable Qwen models.
   // The entry whose id equals the CLI-configured `model.name` carries a
@@ -79,7 +76,6 @@ export function resolveProviderModels({
   const merged = [
     { ...buildFollowCliDefaultModel(t, configuredModel), source: 'cli-config' as const },
     ...cliConfiguredModels,
-    ...qwenCustomModels.map((model) => ({ ...model, source: 'custom' as const })),
   ];
   const seenLabels = new Set<string>();
   const seenIds = new Set<string>();

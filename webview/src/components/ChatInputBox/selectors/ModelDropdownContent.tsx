@@ -4,7 +4,6 @@ import { ModelSearchRow } from './ModelSearchRow';
 import { ModelStatusRows } from './ModelStatusRows';
 import { ModelSection } from './ModelSection';
 import { ModelListHints } from './ModelListHints';
-import { AddModelRow } from './AddModelRow';
 
 const DROPDOWN_LIST_STYLE: React.CSSProperties = { overflowY: 'auto', flex: 1, minHeight: 0 };
 
@@ -29,13 +28,11 @@ interface ModelDropdownContentProps {
   onTogglePin: (e: React.MouseEvent, modelId: string) => void;
   visibleModelCount: number;
   hiddenModelCount: number;
-  /** Runs the add-model flow (also closes the dropdown); absence hides the row. */
-  onAddModelClick?: () => void;
 }
 
 /**
  * ModelDropdownContent - The model dropdown panel: search row, status rows,
- * grouped/pinned model sections, hidden-count hint, and the add-model action.
+ * grouped/pinned model sections, and the hidden-count hint.
  */
 export const ModelDropdownContent = ({
   inline,
@@ -57,7 +54,6 @@ export const ModelDropdownContent = ({
   onTogglePin,
   visibleModelCount,
   hiddenModelCount,
-  onAddModelClick,
 }: ModelDropdownContentProps) => {
   return (
     <div
@@ -93,7 +89,6 @@ export const ModelDropdownContent = ({
           visibleModelCount={visibleModelCount}
           hiddenModelCount={hiddenModelCount}
         />
-        <AddModelRow onAddModelClick={onAddModelClick} />
       </div>
     </div>
   );

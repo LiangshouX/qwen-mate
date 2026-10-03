@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { agentProvider, CREATE_NEW_AGENT_ID, EMPTY_STATE_ID, type AgentItem } from '../providers/agentProvider';
+import { agentProvider, EMPTY_STATE_ID, type AgentItem } from '../providers/agentProvider';
 import type { SelectedAgent } from '../types';
 import {
   fetchNodeProcesses,
@@ -113,10 +113,6 @@ export const ConfigSelect = ({
       setAgentItems([{
         id: EMPTY_STATE_ID,
         name: t('settings.agent.loadFailed'),
-        prompt: '',
-      }, {
-        id: CREATE_NEW_AGENT_ID,
-        name: t('settings.agent.createAgent'),
         prompt: '',
       }]);
     } finally {

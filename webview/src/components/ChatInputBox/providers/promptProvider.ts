@@ -293,13 +293,8 @@ export async function promptProvider(
 
   const now = Date.now();
 
-  // Create prompt item
-  const createNewPromptItem: PromptItem = {
-    id: CREATE_NEW_PROMPT_ID,
-    name: i18n.t('settings.prompt.createPrompt'),
-    content: '',
-  };
-
+  // NOTE: the "create new prompt" row is hidden while the Prompt settings page is
+  // parked for a redo — CREATE_NEW_PROMPT_ID and its dropdown mapping stay for it.
   // Combine prompts from both scopes (project prompts first)
   const allPrompts = [...cachedProjectPrompts, ...cachedGlobalPrompts];
 
@@ -311,9 +306,9 @@ export async function promptProvider(
         id: EMPTY_STATE_ID,
         name: i18n.t('settings.prompt.noPromptsDropdown'),
         content: '',
-      }, createNewPromptItem];
+      }];
     }
-    return [...filtered, createNewPromptItem];
+    return filtered;
   }
 
   // Attempt to refresh data (non-blocking)
@@ -346,9 +341,9 @@ export async function promptProvider(
         id: EMPTY_STATE_ID,
         name: i18n.t('settings.prompt.noPromptsDropdown'),
         content: '',
-      }, createNewPromptItem];
+      }];
     }
-    return [...filtered, createNewPromptItem];
+    return filtered;
   }
 
   // When no data available, show empty state and create button
@@ -356,7 +351,7 @@ export async function promptProvider(
     id: EMPTY_STATE_ID,
     name: i18n.t('settings.prompt.noPromptsDropdown'),
     content: '',
-  }, createNewPromptItem];
+  }];
 }
 
 export function promptToDropdownItem(prompt: PromptItem): DropdownItemData {

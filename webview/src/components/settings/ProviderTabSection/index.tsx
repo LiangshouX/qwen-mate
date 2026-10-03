@@ -1,9 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import QwenConfigSection from '../QwenConfigSection';
 import CliSection from '../CliSection';
-import CustomModelDialog from '../CustomModelDialog';
-import { usePluginModels } from '../hooks/usePluginModels';
 import { useQwenModelOptions } from '../../../hooks/providers/useQwenModelOptions';
 import styles from './style.module.less';
 
@@ -31,24 +29,8 @@ const ProviderTabSection = ({
     return 'qwen';
   });
 
-  // Plugin-level custom Qwen model management
-  const qwenModels = usePluginModels();
   // Read-only catalog of models configured in ~/.qwen/settings.json.
   const qwenModelOptions = useQwenModelOptions();
-
-  // Dialog state
-  const [modelDialogOpen, setModelDialogOpen] = useState(false);
-  const [modelDialogAddMode, setModelDialogAddMode] = useState(false);
-
-  const openModelDialog = useCallback((addMode = false) => {
-    setModelDialogAddMode(addMode);
-    setModelDialogOpen(true);
-  }, []);
-
-  const closeModelDialog = useCallback(() => {
-    setModelDialogOpen(false);
-    setModelDialogAddMode(false);
-  }, []);
 
   return (
     <div className={styles.providerTabSection}>
@@ -83,8 +65,6 @@ const ProviderTabSection = ({
         <div id="panel-qwen-config" role="tabpanel">
           <QwenConfigSection
             addToast={addToast}
-            customModelCount={qwenModels.models.length}
-            onManageCustomModels={() => openModelDialog(false)}
             qwenModelOptions={qwenModelOptions}
           />
         </div>
@@ -95,16 +75,6 @@ const ProviderTabSection = ({
           <CliSection addToast={addToast} />
         </div>
       )}
-
-      {/* Shared custom-model management dialog */}
-      <CustomModelDialog
-        isOpen={modelDialogOpen}
-        models={qwenModels.models}
-        onModelsChange={qwenModels.updateModels}
-        onClose={closeModelDialog}
-        contextWindowEnabled
-        initialAddMode={modelDialogAddMode}
-      />
     </div>
   );
 };

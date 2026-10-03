@@ -28,10 +28,12 @@ export const SETTINGS_BOOTSTRAP_BRIDGE_MESSAGES = [
   'get_working_directory:',
   'get_streaming_enabled:',
   'get_permission_dialog_timeout:',
-  // Appearance fonts
+  // Appearance fonts + current IDE theme (the page-load value can be stale after
+  // an IDE theme switch; "Follow IDE" must resolve against the live theme)
   'get_editor_font_config:',
   'get_ui_font_config:',
   'get_code_font_config:',
+  'get_ide_theme:',
   // Behavior / feature toggles (basic tab sub-views)
   'get_sound_notification_config:',
   'get_commit_generation_enabled:',
@@ -210,6 +212,20 @@ export function useSettingsWindowCallbacks(deps: SettingsWindowCallbacksDeps) {
         previousOnIdeThemeReceived?.(jsonStr);
       } catch (error) {
         console.error('[SettingsView] Failed to parse IDE theme:', error);
+      }
+    };
+
+    // IDE theme change push (LafManagerListener): keep the follow-IDE state fresh
+    // so re-selecting "Follow IDE" never applies a stale theme.
+    const previousOnIdeThemeChanged = window.onIdeThemeChanged;
+    window.onIdeThemeChanged = (jsonStr: string) => {
+      try {
+        const themeData = JSON.parse(jsonStr);
+        const theme = themeData.isDark ? 'dark' : 'light';
+        d().setIdeTheme(theme);
+        previousOnIdeThemeChanged?.(jsonStr);
+      } catch (error) {
+        console.error('[SettingsView] Failed to parse IDE theme change:', error);
       }
     };
 
@@ -494,6 +510,7 @@ export function useSettingsWindowCallbacks(deps: SettingsWindowCallbacksDeps) {
       window.onUiFontConfigReceived = undefined;
       window.onCodeFontConfigReceived = undefined;
       window.onIdeThemeReceived = previousOnIdeThemeReceived;
+      window.onIdeThemeChanged = previousOnIdeThemeChanged;
       if (!d().onStreamingEnabledChangeProp) {
         window.updateStreamingEnabled = previousUpdateStreamingEnabled;
       }
