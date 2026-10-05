@@ -5,9 +5,12 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   DEFAULT_SAFETY_NET_MS,
+  pollAskQuestionResponse,
   pollPermissionResponse,
+  removeAskQuestionFiles,
   removePermissionFiles,
   resolvePermissionIpcConfig,
+  writeAskQuestionRequest,
   writePermissionRequest,
 } from './permission-file-ipc.js';
 
@@ -127,4 +130,91 @@ test('removePermissionFiles deletes request and response files and ignores absen
   assert.deepEqual(readdirSync(dir), []);
 
   assert.doesNotThrow(() => removePermissionFiles(config, 'perm_4'));
+});
+
+test('writeAskQuestionRequest writes the ask contract file with questions', (t) => {
+  const dir = makeTempDir(t);
+  const config = { dir, sessionId: 'sess-test', safetyNetMs: 120000 };
+  const questions = [{ question: 'Which plan?', header: 'Plan', options: [], multiSelect: false }];
+
+  writeAskQuestionRequest(config, 'ask_1_abc', {
+    toolName: 'ask_user_question',
+    questions,
+    cwd: 'D:/Code',
+  });
+
+  const files = readdirSync(dir);
+  assert.deepEqual(files, ['ask-user-question-sess-test-ask_1_abc.json'], 'no temp file may remain');
+  const body = JSON.parse(readFileSync(join(dir, files[0]), 'utf8'));
+  assert.deepEqual(body, {
+    requestId: 'ask_1_abc',
+    toolName: 'ask_user_question',
+    questions,
+    cwd: 'D:/Code',
+  });
+});
+
+test('pollAskQuestionResponse delivers the answers object and consumes the file', async (t) => {
+  const dir = makeTempDir(t);
+  const config = { dir, sessionId: 'sess-test', safetyNetMs: 120000 };
+  const responseFile = join(dir, 'ask-user-question-response-sess-test-ask_2.json');
+
+  const result = new Promise((resolve) => {
+    pollAskQuestionResponse(config, 'ask_2', { onResult: resolve, intervalMs: 10 });
+  });
+  writeFileSync(responseFile, JSON.stringify({ answers: { '0': 'WebSocket' } }), 'utf8');
+
+  assert.deepEqual(await result, { '0': 'WebSocket' });
+  assert.equal(existsSync(responseFile), false, 'response file must be consumed');
+});
+
+test('pollAskQuestionResponse delivers an empty answers object (Java degradation)', async (t) => {
+  const dir = makeTempDir(t);
+  const config = { dir, sessionId: 'sess-test', safetyNetMs: 120000 };
+  const responseFile = join(dir, 'ask-user-question-response-sess-test-ask_3.json');
+
+  const result = new Promise((resolve) => {
+    pollAskQuestionResponse(config, 'ask_3', { onResult: resolve, intervalMs: 10 });
+  });
+  writeFileSync(responseFile, '{"answers":{}}', 'utf8');
+
+  assert.deepEqual(await result, {});
+});
+
+test('pollAskQuestionResponse keeps polling through torn or keyless payloads', async (t) => {
+  const dir = makeTempDir(t);
+  const config = { dir, sessionId: 'sess-test', safetyNetMs: 120000 };
+  const responseFile = join(dir, 'ask-user-question-response-sess-test-ask_4.json');
+
+  let delivered = null;
+  const poll = pollAskQuestionResponse(config, 'ask_4', {
+    onResult: (answers) => { delivered = answers; },
+    intervalMs: 10,
+  });
+  t.after(() => poll.stop());
+
+  writeFileSync(responseFile, '{"answ', 'utf8');
+  await new Promise((resolve) => setTimeout(resolve, 60));
+  assert.equal(delivered, null, 'torn JSON must not resolve');
+
+  writeFileSync(responseFile, '{"answers":"not-an-object"}', 'utf8');
+  await new Promise((resolve) => setTimeout(resolve, 60));
+  assert.equal(delivered, null, 'non-object answers must not resolve');
+
+  writeFileSync(responseFile, '{"answers":{"0":"done"}}', 'utf8');
+  await new Promise((resolve) => setTimeout(resolve, 60));
+  assert.deepEqual(delivered, { '0': 'done' });
+});
+
+test('removeAskQuestionFiles deletes request and response files and ignores absence', (t) => {
+  const dir = makeTempDir(t);
+  const config = { dir, sessionId: 'sess-test', safetyNetMs: 120000 };
+
+  writeAskQuestionRequest(config, 'ask_5', { toolName: 'ask_user_question', questions: [] });
+  writeFileSync(join(dir, 'ask-user-question-response-sess-test-ask_5.json'), '{"answers":{}}', 'utf8');
+
+  removeAskQuestionFiles(config, 'ask_5');
+  assert.deepEqual(readdirSync(dir), []);
+
+  assert.doesNotThrow(() => removeAskQuestionFiles(config, 'ask_5'));
 });

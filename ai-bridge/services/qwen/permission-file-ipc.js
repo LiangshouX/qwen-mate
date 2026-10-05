@@ -7,6 +7,9 @@
  *   - only an explicit boolean `allow` resolves a request; a half-written or
  *     malformed response keeps the poller waiting so a torn file can never
  *     grant permission by accident.
+ * AskUserQuestion uses the sibling pair written by the same watcher:
+ *   - request:  <dir>/ask-user-question-<sessionId>-<requestId>.json         {requestId, toolName, questions, cwd}
+ *   - response: <dir>/ask-user-question-response-<sessionId>-<requestId>.json {answers: {...}} ({} = degraded/no dialog)
  *
  * The directory / session id / safety-net timeout come from the env Java
  * injects when spawning the bridge (QWEN_MATE_PERMISSION_DIR,
@@ -53,6 +56,14 @@ function requestPath(config, requestId) {
 
 function responsePath(config, requestId) {
   return join(config.dir, `response-${config.sessionId}-${requestId}.json`);
+}
+
+function askRequestPath(config, requestId) {
+  return join(config.dir, `ask-user-question-${config.sessionId}-${requestId}.json`);
+}
+
+function askResponsePath(config, requestId) {
+  return join(config.dir, `ask-user-question-response-${config.sessionId}-${requestId}.json`);
 }
 
 function assertSafeRequestId(requestId) {
@@ -152,6 +163,105 @@ export function removePermissionFiles(config, requestId) {
     return;
   }
   for (const file of [requestPath(config, requestId), responsePath(config, requestId)]) {
+    try {
+      unlinkSync(file);
+    } catch {
+      // not present — nothing to clean
+    }
+  }
+}
+
+/**
+ * Write an AskUserQuestion request for the Java PermissionRequestWatcher.
+ * Java requires `requestId` + `toolName`; the frontend dialog renders `questions`.
+ *
+ * @param {{dir: string, sessionId: string}} config
+ * @param {string} requestId
+ * @param {{toolName?: string, questions?: unknown[], cwd?: string}} payload
+ */
+export function writeAskQuestionRequest(config, requestId, payload = {}) {
+  assertSafeRequestId(requestId);
+  mkdirSync(config.dir, { recursive: true });
+  const body = {
+    requestId,
+    toolName: payload.toolName,
+    questions: Array.isArray(payload.questions) ? payload.questions : [],
+  };
+  if (payload.cwd) {
+    body.cwd = payload.cwd;
+  }
+  const target = askRequestPath(config, requestId);
+  const temp = `${target}.${process.pid}.tmp`;
+  writeFileSync(temp, JSON.stringify(body), 'utf8');
+  renameSync(temp, target);
+}
+
+/**
+ * Poll for the AskUserQuestion response written by Java:
+ * `{"answers": {...}}` (possibly an empty object when the dialog timed out or
+ * no window was available — Java's designed degradation). Torn or keyless
+ * payloads keep polling; the file is consumed once a decision is delivered.
+ *
+ * @param {{dir: string, sessionId: string}} config
+ * @param {string} requestId
+ * @param {{onResult: (answers: Record<string, unknown>) => void, intervalMs?: number}} options
+ * @returns {{stop: () => void}}
+ */
+export function pollAskQuestionResponse(config, requestId, { onResult, intervalMs = RESPONSE_POLL_INTERVAL_MS } = {}) {
+  assertSafeRequestId(requestId);
+  const file = askResponsePath(config, requestId);
+  let stopped = false;
+
+  const stop = () => {
+    if (stopped) {
+      return;
+    }
+    stopped = true;
+    clearInterval(timer);
+  };
+
+  const timer = setInterval(() => {
+    if (stopped) {
+      return;
+    }
+    let raw;
+    try {
+      raw = readFileSync(file, 'utf8');
+    } catch {
+      return; // not written yet (or already consumed)
+    }
+    let answers = null;
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed.answers === 'object' && parsed.answers !== null && !Array.isArray(parsed.answers)) {
+        answers = parsed.answers;
+      }
+    } catch {
+      return; // half-written JSON — keep polling
+    }
+    if (answers === null) {
+      return; // no explicit answers object — keep polling
+    }
+    stop();
+    try {
+      unlinkSync(file);
+    } catch {
+      // already gone
+    }
+    onResult(answers);
+  }, intervalMs);
+
+  return { stop };
+}
+
+/**
+ * Best-effort removal of both AskUserQuestion IPC files for a request.
+ */
+export function removeAskQuestionFiles(config, requestId) {
+  if (!SAFE_ID_PATTERN.test(requestId)) {
+    return;
+  }
+  for (const file of [askRequestPath(config, requestId), askResponsePath(config, requestId)]) {
     try {
       unlinkSync(file);
     } catch {

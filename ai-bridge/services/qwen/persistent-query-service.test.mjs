@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { consumeQueryStream, requestPermissionFromJava } from './persistent-query-service.js';
+import { consumeQueryStream, requestPermissionFromJava, requestAskUserAnswers, buildCanUseTool } from './persistent-query-service.js';
 
 /** Run consumeQueryStream while capturing every stdout line it emits. */
 async function captureMarkers(messageFactory) {
@@ -130,6 +130,16 @@ function findRequestId(dir) {
   return file.slice('request-sess-test-'.length, -'.json'.length);
 }
 
+function findAskRequestId(dir) {
+  const file = readdirSync(dir).find(
+    (name) => name.startsWith('ask-user-question-sess-test-')
+      && !name.startsWith('ask-user-question-response-')
+      && name.endsWith('.json'),
+  );
+  assert.ok(file, 'an ask-user-question request file must be written for Java to pick up');
+  return file.slice('ask-user-question-sess-test-'.length, -'.json'.length);
+}
+
 test('requestPermissionFromJava writes a request file and resolves allow when Java answers', async (t) => {
   const dir = withPermissionEnv(t);
   const input = { command: 'ls' };
@@ -187,4 +197,95 @@ test('aborting the turn denies the pending request and removes its files', async
   assert.equal(decision.behavior, 'deny');
   assert.equal(decision.message, 'Request cancelled');
   assert.deepEqual(readdirSync(dir), [], 'an aborted turn must leave no ghost dialog behind');
+});
+
+// ─── AskUserQuestion answer collection (file IPC) ───
+
+const SAMPLE_QUESTIONS = [
+  {
+    question: '你倾向哪种实现方案？',
+    header: '推送方案',
+    options: [{ label: 'WebSocket', description: '长连接' }, { label: 'SSE', description: '单向推送' }],
+    multiSelect: false,
+  },
+  {
+    question: '本次范围？',
+    header: '范围',
+    options: [{ label: '全部', description: '全量实现' }, { label: '一半', description: '部分实现' }],
+    multiSelect: false,
+  },
+];
+
+test('buildCanUseTool routes ask_user_question to the answer dialog even in yolo mode', async (t) => {
+  const dir = withPermissionEnv(t);
+  const canUseTool = buildCanUseTool({ permissionMode: 'yolo', cwd: 'D:/Code' });
+  const input = { questions: SAMPLE_QUESTIONS };
+
+  const pending = canUseTool('ask_user_question', input);
+
+  const requestId = findAskRequestId(dir);
+  const body = JSON.parse(readFileSync(join(dir, `ask-user-question-sess-test-${requestId}.json`), 'utf8'));
+  assert.equal(body.toolName, 'ask_user_question');
+  assert.deepEqual(body.questions, SAMPLE_QUESTIONS);
+  assert.equal(body.cwd, 'D:/Code');
+
+  // The GUI keys answers by question text; the bridge must hand the CLI
+  // decimal index keys or execute() drops them as "No valid answers".
+  writeFileSync(
+    join(dir, `ask-user-question-response-sess-test-${requestId}.json`),
+    JSON.stringify({ answers: { [SAMPLE_QUESTIONS[0].question]: 'WebSocket' } }),
+    'utf8',
+  );
+
+  const decision = await pending;
+  assert.equal(decision.behavior, 'allow');
+  assert.deepEqual(decision.updatedInput, { questions: SAMPLE_QUESTIONS, answers: { '0': 'WebSocket' } });
+  assert.deepEqual(readdirSync(dir), [], 'both IPC files must be consumed');
+});
+
+test('requestAskUserAnswers keeps valid index keys and flattens multi-select arrays', async (t) => {
+  const dir = withPermissionEnv(t);
+  const input = { questions: SAMPLE_QUESTIONS };
+
+  const pending = requestAskUserAnswers('ask_user_question', input, { cwd: 'D:/Code' });
+  const requestId = findAskRequestId(dir);
+  writeFileSync(
+    join(dir, `ask-user-question-response-sess-test-${requestId}.json`),
+    JSON.stringify({
+      answers: { '0': 'SSE', '1': ['全部', '一半'], 2: 'orphan', 9: 'out-of-range', bad: 'text' },
+    }),
+    'utf8',
+  );
+
+  const decision = await pending;
+  assert.equal(decision.behavior, 'allow');
+  assert.deepEqual(decision.updatedInput.answers, { '0': 'SSE', '1': '全部, 一半' });
+});
+
+test('requestAskUserAnswers denies fast when the IPC env is unavailable', async (t) => {
+  const saved = process.env.QWEN_MATE_PERMISSION_DIR;
+  delete process.env.QWEN_MATE_PERMISSION_DIR;
+  t.after(() => {
+    if (saved !== undefined) {
+      process.env.QWEN_MATE_PERMISSION_DIR = saved;
+    }
+  });
+
+  const decision = await requestAskUserAnswers('ask_user_question', { questions: SAMPLE_QUESTIONS });
+  assert.equal(decision.behavior, 'deny');
+  assert.match(decision.message, /Permission bridge unavailable/);
+});
+
+test('aborting the turn denies the pending ask and removes its files', async (t) => {
+  const dir = withPermissionEnv(t);
+  const controller = new AbortController();
+
+  const pending = requestAskUserAnswers('ask_user_question', { questions: SAMPLE_QUESTIONS }, { signal: controller.signal });
+  findAskRequestId(dir);
+  controller.abort();
+
+  const decision = await pending;
+  assert.equal(decision.behavior, 'deny');
+  assert.equal(decision.message, 'Request cancelled');
+  assert.deepEqual(readdirSync(dir), [], 'an aborted ask must leave no ghost dialog behind');
 });

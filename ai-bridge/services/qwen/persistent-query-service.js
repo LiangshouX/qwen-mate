@@ -20,9 +20,12 @@ import { loadQwenSdk, isQwenSdkAvailable } from '../../utils/sdk-loader.js';
 import { maybeGenerateSessionTitle } from '../session-title-service.js';
 import {
   DEFAULT_SAFETY_NET_MS,
+  pollAskQuestionResponse,
   pollPermissionResponse,
+  removeAskQuestionFiles,
   removePermissionFiles,
   resolvePermissionIpcConfig,
+  writeAskQuestionRequest,
   writePermissionRequest,
 } from './permission-file-ipc.js';
 
@@ -290,31 +293,43 @@ function isReadOnlyTool(toolName) {
   return READ_ONLY_TOOL_NAMES.has(toolName);
 }
 
-function buildCanUseTool(params) {
+const ASK_USER_QUESTION_TOOL_NAMES = new Set(['ask_user_question', 'AskUserQuestion']);
+
+function isAskUserQuestionTool(toolName) {
+  return ASK_USER_QUESTION_TOOL_NAMES.has(toolName);
+}
+
+// Exported for tests.
+export function buildCanUseTool(params) {
   const mode = normalizePermissionMode(params.permissionMode);
 
-  // YOLO: the CLI auto-approves every tool call. Keep a permissive callback as
-  // a second gate for anything the CLI still surfaces (plugin tools etc.).
-  if (mode === 'yolo') {
-    return async (toolName, input) => ({ behavior: 'allow', updatedInput: input });
-  }
+  return async (toolName, input, { signal } = {}) => {
+    // AskUserQuestion is an answer dialog, never an allow/deny question, in
+    // every approval mode: the CLI auto-confirms a bare allow with no answers
+    // and the turn continues with "No valid answers were provided".
+    if (isAskUserQuestionTool(toolName)) {
+      return requestAskUserAnswers(toolName, input, { signal, cwd: params.cwd });
+    }
 
-  // Plan: read-only analysis only — no edits, no shell (mirrors the CLI's own
-  // plan restrictions as a second gate).
-  if (mode === 'plan') {
-    return async (toolName, input) => {
+    // YOLO: the CLI auto-approves every tool call. Keep a permissive callback as
+    // a second gate for anything the CLI still surfaces (plugin tools etc.).
+    if (mode === 'yolo') {
+      return { behavior: 'allow', updatedInput: input };
+    }
+
+    // Plan: read-only analysis only — no edits, no shell (mirrors the CLI's own
+    // plan restrictions as a second gate).
+    if (mode === 'plan') {
       if (isReadOnlyTool(toolName)) {
         return { behavior: 'allow', updatedInput: input };
       }
       return { behavior: 'deny', message: 'Plan mode: write operations are not allowed' };
-    };
-  }
+    }
 
-  // auto-edit / auto / default (Ask Permissions): the CLI's approval-mode
-  // policy decides which tools ask at all (auto-edit pre-approves edits, auto
-  // runs its classifier). Whatever still reaches us goes to the GUI dialog,
-  // except read-only tools which never need confirmation.
-  return async (toolName, input, { signal } = {}) => {
+    // auto-edit / auto / default (Ask Permissions): the CLI's approval-mode
+    // policy decides which tools ask at all (auto-edit pre-approves edits, auto
+    // runs its classifier). Whatever still reaches us goes to the GUI dialog,
+    // except read-only tools which never need confirmation.
     if (isReadOnlyTool(toolName)) {
       return { behavior: 'allow', updatedInput: input };
     }
@@ -394,7 +409,7 @@ export function requestPermissionFromJava(toolName, input, { signal, cwd } = {})
   });
 }
 
-export function respondToPermission(requestId, allowed, message) {
+export function respondToPermission(requestId, allowed, message, updatedInput) {
   const entry = pendingPermissions.get(requestId);
   if (!entry) {
     return false;
@@ -404,11 +419,100 @@ export function respondToPermission(requestId, allowed, message) {
     entry.cleanup();
   }
   if (allowed) {
-    entry.resolve({ behavior: 'allow', updatedInput: entry.input });
+    entry.resolve({ behavior: 'allow', updatedInput: updatedInput !== undefined ? updatedInput : entry.input });
   } else {
     entry.resolve({ behavior: 'deny', message: message || 'Denied by user' });
   }
   return true;
+}
+
+// The GUI dialog keys answers by question text; the CLI only accepts decimal
+// question indices ("0".."n") and string values — translate both shape and
+// key so execute() actually picks the answers up.
+function normalizeAskAnswers(questions, answers) {
+  const normalized = {};
+  if (!answers || typeof answers !== 'object' || Array.isArray(answers)) {
+    return normalized;
+  }
+  const list = Array.isArray(questions) ? questions : [];
+  for (const [key, value] of Object.entries(answers)) {
+    let index = null;
+    if (/^\d+$/.test(key) && Number(key) < list.length) {
+      index = Number(key);
+    } else {
+      const matched = list.findIndex((question) => question && question.question === key);
+      if (matched >= 0) {
+        index = matched;
+      }
+    }
+    if (index === null) {
+      continue;
+    }
+    const answer = Array.isArray(value)
+      ? value.filter((item) => typeof item === 'string' && item.trim() !== '').join(', ')
+      : typeof value === 'string' ? value : String(value);
+    if (answer.trim() === '') {
+      continue;
+    }
+    normalized[String(index)] = answer;
+  }
+  return normalized;
+}
+
+// Exported for tests: AskUserQuestion answer collection via file IPC. Writes
+// ask-user-question-*.json, waits for Java's answer dialog, then resolves
+// canUseTool with updatedInput.answers — the CLI treats a bare allow as
+// "proceed with no answers", so the choices must travel with the allow.
+export function requestAskUserAnswers(toolName, input, { signal, cwd } = {}) {
+  return new Promise((resolve) => {
+    const requestId = `ask_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const config = resolvePermissionIpcConfig();
+    if (!config.ok) {
+      resolve({ behavior: 'deny', message: `Permission bridge unavailable: ${config.reason}` });
+      return;
+    }
+
+    const questions = Array.isArray(input?.questions) ? input.questions : [];
+    const entry = { resolve, input, questions, timer: null, poll: null, cleanup: null };
+    pendingPermissions.set(requestId, entry);
+
+    entry.cleanup = () => {
+      if (entry.timer) {
+        clearTimeout(entry.timer);
+        entry.timer = null;
+      }
+      if (entry.poll) {
+        entry.poll.stop();
+        entry.poll = null;
+      }
+      removeAskQuestionFiles(config, requestId);
+    };
+
+    try {
+      writeAskQuestionRequest(config, requestId, { toolName, questions, cwd });
+    } catch (error) {
+      pendingPermissions.delete(requestId);
+      resolve({ behavior: 'deny', message: `Ask question request failed: ${error.message}` });
+      return;
+    }
+
+    entry.poll = pollAskQuestionResponse(config, requestId, {
+      onResult: (answers) => {
+        const updatedInput = { ...entry.input, answers: normalizeAskAnswers(entry.questions, answers) };
+        respondToPermission(requestId, true, undefined, updatedInput);
+      },
+    });
+
+    entry.timer = setTimeout(() => {
+      respondToPermission(requestId, false, 'Ask user question timed out');
+    }, config.safetyNetMs + PERMISSION_FALLBACK_EXTRA_MS);
+
+    if (signal) {
+      signal.addEventListener('abort', () => {
+        respondToPermission(requestId, false, 'Request cancelled');
+      }, { once: true });
+    }
+  });
 }
 
 // ─── Persistent service API (daemon contract) ───
