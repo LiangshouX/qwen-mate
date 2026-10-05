@@ -27,7 +27,10 @@ interface EditToolGroupBlockProps {
     name?: string;
     input?: ToolInput;
     result?: ToolResultBlock | null;
+    toolId?: string;
   }>;
+  /** Denied/interrupted tool ids so batch rows finalize instead of spinning. */
+  deniedToolIds?: Set<string>;
 }
 
 /** Max visible items before scroll */
@@ -169,7 +172,10 @@ function computeDiffStats(oldString: string, newString: string): { additions: nu
 /**
  * Parse item to EditItem
  */
-function parseEditItem(item: { name?: string; input?: ToolInput; result?: ToolResultBlock | null }): EditItem | null {
+function parseEditItem(
+  item: { name?: string; input?: ToolInput; result?: ToolResultBlock | null; toolId?: string },
+  deniedToolIds?: Set<string>,
+): EditItem | null {
   const result = item.result;
   const input = item.input ? normalizeToolInput(item.name, item.input) : item.input;
   if (!input) return null;
@@ -195,8 +201,11 @@ function parseEditItem(item: { name?: string; input?: ToolInput; result?: ToolRe
 
   const { additions, deletions } = computeDiffStats(oldString, newString);
   const lineInfo = getToolLineInfo(input, target, result);
-  const isCompleted = result !== undefined && result !== null;
-  const isError = isCompleted && result?.is_error === true;
+  // Mirror BashToolGroupBlock: an interrupted/denied tool never receives a
+  // result, so without this check its row stayed "pending" forever.
+  const isDenied = item.toolId ? (deniedToolIds?.has(item.toolId) ?? false) : false;
+  const isCompleted = (result !== undefined && result !== null) || isDenied;
+  const isError = isDenied || (isCompleted && result?.is_error === true);
 
   return {
     filePath: target.rawPath,
@@ -288,7 +297,7 @@ const EditFileItem = ({ item, onFileClick, onShowDiff, onRefresh, t }: EditFileI
   );
 };
 
-const EditToolGroupBlock = ({ items }: EditToolGroupBlockProps) => {
+const EditToolGroupBlock = ({ items, deniedToolIds }: EditToolGroupBlockProps) => {
   const [expanded, setExpanded] = useState(true);
   const { t } = useTranslation();
   const listRef = useRef<HTMLDivElement>(null);
@@ -298,9 +307,9 @@ const EditToolGroupBlock = ({ items }: EditToolGroupBlockProps) => {
   // Parse all items
   const editItems = useMemo(() => {
     return items
-      .map(item => parseEditItem(item))
+      .map(item => parseEditItem(item, deniedToolIds))
       .filter((item): item is EditItem => item !== null);
-  }, [items]);
+  }, [items, deniedToolIds]);
 
   // Auto-refresh completed files in IDEA
   useEffect(() => {

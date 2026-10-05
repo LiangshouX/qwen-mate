@@ -94,7 +94,7 @@ const GroupedBlockView = memo(function GroupedBlockView({
 
     return (
       <div className="content-block">
-        <ReadToolGroupBlock items={readItems} />
+        <ReadToolGroupBlock items={readItems} deniedToolIds={window.__deniedToolIds} />
       </div>
     );
   }
@@ -116,7 +116,7 @@ const GroupedBlockView = memo(function GroupedBlockView({
     // without unmounting on the transition.
     return (
       <div className="content-block">
-        <EditToolBlock items={editItems} />
+        <EditToolBlock items={editItems} deniedToolIds={window.__deniedToolIds} />
       </div>
     );
   }

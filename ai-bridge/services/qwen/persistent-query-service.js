@@ -78,15 +78,20 @@ function emitToolUse(toolUse) {
 }
 
 function emitToolResult(toolResult) {
+  // SDK ToolResultBlock fields are snake_case ({ tool_use_id, is_error }).
+  // Reading camelCase here dropped the id entirely: findToolResult could never
+  // match the result (tool cards spun forever) and useFileChanges counted
+  // nothing because it requires a successful result. camelCase stays as a
+  // fallback for ACP-normalized shapes.
   emitMessageMarker({
     type: 'user',
     message: {
       role: 'user',
       content: [{
         type: 'tool_result',
-        tool_use_id: toolResult.toolUseId || toolResult.id,
-        content: toolResult.content || '',
-        is_error: !!toolResult.isError,
+        tool_use_id: toolResult.tool_use_id ?? toolResult.toolUseId ?? toolResult.id,
+        content: toolResult.content ?? '',
+        is_error: toolResult.is_error ?? !!toolResult.isError,
       }],
     },
   });
@@ -119,7 +124,9 @@ export function extractUserMessageText(message) {
 
 // ─── Event normalization: SDK messages → marker protocol ───
 
-async function consumeQueryStream(result, sessionId) {
+// Exported for tests: consumes a raw SDK query() stream and re-emits it as
+// marker-protocol stdout lines.
+export async function consumeQueryStream(result, sessionId) {
   let hasStreamEvents = false;
   let sawSessionId = false;
   let lastUsage = null;
@@ -181,6 +188,28 @@ async function consumeQueryStream(result, sessionId) {
       // Track usage from assistant messages
       if (message.usage) {
         lastUsage = message.usage;
+      }
+    }
+
+    // Streaming deltas. The SDK wraps incremental events as `stream_event`
+    // (payload in `.event`); the legacy `partial_assistant` branch above never
+    // fires, which left [CONTENT_DELTA]/[THINKING_DELTA] unemitted — text only
+    // arrived via whole-message snapshots, so the UI rendered chat-style chunks
+    // instead of streaming token by token.
+    if (message.type === 'stream_event') {
+      const event = message.event;
+      if (event?.type === 'content_block_delta') {
+        const delta = event.delta;
+        if (delta?.type === 'text_delta' && typeof delta.text === 'string') {
+          // beginStream() is intentionally skipped: sendMessagePersistent
+          // already emitted [MESSAGE_START]/[STREAM_START] before the query.
+          // hasStreamEvents only drives endStream() + the final-text fallback.
+          hasStreamEvents = true;
+          emitContentDelta(delta.text);
+        } else if (delta?.type === 'thinking_delta' && typeof delta.thinking === 'string') {
+          hasStreamEvents = true;
+          emitThinkingDelta(delta.thinking);
+        }
       }
     }
 

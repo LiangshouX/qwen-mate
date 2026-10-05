@@ -24,7 +24,10 @@ interface ReadToolGroupBlockProps {
     name?: string;
     input?: ToolInput;
     result?: ToolResultBlock | null;
+    toolId?: string;
   }>;
+  /** Denied/interrupted tool ids so batch rows finalize instead of spinning. */
+  deniedToolIds?: Set<string>;
 }
 
 /** Max visible items before scroll */
@@ -87,7 +90,10 @@ function getFileListItemStyle(isDirectory: boolean): React.CSSProperties {
 /**
  * Parse item to FileItem
  */
-const parseFileItem = (item: { input?: ToolInput; result?: ToolResultBlock | null }): FileItem | null => {
+const parseFileItem = (
+  item: { input?: ToolInput; result?: ToolResultBlock | null; toolId?: string },
+  deniedToolIds?: Set<string>,
+): FileItem | null => {
   const input = item.input;
   if (!input) return null;
 
@@ -101,9 +107,12 @@ const parseFileItem = (item: { input?: ToolInput; result?: ToolResultBlock | nul
       : `L${lineInfoValue.start}`)
     : '';
 
-  // Determine completion status
-  const isCompleted = item.result !== undefined && item.result !== null;
-  const isError = isCompleted && item.result?.is_error === true;
+  // Determine completion status. Mirror BashToolGroupBlock: an interrupted/
+  // denied tool never receives a result, so without this check its row stayed
+  // "pending" forever.
+  const isDenied = item.toolId ? (deniedToolIds?.has(item.toolId) ?? false) : false;
+  const isCompleted = (item.result !== undefined && item.result !== null) || isDenied;
+  const isError = isDenied || (isCompleted && item.result?.is_error === true);
 
   return {
     filePath: target.rawPath,
@@ -169,7 +178,7 @@ const FileListItem = ({ item, onFileClick }: FileListItemProps) => {
   );
 };
 
-const ReadToolGroupBlock = ({ items }: ReadToolGroupBlockProps) => {
+const ReadToolGroupBlock = ({ items, deniedToolIds }: ReadToolGroupBlockProps) => {
   // Default to expanded
   const [expanded, setExpanded] = useState(true);
   const { t } = useTranslation();
@@ -179,9 +188,9 @@ const ReadToolGroupBlock = ({ items }: ReadToolGroupBlockProps) => {
   // Parse all items to file items
   const fileItems = useMemo(() => {
     return items
-      .map(item => parseFileItem(item))
+      .map(item => parseFileItem(item, deniedToolIds))
       .filter((item): item is FileItem => item !== null);
-  }, [items]);
+  }, [items, deniedToolIds]);
 
   // Auto-scroll to bottom when new items are added (streaming)
   useEffect(() => {

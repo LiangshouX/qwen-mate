@@ -71,4 +71,17 @@ describe('ReadToolGroupBlock', () => {
     expect(bridgeMocks.resolveFilePathWithCallback).not.toHaveBeenCalled();
     expect(document.querySelector('.file-link-tooltip')?.textContent).toBe('src/components/');
   });
+
+  it('finalizes denied rows as error instead of pending', () => {
+    const { container } = render(
+      <ReadToolGroupBlock
+        items={[{ toolId: 'call_1', input: { file_path: '/repo/src/App.tsx' } }]}
+        deniedToolIds={new Set(['call_1'])}
+      />,
+    );
+
+    const indicator = container.querySelector('.tool-status-indicator');
+    expect(indicator?.classList.contains('error')).toBe(true);
+    expect(indicator?.classList.contains('pending')).toBe(false);
+  });
 });

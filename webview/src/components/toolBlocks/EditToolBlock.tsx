@@ -22,13 +22,16 @@ interface EditToolBlockProps {
       this one component keeps the instance (and its state) alive as edits
       stream in 1 -> 2 -> ..., so the transition no longer unmounts the block. */
   items: EditToolItem[];
+  /** Denied/interrupted tool ids, forwarded to the grouped view so batch rows
+      finalize out of "pending" instead of spinning forever. */
+  deniedToolIds?: Set<string>;
 }
 
 const ROOT_STYLE: React.CSSProperties = { margin: '12px 0' };
 
 const TASK_CONTAINER_STYLE: React.CSSProperties = { margin: 0 };
 
-const EditToolBlock = memo(function EditToolBlock({ items }: EditToolBlockProps) {
+const EditToolBlock = memo(function EditToolBlock({ items, deniedToolIds }: EditToolBlockProps) {
   // All hooks live in useEditToolState (called unconditionally for any item
   // count), so the component instance - and its state - is preserved when the
   // item count crosses from 1 to many; React reuses this instance and only
@@ -55,7 +58,7 @@ const EditToolBlock = memo(function EditToolBlock({ items }: EditToolBlockProps)
   // the hook call above, so the component instance (and its state) survives
   // the 1 -> N transition.
   if (items.length > 1) {
-    return <EditToolGroupBlock items={items} />;
+    return <EditToolGroupBlock items={items} deniedToolIds={deniedToolIds} />;
   }
 
   if (!normalizedInput) {
