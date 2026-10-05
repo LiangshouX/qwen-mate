@@ -18,6 +18,13 @@ import {
 } from '../../utils/marker-protocol.js';
 import { loadQwenSdk, isQwenSdkAvailable } from '../../utils/sdk-loader.js';
 import { maybeGenerateSessionTitle } from '../session-title-service.js';
+import {
+  DEFAULT_SAFETY_NET_MS,
+  pollPermissionResponse,
+  removePermissionFiles,
+  resolvePermissionIpcConfig,
+  writePermissionRequest,
+} from './permission-file-ipc.js';
 
 // ─── Runtime registry (mirrors the upstream SDK pattern) ───
 
@@ -314,53 +321,94 @@ function buildCanUseTool(params) {
     if (mode === 'auto-edit' && AUTO_EDIT_TOOL_NAMES.has(toolName)) {
       return { behavior: 'allow', updatedInput: input };
     }
-    return requestPermissionFromJava(toolName, input, signal);
+    return requestPermissionFromJava(toolName, input, { signal, cwd: params.cwd });
   };
 }
 
-// Permission request/response bridge
+// Permission request/response bridge (file IPC, see permission-file-ipc.js)
 const pendingPermissions = new Map();
 
-function requestPermissionFromJava(toolName, input, signal) {
+// Node-side fallbacks must answer AFTER the Java dialog safety net
+// (QWEN_MATE_PERMISSION_SAFETY_NET_MS) so a live host always wins the race.
+const PERMISSION_FALLBACK_EXTRA_MS = 10_000;
+// The SDK/CLI canUseTool timeout (default 60s) would cancel the command while
+// the approval dialog is still open; stretch it over the whole dialog window.
+const SDK_CAN_USE_TOOL_EXTRA_MS = 30_000;
+
+function permissionCanUseToolTimeoutMs() {
+  const config = resolvePermissionIpcConfig();
+  return (config.ok ? config.safetyNetMs : DEFAULT_SAFETY_NET_MS) + SDK_CAN_USE_TOOL_EXTRA_MS;
+}
+
+// Exported for tests: file-IPC approval entry point used by buildCanUseTool.
+export function requestPermissionFromJava(toolName, input, { signal, cwd } = {}) {
   return new Promise((resolve) => {
     const requestId = `perm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const config = resolvePermissionIpcConfig();
+    if (!config.ok) {
+      // Without an IPC dir the Java host cannot be asked at all — fail fast
+      // with the reason instead of hanging until some timeout.
+      resolve({ behavior: 'deny', message: `Permission bridge unavailable: ${config.reason}` });
+      return;
+    }
 
-    // Emit permission request marker for Java to parse
-    console.log(`[PERMISSION_REQUEST] ${JSON.stringify({ requestId, toolName, input })}`);
+    const entry = { resolve, input, timer: null, poll: null, cleanup: null };
+    pendingPermissions.set(requestId, entry);
 
-    pendingPermissions.set(requestId, resolve);
-
-    // Auto-deny after 60 seconds
-    const timeout = setTimeout(() => {
-      if (pendingPermissions.has(requestId)) {
-        pendingPermissions.delete(requestId);
-        resolve({ behavior: 'deny', message: 'Permission request timed out' });
+    entry.cleanup = () => {
+      if (entry.timer) {
+        clearTimeout(entry.timer);
+        entry.timer = null;
       }
-    }, 60_000);
+      if (entry.poll) {
+        entry.poll.stop();
+        entry.poll = null;
+      }
+      // Drop unconsumed IPC files so an aborted turn leaves no ghost dialog.
+      removePermissionFiles(config, requestId);
+    };
 
-    // Listen for abort
+    try {
+      writePermissionRequest(config, requestId, { toolName, inputs: input, cwd });
+    } catch (error) {
+      pendingPermissions.delete(requestId);
+      resolve({ behavior: 'deny', message: `Permission request failed: ${error.message}` });
+      return;
+    }
+
+    entry.poll = pollPermissionResponse(config, requestId, {
+      onResult: (allow) => {
+        respondToPermission(requestId, allow, allow ? undefined : 'Denied by user');
+      },
+    });
+
+    entry.timer = setTimeout(() => {
+      respondToPermission(requestId, false, 'Permission request timed out');
+    }, config.safetyNetMs + PERMISSION_FALLBACK_EXTRA_MS);
+
     if (signal) {
       signal.addEventListener('abort', () => {
-        clearTimeout(timeout);
-        pendingPermissions.delete(requestId);
-        resolve({ behavior: 'deny', message: 'Request cancelled' });
-      });
+        respondToPermission(requestId, false, 'Request cancelled');
+      }, { once: true });
     }
   });
 }
 
 export function respondToPermission(requestId, allowed, message) {
-  const resolve = pendingPermissions.get(requestId);
-  if (resolve) {
-    pendingPermissions.delete(requestId);
-    if (allowed) {
-      resolve({ behavior: 'allow' });
-    } else {
-      resolve({ behavior: 'deny', message: message || 'Denied by user' });
-    }
-    return true;
+  const entry = pendingPermissions.get(requestId);
+  if (!entry) {
+    return false;
   }
-  return false;
+  pendingPermissions.delete(requestId);
+  if (entry.cleanup) {
+    entry.cleanup();
+  }
+  if (allowed) {
+    entry.resolve({ behavior: 'allow', updatedInput: entry.input });
+  } else {
+    entry.resolve({ behavior: 'deny', message: message || 'Denied by user' });
+  }
+  return true;
 }
 
 // ─── Persistent service API (daemon contract) ───
@@ -395,6 +443,9 @@ export async function sendMessagePersistent(params = {}) {
 
     if (model) options.model = model;
     if (requestSessionId) options.resume = requestSessionId;
+    // Stretch the SDK/CLI canUseTool timeout over the whole approval dialog
+    // window; the 60s default cancels the command while the dialog is open.
+    options.timeout = { canUseTool: permissionCanUseToolTimeoutMs() };
 
     // Attachments → content blocks
     let prompt;
@@ -507,9 +558,8 @@ export async function abortCurrentTurn() {
     return true;
   }
   // Also resolve any pending permission requests as denied
-  for (const [id, resolve] of pendingPermissions) {
-    resolve({ behavior: 'deny', message: 'Turn cancelled' });
-    pendingPermissions.delete(id);
+  for (const id of [...pendingPermissions.keys()]) {
+    respondToPermission(id, false, 'Turn cancelled');
   }
   return false;
 }

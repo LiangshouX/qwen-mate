@@ -242,10 +242,6 @@ public class QwenSDKBridge extends BaseSDKBridge {
             callback.onMessage("tool_result", line.substring("[TOOL_RESULT]".length()).trim());
             return;
         }
-        if (line.startsWith("[PERMISSION_REQUEST]")) {
-            callback.onMessage("permission_request", line.substring("[PERMISSION_REQUEST]".length()).trim());
-            return;
-        }
         if (line.startsWith("[USAGE]")) {
             String usageJson = line.substring("[USAGE]".length()).trim();
             try {
