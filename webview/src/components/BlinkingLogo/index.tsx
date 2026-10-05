@@ -160,7 +160,7 @@ export const BlinkingLogo = ({ provider, onProviderChange }: BlinkingLogoProps) 
       >
         <ProviderModelIcon
           providerId={displayProvider}
-          size={displayProvider === 'dsh' ? 64 : 58}
+          size={58}
           colored
         />
       </div>

@@ -19,7 +19,7 @@ public class SessionSendServiceTest {
     public void resolveEffectivePermissionModePrefersRequestedModeWhenValid() {
         assertEquals(
                 "auto-edit",
-                SessionSendService.resolveEffectivePermissionMode("qwen", "acceptEdits", "default")
+                SessionSendService.resolveEffectivePermissionMode("acceptEdits", "default")
         );
     }
 
@@ -28,45 +28,24 @@ public class SessionSendServiceTest {
         // Qwen Code CLI natively supports plan mode (read-only analysis).
         assertEquals(
                 "plan",
-                SessionSendService.resolveEffectivePermissionMode("qwen", null, "plan")
+                SessionSendService.resolveEffectivePermissionMode(null, "plan")
         );
         assertEquals(
                 "default",
-                SessionSendService.resolveEffectivePermissionMode("qwen", null, null)
+                SessionSendService.resolveEffectivePermissionMode(null, null)
         );
     }
 
     @Test
-    public void resolveEffectivePermissionModeDowngradesPlanForCliProviders() {
-        assertEquals(
-                "default",
-                SessionSendService.resolveEffectivePermissionMode("dsh", "plan", "acceptEdits")
-        );
-        assertEquals(
-                "default",
-                SessionSendService.resolveEffectivePermissionMode("dsh", null, "plan")
-        );
-    }
-
-    @Test
-    public void resolveEffectivePermissionModeDowngradesNativeAutoForCliProvidersOnly() {
-        // dsh has no SDK-native auto review flow, so auto downgrades to default.
-        assertEquals(
-                "default",
-                SessionSendService.resolveEffectivePermissionMode("dsh", "auto", "acceptEdits")
-        );
-        assertEquals(
-                "default",
-                SessionSendService.resolveEffectivePermissionMode("dsh", null, "auto")
-        );
+    public void resolveEffectivePermissionModeKeepsNativeAuto() {
         // qwen keeps the native auto reviewer: auto passes through untouched.
         assertEquals(
                 "auto",
-                SessionSendService.resolveEffectivePermissionMode("qwen", "auto", "default")
+                SessionSendService.resolveEffectivePermissionMode("auto", "default")
         );
         assertEquals(
                 "auto",
-                SessionSendService.resolveEffectivePermissionMode("qwen", null, "auto")
+                SessionSendService.resolveEffectivePermissionMode(null, "auto")
         );
     }
 
@@ -78,28 +57,16 @@ public class SessionSendServiceTest {
         // migrated to the Qwen Code CLI approval-mode ids.
         assertEquals(
                 "yolo",
-                SessionSendService.resolveEffectivePermissionMode("dsh", "bypassPermissions", "default")
+                SessionSendService.resolveEffectivePermissionMode("bypassPermissions", "default")
         );
         assertEquals(
                 "yolo",
-                SessionSendService.resolveEffectivePermissionMode("dsh", null, "bypassPermissions")
+                SessionSendService.resolveEffectivePermissionMode(null, "bypassPermissions")
         );
         assertEquals(
                 "auto-edit",
-                SessionSendService.resolveEffectivePermissionMode("dsh", "acceptEdits", null)
+                SessionSendService.resolveEffectivePermissionMode("acceptEdits", null)
         );
-    }
-
-    @Test
-    public void normalizeCliModelForProviderMapsSentinelsAndFiltersLeftovers() {
-        assertNull(SessionSendService.normalizeCliModelForProvider("dsh", null));
-        assertNull(SessionSendService.normalizeCliModelForProvider("dsh", "auto"));
-        assertNull(SessionSendService.normalizeCliModelForProvider("dsh", "__config_default__"));
-        assertNull(SessionSendService.normalizeCliModelForProvider("dsh", "dsh-default"));
-        assertEquals("qwen3-coder-plus", SessionSendService.normalizeCliModelForProvider("dsh", "qwen3-coder-plus"));
-        // Leftovers after a provider switch without model reset are ignored for CLI.
-        assertNull(SessionSendService.normalizeCliModelForProvider("dsh", "claude-sonnet-4-6"));
-        assertNull(SessionSendService.normalizeCliModelForProvider("dsh", "gpt-5-codex"));
     }
 
     @Test

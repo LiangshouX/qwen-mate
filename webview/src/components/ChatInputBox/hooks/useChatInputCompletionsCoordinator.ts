@@ -6,8 +6,6 @@ import { useInlineHistoryCompletion } from './useInlineHistoryCompletion.js';
 import {
   agentProvider,
   agentToDropdownItem,
-  codexCommandProvider,
-  codexCommandToDropdownItem,
   commandToDropdownItem,
   dollarCommandProvider,
   dollarCommandToDropdownItem,
@@ -20,7 +18,6 @@ import {
   type PromptItem,
 } from '../providers/index.js';
 import {
-  getCommandInsertionText,
   isCommandPlaceholder,
 } from '../utils/commandCompletionUtils.js';
 import { setCursorOffset } from '../utils/selectionUtils.js';
@@ -71,11 +68,6 @@ export function useChatInputCompletionsCoordinator({
   onOpenPromptSettings,
 }: UseChatInputCompletionsCoordinatorOptions) {
   const renderFileTagsRef = useRef<() => void>(() => {});
-  const isCodexProvider = currentProvider === 'dsh';
-  const commandProvider = isCodexProvider ? codexCommandProvider : slashCommandProvider;
-  const commandItemConverter = isCodexProvider ? codexCommandToDropdownItem : commandToDropdownItem;
-  const dollarProvider = isCodexProvider ? codexCommandProvider : dollarCommandProvider;
-  const dollarItemConverter = isCodexProvider ? codexCommandToDropdownItem : dollarCommandToDropdownItem;
 
   const fileCompletion = useCompletionDropdown<FileItem>({
     trigger: '@',
@@ -109,14 +101,14 @@ export function useChatInputCompletionsCoordinator({
 
   const commandCompletion = useCompletionDropdown<CommandItem>({
     trigger: '/',
-    provider: commandProvider,
-    toDropdownItem: commandItemConverter,
+    provider: slashCommandProvider,
+    toDropdownItem: commandToDropdownItem,
     onSelect: (command, query) => {
       if (!editableRef.current || !query || isCommandPlaceholder(command)) return;
       replaceTextAndSync(
         editableRef,
         getTextContent(),
-        isCodexProvider ? getCommandInsertionText(command) : `${command.label} `,
+        `${command.label} `,
         query,
         commandCompletion.replaceText,
         () => handleInputRef.current()
@@ -193,14 +185,14 @@ export function useChatInputCompletionsCoordinator({
 
   const dollarCommandCompletion = useCompletionDropdown<CommandItem>({
     trigger: '$',
-    provider: dollarProvider,
-    toDropdownItem: dollarItemConverter,
+    provider: dollarCommandProvider,
+    toDropdownItem: dollarCommandToDropdownItem,
     onSelect: (skill, query) => {
       if (!editableRef.current || !query || isCommandPlaceholder(skill)) return;
       replaceTextAndSync(
         editableRef,
         getTextContent(),
-        isCodexProvider ? getCommandInsertionText(skill) : `${skill.label} `,
+        `${skill.label} `,
         query,
         dollarCommandCompletion.replaceText,
         () => handleInputRef.current()
@@ -235,7 +227,7 @@ export function useChatInputCompletionsCoordinator({
     agentCompletion,
     promptCompletion,
     dollarCommandCompletion,
-    isDollarTriggerEnabled: currentProvider === 'dsh',
+    isDollarTriggerEnabled: false,
   });
 
   // Note: completion objects are fresh object literals each render (NOT stable

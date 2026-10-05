@@ -27,7 +27,7 @@ describe('SubagentList', () => {
       <SubagentList
         subagents={[subagent]}
         currentSessionId="session-1"
-        currentProvider="dsh"
+        currentProvider="qwen"
       />,
     );
 
@@ -37,7 +37,7 @@ describe('SubagentList', () => {
       'load_subagent_session',
       JSON.stringify({
         sessionId: 'session-1',
-        provider: 'dsh',
+        provider: 'qwen',
         agentPath: 'audit_ui',
         description: 'Review anchors',
         toolUseId: 'call-spawn',
@@ -71,7 +71,7 @@ describe('SubagentList', () => {
         subagents={[subagent]}
         histories={histories}
         currentSessionId="session-1"
-        currentProvider="dsh"
+        currentProvider="qwen"
       />,
     );
 
@@ -81,7 +81,7 @@ describe('SubagentList', () => {
       'load_subagent_session',
       JSON.stringify({
         sessionId: 'session-1',
-        provider: 'dsh',
+        provider: 'qwen',
         agentId: 'agent-resolved',
         agentPath: '/root/audit_ui',
         description: 'Review anchors',

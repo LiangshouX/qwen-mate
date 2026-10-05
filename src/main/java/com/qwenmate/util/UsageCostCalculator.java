@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
  * (built-in Qwen pricing with user-configured overrides), the same pricing
  * configuration the frontend model dialog edits.
  *
- * <p>An unknown model or an unpriced provider (e.g. dsh) yields {@code 0.0} ("unknown is
+ * <p>An unknown model or an unpriced provider yields {@code 0.0} ("unknown is
  * free"), while absent turn usage still yields {@code null} so callers can distinguish
  * "no usage" from "no pricing".
  */
@@ -23,7 +23,7 @@ public final class UsageCostCalculator {
             return null;
         }
         if (!"qwen".equalsIgnoreCase(provider)) {
-            // dsh (and any future provider without a price list) is reported as free.
+            // Any provider without a price list is reported as free.
             return 0.0d;
         }
         QwenPricing pricing = QwenPricingTable.resolve(model);

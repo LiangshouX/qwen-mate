@@ -8,7 +8,7 @@ import styles from './style.module.less';
 export type ProviderManageTab = 'qwen' | 'cli';
 
 interface ProviderTabSectionProps {
-  currentProvider: 'qwen' | 'dsh' | string;
+  currentProvider: string;
   /** Deep-linked sub-tab (e.g. from the provider dropdown's CLI entry); wins over currentProvider inference */
   initialSubTab?: ProviderManageTab;
   // Shared
@@ -16,7 +16,6 @@ interface ProviderTabSectionProps {
 }
 
 const ProviderTabSection = ({
-  currentProvider,
   initialSubTab,
   addToast,
 }: ProviderTabSectionProps) => {
@@ -24,8 +23,6 @@ const ProviderTabSection = ({
 
   const [activeTab, setActiveTab] = useState<ProviderManageTab>(() => {
     if (initialSubTab) return initialSubTab;
-    // DSH manages its own host connection through the CLI surface.
-    if (currentProvider === 'dsh') return 'cli';
     return 'qwen';
   });
 

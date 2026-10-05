@@ -18,7 +18,7 @@ const ROOT_STYLE: React.CSSProperties = {
 const LOGO_WRAPPER_STYLE: React.CSSProperties = { position: 'relative', display: 'inline-block' };
 
 export interface WelcomeScreenProps {
-  /** Runtime CLI provider (qwen / dsh); welcome logo follows the active CLI */
+  /** Runtime CLI provider (qwen); welcome logo follows the active CLI */
   currentProvider: string;
   t: TFunction;
   onProviderChange: (provider: string) => void;
@@ -31,7 +31,6 @@ export const WelcomeScreen = memo(function WelcomeScreen({
 }: WelcomeScreenProps): React.ReactElement {
   const providerLabels: Record<string, string> = {
     qwen: t('providers.qwen.label', { defaultValue: 'Qwen Code' }),
-    dsh: t('providers.dsh.label', { defaultValue: 'DSH' }),
   };
 
   return (

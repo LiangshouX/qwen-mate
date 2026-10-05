@@ -4,7 +4,6 @@
  */
 export const AI_FEATURE_PROVIDERS = [
   'qwen',
-  'dsh',
 ] as const;
 
 export type AiFeatureProvider = (typeof AI_FEATURE_PROVIDERS)[number];
@@ -17,7 +16,6 @@ export type AiFeatureResolutionSource = 'manual' | 'auto' | 'unavailable';
  */
 export const DEFAULT_AI_FEATURE_MODELS: Record<AiFeatureProvider, string> = {
   qwen: '',
-  dsh: 'auto',
 };
 
 export type AiFeatureModels = Record<AiFeatureProvider, string>;
@@ -52,7 +50,6 @@ export interface AiFeatureConfigInput {
 function emptyAvailability(value = false): AiFeatureAvailability {
   return {
     qwen: value,
-    dsh: value,
   };
 }
 
@@ -146,7 +143,7 @@ export function normalizeAiFeatureConfig(
 /**
  * Resolve auto-mode provider.
  * Prefers `preferredProvider` when available (e.g. current chat CLI for prompt
- * enhancer and commit AI), then Qwen → DSH.
+ * enhancer and commit AI), then Qwen.
  */
 export function pickAutoAiFeatureProvider(
   availability: AiFeatureAvailability,
@@ -160,6 +157,5 @@ export function pickAutoAiFeatureProvider(
     return preferredProvider;
   }
   if (availability.qwen) return 'qwen';
-  if (availability.dsh) return 'dsh';
   return null;
 }

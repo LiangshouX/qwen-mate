@@ -24,7 +24,6 @@ vi.mock('react-i18next', () => ({
         'promptEnhancer.openSettingsTooltip': 'Open settings',
         'promptEnhancer.resolvingUsage': 'Resolving runtime config…',
         'providers.qwen.label': 'Qwen Code',
-        'providers.dsh.label': 'DeepSeek Harness',
       };
       return map[key] ?? options?.defaultValue ?? key;
     },
@@ -84,8 +83,8 @@ describe('PromptEnhancerDialog', () => {
         originalPrompt="x"
         enhancedPrompt="y"
         usageInfo={{
-          provider: 'dsh',
-          model: 'deepseek-v4-flash',
+          provider: 'qwen',
+          model: 'qwen3-coder-plus',
           resolutionSource: 'manual',
         }}
         onUseEnhanced={vi.fn()}
@@ -95,7 +94,7 @@ describe('PromptEnhancerDialog', () => {
     );
 
     expect(screen.getByTestId('prompt-enhancer-mode').textContent).toContain('Manual');
-    expect(screen.getByTestId('prompt-enhancer-provider').textContent).toContain('DeepSeek Harness');
+    expect(screen.getByTestId('prompt-enhancer-provider').textContent).toContain('Qwen Code');
   });
 
   it('invokes onOpenSettings when configure is clicked', () => {

@@ -22,9 +22,7 @@ export function registerUsageModeCallbacks(options: UseWindowCallbacksOptions): 
     setPermissionMode,
     setCurrentProvider,
     setQwenPermissionMode,
-    setDshPermissionMode,
     setSelectedQwenModel,
-    setSelectedDshModel,
     setReasoningEffort,
     setAlwaysThinkingEnabled,
     setStreamingEnabledSetting,
@@ -82,11 +80,7 @@ export function registerUsageModeCallbacks(options: UseWindowCallbacksOptions): 
       : canonicalMode;
     if (isValidPermissionMode(normalizedMode)) {
       setPermissionMode((prev) => (prev === normalizedMode ? prev : normalizedMode));
-      if (activeProvider === 'dsh') {
-        setDshPermissionMode((prev) => (prev === normalizedMode ? prev : normalizedMode));
-      } else {
-        setQwenPermissionMode((prev) => (prev === normalizedMode ? prev : normalizedMode));
-      }
+      setQwenPermissionMode((prev) => (prev === normalizedMode ? prev : normalizedMode));
     }
   };
 
@@ -94,29 +88,20 @@ export function registerUsageModeCallbacks(options: UseWindowCallbacksOptions): 
   window.onModeReceived = (mode) => updateMode(mode as PermissionMode);
 
   window.onModelChanged = (modelId) => {
-    const provider = currentProviderRef.current;
-    if (provider === 'dsh') {
-      setSelectedDshModel(modelId);
-    } else {
-      setSelectedQwenModel(modelId);
-    }
+    setSelectedQwenModel(modelId);
   };
 
-  window.onModelConfirmed = (modelId, provider) => {
-    if (provider === 'dsh') {
-      setSelectedDshModel(modelId);
-    } else {
-      setSelectedQwenModel(modelId);
-    }
+  window.onModelConfirmed = (modelId, _provider) => {
+    setSelectedQwenModel(modelId);
   };
 
   window.applyBackendTabState = (json: string) => {
     try {
       const state = JSON.parse(json) as Record<string, unknown>;
-      const provider = state.provider;
-      if (provider !== 'qwen' && provider !== 'dsh') {
-        throw new Error('invalid provider');
-      }
+      // qwen is the only engine. Legacy persisted tab state may still carry a
+      // retired provider id (e.g. 'dsh'); fold it into qwen like the Java
+      // SessionProviderRouter instead of dropping the whole recovery state.
+      const provider = 'qwen';
 
       // This is Java -> UI recovery state, not a user selection. Update the
       // synchronous ref and React state without emitting set_provider/set_model.
@@ -124,11 +109,7 @@ export function registerUsageModeCallbacks(options: UseWindowCallbacksOptions): 
       setCurrentProvider(provider);
 
       if (typeof state.model === 'string' && state.model.length > 0) {
-        if (provider === 'dsh') {
-          setSelectedDshModel(state.model);
-        } else {
-          setSelectedQwenModel(state.model);
-        }
+        setSelectedQwenModel(state.model);
       }
 
       updateMode(state.permissionMode as PermissionMode | undefined, provider);

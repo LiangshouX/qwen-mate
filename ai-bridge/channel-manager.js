@@ -2,14 +2,13 @@
 
 /**
  * AI Bridge Channel Manager
- * Unified bridge entry point for the Qwen SDK and the DSH host provider
+ * Unified bridge entry point for the Qwen SDK
  *
  * Command format:
  *   node channel-manager.js <provider> <command> [args...]
  *
  * Provider:
  *   qwen     - Qwen Code SDK (@qwen-code/sdk)
- *   dsh      - DeepSeek Harness (Host RPC + WS mux against local `dsh web`)
  *
  * Commands:
  *   send                - Send a message (parameters passed via stdin as JSON)
@@ -26,7 +25,6 @@
 import './utils/no-flash.cjs';
 import { readStdinData } from './utils/stdin-utils.js';
 import { handleQwenCommand } from './channels/qwen-channel.js';
-import { handleDshCommand } from './channels/dsh-channel.js';
 import { getSdkStatus, isQwenSdkAvailable } from './utils/sdk-loader.js';
 
 /**
@@ -114,7 +112,6 @@ async function handleSystemCommand(command, args, stdinData) {
 
 const providerHandlers = {
   qwen: handleQwenCommand,
-  dsh: handleDshCommand,
   system: handleSystemCommand
 };
 
@@ -125,7 +122,7 @@ const providerHandlers = {
     // Validate provider
     console.error('[DIAG-EXEC] Validating provider...');
     if (!provider || !providerHandlers[provider]) {
-      console.error('Invalid provider. Use "qwen", "dsh", or "system"');
+      console.error('Invalid provider. Use "qwen" or "system"');
       writeJsonAndExit({
         success: false,
         error: 'Invalid provider: ' + provider

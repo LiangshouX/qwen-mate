@@ -11,7 +11,7 @@ import com.intellij.openapi.diagnostic.Logger;
 /**
  * Provider message handler.
  * TODO: provider management messages (relay CRUD / cc-switch import) were
- * removed in the qwen/dsh convergence; only the generic always-thinking
+ * removed in the provider convergence; only the generic always-thinking
  * toggle remains here.
  */
 public class ProviderHandler extends BaseMessageHandler {

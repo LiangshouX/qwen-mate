@@ -20,7 +20,7 @@ import { getRealHomeDir } from '../utils/path-utils.js';
 //   [ENHANCED_ERROR]<msg>          — final failure
 
 /** Mirrors chat AVAILABLE_PROVIDERS / webview AiFeatureProvider. */
-const AI_FEATURE_PROVIDERS = ['qwen', 'dsh'];
+const AI_FEATURE_PROVIDERS = ['qwen'];
 
 const DEFAULT_PROMPT_ENHANCER_CONFIG = {
   provider: null,
@@ -28,11 +28,9 @@ const DEFAULT_PROMPT_ENHANCER_CONFIG = {
   resolutionSource: 'auto',
   models: {
     qwen: 'auto',
-    dsh: 'auto',
   },
   availability: {
     qwen: false,
-    dsh: false,
   },
 };
 

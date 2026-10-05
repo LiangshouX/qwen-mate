@@ -18,9 +18,9 @@ vi.mock('./utils/bridge', () => ({
 }));
 
 /**
- * DSH asks through this dialog, and two things it sends were being dropped:
- * `provider` (so the title claimed "Claude") and `detail` (the plan under
- * review), which left a plan-review question unreadable in cc-gui.
+ * Plan-review questions ask through this dialog and carry `detail` (the plan
+ * under review) and `intent`; both were being dropped, which left a plan-review
+ * question unreadable in cc-gui.
  */
 
 const PLAN = [
@@ -47,16 +47,7 @@ const renderDialog = (
   return { onSubmit };
 };
 
-describe('AskUserQuestionDialog DSH questions', () => {
-  it('titles a DSH question as coming from DeepSeek Harness', () => {
-    renderDialog(
-      [{ question: 'Q', header: 'H', multiSelect: false, options: [{ label: 'A', description: '' }] }],
-      'dsh',
-    );
-    expect(screen.getByText('DeepSeek Harness 有一些问题想问你')).toBeTruthy();
-    expect(screen.queryByText('Claude 有一些问题想问你')).toBeNull();
-  });
-
+describe('AskUserQuestionDialog question detail', () => {
   it('renders the detail a question carries', () => {
     renderDialog([
       {

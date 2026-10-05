@@ -14,29 +14,15 @@ describe('normalizeCliPermissionMode', () => {
     expect(normalizeCliPermissionMode('acceptEdits', 'qwen')).toBe('auto-edit');
     expect(normalizeCliPermissionMode('autoEdit', 'qwen')).toBe('auto-edit');
     expect(normalizeCliPermissionMode('bypassPermissions', 'qwen')).toBe('yolo');
-    expect(normalizeCliPermissionMode('autoEdit', 'dsh')).toBe('auto-edit');
-    expect(normalizeCliPermissionMode('bypassPermissions', 'dsh')).toBe('yolo');
-  });
-
-  it('keeps coercing unsupported plan/auto modes to default for the dsh provider', () => {
-    expect(normalizeCliPermissionMode('plan', 'dsh')).toBe('default');
-    expect(normalizeCliPermissionMode('auto', 'dsh')).toBe('default');
-    expect(normalizeCliPermissionMode('auto-edit', 'dsh')).toBe('auto-edit');
-    expect(normalizeCliPermissionMode('default', 'dsh')).toBe('default');
-  });
-
-  it('coerces unsupported plan/auto modes to default when no provider is given (legacy callers)', () => {
-    expect(normalizeCliPermissionMode('plan')).toBe('default');
-    expect(normalizeCliPermissionMode('auto')).toBe('default');
-    expect(normalizeCliPermissionMode('default')).toBe('default');
-    expect(normalizeCliPermissionMode('yolo')).toBe('yolo');
+    // Migration is provider-independent (the provider arg is optional).
+    expect(normalizeCliPermissionMode('autoEdit')).toBe('auto-edit');
+    expect(normalizeCliPermissionMode('bypassPermissions')).toBe('yolo');
   });
 });
 
 describe('isCliOnlyProvider', () => {
-  it('recognizes qwen and dsh as CLI-only providers', () => {
+  it('recognizes qwen as a CLI-only provider', () => {
     expect(isCliOnlyProvider('qwen')).toBe(true);
-    expect(isCliOnlyProvider('dsh')).toBe(true);
     expect(isCliOnlyProvider('unknown')).toBe(false);
     expect(isCliOnlyProvider(undefined)).toBe(false);
   });

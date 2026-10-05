@@ -23,19 +23,16 @@ describe('normalizeAiFeatureConfig', () => {
 
   it('preserves valid provider and availability flags', () => {
     const normalized = normalizeAiFeatureConfig({
-      provider: 'dsh',
-      effectiveProvider: 'dsh',
+      provider: 'qwen',
+      effectiveProvider: 'qwen',
       resolutionSource: 'manual',
-      // Partial payload from the backend: only one provider configured,
-      // the rest must be filled from defaults by normalize.
-      models: { dsh: 'provider/model-a' },
-      availability: { qwen: true, dsh: true },
+      models: { qwen: 'qwen3.5-plus' },
+      availability: { qwen: true },
     });
-    expect(normalized.provider).toBe('dsh');
+    expect(normalized.provider).toBe('qwen');
+    expect(normalized.effectiveProvider).toBe('qwen');
     expect(normalized.availability.qwen).toBe(true);
-    expect(normalized.availability.dsh).toBe(true);
-    expect(normalized.models.dsh).toBe('provider/model-a');
-    expect(normalized.models.qwen).toBe(DEFAULT_AI_FEATURE_MODELS.qwen);
+    expect(normalized.models.qwen).toBe('qwen3.5-plus');
   });
 
   it('rejects unknown provider ids', () => {
@@ -70,35 +67,22 @@ describe('normalizeAiFeatureConfig', () => {
 });
 
 describe('pickAutoAiFeatureProvider', () => {
-  it('falls back to qwen before dsh when no preference applies', () => {
+  it('returns qwen when available and null when not', () => {
     expect(pickAutoAiFeatureProvider({
       qwen: true,
-      dsh: true,
     })).toBe('qwen');
     expect(pickAutoAiFeatureProvider({
       qwen: false,
-      dsh: true,
-    })).toBe('dsh');
-    expect(pickAutoAiFeatureProvider({
-      qwen: false,
-      dsh: false,
     })).toBeNull();
   });
 
   it('prefers the current chat provider when available (prompt enhancer auto)', () => {
     expect(pickAutoAiFeatureProvider({
       qwen: true,
-      dsh: true,
-    }, 'dsh')).toBe('dsh');
-    // Preferred provider unavailable → falls back to qwen first.
-    expect(pickAutoAiFeatureProvider({
-      qwen: true,
-      dsh: false,
-    }, 'dsh')).toBe('qwen');
+    }, 'qwen')).toBe('qwen');
     // Unknown preferred id is ignored.
     expect(pickAutoAiFeatureProvider({
       qwen: true,
-      dsh: true,
     }, 'unknown-cli')).toBe('qwen');
   });
 });
@@ -109,6 +93,5 @@ describe('normalizePromptEnhancerConfig', () => {
     expect(normalized.effectiveProvider).toBe(DEFAULT_PROMPT_ENHANCER_CONFIG.effectiveProvider);
     expect(normalized.models).toEqual(DEFAULT_PROMPT_ENHANCER_CONFIG.models);
     expect(normalized.models.qwen).toBe(DEFAULT_AI_FEATURE_MODELS.qwen);
-    expect(normalized.models.dsh).toBe(DEFAULT_AI_FEATURE_MODELS.dsh);
   });
 });

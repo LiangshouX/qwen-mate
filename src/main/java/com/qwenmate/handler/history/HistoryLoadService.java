@@ -6,7 +6,6 @@ import com.qwenmate.handler.core.HandlerContext;
 
 import com.qwenmate.cache.SessionIndexCache;
 import com.qwenmate.cache.SessionIndexManager;
-import com.qwenmate.provider.dsh.DshHistoryReader;
 import com.qwenmate.provider.qwen.QwenHistoryReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -38,7 +37,7 @@ class HistoryLoadService {
     /**
      * Load and inject history data into the frontend (including favorite info).
      *
-     * @param provider the provider identifier ("qwen" or "dsh")
+     * @param provider the provider identifier ("qwen")
      */
     void handleLoadHistoryData(String provider) {
         CompletableFuture.runAsync(() -> {
@@ -56,17 +55,10 @@ class HistoryLoadService {
                     return;
                 }
 
-                // Choose a different reader based on the provider
-                if ("dsh".equals(provider)) {
-                    LOG.info("[HistoryHandler] 使用 DshHistoryReader 读取 DSH 会话 (项目: " + projectPath + ")");
-                    DshHistoryReader dshReader = new DshHistoryReader();
-                    historyJson = dshReader.getSessionsForProjectAsJson(projectPath);
-                    LOG.info("[HistoryHandler] DshHistoryReader 返回的 JSON 长度: " + historyJson.length());
-                } else {
-                    LOG.info("[HistoryHandler] 使用 QwenHistoryReader 读取 qwen 会话 (项目: " + projectPath + ")");
-                    historyJson = new QwenHistoryReader().getSessionsForProjectAsJson(projectPath);
-                    LOG.info("[HistoryHandler] QwenHistoryReader 返回的 JSON 长度: " + historyJson.length());
-                }
+                // Read the on-disk qwen transcripts for the effective working directory
+                LOG.info("[HistoryHandler] 使用 QwenHistoryReader 读取 qwen 会话 (项目: " + projectPath + ")");
+                historyJson = new QwenHistoryReader().getSessionsForProjectAsJson(projectPath);
+                LOG.info("[HistoryHandler] QwenHistoryReader 返回的 JSON 长度: " + historyJson.length());
 
                 // Load favorite data and merge into history data
                 String enhancedJson = enhanceHistoryWithFavorites(historyJson, provider);
@@ -126,7 +118,7 @@ class HistoryLoadService {
      * Deep search history records.
      * Clears cache and reloads complete history from the file system.
      *
-     * @param provider the provider identifier ("qwen" or "dsh")
+     * @param provider the provider identifier ("qwen")
      */
     void handleDeepSearchHistory(String provider) {
         String rawPath = context.resolveEffectiveWorkingDirectory();
@@ -135,10 +127,7 @@ class HistoryLoadService {
         LOG.info("[HistoryHandler] ========== 开始深度搜索 ========== provider=" + provider);
 
         try {
-            if ("dsh".equals(provider)) {
-                // DSH history is read live from the host; no dedicated index cache.
-                LOG.info("[HistoryHandler] DSH deep search: reloading from the live history host");
-            } else if (projectPath != null) {
+            if (projectPath != null) {
                 // Drop both the in-memory cache and the durable qwen session index so
                 // the reload below re-parses transcripts from disk.
                 SessionIndexCache.getInstance().clearProject(projectPath);

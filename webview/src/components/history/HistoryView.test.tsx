@@ -61,7 +61,7 @@ const historyData: HistoryData = {
       title: 'Second session',
       messageCount: 6,
       lastTimestamp: new Date().toISOString(),
-      provider: 'dsh',
+      provider: 'qwen',
     },
   ],
 };

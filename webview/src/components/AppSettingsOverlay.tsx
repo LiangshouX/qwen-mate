@@ -7,7 +7,7 @@ import { useUIState } from '../contexts/UIStateContext';
  * here).
  */
 interface AppSettingsOverlayProps {
-  currentProvider: 'qwen' | 'dsh' | string;
+  currentProvider: string;
   streamingEnabled?: boolean;
   onStreamingEnabledChange?: (enabled: boolean) => void;
   sendShortcut?: 'enter' | 'cmdEnter';

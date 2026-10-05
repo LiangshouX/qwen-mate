@@ -21,7 +21,7 @@ vi.mock('../../utils/expandedState', () => ({
 vi.mock('../../contexts/SubagentContext', () => ({
   useSubagentHistories: () => mockHistories,
   useSessionId: () => 'session-1',
-  useSessionProvider: () => 'dsh',
+  useSessionProvider: () => 'qwen',
   useGetToolResultRaw: () => () => null,
   useTaskEvent: () => undefined,
 }));

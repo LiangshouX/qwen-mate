@@ -44,9 +44,7 @@ describe('useWindowCallbacks integration', () => {
     setPermissionMode: vi.fn(),
     setCurrentProvider: vi.fn(),
     setQwenPermissionMode: vi.fn(),
-    setDshPermissionMode: vi.fn(),
     setSelectedQwenModel: vi.fn(),
-    setSelectedDshModel: vi.fn(),
     setReasoningEffort: vi.fn(),
     setAlwaysThinkingEnabled: vi.fn(),
     setStreamingEnabledSetting: vi.fn(),
@@ -140,7 +138,9 @@ describe('useWindowCallbacks integration', () => {
   };
 
   it('applies Java recovery state without echoing provider or model bridge commands', () => {
-    const currentProviderRef = { current: 'dsh' };
+    // Start from a different provider so the test proves the recovery state
+    // overwrites it (not just coincides with the initial value).
+    const currentProviderRef = { current: 'codex' };
     const opts = createOptions({ currentProviderRef });
     renderHook(() => useWindowCallbacks(opts));
     const bridgeCallsBeforeRestore = (window.sendToJava as ReturnType<typeof vi.fn>).mock.calls.length;
@@ -162,18 +162,37 @@ describe('useWindowCallbacks integration', () => {
     expect((window.sendToJava as ReturnType<typeof vi.fn>).mock.calls.length).toBe(bridgeCallsBeforeRestore);
   });
 
+  it('folds a retired provider id in Java recovery state into qwen', () => {
+    const currentProviderRef = { current: 'qwen' };
+    const opts = createOptions({ currentProviderRef });
+    renderHook(() => useWindowCallbacks(opts));
+
+    act(() => {
+      window.applyBackendTabState?.(JSON.stringify({
+        provider: 'dsh',
+        model: 'qwen3-coder-plus',
+        permissionMode: 'default',
+      }));
+    });
+
+    expect(currentProviderRef.current).toBe('qwen');
+    expect(opts.setCurrentProvider).toHaveBeenCalledWith('qwen');
+    expect(opts.setSelectedQwenModel).toHaveBeenCalledWith('qwen3-coder-plus');
+    expect(window.__CCGUI_RECOVERY_STATE_APPLIED__).toBe(true);
+  });
+
   it('drains Java recovery state buffered before React callback registration', () => {
     window.__pendingBackendTabState = JSON.stringify({
-      provider: 'dsh',
-      model: 'auto',
+      provider: 'qwen',
+      model: 'qwen3-coder-plus',
       permissionMode: 'default',
     });
     const opts = createOptions();
 
     renderHook(() => useWindowCallbacks(opts));
 
-    expect(opts.setCurrentProvider).toHaveBeenCalledWith('dsh');
-    expect(opts.setSelectedDshModel).toHaveBeenCalledWith('auto');
+    expect(opts.setCurrentProvider).toHaveBeenCalledWith('qwen');
+    expect(opts.setSelectedQwenModel).toHaveBeenCalledWith('qwen3-coder-plus');
     expect(window.__pendingBackendTabState).toBeUndefined();
   });
 
@@ -1184,7 +1203,7 @@ describe('useWindowCallbacks integration', () => {
     };
 
     const opts = createOptions({
-      currentProviderRef: { current: 'dsh' },
+      currentProviderRef: { current: 'qwen' },
       isStreamingRef: { current: true },
       streamingTurnIdRef: { current: 7 },
       patchAssistantForStreaming,

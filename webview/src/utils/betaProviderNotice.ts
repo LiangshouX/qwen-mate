@@ -1,5 +1,5 @@
 /**
- * First-time Beta notice for experimental CLI providers (e.g. DSH).
+ * First-time Beta notice for experimental CLI providers.
  *
  * Shown once per machine when the user first clicks any beta provider entry.
  * Storage: localStorage (same pattern as skipNewSessionConfirm).

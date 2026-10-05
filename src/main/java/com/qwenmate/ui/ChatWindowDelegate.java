@@ -8,7 +8,6 @@ import com.qwenmate.handler.ClipboardHandler;
 import com.qwenmate.handler.ContextHandler;
 import com.qwenmate.handler.CliModelsHandler;
 import com.qwenmate.handler.CliStatusHandler;
-import com.qwenmate.handler.DshHostHandler;
 import com.qwenmate.handler.DependencyHandler;
 import com.qwenmate.handler.DiffHandler;
 import com.qwenmate.handler.core.HandlerContext;
@@ -34,9 +33,7 @@ import com.qwenmate.handler.file.FileHandler;
 import com.qwenmate.handler.file.OpenClassHandler;
 import com.qwenmate.handler.file.UndoFileHandler;
 import com.qwenmate.permission.PermissionService;
-import com.qwenmate.provider.common.MarkerCliBridge;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
-import java.util.Map;
 import com.qwenmate.provider.common.MessageCallback;
 import com.qwenmate.provider.common.SDKResult;
 import com.qwenmate.session.SessionLifecycleManager;
@@ -76,7 +73,6 @@ public class ChatWindowDelegate {
     public interface DelegateHost {
         Project getProject();
         QwenSDKBridge getQwenSDKBridge();
-        Map<String, MarkerCliBridge> getCliBridges();
         QwenMateSession getSession();
         QwenMateSettingsService getSettingsService();
         JPanel getMainPanel();
@@ -137,28 +133,12 @@ public class ChatWindowDelegate {
         if (qwenSDKBridge != null) {
             qwenSDKBridge.setNodeExecutable(path);
         }
-        Map<String, MarkerCliBridge> cliBridges = host.getCliBridges();
-        if (cliBridges != null) {
-            for (MarkerCliBridge bridge : cliBridges.values()) {
-                if (bridge != null) {
-                    bridge.setNodeExecutable(path);
-                }
-            }
-        }
     }
 
     private void applySessionIdToBridges(String sessionId) {
         QwenSDKBridge qwenSDKBridge = host.getQwenSDKBridge();
         if (qwenSDKBridge != null) {
             qwenSDKBridge.setSessionId(sessionId);
-        }
-        Map<String, MarkerCliBridge> cliBridges = host.getCliBridges();
-        if (cliBridges != null) {
-            for (MarkerCliBridge bridge : cliBridges.values()) {
-                if (bridge != null) {
-                    bridge.setSessionId(sessionId);
-                }
-            }
         }
     }
 
@@ -219,11 +199,11 @@ public class ChatWindowDelegate {
      * Intentionally a no-op for startup.
      * <p>
      * The Claude settings.json provider sync was removed together with
-     * {@code ClaudeSettingsManager}; qwen/dsh configure auth through their own
-     * settings blocks, so there is nothing to repair on window open.
+     * {@code ClaudeSettingsManager}; qwen configures auth through its own
+     * settings block, so there is nothing to repair on window open.
      */
     public void syncActiveProvider() {
-        // TODO: re-evaluate once qwen/dsh grow an equivalent managed-settings repair pass.
+        // TODO: re-evaluate once qwen grows an equivalent managed-settings repair pass.
         LOG.info("[QwenMateToolWindow] Provider settings repair skipped (claude settings sync removed)");
     }
 
@@ -231,22 +211,6 @@ public class ChatWindowDelegate {
         Project project = host.getProject();
         QwenSDKBridge qwenSDKBridge = host.getQwenSDKBridge();
         String sessionId = qwenSDKBridge != null ? qwenSDKBridge.getSessionId() : null;
-
-        if (sessionId == null || sessionId.isEmpty()) {
-            Map<String, MarkerCliBridge> cliBridges = host.getCliBridges();
-            if (cliBridges != null) {
-                for (MarkerCliBridge bridge : cliBridges.values()) {
-                    if (bridge == null) {
-                        continue;
-                    }
-                    String candidate = bridge.getSessionId();
-                    if (candidate != null && !candidate.isEmpty()) {
-                        sessionId = candidate;
-                        break;
-                    }
-                }
-            }
-        }
 
         if (sessionId == null || sessionId.isEmpty()) {
             LOG.warn("Failed to get session ID from bridges, generating fallback UUID");
@@ -329,7 +293,6 @@ public class ChatWindowDelegate {
         messageDispatcher.registerHandler(new DependencyHandler(handlerContext));
         messageDispatcher.registerHandler(new CliModelsHandler(handlerContext));
         messageDispatcher.registerHandler(new CliStatusHandler(handlerContext));
-        messageDispatcher.registerHandler(new DshHostHandler(handlerContext));
         messageDispatcher.registerHandler(new ClipboardHandler(handlerContext));
         messageDispatcher.registerHandler(new NodeProcessHandler(handlerContext));
 

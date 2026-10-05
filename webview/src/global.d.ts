@@ -971,7 +971,7 @@ interface Window {
   __INITIAL_IDE_THEME__?: 'light' | 'dark';
 
   /**
-   * Per-tab provider id ("qwen" / "dsh") injected by Java into the HTML
+   * Per-tab provider id ("qwen") injected by Java into the HTML
    * before React boots. Used by useModelStatePersistence to override the
    * global localStorage snapshot ("model-selection-state") when the backend
    * has already restored a provider for this tab. Empty / unset means no
@@ -984,9 +984,6 @@ interface Window {
    * __INITIAL_TAB_PROVIDER__. Empty / unset means no backend preference.
    */
   __INITIAL_TAB_MODEL__?: string;
-
-  /** User-installed DSH agent preset ids discovered from the DSH home. */
-  __INITIAL_DSH_PRESETS__?: string[];
 
   /** Runtime page generation established by Java before exposing the bridge. */
   __CCG_PAGE_GENERATION__?: number;
@@ -1063,39 +1060,6 @@ interface Window {
       | {
           configuredModel?: string;
           models?: Array<{ id?: string; name?: string; provider?: string }>;
-        }
-  ) => void;
-
-  /**
-   * DSH host lifecycle status. Java pushes JSON after
-   * `get_dsh_status` / `start_dsh_host` / `stop_dsh_host` /
-   * `save_dsh_settings:<json>` via channel-manager `dsh status|ensureHost|stopHost`.
-   */
-  updateDshStatus?: (
-    dataOrStr:
-      | string
-      | {
-          success?: boolean;
-          provider?: string;
-          installed?: boolean;
-          version?: string;
-          bin?: string;
-          origin?: string;
-          hostRunning?: boolean;
-          ownership?: 'spawned' | 'adopted';
-          error?: string;
-          describe?: {
-            version?: string;
-            provider?: string;
-            model?: string;
-            attachedSessions?: number;
-          };
-          settings?: {
-            bin?: string;
-            host?: string;
-            port?: number;
-            autoStart?: boolean;
-          };
         }
   ) => void;
 }

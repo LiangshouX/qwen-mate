@@ -28,21 +28,6 @@ const buildRequest = (overrides: Partial<AskUserQuestionRequest> = {}): AskUserQ
   ...overrides,
 });
 
-describe('AskUserQuestionDialog provider label', () => {
-  it('identifies DSH requests', () => {
-    render(
-      <AskUserQuestionDialog
-        isOpen
-        request={buildRequest({ toolName: 'AskUserQuestion', provider: 'dsh' })}
-        onSubmit={() => {}}
-        onCancel={() => {}}
-      />,
-    );
-
-    expect(screen.getByText('DeepSeek Harness 有一些问题想问你')).toBeTruthy();
-  });
-});
-
 describe('AskUserQuestionDialog countdown', () => {
   beforeEach(() => {
     vi.useFakeTimers();

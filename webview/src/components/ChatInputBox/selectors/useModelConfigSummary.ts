@@ -1,8 +1,5 @@
-import { useMemo } from 'react';
 import {
-  DSH_PRESETS,
   REASONING_LEVELS,
-  getUserDshPresetOptions,
   type ModelInfo,
   type ReasoningEffort,
   type ReasoningInfo,
@@ -31,9 +28,7 @@ export const useCurrentModel = (
 };
 
 interface UseModelConfigRowsInput {
-  currentProvider: string;
   onReasoningChange?: (effort: ReasoningEffort) => void;
-  onDshPresetChange?: (preset: string) => void;
   showEffort: boolean;
 }
 
@@ -42,18 +37,14 @@ interface UseModelConfigRowsInput {
  * divider between the flat model list and those rows.
  */
 export const useModelConfigRows = ({
-  currentProvider,
   onReasoningChange,
-  onDshPresetChange,
   showEffort,
 }: UseModelConfigRowsInput) => {
   const showEffortRow = showEffort && !!onReasoningChange;
-  const showPreset = currentProvider === 'dsh' && !!onDshPresetChange;
-  const showDivider = showEffortRow || showPreset;
+  const showDivider = showEffortRow;
 
   return {
     showEffortRow,
-    showPreset,
     showDivider,
   };
 };
@@ -62,23 +53,19 @@ interface UseModelConfigSummaryInput {
   t: (key: string, options?: { defaultValue?: string }) => string;
   currentModel: ModelInfo | undefined;
   currentProvider: string;
-  dshPreset: string;
   showEffortRow: boolean;
-  showPreset: boolean;
   currentLevel: ReasoningInfo | undefined;
 }
 
 /**
  * The current-value label of each function row and the combined summary text
- * shown on the trigger (model + effort + preset).
+ * shown on the trigger (model + effort).
  */
 export const useModelConfigSummary = ({
   t,
   currentModel,
   currentProvider,
-  dshPreset,
   showEffortRow,
-  showPreset,
   currentLevel,
 }: UseModelConfigSummaryInput) => {
   const modelLabel = currentModel
@@ -88,23 +75,14 @@ export const useModelConfigSummary = ({
       })
     : '';
 
-  const dshOptions = useMemo(
-    () => [...DSH_PRESETS, ...getUserDshPresetOptions()],
-    [],
-  );
-  const currentDshPreset = dshOptions.find((preset) => preset.id === dshPreset) || dshOptions[0];
-  const dshPresetLabel = currentDshPreset?.label
-    || (currentDshPreset?.labelKey ? t(currentDshPreset.labelKey, { defaultValue: currentDshPreset.id }) : '');
   const effortLabel = currentLevel ? getReasoningLabel(t, currentLevel.id) : '';
   const summaryParts = [
     modelLabel,
     showEffortRow ? effortLabel : '',
-    showPreset && dshPreset ? dshPresetLabel : '',
   ].filter(Boolean);
   const summaryText = summaryParts.join(' ');
 
   return {
-    dshPresetLabel,
     effortLabel,
     summaryText,
   };

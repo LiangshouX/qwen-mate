@@ -25,18 +25,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 vi.mock('../../../hooks/providers/useCliModels', () => ({
-  useCliModels: (provider: string) => {
-    if (provider === 'dsh') {
-      return {
-        cliModels: [
-          { id: 'provider/model-a', label: 'Model A' },
-          { id: 'provider/model-b', label: 'Model B' },
-        ],
-        cliCatalogHasEntries: true,
-        cliModelsLoading: false,
-        cliModelsError: null,
-      };
-    }
+  useCliModels: () => {
     // Qwen catalog comes from the CLI config — no dynamic fetch.
     return {
       cliModels: [],
@@ -65,7 +54,6 @@ describe('AiFeatureProviderModelPanel', () => {
     models: { ...DEFAULT_AI_FEATURE_MODELS },
     availability: {
       qwen: true,
-      dsh: true,
     },
   };
 
@@ -95,7 +83,7 @@ describe('AiFeatureProviderModelPanel', () => {
     const onProviderChange = vi.fn();
     render(
       <AiFeatureProviderModelPanel
-        config={{ ...config, effectiveProvider: 'dsh' }}
+        config={{ ...config, effectiveProvider: 'qwen' }}
         settingsKeyPrefix="settings.commit.providerModel"
         providerKeyPrefix="settings.basic.promptEnhancer.provider"
         onProviderChange={onProviderChange}
@@ -105,7 +93,7 @@ describe('AiFeatureProviderModelPanel', () => {
     );
 
     fireEvent.click(screen.getByTestId('ai-feature-mode-manual'));
-    expect(onProviderChange).toHaveBeenCalledWith('dsh');
+    expect(onProviderChange).toHaveBeenCalledWith('qwen');
   });
 
   it('switches manual → auto via reset callback', () => {
@@ -114,8 +102,8 @@ describe('AiFeatureProviderModelPanel', () => {
       <AiFeatureProviderModelPanel
         config={{
           ...config,
-          provider: 'dsh',
-          effectiveProvider: 'dsh',
+          provider: 'qwen',
+          effectiveProvider: 'qwen',
           resolutionSource: 'manual',
         }}
         settingsKeyPrefix="settings.commit.providerModel"
@@ -134,13 +122,13 @@ describe('AiFeatureProviderModelPanel', () => {
     expect(onResetToDefault).toHaveBeenCalledTimes(1);
   });
 
-  it('lists the same 2 providers as the main chat provider selector in manual mode', () => {
+  it('lists the same providers as the main chat provider selector in manual mode', () => {
     render(
       <AiFeatureProviderModelPanel
         config={{
           ...config,
-          provider: 'dsh',
-          effectiveProvider: 'dsh',
+          provider: 'qwen',
+          effectiveProvider: 'qwen',
           resolutionSource: 'manual',
         }}
         settingsKeyPrefix="settings.basic.promptEnhancer"
@@ -155,12 +143,9 @@ describe('AiFeatureProviderModelPanel', () => {
     const providerRoot = screen.getByTestId('ai-feature-provider-select');
     fireEvent.click(within(providerRoot).getByRole('button'));
     const options = within(providerRoot).getAllByRole('option');
-    expect(options).toHaveLength(2);
+    expect(options).toHaveLength(1);
     const labels = options.map((opt) => opt.textContent ?? '');
     expect(labels.some((l) => /qwen/i.test(l))).toBe(true);
-    expect(labels.some((l) => /dsh/i.test(l))).toBe(true);
-    // Beta badge follows AVAILABLE_PROVIDERS: dsh is beta, qwen is not.
-    expect(labels.find((l) => /dsh/i.test(l))).toMatch(/Beta/);
     expect(labels.find((l) => /qwen/i.test(l))).not.toMatch(/Beta/);
   });
 
@@ -191,7 +176,6 @@ describe('AiFeatureProviderModelPanel', () => {
           resolutionSource: 'unavailable',
           availability: {
             qwen: false,
-            dsh: false,
           },
         }}
         settingsKeyPrefix="settings.basic.promptEnhancer"
@@ -209,7 +193,7 @@ describe('AiFeatureProviderModelPanel', () => {
 
     fireEvent.click(trigger);
     const options = within(providerRoot).getAllByRole('option');
-    expect(options.length).toBe(2);
+    expect(options.length).toBe(1);
     options.forEach((opt) => {
       expect((opt as HTMLButtonElement).disabled).toBe(false);
       // Availability hint is informational only — never gates selection.
@@ -217,9 +201,9 @@ describe('AiFeatureProviderModelPanel', () => {
     });
 
     fireEvent.click(within(providerRoot).getByRole('option', {
-      name: /^dsh/i,
+      name: /^qwen/i,
     }));
-    expect(onProviderChange).toHaveBeenCalledWith('dsh');
+    expect(onProviderChange).toHaveBeenCalledWith('qwen');
   });
 
   it('calls provider callback from manual mode selector', () => {
@@ -229,8 +213,8 @@ describe('AiFeatureProviderModelPanel', () => {
       <AiFeatureProviderModelPanel
         config={{
           ...config,
-          provider: 'dsh',
-          effectiveProvider: 'dsh',
+          provider: 'qwen',
+          effectiveProvider: 'qwen',
           resolutionSource: 'manual',
         }}
         settingsKeyPrefix="settings.commit.providerModel"
@@ -276,63 +260,6 @@ describe('AiFeatureProviderModelPanel', () => {
     expect(onModelChange).toHaveBeenCalledWith('qwen3-coder-flash');
   });
 
-  it('can select the beta CLI provider (dsh) in manual mode', () => {
-    const onProviderChange = vi.fn();
-    render(
-      <AiFeatureProviderModelPanel
-        config={{
-          ...config,
-          provider: 'qwen',
-          effectiveProvider: 'qwen',
-          resolutionSource: 'manual',
-        }}
-        settingsKeyPrefix="settings.basic.promptEnhancer"
-        providerKeyPrefix="settings.basic.promptEnhancer.provider"
-        onProviderChange={onProviderChange}
-        onModelChange={vi.fn()}
-        onResetToDefault={vi.fn()}
-      />
-    );
-
-    const providerRoot = screen.getByTestId('ai-feature-provider-select');
-    fireEvent.click(within(providerRoot).getByRole('button'));
-    fireEvent.click(within(providerRoot).getByRole('option', {
-      name: /^dsh/i,
-    }));
-    expect(onProviderChange).toHaveBeenCalledWith('dsh');
-  });
-
-  it('shows the DSH runtime catalog in the model select without leaking the Qwen static list', () => {
-    render(
-      <AiFeatureProviderModelPanel
-        config={{
-          ...config,
-          provider: 'dsh',
-          effectiveProvider: 'dsh',
-          resolutionSource: 'manual',
-          models: {
-            ...DEFAULT_AI_FEATURE_MODELS,
-            dsh: 'provider/model-a',
-          },
-        }}
-        settingsKeyPrefix="settings.basic.promptEnhancer"
-        providerKeyPrefix="settings.basic.promptEnhancer.provider"
-        onProviderChange={vi.fn()}
-        onModelChange={vi.fn()}
-        onResetToDefault={vi.fn()}
-      />
-    );
-
-    const modelRoot = screen.getByTestId('ai-feature-model-select');
-    fireEvent.click(within(modelRoot).getByRole('button'));
-    const options = within(modelRoot).getAllByRole('option');
-    const labels = options.map((opt) => opt.textContent ?? '');
-    expect(labels.some((l) => /Model A/i.test(l))).toBe(true);
-    expect(labels.some((l) => /Model B/i.test(l))).toBe(true);
-    // The Qwen built-in catalog must not surface for dsh.
-    expect(labels.some((l) => /Qwen3/i.test(l))).toBe(false);
-  });
-
   it('shows unavailable summary in auto mode when no provider is effective', () => {
     render(
       <AiFeatureProviderModelPanel
@@ -343,7 +270,6 @@ describe('AiFeatureProviderModelPanel', () => {
           resolutionSource: 'unavailable',
           availability: {
             qwen: false,
-            dsh: false,
           },
         }}
         settingsKeyPrefix="settings.basic.promptEnhancer"

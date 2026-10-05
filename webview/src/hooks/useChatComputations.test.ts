@@ -34,26 +34,7 @@ describe('deriveTodosForTurn', () => {
     ];
 
     const latestTurn = sliceLatestConversationTurn(messages);
-    expect(deriveTodosForTurn(latestTurn, getContentBlocks, true, 'dsh')).toEqual([]);
-  });
-
-  it('does not revive an earlier Codex plan after a later turn settles', () => {
-    const messages = [
-      user('previous request'),
-      assistant([
-        toolUse('plan-1', 'update_plan', {
-          plan: [
-            { step: 'Inspect existing UI', status: 'in_progress' },
-            { step: 'Implement page', status: 'pending' },
-            { step: 'Verify integration', status: 'pending' },
-          ],
-        }),
-      ]),
-      user('follow-up request without a plan'),
-      assistant([]),
-    ];
-
-    expect(deriveTodosForTurn(messages, getContentBlocks, false, 'dsh')).toEqual([]);
+    expect(deriveTodosForTurn(latestTurn, getContentBlocks, true, 'qwen')).toEqual([]);
   });
 
   it('shows the latest plan created in the current turn', () => {
@@ -73,7 +54,7 @@ describe('deriveTodosForTurn', () => {
     ];
 
     const latestTurn = sliceLatestConversationTurn(messages);
-    expect(deriveTodosForTurn(latestTurn, getContentBlocks, true, 'dsh')).toEqual([
+    expect(deriveTodosForTurn(latestTurn, getContentBlocks, true, 'qwen')).toEqual([
       { content: 'First', status: 'in_progress' },
       { content: 'Second', status: 'pending' },
       { content: 'Third', status: 'pending' },
@@ -121,38 +102,6 @@ describe('deriveTodosForTurn', () => {
       { content: 'Kept step', status: 'completed' },
       { content: 'In-flight step', status: 'completed' },
     ]);
-  });
-
-  it('preserves Codex in-progress plan state after streaming settles', () => {
-    const messages = [
-      user('implement the fix'),
-      assistant([toolUse('plan-1', 'update_plan', {
-        plan: [
-          { step: 'Inspect', status: 'completed' },
-          { step: 'Implement', status: 'in_progress' },
-        ],
-      })]),
-    ];
-
-    expect(deriveTodosForTurn(messages, getContentBlocks, false, 'dsh')).toEqual([
-      { content: 'Inspect', status: 'completed' },
-      { content: 'Implement', status: 'in_progress' },
-    ]);
-  });
-
-  it.each([
-    ['update_plan', { plan: [] }],
-    ['TodoWrite', { todos: [] }],
-  ])('treats a Codex empty %s snapshot as clearing the previous plan', (name, input) => {
-    const messages = [
-      user('implement the fix'),
-      assistant([toolUse('plan-1', 'update_plan', {
-        plan: [{ step: 'Old step', status: 'in_progress' }],
-      })]),
-      assistant([toolUse('plan-2', name, input)]),
-    ];
-
-    expect(deriveTodosForTurn(messages, getContentBlocks, false, 'dsh')).toEqual([]);
   });
 
   it('lets Claude structured tasks survive an empty TodoWrite snapshot', () => {

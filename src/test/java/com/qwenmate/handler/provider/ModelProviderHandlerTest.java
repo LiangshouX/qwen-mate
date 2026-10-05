@@ -99,7 +99,7 @@ public class ModelProviderHandlerTest {
         Files.writeString(config, """
                 {
                   "customModelContextWindows": {
-                    "dsh": {
+                    "custom-provider": {
                       "custom-model": 750000
                     }
                   }
@@ -110,10 +110,10 @@ public class ModelProviderHandlerTest {
         );
 
         try {
-            assertEquals(750_000, ModelProviderHandler.getModelContextLimit("dsh", "custom-model"));
-            assertEquals(1_000_000, ModelProviderHandler.getModelContextLimit("dsh", "custom-model[1m]"));
-            assertEquals(500_000, ModelProviderHandler.getModelContextLimit("dsh", "legacy-model[500k]"));
-            assertEquals(200_000, ModelProviderHandler.getModelContextLimit("dsh", "unknown-model"));
+            assertEquals(750_000, ModelProviderHandler.getModelContextLimit("custom-provider", "custom-model"));
+            assertEquals(1_000_000, ModelProviderHandler.getModelContextLimit("custom-provider", "custom-model[1m]"));
+            assertEquals(500_000, ModelProviderHandler.getModelContextLimit("custom-provider", "legacy-model[500k]"));
+            assertEquals(200_000, ModelProviderHandler.getModelContextLimit("custom-provider", "unknown-model"));
         } finally {
             CustomModelContextWindowProvider.setInstanceForTests(null);
         }
@@ -148,10 +148,10 @@ public class ModelProviderHandlerTest {
      */
     @Test
     public void shouldDetectOnlyActualProviderSwitches() {
-        assertTrue(ModelProviderHandler.isActualProviderSwitch("qwen", "dsh"));
-        assertFalse(ModelProviderHandler.isActualProviderSwitch("dsh", "dsh"));
-        assertFalse(ModelProviderHandler.isActualProviderSwitch(null, "dsh"));
-        assertFalse(ModelProviderHandler.isActualProviderSwitch("", "dsh"));
+        assertTrue(ModelProviderHandler.isActualProviderSwitch("qwen", "custom-provider"));
+        assertFalse(ModelProviderHandler.isActualProviderSwitch("custom-provider", "custom-provider"));
+        assertFalse(ModelProviderHandler.isActualProviderSwitch(null, "custom-provider"));
+        assertFalse(ModelProviderHandler.isActualProviderSwitch("", "custom-provider"));
     }
 
     /**
@@ -173,7 +173,7 @@ public class ModelProviderHandlerTest {
     @Test
     public void handleSetModelPreservesUsageWhenRestoredSessionAlreadyOwnsModel() {
         HandlerContext context = createHandlerContext();
-        QwenMateSession session = new QwenMateSession(null, null, null);
+        QwenMateSession session = new QwenMateSession(null, null);
         session.setProvider("qwen");
         session.setModel("qwen3-coder-plus");
         JsonObject raw = new JsonObject();

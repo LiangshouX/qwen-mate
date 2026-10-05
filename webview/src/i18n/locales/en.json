@@ -216,8 +216,7 @@
         "providerAvailable": "Available",
         "providerUnavailable": "Currently unavailable",
         "provider": {
-          "qwen": "Qwen Code",
-          "dsh": "DeepSeek Harness"
+          "qwen": "Qwen Code"
         },
         "currentProviderAuto": "Currently using automatic selection: {{provider}}",
         "currentProviderManual": "Currently using manually selected provider: {{provider}}",
@@ -380,10 +379,6 @@
         "qwen": {
           "name": "Qwen Code",
           "description": "Alibaba Qwen terminal coding agent"
-        },
-        "dsh": {
-          "name": "DeepSeek Harness",
-          "description": "DeepSeek terminal agent CLI (dsh)"
         }
       },
       "installDialog": {
@@ -405,26 +400,6 @@
       "visibility": {
         "hide": "Hide in provider switcher",
         "show": "Show in provider switcher"
-      },
-      "dsh": {
-        "groupTitle": "DeepSeek Harness",
-        "cliRowTitle": "CLI install",
-        "cardTitle": "Local host",
-        "rowHint": "Start or adopt the local dsh web host",
-        "hint": "One persistent local dsh web host serves all sessions; the plugin adopts a running host instead of spawning a second one.",
-        "state": {
-          "checking": "Checking…",
-          "notInstalled": "Not installed",
-          "notRunning": "Not running",
-          "connected": "Connected"
-        },
-        "adopted": "adopted",
-        "adoptedHint": "Adopted an already-running host; it is never stopped by the plugin.",
-        "openWebUi": "Open DSH Web UI",
-        "startHost": "Start host",
-        "stopHost": "Stop host (plugin-spawned only)",
-        "autoStart": "Auto-start when needed",
-        "moreActions": "More"
       }
     },
     "pluginModels": {
@@ -861,7 +836,6 @@
     "expand": "Expand",
     "collapse": "Collapse",
     "clickToAnswer": "Click to answer",
-    "dshTitle": "DeepSeek Harness has some questions for you",
     "invalidFormat": "Unsupported question data format. Please cancel and retry.",
     "loading": "Loading questions...",
     "planDetail": "Plan details"
@@ -1425,9 +1399,6 @@
       "title": "Beta Feature",
       "message": "This feature is still in Beta. If you encounter any bugs, please report them to the author promptly."
     },
-    "dsh": {
-      "label": "DeepSeek Harness"
-    },
     "manageCli": "CLI Settings"
   },
   "promptEnhancer": {
@@ -1564,32 +1535,6 @@
     "uploadedAttachments": "Uploaded attachment(s)",
     "emptyMessage": "Empty message",
     "attachment": "Attachment"
-  },
-  "dshPresets": {
-    "title": "Select DeepSeek Harness agent preset",
-    "none": {
-      "label": "Default",
-      "description": "dsh default headless composition (full toolset)"
-    },
-    "standard": {
-      "label": "Standard",
-      "description": "Full coding agent with the standard toolset"
-    },
-    "code": {
-      "label": "PTC",
-      "description": "Standard capabilities with Code Mode"
-    },
-    "minimal": {
-      "label": "Minimal",
-      "description": "Bash and str_replace_editor only"
-    },
-    "cordis": {
-      "label": "Creator",
-      "description": "Standard capabilities plus composition authoring"
-    },
-    "user": {
-      "description": "Custom preset installed under the DSH home"
-    }
   },
   "error": {
     "providerNotConfigured": "Provider Not Configured",

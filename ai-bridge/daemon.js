@@ -28,7 +28,6 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { createInterface } from 'readline';
 import { handleQwenCommand } from './channels/qwen-channel.js';
-import { handleDshCommand } from './channels/dsh-channel.js';
 import { loadQwenSdk, isQwenSdkAvailable } from './utils/sdk-loader.js';
 import {
   sendMessagePersistent as qwenSendPersistent,
@@ -358,17 +357,12 @@ async function preloadSdks() {
 // Request Processing
 // =============================================================================
 
-// dsh turns run stateless against an external `dsh web` host; there is no
-// persistent in-daemon runtime to report for it.
-const DSH_RUNTIME_SNAPSHOT = { external: true };
-
 /**
- * Runtime snapshot for heartbeat / status responses (qwen + dsh only).
+ * Runtime snapshot for heartbeat / status responses (qwen only).
  */
 function getRuntimeSnapshots() {
   return {
     qwen: getQwenRuntimeSnapshot(),
-    dsh: DSH_RUNTIME_SNAPSHOT,
   };
 }
 
@@ -487,9 +481,6 @@ async function processRequest(request) {
       switch (provider) {
         case 'qwen':
           await handleQwenCommand(command, [], stdinData);
-          break;
-        case 'dsh':
-          await handleDshCommand(command, [], stdinData);
           break;
         default:
           throw new Error(`Unknown provider: ${provider}`);

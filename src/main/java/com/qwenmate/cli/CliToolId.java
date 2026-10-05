@@ -4,8 +4,7 @@ package com.qwenmate.cli;
  * Supported headless CLI tools shown in Settings → Provider Management → CLI.
  */
 public enum CliToolId {
-    QWEN("qwen", "Qwen Code", "qwen", null),
-    DSH("dsh", "DeepSeek Harness", "dsh", null);
+    QWEN("qwen", "Qwen Code", "qwen", null);
 
     private final String id;
     private final String displayName;

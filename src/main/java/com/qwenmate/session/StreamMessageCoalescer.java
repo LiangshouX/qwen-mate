@@ -934,8 +934,8 @@ public class StreamMessageCoalescer {
             return false;
         }
         String provider = context.getCurrentProvider();
-        // Qwen streams deltas through the daemon channel; the CLI providers (dsh)
-        // keep the full-content reconciliation path they always used.
+        // Qwen streams deltas through the daemon channel; providers without a
+        // delta channel keep the full-content reconciliation path.
         return "qwen".equals(provider);
     }
 

@@ -11,7 +11,7 @@ public class QwenMateChatWindowSessionPreferencesTest {
     @Test
     public void shouldCopyProviderPreferencesWithoutConversationState() {
         SessionState source = new SessionState();
-        source.setProvider("dsh");
+        source.setProvider("alt");
         source.setModel("gpt-5.6-sol");
         source.setPermissionMode("plan");
         source.setReasoningEffort("xhigh");
@@ -24,7 +24,7 @@ public class QwenMateChatWindowSessionPreferencesTest {
 
         QwenMateChatWindow.copySessionPreferences(source, target);
 
-        assertEquals("dsh", target.getProvider());
+        assertEquals("alt", target.getProvider());
         assertEquals("gpt-5.6-sol", target.getModel());
         assertEquals("plan", target.getPermissionMode());
         assertEquals("xhigh", target.getReasoningEffort());
@@ -35,7 +35,7 @@ public class QwenMateChatWindowSessionPreferencesTest {
     @Test
     public void shouldClearOptionalPreferencesWhenSourceUsesDefaults() {
         SessionState source = new SessionState();
-        source.setProvider("dsh");
+        source.setProvider("alt");
         source.setModel(null);
         source.setReasoningEffort(null);
 

@@ -10,12 +10,11 @@
 
 ---
 
-为 **Qwen Code**（官方 TypeScript SDK 驱动）与 **DeepSeek Harness**（Beta）提供可视化界面的 JetBrains IDE 插件，让 AI 辅助编程更高效直观。
+为 **Qwen Code**（官方 TypeScript SDK 驱动）提供可视化界面的 JetBrains IDE 插件，让 AI 辅助编程更高效直观。
 
 ## 支持的引擎
 
 - **Qwen Code** —— 通义千问 AI 编程助手（官方 TypeScript SDK，支持 qwen3-coder 等多模型）
-- **DeepSeek Harness**（Beta）
 
 ## 核心功能
 

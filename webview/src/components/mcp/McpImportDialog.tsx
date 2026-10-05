@@ -4,7 +4,7 @@ import type { McpImportPreviewResponse, McpServer } from '../../types/mcp';
 import { sendToJava } from '../../utils/bridge';
 
 interface McpImportDialogProps {
-  currentProvider?: 'qwen' | 'dsh' | string;
+  currentProvider?: string;
   existingIds?: string[];
   onClose: () => void;
   onImport: (servers: McpServer[]) => void;
@@ -37,9 +37,8 @@ function uniqueId(baseId: string, taken: Set<string>): string {
  */
 const EMPTY_EXISTING_IDS: string[] = [];
 
-export function McpImportDialog({ currentProvider = 'qwen', existingIds = EMPTY_EXISTING_IDS, onClose, onImport }: McpImportDialogProps) {
+export function McpImportDialog({ existingIds = EMPTY_EXISTING_IDS, onClose, onImport }: McpImportDialogProps) {
   const { t } = useTranslation();
-  const isCodexMode = currentProvider === 'dsh';
   const [jsonContent, setJsonContent] = useState('');
   const [preview, setPreview] = useState<PreviewItem[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -94,8 +93,8 @@ export function McpImportDialog({ currentProvider = 'qwen', existingIds = EMPTY_
     }
     setLoading(true);
     setError(null);
-    sendToJava('parse_copilot_mcp_config', { json: jsonContent, isCodexMode });
-  }, [jsonContent, isCodexMode]);
+    sendToJava('parse_copilot_mcp_config', { json: jsonContent, isCodexMode: false });
+  }, [jsonContent]);
 
   const handleContentChange = (value: string) => {
     setJsonContent(value);

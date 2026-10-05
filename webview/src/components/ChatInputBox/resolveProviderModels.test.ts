@@ -6,31 +6,6 @@ const t = (key: string, options?: { defaultValue?: string } & Record<string, unk
   String(options?.defaultValue ?? key);
 
 describe('resolveProviderModels', () => {
-  it('returns the DSH runtime catalog for dsh', () => {
-    const catalog = [
-      { id: 'provider/model-a', label: 'Model A', description: 'provider/model-a' },
-      { id: 'auto', label: 'DSH Auto' },
-    ];
-    expect(
-      resolveProviderModels({
-        provider: 'dsh',
-        cliModels: catalog,
-        cliCatalogHasEntries: true,
-      }),
-    ).toEqual(catalog);
-  });
-
-  it('returns the static DSH fallback list when the catalog is empty', () => {
-    const fallback = [{ id: 'auto', label: 'DSH Auto' }];
-    expect(
-      resolveProviderModels({
-        provider: 'dsh',
-        cliModels: fallback,
-        cliCatalogHasEntries: false,
-      }),
-    ).toEqual(fallback);
-  });
-
   it('ignores cliModels for qwen — its catalog comes from the CLI config and customs', () => {
     const result = resolveProviderModels({
       provider: 'qwen',

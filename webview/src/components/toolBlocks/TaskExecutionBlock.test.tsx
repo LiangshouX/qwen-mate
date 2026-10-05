@@ -391,7 +391,7 @@ describe('TaskExecutionBlock polling', () => {
   });
 
   it('loads Codex spawn_agent history with provider and task path', () => {
-    mockUseSessionProvider.mockReturnValue('dsh');
+    mockUseSessionProvider.mockReturnValue('qwen');
     const result = {
       type: 'tool_result',
       tool_use_id: 'call-1',
@@ -413,7 +413,7 @@ describe('TaskExecutionBlock polling', () => {
       'load_subagent_session',
       JSON.stringify({
         sessionId: 'session-1',
-        provider: 'dsh',
+        provider: 'qwen',
         agentPath: '/root/reviewer',
         toolUseId: 'call-1',
       }),
@@ -422,7 +422,7 @@ describe('TaskExecutionBlock polling', () => {
   });
 
   it('uses task identity without rendering Codex spawn_agent message content', () => {
-    mockUseSessionProvider.mockReturnValue('dsh');
+    mockUseSessionProvider.mockReturnValue('qwen');
     const opaqueMessage = 'gAAAAABopaque-transport-content';
 
     const { container } = render(
@@ -439,7 +439,7 @@ describe('TaskExecutionBlock polling', () => {
   });
 
   it('loads full details when only a lightweight status snapshot exists', () => {
-    mockUseSessionProvider.mockReturnValue('dsh');
+    mockUseSessionProvider.mockReturnValue('qwen');
     mockHistories = { 'call-status': { success: true, status: 'running' } };
 
     const { container } = render(

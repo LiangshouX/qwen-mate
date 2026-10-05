@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Delay before switching an already-open fly-out. The effort fly-out sits
- * beside its row, so the pointer may cross the 1M context / speed / preset
- * rows on the way; without a grace period those rows steal the submenu.
+ * beside its row, so the pointer may cross the 1M context / speed rows on
+ * the way; without a grace period those rows steal the submenu.
  */
 export const SUBMENU_HOVER_DELAY_MS = 200;
 /**
@@ -13,7 +13,7 @@ export const SUBMENU_HOVER_DELAY_MS = 200;
  */
 export const SUBMENU_TRIGGER_DELAY_MS = 500;
 
-export type ActiveSubmenu = 'none' | 'effort' | 'speed' | 'preset';
+export type ActiveSubmenu = 'none' | 'effort' | 'speed';
 
 /**
  * Hover state machine behind the model-config fly-out submenus: which
@@ -30,7 +30,6 @@ export const useModelConfigSubmenu = () => {
   const hoverTimerRef = useRef<number | undefined>(undefined);
   const effortTriggerRef = useRef<HTMLDivElement>(null);
   const speedTriggerRef = useRef<HTMLDivElement>(null);
-  const presetTriggerRef = useRef<HTMLDivElement>(null);
 
   const clearHoverTimer = useCallback(() => {
     if (hoverTimerRef.current !== undefined) {
@@ -62,7 +61,6 @@ export const useModelConfigSubmenu = () => {
   }, [clearHoverTimer]);
 
   const triggerRefFor = (submenu: ActiveSubmenu) => {
-    if (submenu === 'preset') return presetTriggerRef.current;
     if (submenu === 'effort') return effortTriggerRef.current;
     if (submenu === 'speed') return speedTriggerRef.current;
     return null;
@@ -93,7 +91,6 @@ export const useModelConfigSubmenu = () => {
     activeSubmenu,
     effortTriggerRef,
     speedTriggerRef,
-    presetTriggerRef,
     openSubmenu,
     scheduleSubmenu,
     retainActiveSubmenu,

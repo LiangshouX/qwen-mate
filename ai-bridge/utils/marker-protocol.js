@@ -1,5 +1,5 @@
 /**
- * Shared bridge marker protocol used by the Qwen / DSH channels.
+ * Shared bridge marker protocol used by the Qwen channel.
  * Java MarkerCliBridge parses these lines into MessageCallback events.
  */
 

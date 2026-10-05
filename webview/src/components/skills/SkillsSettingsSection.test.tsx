@@ -22,24 +22,23 @@ describe('SkillsSettingsSection', () => {
     vi.useRealTimers();
   });
 
-  it('correlates Codex toggle responses by the stable skill id', () => {
-    const skillId = 'user:C:/skills/review';
-    render(<SkillsSettingsSection currentProvider="dsh" />);
+  it('correlates toggle responses by the stable skill id', () => {
+    const skillId = 'global:C:/skills/review';
+    render(<SkillsSettingsSection currentProvider="qwen" />);
 
     act(() => {
       window.updateSkills?.(JSON.stringify({
-        user: {
+        global: {
           [skillId]: {
             id: skillId,
             name: 'review',
             type: 'directory',
-            scope: 'user',
+            scope: 'global',
             path: 'C:/skills/review',
-            skillPath: 'C:/skills/review/SKILL.md',
             enabled: true,
           },
         },
-        repo: {},
+        local: {},
       }));
     });
 
@@ -51,9 +50,8 @@ describe('SkillsSettingsSection', () => {
       id: skillId,
       requestId: expect.any(String),
       name: 'review',
-      scope: 'user',
+      scope: 'global',
       enabled: true,
-      skillPath: 'C:/skills/review/SKILL.md',
     });
 
     act(() => {
@@ -72,23 +70,22 @@ describe('SkillsSettingsSection', () => {
 
   it('ignores a late response after a timed-out toggle is retried', () => {
     vi.useFakeTimers();
-    const skillId = 'user:C:/skills/review';
-    render(<SkillsSettingsSection currentProvider="dsh" />);
+    const skillId = 'global:C:/skills/review';
+    render(<SkillsSettingsSection currentProvider="qwen" />);
 
     act(() => {
       window.updateSkills?.(JSON.stringify({
-        user: {
+        global: {
           [skillId]: {
             id: skillId,
             name: 'review',
             type: 'directory',
-            scope: 'user',
+            scope: 'global',
             path: 'C:/skills/review',
-            skillPath: 'C:/skills/review/SKILL.md',
             enabled: true,
           },
         },
-        repo: {},
+        local: {},
       }));
     });
 

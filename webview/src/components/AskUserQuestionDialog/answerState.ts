@@ -98,7 +98,7 @@ export const formatAnswers = (
     // A typed custom answer always travels with the answer, whether or not the
     // "Other" row still carries the marker (a restored draft can disagree).
     // Single-select questions carry exactly one value, and the custom answer
-    // wins there — the same precedence the DSH answer encoding expects, where
+    // wins there — the same precedence the host answer encoding expects, where
     // `custom` overrides the selected choice.
     if (customText) {
       formattedAnswers[q.question] = q.multiSelect ? [...selectedLabels, customText] : customText;

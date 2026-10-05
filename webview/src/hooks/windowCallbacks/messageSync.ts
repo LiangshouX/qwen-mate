@@ -7,21 +7,18 @@
  */
 
 import type { MutableRefObject } from 'react';
-import type { QwenMateContentOrResultBlock, QwenMateMessage, QwenMateRawMessage } from '../../types';
+import type { QwenMateMessage, QwenMateRawMessage } from '../../types';
 
 /** Time window (ms) for matching optimistic messages with backend messages. */
 export const OPTIMISTIC_MESSAGE_TIME_WINDOW = 5000;
 
 export const getStreamEndHandlingMode = (
-  provider: string,
+  _provider: string,
   isStreaming: boolean,
   currentTurnId: number,
-): 'full' | 'minimal' | 'skip' => {
+): 'full' | 'skip' => {
   if (isStreaming || currentTurnId > 0) {
     return 'full';
-  }
-  if (provider === 'dsh') {
-    return 'minimal';
   }
   return 'skip';
 };
@@ -687,93 +684,16 @@ export const preserveStreamingAssistantContent = (
   return copy;
 };
 
-const getMessageContentArray = (message: QwenMateMessage): QwenMateContentOrResultBlock[] => {
-  const raw = message.raw;
-  if (!raw || typeof raw !== 'object') return [];
-
-  const content = Array.isArray(raw.message?.content)
-    ? raw.message.content
-    : Array.isArray(raw.content)
-      ? raw.content
-      : [];
-
-  return content.filter((entry): entry is QwenMateContentOrResultBlock => Boolean(entry) && typeof entry === 'object');
-};
-
-const getToolEventKey = (block: QwenMateContentOrResultBlock): string | null => {
-  if (block.type === 'tool_use' && typeof block.id === 'string' && block.id) {
-    return `tool_use:${block.id}`;
-  }
-  if (block.type === 'tool_result' && typeof block.tool_use_id === 'string' && block.tool_use_id) {
-    return `tool_result:${block.tool_use_id}`;
-  }
-  return null;
-};
-
-const getMessageToolEventKeys = (message: QwenMateMessage): string[] => {
-  const keys = new Set<string>();
-  for (const block of getMessageContentArray(message)) {
-    const key = getToolEventKey(block);
-    if (key) {
-      keys.add(key);
-    }
-  }
-  return [...keys];
-};
-
-const isToolOnlyMessage = (message: QwenMateMessage): boolean => {
-  if (typeof message.content === 'string' && message.content.trim()) {
-    return false;
-  }
-  const blocks = getMessageContentArray(message);
-  return blocks.length > 0 && blocks.every((block) => block.type === 'tool_use' || block.type === 'tool_result');
-};
-
+/**
+ * Historically stripped duplicated trailing tool-only messages for a retired
+ * harness provider. With that provider removed the Qwen behavior stands: the
+ * list passes through unchanged.
+ */
 export const stripDuplicateTrailingToolMessages = (
   nextList: QwenMateMessage[],
-  provider: string,
+  _provider: string,
 ): QwenMateMessage[] => {
-  if (provider !== 'dsh') return nextList;
-  if (nextList.length === 0) return nextList;
-
-  // Pre-compute keys per message once, then use a reference-count map so we
-  // can walk backwards from the tail in O(n) total instead of rebuilding a
-  // Set on every iteration.
-  const allKeys = nextList.map((msg) => getMessageToolEventKeys(msg));
-  const keyCounts = new Map<string, number>();
-  for (const keys of allKeys) {
-    for (const key of keys) {
-      keyCounts.set(key, (keyCounts.get(key) ?? 0) + 1);
-    }
-  }
-
-  let endIndex = nextList.length;
-  while (endIndex > 0) {
-    const lastMessage = nextList[endIndex - 1];
-    if (!isToolOnlyMessage(lastMessage)) break;
-
-    const candidateKeys = allKeys[endIndex - 1];
-    if (candidateKeys.length === 0) break;
-
-    // A key is duplicated if it appears more than once across all remaining messages.
-    if (!candidateKeys.every((key) => (keyCounts.get(key) ?? 0) > 1)) {
-      break;
-    }
-
-    // Decrement counts for the removed message's keys.
-    for (const key of candidateKeys) {
-      const count = keyCounts.get(key) ?? 0;
-      if (count <= 1) {
-        keyCounts.delete(key);
-      } else {
-        keyCounts.set(key, count - 1);
-      }
-    }
-
-    endIndex--;
-  }
-
-  return endIndex === nextList.length ? nextList : nextList.slice(0, endIndex);
+  return nextList;
 };
 
 /**
@@ -788,7 +708,7 @@ export const stripDuplicateTrailingToolMessages = (
 export const preserveLatestMessagesOnShrink = (
   prevList: QwenMateMessage[],
   nextList: QwenMateMessage[],
-  provider: string,
+  _provider: string,
 ): QwenMateMessage[] => {
   // Always check for shrink regardless of provider
   if (nextList.length >= prevList.length) return nextList;
@@ -801,9 +721,8 @@ export const preserveLatestMessagesOnShrink = (
   const hasStreamingTail = preservedTail.some((msg) => msg.type === 'assistant' && (msg.isStreaming || !!msg.__turnId));
   const hasUserTail = preservedTail.some((msg) => msg.type === 'user');
 
-  // Codex: always preserve shrink tail (handles compaction/summarization)
-  // Other providers: only preserve if tail contains streaming/recent messages
-  if (provider !== 'dsh' && !hasStreamingTail && !hasUserTail) {
+  // Only preserve if the tail contains streaming/recent messages.
+  if (!hasStreamingTail && !hasUserTail) {
     return nextList;
   }
 

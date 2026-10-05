@@ -5,7 +5,6 @@ import com.intellij.openapi.diagnostic.Logger;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -162,35 +161,16 @@ public class HtmlLoader {
      * @param html the static HTML document.
      * @param provider the restored provider, or {@code null}.
      * @param model the restored model, or {@code null}.
-     * @param presetIds locally available DSH preset IDs.
      * @return the HTML with all page-start state injected.
      */
     public String injectInitialPageState(
             String html,
             String provider,
-            String model,
-            List<String> presetIds
+            String model
     ) {
         try {
             String safeProvider = escapeForSingleQuotedJs(provider == null ? "" : provider);
             String safeModel = escapeForSingleQuotedJs(model == null ? "" : model);
-            StringBuilder presetValues = new StringBuilder("[");
-            if (presetIds != null) {
-                boolean first = true;
-                for (String presetId : presetIds) {
-                    if (presetId == null || presetId.isBlank()) {
-                        continue;
-                    }
-                    if (!first) {
-                        presetValues.append(',');
-                    }
-                    presetValues.append('\'')
-                            .append(escapeForSingleQuotedJs(presetId.trim()))
-                            .append('\'');
-                    first = false;
-                }
-            }
-            presetValues.append(']');
 
             String scriptInjection = "\n    <script>"
                     + "window.__CCG_PAGE_GENERATION__ = undefined;"
@@ -199,8 +179,6 @@ public class HtmlLoader {
                     + "window.__CCGUI_RECOVERY_RELOAD__ = undefined;"
                     + "window.__CCGUI_RECOVERY_STATE_APPLIED__ = false;"
                     + "</script>"
-                    + "\n    <script>window.__INITIAL_DSH_PRESETS__ = "
-                    + presetValues + ";</script>"
                     + "\n    <script>"
                     + "window.__INITIAL_TAB_PROVIDER__ = '" + safeProvider + "';"
                     + "window.__INITIAL_TAB_MODEL__ = '" + safeModel + "';"

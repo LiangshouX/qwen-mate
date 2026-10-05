@@ -24,7 +24,7 @@ public class QwenMateSettingsServiceCommitAiConfigTest {
     }
 
     @Test
-    public void shouldDefaultToQwenDshModelsWithAutoResolution() throws Exception {
+    public void shouldDefaultToQwenModelWithAutoResolution() throws Exception {
         Path tempHome = Files.createTempDirectory("commit-ai-default-home");
         useTemporaryHomeDirectory(tempHome);
 
@@ -35,9 +35,7 @@ public class QwenMateSettingsServiceCommitAiConfigTest {
         assertTrue(config.get("provider").isJsonNull());
         // Empty model id = follow the Qwen CLI config
         assertEquals("", config.getAsJsonObject("models").get("qwen").getAsString());
-        assertEquals("auto", config.getAsJsonObject("models").get("dsh").getAsString());
         assertTrue(config.getAsJsonObject("availability").has("qwen"));
-        assertTrue(config.getAsJsonObject("availability").has("dsh"));
         assertAutoResolution(config, null);
     }
 
@@ -49,10 +47,9 @@ public class QwenMateSettingsServiceCommitAiConfigTest {
         QwenMateSettingsService service = new QwenMateSettingsService();
 
         // Preferred provider is followed when its CLI is available, otherwise
-        // resolution falls back to Qwen -> DSH (availability depends on the machine).
+        // resolution falls back to Qwen (availability depends on the machine).
         assertAutoResolution(service.getCommitAiConfig("qwen"), "qwen");
-        assertAutoResolution(service.getCommitAiConfig("dsh"), "dsh");
-        // Unknown preferred provider is ignored -> plain Qwen -> DSH fallback.
+        // Unknown preferred provider is ignored -> plain Qwen fallback.
         assertAutoResolution(service.getCommitAiConfig("grok"), null);
     }
 
@@ -65,17 +62,15 @@ public class QwenMateSettingsServiceCommitAiConfigTest {
 
         JsonObject models = new JsonObject();
         models.addProperty("qwen", "custom-qwen-model");
-        models.addProperty("dsh", "custom-dsh-model");
-        service.setCommitAiConfig("dsh", models);
+        service.setCommitAiConfig("qwen", models);
 
         JsonObject config = service.getCommitAiConfig();
 
-        assertEquals("dsh", config.get("provider").getAsString());
+        assertEquals("qwen", config.get("provider").getAsString());
         assertEquals("custom-qwen-model", config.getAsJsonObject("models").get("qwen").getAsString());
-        assertEquals("custom-dsh-model", config.getAsJsonObject("models").get("dsh").getAsString());
-        if (config.getAsJsonObject("availability").get("dsh").getAsBoolean()) {
+        if (config.getAsJsonObject("availability").get("qwen").getAsBoolean()) {
             assertEquals("manual", config.get("resolutionSource").getAsString());
-            assertEquals("dsh", config.get("effectiveProvider").getAsString());
+            assertEquals("qwen", config.get("effectiveProvider").getAsString());
         } else {
             // Manual provider kept even when its CLI is not installed
             assertEquals("unavailable", config.get("resolutionSource").getAsString());
@@ -92,29 +87,25 @@ public class QwenMateSettingsServiceCommitAiConfigTest {
 
         JsonObject enhancerModels = new JsonObject();
         enhancerModels.addProperty("qwen", "enhancer-qwen-model");
-        enhancerModels.addProperty("dsh", "enhancer-dsh-model");
         service.setPromptEnhancerConfig("qwen", enhancerModels);
 
         JsonObject commitModels = new JsonObject();
         commitModels.addProperty("qwen", "commit-qwen-model");
-        commitModels.addProperty("dsh", "commit-dsh-model");
-        service.setCommitAiConfig("dsh", commitModels);
+        service.setCommitAiConfig("qwen", commitModels);
 
         JsonObject promptEnhancerConfig = service.getPromptEnhancerConfig();
         JsonObject commitAiConfig = service.getCommitAiConfig();
 
         assertEquals("qwen", promptEnhancerConfig.get("provider").getAsString());
         assertEquals("enhancer-qwen-model", promptEnhancerConfig.getAsJsonObject("models").get("qwen").getAsString());
-        assertEquals("enhancer-dsh-model", promptEnhancerConfig.getAsJsonObject("models").get("dsh").getAsString());
 
-        assertEquals("dsh", commitAiConfig.get("provider").getAsString());
+        assertEquals("qwen", commitAiConfig.get("provider").getAsString());
         assertEquals("commit-qwen-model", commitAiConfig.getAsJsonObject("models").get("qwen").getAsString());
-        assertEquals("commit-dsh-model", commitAiConfig.getAsJsonObject("models").get("dsh").getAsString());
     }
 
     /**
      * Asserts auto-mode resolution against the availability map reported in the
-     * same response: preferred provider when available, otherwise Qwen -> DSH.
+     * same response: preferred provider when available, otherwise Qwen.
      * Machine-dependent CLI availability is read from the response itself.
      */
     private static void assertAutoResolution(JsonObject config, String preferredProvider) {
@@ -126,8 +117,6 @@ public class QwenMateSettingsServiceCommitAiConfigTest {
             expected = preferredProvider;
         } else if (availability.get("qwen").getAsBoolean()) {
             expected = "qwen";
-        } else if (availability.get("dsh").getAsBoolean()) {
-            expected = "dsh";
         }
 
         if (expected == null) {

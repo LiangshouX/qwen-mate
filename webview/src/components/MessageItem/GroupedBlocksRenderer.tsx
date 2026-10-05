@@ -21,7 +21,6 @@ import type { GroupedBlock } from './groupBlocks';
 /** Map provider id to a human-readable label used in UI text. */
 function getProviderDisplayName(providerId?: string): string {
   if (providerId === 'qwen') return 'Qwen';
-  if (providerId === 'dsh') return 'DSH';
   if (providerId) return providerId.charAt(0).toUpperCase() + providerId.slice(1);
   return 'Qwen';
 }

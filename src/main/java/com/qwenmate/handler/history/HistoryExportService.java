@@ -3,7 +3,6 @@ package com.qwenmate.handler.history;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.core.HandlerContext;
 
-import com.qwenmate.provider.dsh.DshHistoryReader;
 import com.qwenmate.provider.qwen.QwenHistoryReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -65,7 +64,7 @@ class HistoryExportService {
                 LOG.info("[HistoryHandler] ProjectPath: " + projectPath);
                 LOG.info("[HistoryHandler] CurrentProvider: " + provider);
 
-                JsonElement messagesElement = loadMessagesForExport(provider, sessionId, projectPath);
+                JsonElement messagesElement = loadMessagesForExport(sessionId, projectPath);
 
                 // Wrap messages into an object containing sessionId and title
                 JsonObject exportData = new JsonObject();
@@ -118,11 +117,7 @@ class HistoryExportService {
         });
     }
 
-    private JsonElement loadMessagesForExport(String provider, String sessionId, String projectPath) {
-        if ("dsh".equals(provider)) {
-            LOG.info("[HistoryHandler] 使用 DshHistoryReader 导出 DSH 会话");
-            return toJsonArray(new DshHistoryReader().getSessionMessages(sessionId, projectPath));
-        }
+    private JsonElement loadMessagesForExport(String sessionId, String projectPath) {
         LOG.info("[HistoryHandler] 使用 QwenHistoryReader 导出 qwen 会话");
         return toJsonArray(new QwenHistoryReader().getSessionMessages(sessionId, projectPath));
     }

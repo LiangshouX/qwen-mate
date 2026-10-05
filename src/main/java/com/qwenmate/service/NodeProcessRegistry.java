@@ -347,7 +347,6 @@ public final class NodeProcessRegistry implements Disposable {
     // sits between [a-z0-9_] and anything else, so "qwen-agent" still matches
     // while "myqwen" does not.
     private static final Pattern QWEN_WORD = Pattern.compile("\\bqwen\\b");
-    private static final Pattern DSH_WORD = Pattern.compile("\\bdsh\\b");
 
     static @Nullable String detectProviderFromCmd(String cmd) {
         if (cmd == null) {
@@ -355,9 +354,6 @@ public final class NodeProcessRegistry implements Disposable {
         }
         String lower = cmd.toLowerCase();
         if (lower.contains("channel-manager")) {
-            if (DSH_WORD.matcher(lower).find()) {
-                return "dsh";
-            }
             if (QWEN_WORD.matcher(lower).find()) {
                 return "qwen";
             }

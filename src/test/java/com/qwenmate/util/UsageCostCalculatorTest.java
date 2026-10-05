@@ -71,7 +71,7 @@ public class UsageCostCalculatorTest {
 
         // Unknown models and unpriced providers stay free.
         assertEquals(0.0d, UsageCostCalculator.calculateTurnCostUsd("qwen", usage, "qwen-unknown-model"), 0.0);
-        assertEquals(0.0d, UsageCostCalculator.calculateTurnCostUsd("dsh", usage, "dsh-default"), 0.0);
+        assertEquals(0.0d, UsageCostCalculator.calculateTurnCostUsd("custom-provider", usage, "custom-model"), 0.0);
     }
 
     @Test

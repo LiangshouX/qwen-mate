@@ -31,7 +31,7 @@ const MAX_CACHED_SERVERS = 50;
  * @param provider - Provider type
  * @returns Set of cache keys
  */
-export function getCacheKeys(provider: 'qwen' | 'dsh'): CacheKeys {
+export function getCacheKeys(provider: 'qwen'): CacheKeys {
   return {
     SERVERS: `mcp_servers_cache_${provider}`,
     STATUS: `mcp_status_cache_${provider}`,

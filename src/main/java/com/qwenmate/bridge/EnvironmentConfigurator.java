@@ -116,9 +116,8 @@ public class EnvironmentConfigurator {
                     // pnpm global installs (PNPM_HOME defaults per platform)
                     userHome + "/Library/pnpm",
                     userHome + "/.local/share/pnpm",
-                    // DeepSeek Harness (Hermes installer keeps node + dsh together)
+                    // Hermes-managed node bin (node + globally installed CLIs)
                     userHome + "/.hermes/node/bin",
-                    userHome + "/.dsh/bin",
             };
             for (String p : unixPaths) {
                 if (!pathContains(currentPath, p)) {

@@ -216,8 +216,7 @@
         "providerAvailable": "可用",
         "providerUnavailable": "当前不可用",
         "provider": {
-          "qwen": "Qwen Code",
-          "dsh": "DeepSeek Harness"
+          "qwen": "Qwen Code"
         },
         "currentProviderAuto": "当前使用自动选择：{{provider}}",
         "currentProviderManual": "当前使用手动选择的 provider：{{provider}}",
@@ -380,10 +379,6 @@
         "qwen": {
           "name": "Qwen Code",
           "description": "阿里 Qwen 终端编码助手"
-        },
-        "dsh": {
-          "name": "DeepSeek Harness",
-          "description": "DeepSeek 终端智能体 CLI（dsh）"
         }
       },
       "installDialog": {
@@ -405,26 +400,6 @@
       "visibility": {
         "hide": "在切换菜单中隐藏",
         "show": "在切换菜单中显示"
-      },
-      "dsh": {
-        "groupTitle": "DeepSeek Harness",
-        "cliRowTitle": "CLI 安装",
-        "cardTitle": "本机宿主",
-        "rowHint": "启动或接管本机 dsh web",
-        "hint": "DSH 由本机一个常驻 dsh web 宿主承载所有会话；插件会接管已在运行的宿主，而不会重复启动。",
-        "state": {
-          "checking": "检测中…",
-          "notInstalled": "未安装",
-          "notRunning": "未运行",
-          "connected": "已连接"
-        },
-        "adopted": "已接管",
-        "adoptedHint": "已接管正在运行的宿主；插件不会停止它。",
-        "openWebUi": "打开 DSH Web UI",
-        "startHost": "立即启动",
-        "stopHost": "关闭（仅限插件启动的宿主）",
-        "autoStart": "需要时自动启动",
-        "moreActions": "更多"
       }
     },
     "pluginModels": {
@@ -861,7 +836,6 @@
     "expand": "展开",
     "collapse": "收起",
     "clickToAnswer": "点击回答",
-    "dshTitle": "DeepSeek Harness 有一些问题想问你",
     "invalidFormat": "问题数据格式不支持，请取消后重试。",
     "loading": "正在加载问题...",
     "planDetail": "计划内容"
@@ -1425,9 +1399,6 @@
       "title": "Beta 功能",
       "message": "此功能仍处于 Beta 阶段。如果遇到使用 Bug，请及时反馈给作者。"
     },
-    "dsh": {
-      "label": "DeepSeek Harness"
-    },
     "manageCli": "CLI 配置管理"
   },
   "promptEnhancer": {
@@ -1564,32 +1535,6 @@
     "uploadedAttachments": "已上传附件",
     "emptyMessage": "空消息",
     "attachment": "附件"
-  },
-  "dshPresets": {
-    "title": "选择 DeepSeek Harness Agent 预设",
-    "none": {
-      "label": "默认",
-      "description": "dsh 默认 headless 组合（完整工具集）"
-    },
-    "standard": {
-      "label": "标准模式",
-      "description": "功能完整的标准编码工具集"
-    },
-    "code": {
-      "label": "PTC 模式",
-      "description": "标准能力加 Code Mode"
-    },
-    "minimal": {
-      "label": "极简模式",
-      "description": "仅提供 bash 与 str_replace_editor"
-    },
-    "cordis": {
-      "label": "创造模式",
-      "description": "标准能力加组合编排能力"
-    },
-    "user": {
-      "description": "安装在 DSH 主目录中的自定义预设"
-    }
   },
   "error": {
     "providerNotConfigured": "供应商未配置",

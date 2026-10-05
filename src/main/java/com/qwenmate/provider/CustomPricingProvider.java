@@ -94,7 +94,7 @@ public final class CustomPricingProvider {
     /**
      * Look up custom pricing for a model under a given provider family.
      *
-     * @param provider provider id (e.g. "qwen" or "dsh")
+     * @param provider provider id (e.g. "qwen")
      * @param modelId  the model ID
      * @return the configured pricing, or {@link Optional#empty()} if not configured
      */
@@ -181,7 +181,7 @@ public final class CustomPricingProvider {
             }
             JsonObject rootObj = root.getAsJsonObject(ROOT_KEY);
             Map<String, Map<String, ModelPricing>> result = new HashMap<>();
-            // Pricing is stored per provider key (e.g. "qwen", "dsh"); load every
+            // Pricing is stored per provider key (e.g. "qwen"); load every
             // configured provider node instead of a hard-coded provider list.
             for (String provider : rootObj.keySet()) {
                 if (!rootObj.get(provider).isJsonObject()) {

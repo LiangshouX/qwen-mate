@@ -41,7 +41,7 @@ const QuestionSection = ({
       </div>
       <p className="question-text">{question.question}</p>
 
-      {/* Supporting detail (DSH's plan under review). It is the thing being
+      {/* Supporting detail (e.g. a plan under review). It is the thing being
           approved or declined, so it must be readable in the dialog. */}
       {question.detail && (
         <div className="question-detail">

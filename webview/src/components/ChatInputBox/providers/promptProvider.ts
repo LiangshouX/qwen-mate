@@ -42,8 +42,8 @@ const MAX_PENDING_WAITERS = 10; // Maximum concurrent waiters
 // Core Functions
 // ============================================================================
 
-function normalizePromptProvider(provider?: string | null): PromptProvider {
-  return provider === 'dsh' ? 'dsh' : 'qwen';
+function normalizePromptProvider(_provider?: string | null): PromptProvider {
+  return 'qwen';
 }
 
 function promptOwner(prompt: PromptConfig): PromptProvider {

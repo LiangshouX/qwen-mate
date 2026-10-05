@@ -115,14 +115,15 @@ public class SessionMessageOrchestratorHistoryPageTest {
     @Test
     public void loadEarlierClaudeHistoryPageDegradesGracefullyWithoutPageSupport() {
         SessionState state = new SessionState();
-        state.setProvider("dsh");
+        state.setProvider("qwen");
         state.setSessionId("session-page");
 
         RecordingCallback callback = new RecordingCallback();
         SessionCallbackFacade callbackFacade = new SessionCallbackFacade(null);
         callbackFacade.setCallback(callback);
 
-        // Default SessionHistoryAccess returns null pages (CLI-routed providers).
+        // Default SessionHistoryAccess returns null pages (providers without
+        // a paginated history source).
         SessionMessageOrchestrator orchestrator = new SessionMessageOrchestrator(
                 state, new MessageParser(), callbackFacade, new PagingHistoryAccess(), (usedTokens, maxTokens) -> {
         });

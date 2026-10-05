@@ -31,7 +31,6 @@ export interface UseMessageSenderOptions {
   selectedModel: string;
   permissionMode: PermissionMode;
   reasoningEffort: ReasoningEffort;
-  dshPreset?: string;
   selectedAgent: SelectedAgent | null;
   sdkStatusLoading: boolean;
   currentSdkInstalled: boolean;
@@ -63,7 +62,6 @@ export function useMessageSender({
   selectedModel,
   permissionMode,
   reasoningEffort,
-  dshPreset,
   selectedAgent,
   sdkStatusLoading,
   currentSdkInstalled,
@@ -112,7 +110,7 @@ export function useMessageSender({
       return true;
     }
 
-    // /plan - switch to plan mode (Qwen only; DSH sends as normal text)
+    // /plan - switch to plan mode (Qwen only)
     if (PLAN_COMMANDS.has(command) && currentProvider === 'qwen') {
       if (handleModeSelect) {
         handleModeSelect('plan');
@@ -262,7 +260,6 @@ export function useMessageSender({
           fileTags: fileTagsInfo,
           permissionMode: requestedPermissionMode,
           ...reasoningEffortPayload,
-          ...(currentProvider === 'dsh' ? { dshPreset: dshPreset || '' } : {}),
         });
         sendBridgeEvent('send_message_with_attachments', payload);
       } catch (error) {
@@ -273,7 +270,6 @@ export function useMessageSender({
           fileTags: fileTagsInfo,
           permissionMode: requestedPermissionMode,
           ...reasoningEffortPayload,
-          ...(currentProvider === 'dsh' ? { dshPreset: dshPreset || '' } : {}),
         });
         sendBridgeEvent('send_message', fallbackPayload);
       }
@@ -284,11 +280,10 @@ export function useMessageSender({
         fileTags: fileTagsInfo,
         permissionMode: requestedPermissionMode,
         ...reasoningEffortPayload,
-        ...(currentProvider === 'dsh' ? { dshPreset: dshPreset || '' } : {}),
       });
       sendBridgeEvent('send_message', payload);
     }
-  }, [currentProvider, dshPreset, reasoningEffort]);
+  }, [currentProvider, reasoningEffort]);
 
   /**
    * Execute message sending (from queue or directly)
@@ -383,7 +378,6 @@ export function useMessageSender({
     sdkStatusLoading,
     currentSdkInstalled,
     currentProvider,
-    dshPreset,
     permissionMode,
     selectedAgent,
     buildUserContentBlocks,

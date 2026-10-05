@@ -11,21 +11,16 @@ import { normalizeCliPermissionMode } from './providers/cliProviders';
 /** Per-provider selected-model snapshot, keyed by provider id. */
 export interface ProviderModelSelection {
   qwen: string;
-  dsh: string;
 }
 
 /** Per-provider permission-mode snapshot, keyed by provider id. */
 export interface ProviderPermissionModes {
   qwen: PermissionMode;
-  dsh: PermissionMode;
 }
 
 /** Model shown for the active provider; unknown ids fall back to Qwen. */
-export function selectedModelForProvider(providerId: string, models: ProviderModelSelection): string {
-  switch (providerId) {
-    case 'dsh': return models.dsh;
-    default: return models.qwen;
-  }
+export function selectedModelForProvider(_providerId: string, models: ProviderModelSelection): string {
+  return models.qwen;
 }
 
 /**
@@ -36,30 +31,23 @@ export function resolveProviderPermissionMode(
   providerId: string,
   modes: ProviderPermissionModes,
 ): PermissionMode {
-  switch (providerId) {
-    case 'dsh': return normalizeCliPermissionMode(modes.dsh, providerId);
-    default: return normalizeCliPermissionMode(modes.qwen, providerId);
-  }
+  return normalizeCliPermissionMode(modes.qwen, providerId);
 }
 
 /**
  * Model to activate when switching to `providerId`.
  */
 export function resolveProviderModel(
-  providerId: string,
+  _providerId: string,
   models: ProviderModelSelection,
 ): string {
-  switch (providerId) {
-    case 'dsh': return models.dsh;
-    default: return models.qwen;
-  }
+  return models.qwen;
 }
 
 /** State setters consumed by applyCliModeSelect. */
 export interface CliModeSelectActions {
   setPermissionMode: (mode: PermissionMode) => void;
   setQwenPermissionMode: (mode: PermissionMode) => void;
-  setDshPermissionMode: (mode: PermissionMode) => void;
 }
 
 /**
@@ -73,10 +61,7 @@ export function applyCliModeSelect(
 ): void {
   const cliMode = normalizeCliPermissionMode(mode, providerId);
   actions.setPermissionMode(cliMode);
-  switch (providerId) {
-    case 'dsh': actions.setDshPermissionMode(cliMode); break;
-    default: actions.setQwenPermissionMode(cliMode); break;
-  }
+  actions.setQwenPermissionMode(cliMode);
   if (isValidPermissionMode(cliMode)) {
     sendBridgeEvent('set_mode', cliMode);
   }
@@ -85,7 +70,6 @@ export function applyCliModeSelect(
 /** Setters consumed by applyModelSelect. */
 export interface ModelSelectActions {
   setSelectedQwenModel: (modelId: string) => void;
-  setSelectedDshModel: (modelId: string) => void;
 }
 
 /**
@@ -94,14 +78,10 @@ export interface ModelSelectActions {
  * auto-select once the fetch lands (or kept as custom ids).
  */
 export function applyModelSelect(
-  providerId: string,
+  _providerId: string,
   modelId: string,
   actions: ModelSelectActions,
 ): void {
-  if (providerId === 'dsh') {
-    actions.setSelectedDshModel(modelId);
-  } else {
-    actions.setSelectedQwenModel(modelId);
-  }
+  actions.setSelectedQwenModel(modelId);
   sendBridgeEvent('set_model', modelId);
 }

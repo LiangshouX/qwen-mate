@@ -125,7 +125,6 @@ public class SessionHandler extends BaseMessageHandler {
         List<String> fileTagPaths = null;
         String requestedPermissionMode = null;
         String requestedReasoningEffort = null;
-        String requestedDshPreset = null;
         try {
             Gson gson = new Gson();
             JsonObject payload = gson.fromJson(content, JsonObject.class);
@@ -169,8 +168,6 @@ public class SessionHandler extends BaseMessageHandler {
             }
 
             requestedReasoningEffort = extractReasoningEffort(payload);
-
-            requestedDshPreset = extractDshPreset(payload);
         } catch (Exception e) {
             // If parsing fails, treat content as plain text (backward compatibility)
             LOG.debug("[SessionHandler] Message is plain text, not JSON: " + e.getMessage());
@@ -182,7 +179,6 @@ public class SessionHandler extends BaseMessageHandler {
         final List<String> finalFileTagPaths = fileTagPaths;
         final String finalRequestedPermissionMode = requestedPermissionMode;
         final String finalRequestedReasoningEffort = requestedReasoningEffort;
-        final String finalRequestedDshPreset = requestedDshPreset;
 
         CompletableFuture.runAsync(() -> {
             String currentWorkingDir = determineWorkingDirectory();
@@ -201,8 +197,7 @@ public class SessionHandler extends BaseMessageHandler {
 
             // [FIX] Pass agent prompt and file tags directly to session
             context.getSession().send(finalPrompt, finalAgentPrompt, finalFileTagPaths,
-                            finalRequestedPermissionMode, finalRequestedReasoningEffort,
-                            finalRequestedDshPreset)
+                            finalRequestedPermissionMode, finalRequestedReasoningEffort)
                 .exceptionally(ex -> {
                     LOG.error("Failed to send message", ex);
                     if (project != null) {
@@ -250,7 +245,6 @@ public class SessionHandler extends BaseMessageHandler {
             String agentPrompt = null;
             String requestedPermissionMode = null;
             String requestedReasoningEffort = null;
-            String requestedDshPreset = null;
             if (payload != null && payload.has("agent") && !payload.get("agent").isJsonNull()) {
                 JsonObject agent = payload.getAsJsonObject("agent");
                 if (agent.has("prompt") && !agent.get("prompt").isJsonNull()) {
@@ -287,10 +281,8 @@ public class SessionHandler extends BaseMessageHandler {
 
             requestedReasoningEffort = extractReasoningEffort(payload);
 
-            requestedDshPreset = extractDshPreset(payload);
-
             sendMessageWithAttachments(text, atts, agentPrompt, fileTagPaths, requestedPermissionMode,
-                    requestedReasoningEffort, requestedDshPreset);
+                    requestedReasoningEffort);
         } catch (Exception e) {
             LOG.error("[SessionHandler] 解析附件负载失败: " + e.getMessage(), e);
             handleSendMessage(content);
@@ -307,8 +299,7 @@ public class SessionHandler extends BaseMessageHandler {
         String agentPrompt,
         List<String> fileTagPaths,
         String requestedPermissionMode,
-        String requestedReasoningEffort,
-        String requestedDshPreset
+        String requestedReasoningEffort
     ) {
         // Version check (consistent with handleSendMessage)
         String nodeVersion = this.resolveNodeVersion();
@@ -331,7 +322,6 @@ public class SessionHandler extends BaseMessageHandler {
         final List<String> finalFileTagPaths = fileTagPaths;
         final String finalRequestedPermissionMode = requestedPermissionMode;
         final String finalRequestedReasoningEffort = requestedReasoningEffort;
-        final String finalRequestedDshPreset = requestedDshPreset;
 
         CompletableFuture.runAsync(() -> {
             String currentWorkingDir = determineWorkingDirectory();
@@ -349,8 +339,7 @@ public class SessionHandler extends BaseMessageHandler {
 
             // [FIX] Pass agent prompt and file tags directly to session
             context.getSession().send(prompt, attachments, finalAgentPrompt, finalFileTagPaths,
-                            finalRequestedPermissionMode, finalRequestedReasoningEffort,
-                            finalRequestedDshPreset)
+                            finalRequestedPermissionMode, finalRequestedReasoningEffort)
                 .exceptionally(ex -> {
                     LOG.error("Failed to send message with attachments", ex);
                     if (project != null) {
@@ -432,14 +421,6 @@ public class SessionHandler extends BaseMessageHandler {
             return null;
         }
         return payload.get("reasoningEffort").getAsString();
-    }
-
-    private String extractDshPreset(JsonObject payload) {
-        if (payload == null || !payload.has("dshPreset") || payload.get("dshPreset").isJsonNull()) {
-            return null;
-        }
-        String preset = payload.get("dshPreset").getAsString();
-        return SessionState.isValidDshPreset(preset) ? preset.trim() : null;
     }
 
     /**

@@ -161,7 +161,7 @@ public class SessionMessageOrchestrator {
                     callbackMessages = state.getMessagesSnapshot();
                     restoreTokenUsage(serverMessages);
                     callbackFacade.notifyMessageUpdate(callbackMessages);
-                    seedHistoryPageInfoAfterFullLoad(requestedSessionId, loadedMessages, requestedProvider);
+                    seedHistoryPageInfoAfterFullLoad(requestedSessionId, loadedMessages);
                 }
             } catch (SessionHistoryNotFoundException e) {
                 // A missing history file is an explicit stale-session signal, so unlike
@@ -298,12 +298,8 @@ public class SessionMessageOrchestrator {
      */
     private void seedHistoryPageInfoAfterFullLoad(
             String sessionId,
-            List<QwenMateSession.Message> loadedMessages,
-            String provider
+            List<QwenMateSession.Message> loadedMessages
     ) {
-        if (SessionProviderRouter.isCliProvider(provider)) {
-            return;
-        }
         int totalTurns = 0;
         for (QwenMateSession.Message message : loadedMessages) {
             if (message.type == QwenMateSession.Message.Type.USER && !"[tool_result]".equals(message.content)) {

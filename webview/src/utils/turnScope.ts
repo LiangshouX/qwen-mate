@@ -85,9 +85,9 @@ export function selectLatestSubagentTurn(
 export function finalizeTodosForSettledTurn(
   todos: TodoItem[],
   isStreaming: boolean,
-  currentProvider: string,
+  _currentProvider: string,
 ): TodoItem[] {
-  if (isStreaming || currentProvider === 'dsh') return todos;
+  if (isStreaming) return todos;
   return todos.map((todo) => (
     todo.status === 'in_progress'
       ? { ...todo, status: 'completed' }

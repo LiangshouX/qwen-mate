@@ -45,9 +45,7 @@ export interface UseWindowCallbacksOptions {
   setPermissionMode: React.Dispatch<React.SetStateAction<PermissionMode>>;
   setCurrentProvider: React.Dispatch<React.SetStateAction<string>>;
   setQwenPermissionMode: React.Dispatch<React.SetStateAction<PermissionMode>>;
-  setDshPermissionMode: React.Dispatch<React.SetStateAction<PermissionMode>>;
   setSelectedQwenModel: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedDshModel: React.Dispatch<React.SetStateAction<string>>;
   setReasoningEffort: React.Dispatch<React.SetStateAction<ReasoningEffort>>;
   setAlwaysThinkingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setStreamingEnabledSetting: React.Dispatch<React.SetStateAction<boolean>>;

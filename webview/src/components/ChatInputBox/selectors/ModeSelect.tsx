@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AVAILABLE_MODES, type ModeInfo, type PermissionMode } from '../types';
 import { useDropdownPosition } from '../../../hooks/useDropdownPosition';
@@ -32,12 +32,11 @@ interface ModeSelectProps {
 /**
  * ModeSelect - Mode selector component
  * Supports switching between manual, agent, plan, provider-native auto, and
- * Full Auto modes (Qwen); DSH exposes the reduced CLI set.
+ * Full Auto modes.
  */
 export const ModeSelect = ({
   value,
   onChange,
-  provider,
 }: ModeSelectProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -49,13 +48,7 @@ export const ModeSelect = ({
     preferredAlignment: 'right',
   });
 
-  const modeOptions = useMemo(() => {
-    if (provider === 'dsh') {
-      // DSH exposes neither plan mode nor a provider-native auto reviewer.
-      return AVAILABLE_MODES.filter((mode) => mode.id !== 'auto' && mode.id !== 'plan');
-    }
-    return AVAILABLE_MODES;
-  }, [provider]);
+  const modeOptions = AVAILABLE_MODES;
 
   const currentMode = modeOptions.find((m: ModeInfo) => m.id === value) || modeOptions[0];
 

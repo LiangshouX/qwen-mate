@@ -5,25 +5,23 @@ import type { McpServer, McpServerSpec } from '../../types/mcp';
 interface McpServerDialogProps {
   server?: McpServer | null;
   existingIds?: string[];
-  currentProvider?: 'qwen' | 'dsh' | string;
+  currentProvider?: string;
   onClose: () => void;
   onSave: (server: McpServer) => void;
 }
 
 /**
  * MCP Server Configuration Dialog (Add/Edit)
- * Supports both Claude and Codex providers
  */
-export function McpServerDialog({ server, existingIds = [], currentProvider = 'qwen', onClose, onSave }: McpServerDialogProps) {
+export function McpServerDialog({ server, existingIds = [], onClose, onSave }: McpServerDialogProps) {
   const { t } = useTranslation();
-  const isCodexMode = currentProvider === 'dsh';
   const [saving, setSaving] = useState(false);
   const [jsonContent, setJsonContent] = useState('');
   const [parseError, setParseError] = useState('');
   const editorRef = useRef<HTMLTextAreaElement>(null);
 
-  // Placeholder examples based on provider
-  const claudePlaceholder = `// demo:
+  // Placeholder example
+  const placeholder = `// demo:
 // {
 //   "mcpServers": {
 //     "example-server": {
@@ -35,23 +33,6 @@ export function McpServerDialog({ server, existingIds = [], currentProvider = 'q
 //     }
 //   }
 // }`;
-
-  const codexPlaceholder = `// Codex MCP Server Example:
-// {
-//   "mcpServers": {
-//     "context7": {
-//       "command": "npx",
-//       "args": ["-y", "@upstash/context7-mcp"],
-//       "env": {
-//         "CONTEXT7_API_KEY": "your-api-key"
-//       },
-//       "startup_timeout_sec": 20,
-//       "tool_timeout_sec": 60
-//     }
-//   }
-// }`;
-
-  const placeholder = isCodexMode ? codexPlaceholder : claudePlaceholder;
 
   // Calculate line count
   const lineCount = Math.max((jsonContent || placeholder).split('\n').length, 12);
@@ -144,8 +125,8 @@ export function McpServerDialog({ server, existingIds = [], currentProvider = 'q
             name: serverConfig.name || id,
             server: serverSpec as McpServerSpec,
             apps: {
-              claude: !isCodexMode,
-              codex: isCodexMode,
+              claude: true,
+              codex: false,
               gemini: false,
             },
             enabled: true,
@@ -169,8 +150,8 @@ export function McpServerDialog({ server, existingIds = [], currentProvider = 'q
           name: parsed.name || id,
           server: serverSpec as McpServerSpec,
           apps: {
-            claude: !isCodexMode,
-            codex: isCodexMode,
+            claude: true,
+            codex: false,
             gemini: false,
           },
           enabled: true,

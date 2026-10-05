@@ -32,13 +32,13 @@ describe('subagentHistoryMerge', () => {
   it('attaches batch session identity to a lightweight snapshot', () => {
     expect(toSubagentHistoryResponse(
       { success: false, toolUseId: 'call-1', status: 'running' },
-      { sessionId: 'session-1', provider: 'dsh', requestId: 'request-1' },
+      { sessionId: 'session-1', provider: 'qwen', requestId: 'request-1' },
     )).toEqual({
       success: false,
       toolUseId: 'call-1',
       status: 'running',
       sessionId: 'session-1',
-      provider: 'dsh',
+      provider: 'qwen',
     });
   });
 
@@ -77,20 +77,21 @@ describe('subagentHistoryMerge', () => {
     });
   });
 
-  it('rejects responses from an inactive session or provider', () => {expect(isCurrentSubagentResponse(
-      { sessionId: 'old-session', provider: 'dsh' },
+  it('rejects responses from an inactive session or provider', () => {
+    expect(isCurrentSubagentResponse(
+      { sessionId: 'old-session', provider: 'qwen' },
       'current-session',
-      'dsh',
+      'qwen',
+    )).toBe(false);
+    expect(isCurrentSubagentResponse(
+      { sessionId: 'current-session', provider: 'codex' },
+      'current-session',
+      'qwen',
     )).toBe(false);
     expect(isCurrentSubagentResponse(
       { sessionId: 'current-session', provider: 'qwen' },
       'current-session',
-      'dsh',
-    )).toBe(false);
-    expect(isCurrentSubagentResponse(
-      { sessionId: 'current-session', provider: 'dsh' },
-      'current-session',
-      'dsh',
+      'qwen',
     )).toBe(true);
   });
 });

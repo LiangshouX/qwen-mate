@@ -64,7 +64,7 @@ describe('modelSelectUtils', () => {
     it('writes and toggles pins per provider', () => {
       writePinnedModelIds('opencode', ['opencode/big-pickle']);
       expect(readPinnedModelIds('opencode')).toEqual(['opencode/big-pickle']);
-      expect(readPinnedModelIds('dsh')).toEqual([]);
+      expect(readPinnedModelIds('qwen')).toEqual([]);
 
       const afterAdd = togglePinnedModelId('opencode', 'deepseek/deepseek-v4-flash-free');
       expect(afterAdd).toEqual(['opencode/big-pickle', 'deepseek/deepseek-v4-flash-free']);

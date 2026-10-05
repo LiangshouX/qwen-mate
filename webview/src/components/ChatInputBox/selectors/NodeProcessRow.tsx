@@ -90,7 +90,6 @@ function formatBytes(bytes: number): string {
 function providerIcon(provider?: string, kind?: string): string {
   if (kind === 'ORPHAN') return 'codicon-warning';
   if (provider === 'qwen') return 'codicon-server-process';
-  if (provider === 'dsh') return 'codicon-comment-discussion';
   return 'codicon-debug-disconnect';
 }
 

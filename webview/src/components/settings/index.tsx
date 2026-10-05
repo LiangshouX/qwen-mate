@@ -26,7 +26,7 @@ interface SettingsViewProps {
   initialTab?: SettingsTab;
   /** Deep link into the Providers tab's sub-tab (qwen/cli) */
   initialProviderSubTab?: ProviderManageTab;
-  currentProvider: 'qwen' | 'dsh' | string;
+  currentProvider: string;
   // Streaming configuration (passed from App.tsx for state sync)
   streamingEnabled?: boolean;
   onStreamingEnabledChange?: (enabled: boolean) => void;

@@ -3,7 +3,6 @@ package com.qwenmate.handler.history;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.NodeJsServiceCaller;
 import com.qwenmate.handler.core.HandlerContext;
-import com.qwenmate.provider.dsh.DshHistoryReader;
 import com.qwenmate.provider.qwen.QwenHistoryReader;
 
 import com.qwenmate.cache.SessionIndexCache;
@@ -211,24 +210,10 @@ class HistoryDeleteService {
             LOG.warn("[HistoryHandler] Delete session rejected: invalid sessionId");
             return new DeleteResult(false, 0);
         }
-        if ("dsh".equals(currentProvider)) {
-            return new DeleteResult(deleteDshSession(sessionId), 0);
-        }
         if ("qwen".equals(currentProvider)) {
             return new DeleteResult(deleteQwenSession(sessionId), 0);
         }
         return new DeleteResult(false, 0);
-    }
-
-    private boolean deleteDshSession(String sessionId) throws IOException {
-        String rawPath = context.resolveEffectiveWorkingDirectory();
-        String nodePath = NodeDetector.getInstance().getCachedNodePath();
-        String projectPath = NodeDetector.isWslPath(nodePath) ? NodeDetector.convertToWslPath(rawPath) : rawPath;
-        DshHistoryReader reader = new DshHistoryReader();
-        // DSH "delete" is a host-side archive — the event log stays in $DSH_HOME.
-        boolean archived = reader.deleteSession(sessionId, projectPath);
-        LOG.info("[HistoryHandler] Archive DSH session " + sessionId + ": " + (archived ? "ok" : "failed"));
-        return archived;
     }
 
     /**

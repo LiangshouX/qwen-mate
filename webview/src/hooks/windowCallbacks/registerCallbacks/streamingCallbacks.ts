@@ -504,18 +504,6 @@ export function registerStreamingCallbacks(options: UseWindowCallbacksOptions): 
     // Notify backend about stream completion for tab status indicator
     sendBridgeEvent('tab_status_changed', JSON.stringify({ status: 'completed' }));
 
-    if (handlingMode === 'minimal') {
-      if (typeof window.__cancelPendingUpdateMessages === 'function') {
-        window.__cancelPendingUpdateMessages();
-      }
-      setStreamingActive(false);
-      setLoading(false);
-      setLoadingStartTime(null);
-      setIsThinking(false);
-      window.__streamEndProcessedTurnId = currentTurnId > 0 ? currentTurnId : undefined;
-      return;
-    }
-
     // FIX: Extract backend final snapshot from pending updateMessages BEFORE cancelling
     // the pending batch timer. The backend's final flush contains the authoritative message
     // state (complete raw blocks). If onStreamEnd cancels that timer without processing this

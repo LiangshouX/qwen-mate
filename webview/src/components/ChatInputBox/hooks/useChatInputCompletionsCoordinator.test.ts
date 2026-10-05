@@ -1,8 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { useChatInputCompletionsCoordinator } from './useChatInputCompletionsCoordinator.js';
 import {
-  codexCommandProvider,
-  codexCommandToDropdownItem,
   dollarCommandProvider,
   slashCommandProvider,
 } from '../providers/index.js';
@@ -101,29 +99,6 @@ describe('useChatInputCompletionsCoordinator', () => {
     expect(result.current.debouncedDetectCompletion).toBe(debouncedDetectCompletion);
   });
 
-  it('shares the merged Codex provider between slash and dollar triggers', () => {
-    renderHook(() =>
-      useChatInputCompletionsCoordinator({
-        editableRef: { current: document.createElement('div') },
-        sharedComposingRef: { current: false },
-        justRenderedTagRef: { current: false },
-        getTextContent: () => '',
-        pathMappingRef: { current: new Map() },
-        setCursorAfterPath: vi.fn(),
-        closeAllCompletionsRef: { current: vi.fn() },
-        handleInputRef: { current: vi.fn() },
-        currentProvider: 'dsh',
-      })
-    );
-
-    const slashConfig = completionConfigs.find((config) => config.trigger === '/');
-    const dollarConfig = completionConfigs.find((config) => config.trigger === '$');
-    expect(slashConfig?.provider).toBe(codexCommandProvider);
-    expect(dollarConfig?.provider).toBe(codexCommandProvider);
-    expect(slashConfig?.toDropdownItem).toBe(codexCommandToDropdownItem);
-    expect(dollarConfig?.toDropdownItem).toBe(codexCommandToDropdownItem);
-  });
-
   it('keeps the slash-only provider for Claude', () => {
     renderHook(() =>
       useChatInputCompletionsCoordinator({
@@ -160,7 +135,7 @@ describe('useChatInputCompletionsCoordinator', () => {
         setCursorAfterPath: vi.fn(),
         closeAllCompletionsRef: { current: vi.fn() },
         handleInputRef: { current: handleInput },
-        currentProvider: 'dsh',
+        currentProvider: 'qwen',
       })
     );
 
@@ -194,7 +169,7 @@ describe('useChatInputCompletionsCoordinator', () => {
         setCursorAfterPath: vi.fn(),
         closeAllCompletionsRef: { current: vi.fn() },
         handleInputRef: { current: handleInput },
-        currentProvider: 'dsh',
+        currentProvider: 'qwen',
       })
     );
 

@@ -26,7 +26,7 @@ public class HistoryMessageInjectorTest {
 
         injector.handleLoadSession(
                 "{\"sessionId\":\"hist-qwen\",\"provider\":\"qwen\",\"model\":\"qwen3-max\"}",
-                "dsh",
+                "alt",
                 (sessionId, projectPath, provider, model) -> {
                     callbackArgs[0] = sessionId;
                     callbackArgs[1] = projectPath;
@@ -47,7 +47,7 @@ public class HistoryMessageInjectorTest {
         boolean[] callbackInvoked = {false};
 
         injector.handleLoadSession(
-                "{\"sessionId\":\"hist-dsh\",\"provider\":\"dsh\"}",
+                "{\"sessionId\":\"hist-alt\",\"provider\":\"alt\"}",
                 "qwen",
                 (sessionId, projectPath, provider, model) -> callbackInvoked[0] = true
         );
@@ -62,7 +62,7 @@ public class HistoryMessageInjectorTest {
 
         injector.handleLoadSession(
                 "{\"sessionId\":\"hist-qwen\",\"provider\":\"qwen\"}",
-                "dsh",
+                "alt",
                 null
         );
 

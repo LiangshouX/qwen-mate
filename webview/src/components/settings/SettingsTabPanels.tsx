@@ -18,7 +18,7 @@ import type {
 } from './hooks';
 
 export interface SettingsTabPanelProps {
-  currentProvider: 'qwen' | 'dsh' | string;
+  currentProvider: string;
   initialProviderSubTab?: ProviderManageTab;
   addToast: (message: string, type?: ToastMessage['type']) => void;
   themeSync: UseSettingsThemeSyncReturn;

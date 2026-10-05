@@ -2,9 +2,6 @@ import { useEffect } from 'react';
 import { sendBridgeEvent } from '../../utils/bridge';
 import {
   DEFAULT_QWEN_MODEL_ID,
-  DSH_DEFAULT_MODEL_ID,
-  DSH_PRESET_NONE,
-  isValidDshPreset,
   isValidPermissionMode,
   normalizeQwenModelId,
   QWEN_MODELS,
@@ -63,20 +60,14 @@ export interface UseModelStatePersistenceOptions {
   // Cross-slice load setters (run once on mount)
   setCurrentProvider: (value: string) => void;
   setSelectedQwenModel: (value: string) => void;
-  setSelectedDshModel: (value: string) => void;
   setQwenPermissionMode: (value: PermissionMode) => void;
-  setDshPermissionMode: (value: PermissionMode) => void;
   setPermissionMode: (value: PermissionMode) => void;
   setReasoningEffort: (value: ReasoningEffort) => void;
-  setDshPreset: (value: string) => void;
   // Cross-slice save deps (re-saves on any change)
   currentProvider: string;
   selectedQwenModel: string;
-  selectedDshModel: string;
   qwenPermissionMode: PermissionMode;
-  dshPermissionMode: PermissionMode;
   reasoningEffort: ReasoningEffort;
-  dshPreset: string;
 }
 
 /**
@@ -94,19 +85,13 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
   const {
     setCurrentProvider,
     setSelectedQwenModel,
-    setSelectedDshModel,
     setQwenPermissionMode,
-    setDshPermissionMode,
     setPermissionMode,
     setReasoningEffort,
-    setDshPreset,
     currentProvider,
     selectedQwenModel,
-    selectedDshModel,
     qwenPermissionMode,
-    dshPermissionMode,
     reasoningEffort,
-    dshPreset,
   } = options;
 
   // Hydrate from localStorage and sync to backend (mount only).
@@ -136,10 +121,7 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
 
       let restoredProvider = 'qwen';
       let restoredQwenModel = DEFAULT_QWEN_MODEL_ID;
-      let restoredDshModel = DSH_DEFAULT_MODEL_ID;
       let restoredQwenPermissionMode: PermissionMode = 'default';
-      let restoredDshPermissionMode: PermissionMode = 'default';
-      let restoredDshPreset = DSH_PRESET_NONE;
 
       // Model restore appliers — custom models make any non-empty id valid;
       // the qwen empty id (follow CLI config) is a valid saved selection too.
@@ -148,12 +130,6 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
           const normalized = normalizeQwenModelId(modelId);
           restoredQwenModel = normalized;
           setSelectedQwenModel(normalized);
-        }
-      };
-      const applyDshModel = (modelId: unknown) => {
-        if (isRestorableModelId(modelId)) {
-          restoredDshModel = modelId;
-          setSelectedDshModel(modelId);
         }
       };
 
@@ -178,31 +154,18 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
         if (restoredQwenMode) {
           restoredQwenPermissionMode = normalizeCliPermissionMode(restoredQwenMode, 'qwen');
         }
-        const restoredDshMode = normalizeRestoredPermissionMode(state.dshPermissionMode);
-        if (restoredDshMode) {
-          restoredDshPermissionMode = normalizeCliPermissionMode(restoredDshMode, 'dsh');
-        }
 
         if (isReasoningEffort(state.reasoningEffort)) {
           setReasoningEffort(state.reasoningEffort);
         }
-        if (isValidDshPreset(state.dshPreset)) {
-          restoredDshPreset = state.dshPreset;
-          setDshPreset(restoredDshPreset);
-        }
 
-        // Tolerant reads: prefer the qwen/dsh keys; legacy snapshots without
-        // them fall back to the old claudeModel slot (migrated to the Qwen
+        // Tolerant reads: prefer the qwen key; legacy snapshots without
+        // it fall back to the old claudeModel slot (migrated to the Qwen
         // default when it is not a Qwen id) so nothing is silently blanked.
         const qwenModelCandidate = hasBackendModel && restoredProvider === 'qwen'
           ? initialTabModel
           : (state.qwenModel ?? migrateLegacyClaudeModel(state.claudeModel));
         applyQwenModel(qwenModelCandidate);
-
-        const dshModelCandidate = hasBackendModel && restoredProvider === 'dsh'
-          ? initialTabModel
-          : state.dshModel;
-        applyDshModel(dshModelCandidate);
       } else if (hasBackendProvider) {
         // No localStorage yet (fresh user) but backend supplied a provider:
         // honor it so the tab starts with the right provider.
@@ -210,15 +173,11 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
         setCurrentProvider(initialTabProvider);
         if (hasBackendModel) {
           if (initialTabProvider === 'qwen') applyQwenModel(initialTabModel);
-          else if (initialTabProvider === 'dsh') applyDshModel(initialTabModel);
         }
       }
 
-      const initialPermissionMode: PermissionMode = restoredProvider === 'dsh'
-        ? restoredDshPermissionMode
-        : restoredQwenPermissionMode;
+      const initialPermissionMode: PermissionMode = restoredQwenPermissionMode;
       setQwenPermissionMode(restoredQwenPermissionMode);
-      setDshPermissionMode(restoredDshPermissionMode);
       setPermissionMode(initialPermissionMode);
 
       let syncRetryCount = 0;
@@ -239,8 +198,7 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
             return;
           }
           sendBridgeEvent('set_provider', restoredProvider);
-          const modelToSync = restoredProvider === 'dsh' ? restoredDshModel : restoredQwenModel;
-          sendBridgeEvent('set_model', modelToSync);
+          sendBridgeEvent('set_model', restoredQwenModel);
           // Do NOT push the permission mode to Java on boot. Java is the source
           // of truth for the mode (persisted app-level in PropertiesComponent,
           // which survives a plugin reinstall) and the webview seeds its own mode
@@ -248,9 +206,6 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
           // wiped on reinstall, so pushing it here would clobber the surviving
           // Java value with 'default'. The mode is only sent to Java on an
           // explicit user switch (handleModeSelect → set_mode).
-          if (restoredProvider === 'dsh') {
-            sendBridgeEvent('set_dsh_preset', restoredDshPreset);
-          }
         } else {
           syncRetryCount++;
           if (syncRetryCount < MAX_SYNC_RETRIES) {
@@ -298,11 +253,8 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           provider: currentProvider,
           qwenModel: selectedQwenModel,
-          dshModel: selectedDshModel,
           qwenPermissionMode,
-          dshPermissionMode,
           reasoningEffort,
-          dshPreset,
         }));
       } catch {
         // Failed to save model selection state — non-fatal.
@@ -318,10 +270,7 @@ export function useModelStatePersistence(options: UseModelStatePersistenceOption
   }, [
     currentProvider,
     selectedQwenModel,
-    selectedDshModel,
     qwenPermissionMode,
-    dshPermissionMode,
     reasoningEffort,
-    dshPreset,
   ]);
 }

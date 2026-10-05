@@ -353,55 +353,6 @@ export const QWEN_MODELS: ModelInfo[] = [
 ];
 
 /**
- * DSH default: skip `session.selectModel` so the host serves whatever the DSH
- * Web UI configured. The runtime catalog (`provider/model` ids) is fetched
- * from the host via `llm.models` — this static entry is the offline fallback.
- */
-export const DSH_DEFAULT_MODEL_ID = 'auto';
-
-export const DSH_MODELS: ModelInfo[] = [
-  {
-    id: DSH_DEFAULT_MODEL_ID,
-    label: 'DSH Auto',
-    description: 'Use the model configured in the DSH Web UI',
-  },
-];
-
-/** No DSH agent preset: use the default headless composition. */
-export const DSH_PRESET_NONE = '';
-
-export interface DshPresetOption {
-  id: string;
-  label?: string;
-  labelKey?: string;
-  descriptionKey?: string;
-}
-
-export const DSH_PRESETS: DshPresetOption[] = [
-  { id: DSH_PRESET_NONE, labelKey: 'dshPresets.none.label', descriptionKey: 'dshPresets.none.description' },
-  { id: 'standard', labelKey: 'dshPresets.standard.label', descriptionKey: 'dshPresets.standard.description' },
-  { id: 'code', labelKey: 'dshPresets.code.label', descriptionKey: 'dshPresets.code.description' },
-  { id: 'minimal', labelKey: 'dshPresets.minimal.label', descriptionKey: 'dshPresets.minimal.description' },
-  { id: 'cordis', labelKey: 'dshPresets.cordis.label', descriptionKey: 'dshPresets.cordis.description' },
-];
-
-export const getUserDshPresetOptions = (): DshPresetOption[] => {
-  const injected = window.__INITIAL_DSH_PRESETS__;
-  if (!Array.isArray(injected)) return [];
-  const curated = new Set(DSH_PRESETS.map((preset) => preset.id));
-  return injected
-    .filter((id): id is string => typeof id === 'string' && id.trim() !== '' && !curated.has(id))
-    .map((id) => ({ id, label: id, descriptionKey: 'dshPresets.user.description' }));
-};
-
-export type DshPreset = string;
-
-export const isValidDshPreset = (value: unknown): value is DshPreset =>
-  typeof value === 'string'
-  && (DSH_PRESETS.some((preset) => preset.id === value)
-    || getUserDshPresetOptions().some((preset) => preset.id === value));
-
-/**
  * Available models (backward compatibility)
  */
 export const AVAILABLE_MODELS = QWEN_MODELS;
@@ -423,7 +374,6 @@ export interface ProviderInfo {
  */
 export const AVAILABLE_PROVIDERS: ProviderInfo[] = [
   { id: 'qwen', label: 'Qwen Code', icon: 'codicon-terminal', enabled: true },
-  { id: 'dsh', label: 'DeepSeek Harness', icon: 'codicon-terminal', enabled: true, beta: true },
 ];
 
 /**
@@ -587,10 +537,6 @@ export interface ChatInputBoxProps {
   reasoningEffort?: ReasoningEffort;
   /** Switch reasoning effort callback */
   onReasoningChange?: (effort: ReasoningEffort) => void;
-  /** DSH agent preset */
-  dshPreset?: string;
-  /** Switch DSH agent preset callback */
-  onDshPresetChange?: (preset: string) => void;
   /** Toggle thinking mode */
   onToggleThinking?: (enabled: boolean) => void;
   /** Whether streaming is enabled */
@@ -665,8 +611,6 @@ export interface ButtonAreaProps {
   currentProvider?: string;
   /** Current reasoning effort */
   reasoningEffort?: ReasoningEffort;
-  /** DSH agent preset */
-  dshPreset?: string;
 
   // Event callbacks
   onSubmit?: () => void;
@@ -676,8 +620,6 @@ export interface ButtonAreaProps {
   onProviderSelect?: (providerId: string) => void;
   /** Switch reasoning effort callback */
   onReasoningChange?: (effort: ReasoningEffort) => void;
-  /** Switch DSH agent preset callback */
-  onDshPresetChange?: (preset: string) => void;
   /** Enhance prompt callback */
   onEnhancePrompt?: () => void;
   /** Whether always thinking enabled */

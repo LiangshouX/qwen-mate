@@ -2,7 +2,7 @@ package com.qwenmate.session;
 
 import com.qwenmate.permission.PermissionManager;
 import com.qwenmate.permission.PermissionRequest;
-import com.qwenmate.provider.common.MarkerCliBridge;
+import com.qwenmate.provider.qwen.QwenSDKBridge;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class QwenMateSessionTest {
 
     @Test
     public void setSessionInfoNotifiesSessionIdWhenRestoringHistorySession() {
-        QwenMateSession session = new QwenMateSession(null, null, null);
+        QwenMateSession session = new QwenMateSession(null, null);
         RecordingCallback callback = new RecordingCallback();
         session.setCallback(callback);
 
@@ -31,16 +31,16 @@ public class QwenMateSessionTest {
 
     @Test
     public void hasNoTurnStartTimestampBeforeFirstSubmission() {
-        QwenMateSession session = new QwenMateSession(null, null, null);
+        QwenMateSession session = new QwenMateSession(null, null);
 
         assertEquals(0L, session.getLastTurnStartedAtMillis());
     }
 
     @Test
     public void interruptDoesNotResetAReplacementChannel() throws Exception {
-        BlockingDshBridge bridge = new BlockingDshBridge(false);
-        QwenMateSession session = new QwenMateSession(null, null, SessionProviderRouter.registerCliBridges(bridge));
-        session.setProvider("dsh");
+        BlockingQwenBridge bridge = new BlockingQwenBridge(false);
+        QwenMateSession session = new QwenMateSession(null, bridge);
+        session.setProvider("qwen");
         session.getState().setChannelId("old-channel");
         session.getState().setBusy(true);
         session.getState().setLoading(true);
@@ -60,9 +60,9 @@ public class QwenMateSessionTest {
 
     @Test(expected = CompletionException.class)
     public void interruptCompletesExceptionallyWhenProviderInterruptFails() {
-        BlockingDshBridge bridge = new BlockingDshBridge(true);
-        QwenMateSession session = new QwenMateSession(null, null, SessionProviderRouter.registerCliBridges(bridge));
-        session.setProvider("dsh");
+        BlockingQwenBridge bridge = new BlockingQwenBridge(true);
+        QwenMateSession session = new QwenMateSession(null, bridge);
+        session.setProvider("qwen");
         session.getState().setChannelId("failing-channel");
 
         session.interrupt().join();
@@ -70,7 +70,7 @@ public class QwenMateSessionTest {
 
     @Test
     public void nativeAutoKeepsResidualPermissionRequestsInteractive() {
-        QwenMateSession session = new QwenMateSession(null, null, null);
+        QwenMateSession session = new QwenMateSession(null, null);
 
         session.setPermissionMode("auto");
         assertEquals(PermissionManager.PermissionMode.DEFAULT, session.getPermissionManager().getPermissionMode());
@@ -116,24 +116,13 @@ public class QwenMateSessionTest {
         }
     }
 
-    private static class BlockingDshBridge extends MarkerCliBridge {
+    private static class BlockingQwenBridge extends QwenSDKBridge {
         private final CountDownLatch interruptStarted = new CountDownLatch(1);
         private final CountDownLatch interruptRelease = new CountDownLatch(1);
         private final boolean fail;
 
-        private BlockingDshBridge(boolean fail) {
-            super(BlockingDshBridge.class);
+        private BlockingQwenBridge(boolean fail) {
             this.fail = fail;
-        }
-
-        @Override
-        protected String getProviderName() {
-            return "dsh";
-        }
-
-        @Override
-        protected String getStdinEnvKey() {
-            return "DSH_USE_STDIN";
         }
 
         @Override

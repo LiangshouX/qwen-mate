@@ -105,11 +105,9 @@ describe('useSettingsWindowCallbacks', () => {
       resolutionSource: 'auto',
       models: {
         qwen: 'qwen3-coder-flash',
-        dsh: 'provider/model-a',
       },
       availability: {
         qwen: true,
-        dsh: true,
       },
     };
 
@@ -125,15 +123,13 @@ describe('useSettingsWindowCallbacks', () => {
 
     const payload: CommitAiConfig = {
       provider: null,
-      effectiveProvider: 'dsh',
+      effectiveProvider: 'qwen',
       resolutionSource: 'auto',
       models: {
         qwen: 'qwen3-coder-flash',
-        dsh: 'provider/model-a',
       },
       availability: {
         qwen: true,
-        dsh: true,
       },
     };
 

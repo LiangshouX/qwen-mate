@@ -2,8 +2,6 @@ package com.qwenmate.handler.provider;
 
 import com.qwenmate.handler.core.BaseMessageHandler;
 import com.qwenmate.handler.core.HandlerContext;
-import com.qwenmate.handler.UsagePushService;
-import com.qwenmate.provider.CustomModelContextWindowProvider;
 import com.qwenmate.provider.CustomPricingProvider;
 import com.qwenmate.settings.QwenMateSettingsService;
 import com.qwenmate.settings.ModelPricing;
@@ -17,15 +15,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Handles persistence of user-configured model pricing and dsh context windows.
+ * Handles persistence of user-configured model pricing.
  *
  * <p>The frontend sends {@code set_custom_model_pricing} whenever plugin-level custom models or
  * pricing-only configured models change. The payload shape is:
  * <pre>
- * { "provider": "qwen"|"dsh", "models": [ { "id": "...", "pricing": { ... } } ] }
+ * { "provider": "qwen", "models": [ { "id": "...", "pricing": { ... } } ] }
  * </pre>
- * Pricing is supported for both provider families. Context-window metadata is accepted only for
- * dsh models so qwen's runtime-controlled context behavior remains unchanged.
+ * Pricing is supported for the qwen provider family. Context-window metadata is not accepted;
+ * qwen's context behavior stays runtime-controlled.
  */
 public class CustomModelPricingHandler extends BaseMessageHandler {
 
@@ -34,12 +32,10 @@ public class CustomModelPricingHandler extends BaseMessageHandler {
     static final String SET_TYPE = "set_custom_model_pricing";
 
     private final QwenMateSettingsService settingsService;
-    private final UsagePushService usagePushService;
 
     public CustomModelPricingHandler(HandlerContext context, QwenMateSettingsService settingsService) {
         super(context);
         this.settingsService = settingsService;
-        this.usagePushService = context == null ? null : new UsagePushService(context);
     }
 
     @Override
@@ -52,14 +48,12 @@ public class CustomModelPricingHandler extends BaseMessageHandler {
             String provider = payload.has("provider") && !payload.get("provider").isJsonNull()
                     ? payload.get("provider").getAsString()
                     : null;
-            if (!"qwen".equals(provider) && !"dsh".equals(provider)) {
+            if (!"qwen".equals(provider)) {
                 LOG.warn("[CustomModelPricingHandler] Rejected unknown provider: " + provider);
                 return true;
             }
 
             Map<String, ModelPricing> pricingMap = new LinkedHashMap<>();
-            Map<String, Integer> contextWindowMap = new LinkedHashMap<>();
-            boolean supportsContextWindows = "dsh".equals(provider);
             if (payload.has("models") && payload.get("models").isJsonArray()) {
                 JsonArray models = payload.getAsJsonArray("models");
                 for (JsonElement el : models) {
@@ -78,29 +72,14 @@ public class CustomModelPricingHandler extends BaseMessageHandler {
                     if (pricing != null) {
                         pricingMap.put(id, pricing);
                     }
-                    if (supportsContextWindows) {
-                        Integer contextWindow = parseContextWindow(model);
-                        if (contextWindow != null) {
-                            contextWindowMap.put(id, contextWindow);
-                        }
-                    }
                 }
             }
 
             settingsService.setCustomModelPricing(provider, pricingMap);
             CustomPricingProvider.getInstance().invalidateCache();
-            if (supportsContextWindows) {
-                settingsService.setCustomModelContextWindows(provider, contextWindowMap);
-                CustomModelContextWindowProvider.getInstance().invalidateCache();
-            }
             LOG.info("[CustomModelPricingHandler] Persisted " + pricingMap.size()
                     + " custom model pricing entries"
-                    + (supportsContextWindows ? " and " + contextWindowMap.size() + " context window entries" : "")
                     + " for " + provider);
-
-            if (supportsContextWindows) {
-                refreshCurrentUsage(provider);
-            }
         } catch (Exception e) {
             LOG.error("[CustomModelPricingHandler] Failed to handle " + type + ": " + e.getMessage(), e);
         }
@@ -125,26 +104,6 @@ public class CustomModelPricingHandler extends BaseMessageHandler {
             return null;
         }
         return new ModelPricing(input, output, cacheWrite, cacheRead);
-    }
-
-    private Integer parseContextWindow(JsonObject model) {
-        if (!model.has("contextWindowTokens") || model.get("contextWindowTokens").isJsonNull()) {
-            return null;
-        }
-        try {
-            int value = model.get("contextWindowTokens").getAsBigDecimal().intValueExact();
-            return value >= 1_000 && value % 1_000 == 0 ? value : null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private void refreshCurrentUsage(String provider) {
-        if (usagePushService == null || context == null || !provider.equalsIgnoreCase(context.getCurrentProvider())) {
-            return;
-        }
-        int maxTokens = ModelProviderHandler.getModelContextLimit(provider, context.getCurrentModel());
-        usagePushService.pushUsageUpdateAfterModelChange(maxTokens);
     }
 
     private static Double readDouble(JsonObject obj, String key) {

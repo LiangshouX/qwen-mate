@@ -100,10 +100,10 @@ describe('useMessageSender - /context command', () => {
     );
   });
 
-  it('shows warning toast and does not send bridge event for the dsh provider', () => {
+  it('shows warning toast and does not send bridge event for a non-qwen provider', () => {
     const addToast = vi.fn();
     const opts = createOptions({
-      currentProvider: 'dsh',
+      currentProvider: 'codex',
       addToast,
     });
 

@@ -135,7 +135,7 @@ export interface HistorySessionSummary {
   lastTimestamp?: string;
   isFavorited?: boolean;
   favoritedAt?: number;
-  provider?: string; // 'qwen' | 'dsh' | …
+  provider?: string; // 'qwen' | …
   /** Model used by this session when known (restored on open). */
   model?: string;
   /** Agent name when known. */

@@ -28,7 +28,7 @@ export interface MessageItemProps {
   onNavigateToProviderSettings?: () => void;
   onNavigateToDependencySettings?: () => void;
   toolResultSignature?: string;
-  /** Current active provider id (e.g. 'qwen', 'dsh'); drives the streaming-connect label. */
+  /** Current active provider id (e.g. 'qwen'); drives the streaming-connect label. */
   currentProvider?: string;
   /** Show opt-in detailed footer extras such as turn cost and cache-hit ratio. */
   detailedOutputEnabled?: boolean;

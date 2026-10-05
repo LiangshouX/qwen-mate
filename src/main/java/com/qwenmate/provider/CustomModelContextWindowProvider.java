@@ -76,7 +76,7 @@ public final class CustomModelContextWindowProvider {
 
         String normalizedProvider = normalizeProvider(provider);
         // Qwen keeps its statically known context window; custom windows are
-        // honored per provider key (e.g. dsh) where the window is user-configurable.
+        // honored per provider key where the window is user-configurable.
         if (QWEN_PROVIDER.equals(normalizedProvider)) {
             return OptionalInt.empty();
         }

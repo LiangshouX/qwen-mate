@@ -2,7 +2,6 @@ package com.qwenmate.session;
 
 import com.qwenmate.permission.PermissionManager;
 import com.qwenmate.permission.PermissionRequest;
-import com.qwenmate.provider.common.MarkerCliBridge;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
 import com.google.gson.JsonObject;
 import com.intellij.openapi.diagnostic.Logger;
@@ -177,8 +176,7 @@ public class QwenMateSession {
 
     public QwenMateSession(
             Project project,
-            QwenSDKBridge qwenSDKBridge,
-            Map<String, MarkerCliBridge> cliBridges
+            QwenSDKBridge qwenSDKBridge
     ) {
         this.project = project;
 
@@ -189,13 +187,12 @@ public class QwenMateSession {
         this.callbackFacade = new SessionCallbackFacade(project);
         this.contextService = new SessionContextService(project);
         this.qwenSDKBridge = qwenSDKBridge;
-        this.providerRouter = new SessionProviderRouter(qwenSDKBridge, cliBridges);
+        this.providerRouter = new SessionProviderRouter(qwenSDKBridge);
         this.sendService = new SessionSendService(
                 project,
                 state,
                 callbackFacade,
                 qwenSDKBridge,
-                cliBridges,
                 contextService);
         this.messageOrchestrator = new SessionMessageOrchestrator(
                 project,
@@ -436,23 +433,7 @@ public class QwenMateSession {
             String requestedReasoningEffort
     ) {
         return send(input, null, agentPrompt, fileTagPaths, requestedPermissionMode,
-                requestedReasoningEffort, null);
-    }
-
-    /**
-     * Send a message with a specific agent prompt, file tags, requested permission mode,
-     * requested reasoning effort, and an optional DSH agent preset.
-     */
-    public CompletableFuture<Void> send(
-            String input,
-            String agentPrompt,
-            List<String> fileTagPaths,
-            String requestedPermissionMode,
-            String requestedReasoningEffort,
-            String requestedDshPreset
-    ) {
-        return send(input, null, agentPrompt, fileTagPaths, requestedPermissionMode,
-                requestedReasoningEffort, requestedDshPreset);
+                requestedReasoningEffort);
     }
 
     /**
@@ -519,22 +500,6 @@ public class QwenMateSession {
             String requestedPermissionMode,
             String requestedReasoningEffort
     ) {
-        return send(input, attachments, agentPrompt, fileTagPaths, requestedPermissionMode,
-                requestedReasoningEffort, null);
-    }
-
-    /**
-     * Send a message with attachments and an optional DSH agent preset.
-     */
-    public CompletableFuture<Void> send(
-            String input,
-            List<Attachment> attachments,
-            String agentPrompt,
-            List<String> fileTagPaths,
-            String requestedPermissionMode,
-            String requestedReasoningEffort,
-            String requestedDshPreset
-    ) {
         lastTurnStartedAtMillis = System.currentTimeMillis();
         // Reset the manual-interrupt flag at the start of a new turn so that
         // a fresh send is not mistaken for a user-initiated stop.
@@ -547,7 +512,6 @@ public class QwenMateSession {
         final List<String> finalFileTagPaths = fileTagPaths;
         final String finalRequestedPermissionMode = requestedPermissionMode;
         final String finalRequestedReasoningEffort = requestedReasoningEffort;
-        final String finalRequestedDshPreset = requestedDshPreset;
 
         return launchClaude().thenCompose(chId -> {
             sendService.prepareContextCollector(contextCollector);
@@ -561,8 +525,7 @@ public class QwenMateSession {
                             finalAgentPrompt,
                             finalFileTagPaths,
                             finalRequestedPermissionMode,
-                            finalRequestedReasoningEffort,
-                            finalRequestedDshPreset
+                            finalRequestedReasoningEffort
                     )
             );
         }).exceptionally(ex -> {

@@ -58,11 +58,11 @@ describe('ModelSelect', () => {
         models={[
           {
             id: 'auto',
-            label: 'DSH Auto',
-            description: 'Use the model configured in the DSH Web UI',
+            label: 'Auto',
+            description: 'Use the model configured in the CLI',
           },
         ]}
-        currentProvider="dsh"
+        currentProvider="qwen"
         loading
       />,
     );
@@ -81,11 +81,11 @@ describe('ModelSelect', () => {
         models={[
           {
             id: 'auto',
-            label: 'DSH Auto',
-            description: 'Use the model configured in the DSH Web UI',
+            label: 'Auto',
+            description: 'Use the model configured in the CLI',
           },
         ]}
-        currentProvider="dsh"
+        currentProvider="qwen"
         error="llm.models failed"
         onRetry={onRetry}
       />,
@@ -105,8 +105,8 @@ describe('ModelSelect', () => {
       <ModelSelect
         value="auto"
         onChange={vi.fn()}
-        models={[{ id: 'auto', label: 'DSH Auto' }]}
-        currentProvider="dsh"
+        models={[{ id: 'auto', label: 'Auto' }]}
+        currentProvider="qwen"
         loading
         error="timeout"
         onRetry={vi.fn()}
@@ -137,7 +137,7 @@ describe('ModelSelect', () => {
         value="opencode/big-pickle"
         onChange={vi.fn()}
         models={catalogModels}
-        currentProvider="dsh"
+        currentProvider="qwen"
       />,
     );
 
@@ -154,7 +154,7 @@ describe('ModelSelect', () => {
         value="opencode/big-pickle"
         onChange={vi.fn()}
         models={catalogModels}
-        currentProvider="dsh"
+        currentProvider="qwen"
       />,
     );
 
@@ -176,7 +176,7 @@ describe('ModelSelect', () => {
         value="opencode/big-pickle"
         onChange={vi.fn()}
         models={catalogModels}
-        currentProvider="dsh"
+        currentProvider="qwen"
       />,
     );
 
@@ -202,7 +202,7 @@ describe('ModelSelect', () => {
         value={catalogModel.id}
         onChange={vi.fn()}
         models={[catalogModel]}
-        currentProvider="dsh"
+        currentProvider="qwen"
       />,
     );
 

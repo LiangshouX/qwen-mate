@@ -10,7 +10,7 @@ const createProps = (): ComponentProps<typeof ChatInputBoxHeader> => ({
   sdkInstalled: true,
   sdkStatusLoading: false,
   sdkStatusError: false,
-  currentProvider: 'dsh',
+  currentProvider: 'qwen',
   t: ((key: string) => key) as never,
   attachments: [],
   onRemoveAttachment: vi.fn(),

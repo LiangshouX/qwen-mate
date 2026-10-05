@@ -152,7 +152,7 @@ describe('useSessionManagement', () => {
         {
           sessionId: 'history-2',
           title: 'History Two',
-          provider: 'dsh',
+          provider: 'qwen',
           messageCount: 5,
           lastTimestamp: Date.now(),
         },
@@ -203,7 +203,7 @@ describe('useSessionManagement', () => {
         {
           sessionId: 'history-2',
           title: 'History Two',
-          provider: 'dsh',
+          provider: 'qwen',
           messageCount: 5,
           lastTimestamp: Date.now(),
         },
@@ -276,7 +276,7 @@ describe('useSessionManagement', () => {
         {
           sessionId: 'history-2',
           title: 'History Two',
-          provider: 'dsh',
+          provider: 'qwen',
           messageCount: 5,
           lastTimestamp: Date.now(),
         },
@@ -359,10 +359,10 @@ describe('useSessionManagement', () => {
     );
 
     act(() => {
-      result.current.forceCreateNewSessionWithProvider('dsh');
+      result.current.forceCreateNewSessionWithProvider('codex');
     });
 
-    expect(window.sendToJava).toHaveBeenNthCalledWith(1, 'set_provider:dsh');
+    expect(window.sendToJava).toHaveBeenNthCalledWith(1, 'set_provider:codex');
     expect(window.sendToJava).toHaveBeenNthCalledWith(2, 'create_new_session:');
     expect(window.__sessionTransitioning).toBe(true);
     expect(mocks.setMessages).toHaveBeenCalledWith([]);
@@ -616,7 +616,7 @@ describe('useSessionManagement', () => {
         {
           sessionId: 'hist-codex',
           title: 'Codex Session',
-          provider: 'dsh',
+          provider: 'codex',
           model: 'gpt-5.4',
           messageCount: 2,
           lastTimestamp: Date.now(),
@@ -639,11 +639,11 @@ describe('useSessionManagement', () => {
     );
 
     act(() => {
-      result.current.loadHistorySession('hist-codex', 'dsh');
+      result.current.loadHistorySession('hist-codex', 'codex');
     });
 
     expect(window.sendToJava).toHaveBeenCalledWith(
-      'load_session:{"sessionId":"hist-codex","provider":"dsh","model":"gpt-5.4"}'
+      'load_session:{"sessionId":"hist-codex","provider":"codex","model":"gpt-5.4"}'
     );
   });
 
@@ -669,7 +669,7 @@ describe('useSessionManagement', () => {
         loading: false,
         historyData,
         currentSessionId: null,
-        currentProvider: 'dsh',
+        currentProvider: 'codex',
         ...mocks,
         t,
       })
@@ -680,7 +680,7 @@ describe('useSessionManagement', () => {
     });
 
     expect(window.sendToJava).toHaveBeenCalledWith(
-      'load_session:{"sessionId":"hist-codex-missing-provider","provider":"dsh"}'
+      'load_session:{"sessionId":"hist-codex-missing-provider","provider":"codex"}'
     );
   });
 

@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { TFunction } from 'i18next';
 import { sendBridgeEvent } from '../utils/bridge';
-import { isValidDshPreset, isValidPermissionMode } from '../components/ChatInputBox/types';
+import { isValidPermissionMode } from '../components/ChatInputBox/types';
 import type { PermissionMode, ReasoningEffort } from '../components/ChatInputBox/types';
 import { isCliOnlyProvider } from './providers/cliProviders';
 import { useQwenProvider } from './providers/useQwenProvider';
-import { useDshProvider } from './providers/useDshProvider';
 import { useUsageTracking } from './providers/useUsageTracking';
 import { useProviderSettings } from './providers/useProviderSettings';
 import { useModelStatePersistence } from './providers/useModelStatePersistence';
@@ -26,7 +25,7 @@ export interface UseModelProviderStateOptions {
 
 /**
  * Orchestrates provider/model/permission state. Composes the provider slices
- * (Qwen / DSH) plus usage tracking and provider settings, then wires the
+ * (Qwen) plus usage tracking and provider settings, then wires the
  * cross-slice state (currentProvider + permissionMode) and the cross-provider
  * handlers (mode/model/provider switch, thinking toggle).
  *
@@ -52,7 +51,6 @@ export function useModelProviderState({ addToast, t }: UseModelProviderStateOpti
 
   // ── Provider-specific sub-hooks ──
   const qwen = useQwenProvider();
-  const dsh = useDshProvider();
   const { isSdkInstalled, isSdkStatusKnown, sdkStatus, ...usage } = useUsageTracking();
   const settings = useProviderSettings({ addToast, t });
 
@@ -60,35 +58,23 @@ export function useModelProviderState({ addToast, t }: UseModelProviderStateOpti
     selectedQwenModel, setSelectedQwenModel,
     qwenPermissionMode, setQwenPermissionMode,
   } = qwen;
-  const {
-    selectedDshModel, setSelectedDshModel,
-    dshPermissionMode, setDshPermissionMode,
-    dshPreset, setDshPreset,
-  } = dsh;
 
   // ── Persistence: load on mount + save on change ──
   useModelStatePersistence({
     setCurrentProvider,
     setSelectedQwenModel,
-    setSelectedDshModel,
     setQwenPermissionMode,
-    setDshPermissionMode,
     setPermissionMode,
     setReasoningEffort: settings.setReasoningEffort,
-    setDshPreset,
     currentProvider,
     selectedQwenModel,
-    selectedDshModel,
     qwenPermissionMode,
-    dshPermissionMode,
     reasoningEffort: settings.reasoningEffort,
-    dshPreset,
   });
 
   // ── Computed values ──
   const selectedModel = selectedModelForProvider(currentProvider, {
     qwen: selectedQwenModel,
-    dsh: selectedDshModel,
   });
   const currentSdkInstalled = useMemo(
     () => isSdkInstalled(currentProvider),
@@ -106,21 +92,19 @@ export function useModelProviderState({ addToast, t }: UseModelProviderStateOpti
       applyCliModeSelect(currentProvider, mode, {
         setPermissionMode,
         setQwenPermissionMode,
-        setDshPermissionMode,
       });
       return;
     }
     setPermissionMode(mode);
     setQwenPermissionMode(mode);
     sendBridgeEvent('set_mode', mode);
-  }, [currentProvider, setQwenPermissionMode, setDshPermissionMode]);
+  }, [currentProvider, setQwenPermissionMode]);
 
   const handleModelSelect = useCallback((modelId: string) => {
     applyModelSelect(currentProvider, modelId, {
       setSelectedQwenModel,
-      setSelectedDshModel,
     });
-  }, [currentProvider, setSelectedQwenModel, setSelectedDshModel]);
+  }, [currentProvider, setSelectedQwenModel]);
 
   const handleProviderSelect = useCallback((providerId: string) => {
     setCurrentProvider(providerId);
@@ -128,7 +112,6 @@ export function useModelProviderState({ addToast, t }: UseModelProviderStateOpti
 
     const modeToSet = resolveProviderPermissionMode(providerId, {
       qwen: qwenPermissionMode,
-      dsh: dshPermissionMode,
     });
     setPermissionMode(modeToSet);
     if (isValidPermissionMode(modeToSet)) {
@@ -137,27 +120,12 @@ export function useModelProviderState({ addToast, t }: UseModelProviderStateOpti
 
     const newModel = resolveProviderModel(providerId, {
       qwen: selectedQwenModel,
-      dsh: selectedDshModel,
     });
     sendBridgeEvent('set_model', newModel);
-    if (providerId === 'dsh') {
-      sendBridgeEvent('set_dsh_preset', dshPreset);
-    }
   }, [
     qwenPermissionMode,
-    dshPermissionMode,
     selectedQwenModel,
-    selectedDshModel,
-    dshPreset,
   ]);
-
-  const handleDshPresetChange = useCallback((preset: string) => {
-    if (!isValidDshPreset(preset)) return;
-    setDshPreset(preset);
-    if (currentProvider === 'dsh') {
-      sendBridgeEvent('set_dsh_preset', preset);
-    }
-  }, [currentProvider, setDshPreset]);
 
   const handleReasoningChange = useCallback((effort: ReasoningEffort) => {
     settings.setReasoningEffort(effort);
@@ -172,7 +140,6 @@ export function useModelProviderState({ addToast, t }: UseModelProviderStateOpti
 
   return {
     ...qwen,
-    ...dsh,
     ...usage,
     ...settings,
     sdkStatus,
@@ -185,7 +152,6 @@ export function useModelProviderState({ addToast, t }: UseModelProviderStateOpti
     handleModeSelect,
     handleModelSelect,
     handleProviderSelect,
-    handleDshPresetChange,
     handleReasoningChange,
     handleToggleThinking,
   };

@@ -60,27 +60,27 @@ public class CustomPricingProviderTest {
 
     @Test
     public void shouldKeepOneMillionContextSuffixFallback() throws IOException {
-        CustomPricingProvider provider = newProvider(config(entry("deepseek-v4-pro", 3.0)));
+        CustomPricingProvider provider = newProvider(config(entry("acme-v4-pro", 3.0)));
 
-        Optional<ModelPricing> pricing = provider.getPricing("qwen", "deepseek-v4-pro[1m]");
+        Optional<ModelPricing> pricing = provider.getPricing("qwen", "acme-v4-pro[1m]");
 
         assertInputRate(pricing, 3.0);
     }
 
     @Test
     public void shouldMatchConfiguredOneMillionContextSuffixWhenHistoryStoresBaseModel() throws IOException {
-        CustomPricingProvider provider = newProvider(config(entry("deepseek-v4-pro[1m]", 3.5)));
+        CustomPricingProvider provider = newProvider(config(entry("acme-v4-pro[1m]", 3.5)));
 
-        Optional<ModelPricing> pricing = provider.getPricing("qwen", "deepseek-v4-pro");
+        Optional<ModelPricing> pricing = provider.getPricing("qwen", "acme-v4-pro");
 
         assertInputRate(pricing, 3.5);
     }
 
     @Test
     public void shouldMatchRoutePrefixedPricingWithOneMillionContextSuffix() throws IOException {
-        CustomPricingProvider provider = newProvider(config(entry("ppio/deepseek-v4-pro[1m]", 4.0)));
+        CustomPricingProvider provider = newProvider(config(entry("ppio/acme-v4-pro[1m]", 4.0)));
 
-        Optional<ModelPricing> pricing = provider.getPricing("qwen", "deepseek-v4-pro");
+        Optional<ModelPricing> pricing = provider.getPricing("qwen", "acme-v4-pro");
 
         assertInputRate(pricing, 4.0);
     }

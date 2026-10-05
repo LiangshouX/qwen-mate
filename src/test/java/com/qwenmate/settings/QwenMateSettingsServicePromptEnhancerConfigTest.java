@@ -25,7 +25,7 @@ public class QwenMateSettingsServicePromptEnhancerConfigTest {
     }
 
     @Test
-    public void shouldDefaultToQwenDshModelsWithAutoResolution() throws Exception {
+    public void shouldDefaultToQwenModelWithAutoResolution() throws Exception {
         Path tempHome = Files.createTempDirectory("prompt-enhancer-default-home");
         useTemporaryHomeDirectory(tempHome);
 
@@ -36,10 +36,8 @@ public class QwenMateSettingsServicePromptEnhancerConfigTest {
         assertTrue(config.get("provider").isJsonNull());
         // Empty model id = follow the Qwen CLI config
         assertEquals("", config.getAsJsonObject("models").get("qwen").getAsString());
-        assertEquals("auto", config.getAsJsonObject("models").get("dsh").getAsString());
         // Same provider set as the main chat selector
         assertTrue(config.getAsJsonObject("availability").has("qwen"));
-        assertTrue(config.getAsJsonObject("availability").has("dsh"));
         assertAutoResolution(config, null);
     }
 
@@ -51,15 +49,14 @@ public class QwenMateSettingsServicePromptEnhancerConfigTest {
         QwenMateSettingsService service = new QwenMateSettingsService();
 
         // Preferred provider is followed when its CLI is available, otherwise
-        // resolution falls back to Qwen -> DSH (availability depends on the machine).
+        // resolution falls back to Qwen (availability depends on the machine).
         assertAutoResolution(service.getPromptEnhancerConfig("qwen"), "qwen");
-        assertAutoResolution(service.getPromptEnhancerConfig("dsh"), "dsh");
-        // Unknown preferred provider is ignored -> plain Qwen -> DSH fallback.
+        // Unknown preferred provider is ignored -> plain Qwen fallback.
         assertAutoResolution(service.getPromptEnhancerConfig("grok"), null);
     }
 
     @Test
-    public void shouldPersistManualProviderAndProviderSpecificModels() throws Exception {
+    public void shouldPersistManualProviderAndModels() throws Exception {
         Path tempHome = Files.createTempDirectory("prompt-enhancer-manual-home");
         useTemporaryHomeDirectory(tempHome);
 
@@ -67,14 +64,12 @@ public class QwenMateSettingsServicePromptEnhancerConfigTest {
 
         JsonObject models = new JsonObject();
         models.addProperty("qwen", "custom-qwen-model");
-        models.addProperty("dsh", "custom-dsh-model");
         service.setPromptEnhancerConfig("qwen", models);
 
         JsonObject config = service.getPromptEnhancerConfig();
 
         assertEquals("qwen", config.get("provider").getAsString());
         assertEquals("custom-qwen-model", config.getAsJsonObject("models").get("qwen").getAsString());
-        assertEquals("custom-dsh-model", config.getAsJsonObject("models").get("dsh").getAsString());
         if (config.getAsJsonObject("availability").get("qwen").getAsBoolean()) {
             assertEquals("manual", config.get("resolutionSource").getAsString());
             assertEquals("qwen", config.get("effectiveProvider").getAsString());
@@ -99,10 +94,8 @@ public class QwenMateSettingsServicePromptEnhancerConfigTest {
         JsonObject config = service.getPromptEnhancerConfig();
         JsonObject savedModels = config.getAsJsonObject("models");
 
-        assertEquals(2, savedModels.size());
+        assertEquals(1, savedModels.size());
         assertEquals("custom-qwen-model", savedModels.get("qwen").getAsString());
-        // Partial model map keeps the default for missing providers
-        assertEquals("auto", savedModels.get("dsh").getAsString());
         assertFalse(savedModels.has("claude"));
     }
 
@@ -127,7 +120,7 @@ public class QwenMateSettingsServicePromptEnhancerConfigTest {
 
     /**
      * Asserts auto-mode resolution against the availability map reported in the
-     * same response: preferred provider when available, otherwise Qwen -> DSH.
+     * same response: preferred provider when available, otherwise Qwen.
      * Machine-dependent CLI availability is read from the response itself.
      */
     private static void assertAutoResolution(JsonObject config, String preferredProvider) {
@@ -139,8 +132,6 @@ public class QwenMateSettingsServicePromptEnhancerConfigTest {
             expected = preferredProvider;
         } else if (availability.get("qwen").getAsBoolean()) {
             expected = "qwen";
-        } else if (availability.get("dsh").getAsBoolean()) {
-            expected = "dsh";
         }
 
         if (expected == null) {

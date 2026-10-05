@@ -170,7 +170,6 @@ const [isThinking, setIsThinking] = useState(false);
 ```typescript
 const [currentProvider, setCurrentProvider] = useState('qwen');
 const [selectedQwenModel, setSelectedQwenModel] = useState(QWEN_MODELS[0].id);
-const [selectedDshModel, setSelectedDshModel] = useState(DSH_MODELS[0].id);
 const [permissionMode, setPermissionMode] = useState<PermissionMode>('bypassPermissions');
 ```
 

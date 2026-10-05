@@ -31,16 +31,9 @@ public class PermissionModeHandler {
         if (normalized.isEmpty()) {
             normalized = "default";
         }
-        // DSH exposes neither plan mode nor a provider-native auto reviewer;
-        // qwen supports the full CLI approval-mode set natively.
-        String provider = this.context.getCurrentProvider();
-        if ((provider == null || provider.isEmpty())) {
-            provider = HandlerContext.DEFAULT_PROVIDER;
-        }
-        if (!"qwen".equals(provider)
-                && ("plan".equals(normalized) || "auto".equals(normalized))) {
-            return "default";
-        }
+        // qwen supports the full CLI approval-mode set natively
+        // (plan / default / auto-edit / auto / yolo), so no provider-side coercion
+        // is needed here.
         return normalized;
     }
 
@@ -139,8 +132,7 @@ public class PermissionModeHandler {
             }
 
             // Only the Qwen persistent runtime supports hot-swapping the mode
-            // on a live query today; dsh rebuilds its options per turn.
-            // TODO: implement live permission-mode switch for the dsh provider
+            // on a live query today.
             if (!"qwen".equals(provider)) {
                 return;
             }

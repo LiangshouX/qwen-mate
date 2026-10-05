@@ -90,7 +90,6 @@ export interface ChatScreenProps {
   currentSdkInstalled: ProviderState['currentSdkInstalled'];
   alwaysThinkingEnabled: ProviderState['alwaysThinkingEnabled'];
   reasoningEffort: ProviderState['reasoningEffort'];
-  dshPreset: ProviderState['dshPreset'];
   streamingEnabledSetting: ProviderState['streamingEnabledSetting'];
   sendShortcut: ProviderState['sendShortcut'];
   autoOpenFileEnabled: ProviderState['autoOpenFileEnabled'];
@@ -103,7 +102,6 @@ export interface ChatScreenProps {
   onModelSelect: ProviderState['handleModelSelect'];
   onAgentSelect: ProviderState['handleAgentSelect'];
   onReasoningChange: ProviderState['handleReasoningChange'];
-  onDshPresetChange: ProviderState['handleDshPresetChange'];
   onToggleThinking: ProviderState['handleToggleThinking'];
   onStreamingEnabledChange: ProviderState['handleStreamingEnabledChange'];
   onAutoOpenFileEnabledChange: ProviderState['handleAutoOpenFileEnabledChange'];
@@ -137,9 +135,9 @@ export const ChatScreen = ({
   currentProvider, selectedModel, permissionMode, selectedAgent,
   sdkStatusLoading, sdkStatusError, onRetrySdkStatus, currentSdkInstalled,
   alwaysThinkingEnabled,
-  reasoningEffort, dshPreset, streamingEnabledSetting, sendShortcut, autoOpenFileEnabled,
+  reasoningEffort, streamingEnabledSetting, sendShortcut, autoOpenFileEnabled,
   usagePercentage, usageUsedTokens, usageMaxTokens,
-  onModeSelect, onModelSelect, onAgentSelect, onReasoningChange, onDshPresetChange, onToggleThinking,
+  onModeSelect, onModelSelect, onAgentSelect, onReasoningChange, onToggleThinking,
   onStreamingEnabledChange,
   onAutoOpenFileEnabledChange,
   messageQueue, onRemoveFromQueue, onReorderQueue,
@@ -321,9 +319,7 @@ export const ChatScreen = ({
           onModelSelect={onModelSelect}
           onProviderSelect={onProviderSelect}
           reasoningEffort={reasoningEffort}
-          dshPreset={dshPreset}
           onReasoningChange={onReasoningChange}
-          onDshPresetChange={onDshPresetChange}
           onToggleThinking={onToggleThinking}
           streamingEnabled={streamingEnabledSetting}
           onStreamingEnabledChange={onStreamingEnabledChange}

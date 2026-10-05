@@ -9,7 +9,7 @@ import type { McpServer, McpServerStatusInfo } from '../../types/mcp';
 // ============================================================================
 
 export interface McpSettingsSectionProps {
-  currentProvider?: 'qwen' | 'dsh' | string;
+  currentProvider?: string;
 }
 
 // ============================================================================

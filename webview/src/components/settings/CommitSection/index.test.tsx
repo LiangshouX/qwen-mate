@@ -32,7 +32,6 @@ describe('CommitSection', () => {
       models: { ...DEFAULT_AI_FEATURE_MODELS },
       availability: {
         qwen: true,
-        dsh: true,
       },
     };
 

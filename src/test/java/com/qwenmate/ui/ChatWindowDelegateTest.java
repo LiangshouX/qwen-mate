@@ -97,7 +97,7 @@ public class ChatWindowDelegateTest {
             boolean runtimeRecovery,
             List<String> javaScriptCalls
     ) {
-        QwenMateSession session = new QwenMateSession(null, null, null);
+        QwenMateSession session = new QwenMateSession(null, null);
         session.setProvider("qwen");
         session.setModel("qwen3-coder-plus");
 

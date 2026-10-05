@@ -10,12 +10,11 @@ Based on [CC GUI](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) (MIT)
 
 ---
 
-A JetBrains IDE plugin that provides a visual interface for **Qwen Code** (official TypeScript SDK) and **DeepSeek Harness** (Beta), making AI-assisted programming more efficient and intuitive.
+A JetBrains IDE plugin that provides a visual interface for **Qwen Code** (official TypeScript SDK), making AI-assisted programming more efficient and intuitive.
 
 ## Supported Engines
 
 - **Qwen Code** — 通义千问 AI 编程助手（官方 TypeScript SDK 驱动，支持 qwen3-coder 等多模型）
-- **DeepSeek Harness** (Beta)
 
 ## Key Features
 

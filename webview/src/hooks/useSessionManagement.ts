@@ -297,11 +297,8 @@ export function useSessionManagement({
     // Re-opening the session already active: soft-reload only — do NOT
     // beginSessionTransition (which clears messages and holds the transition
     // guard). Backend routes same-session to reloadActiveSessionMessages.
-    // Codex still uses a full transition: its loadCodexSession path is separate
-    // and mid-stream soft-reload without interrupt can clearMessages under the
-    // live reply.
     const isSameSession = sessionId === currentSessionId;
-    if (isSameSession && effectiveProvider !== 'dsh') {
+    if (isSameSession) {
       sendBridgeEvent('load_session', JSON.stringify({
         sessionId,
         provider: effectiveProvider,
@@ -311,7 +308,7 @@ export function useSessionManagement({
       return;
     }
 
-    // Switching to a different session (or Codex same-session): interrupt first
+    // Switching to a different session: interrupt first
     // if the AI is mid-reply, then do a full session swap.
     if (loading) {
       sendBridgeEvent('interrupt_session');

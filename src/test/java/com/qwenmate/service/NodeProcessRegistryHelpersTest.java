@@ -72,12 +72,6 @@ public class NodeProcessRegistryHelpersTest {
     }
 
     @Test
-    public void detectProviderClassifiesDshChannelManager() {
-        assertEquals("dsh",
-                NodeProcessRegistry.detectProviderFromCmd("node /path/channel-manager.js dsh send"));
-    }
-
-    @Test
     public void detectProviderChannelManagerBeatsDaemonJsAmbiguity() {
         // A channel-manager invocation may also contain daemon.js in its argv;
         // the channel-manager check must win over the daemon.js fallback.

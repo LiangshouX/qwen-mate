@@ -7,19 +7,16 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('StatusPanel', () => {
-  it.each([
-    ['dsh', 'statusPanel.todoTab'],
-    ['qwen', 'statusPanel.tasksTab'],
-  ])('uses the provider-specific todo label for %s', (currentProvider, expectedLabel) => {
+  it('uses the tasks tab label', () => {
     render(
       <StatusPanel
         todos={[]}
         fileChanges={[]}
         subagents={[]}
-        currentProvider={currentProvider}
+        currentProvider="qwen"
       />,
     );
 
-    expect(screen.getByText(expectedLabel)).toBeTruthy();
+    expect(screen.getByText('statusPanel.tasksTab')).toBeTruthy();
   });
 });

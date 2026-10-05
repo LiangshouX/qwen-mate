@@ -17,7 +17,7 @@ export interface QuestionOption {
   description: string;
 }
 
-/** Presentation intent a capable UI may recognise (DSH `plan-review` today). */
+/** Presentation intent a capable UI may recognise (e.g. `plan-review`). */
 export interface QuestionIntent {
   kind: string;
   /** Option label that approves, for `plan-review`. */
@@ -31,8 +31,8 @@ export interface Question {
   multiSelect: boolean;
   /**
    * Supporting detail rendered with the question but kept out of the option
-   * labels — DSH carries the plan under review here, so dropping it left the
-   * user approving a plan they could not read.
+   * labels — the host may carry a plan under review here, so dropping it left
+   * the user approving a plan they could not read.
    */
   detail?: string;
   intent?: QuestionIntent;
@@ -42,7 +42,7 @@ export interface AskUserQuestionRequest {
   requestId: string;
   toolName: string;
   questions: Question[];
-  provider?: 'qwen' | 'dsh' | 'dsh';
+  provider?: string;
   deadlineMs?: number;
   dialogToken?: string;
 }
@@ -81,10 +81,7 @@ const AskUserQuestionDialog = ({
   });
 
   const normalizedQuestions = normalizeQuestions(request?.questions);
-  const isDshRequest = request?.provider === 'dsh';
-  const dialogTitle = isDshRequest
-    ? t('askUserQuestion.dshTitle', 'DeepSeek Harness 有一些问题想问你')
-    : t('askUserQuestion.title', 'Qwen 有一些问题想问你');
+  const dialogTitle = t('askUserQuestion.title', 'Qwen 有一些问题想问你');
 
   const handleCancel = useCallback(() => {
     if (request && markSubmitted()) {

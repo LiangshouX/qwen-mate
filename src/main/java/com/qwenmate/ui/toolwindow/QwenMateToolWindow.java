@@ -1,7 +1,6 @@
 package com.qwenmate.ui.toolwindow;
 
 import com.qwenmate.i18n.QwenMateBundle;
-import com.qwenmate.provider.common.MarkerCliBridge;
 import com.qwenmate.settings.TabStateService;
 import com.qwenmate.startup.BridgePreloader;
 import com.qwenmate.ui.detached.DetachedWindowManager;
@@ -161,14 +160,6 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
         try {
             if (window.getQwenSDKBridge() != null) {
                 window.getQwenSDKBridge().cleanupAllProcesses();
-            }
-            if (window.getCliBridges() != null) {
-                for (MarkerCliBridge bridge
-                        : window.getCliBridges().values()) {
-                    if (bridge != null) {
-                        bridge.cleanupAllProcesses();
-                    }
-                }
             }
         } catch (Exception e) {
             LOG.error("[ShutdownHook] Error cleaning up processes: " + e.getMessage(), e);

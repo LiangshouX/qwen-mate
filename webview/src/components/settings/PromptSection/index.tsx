@@ -14,11 +14,11 @@ type PromptCallbackPayload = { provider: PromptProvider; prompts: PromptConfig[]
 
 interface PromptSectionProps {
   onSuccess?: (message: string) => void;
-  currentProvider?: 'qwen' | 'dsh' | string;
+  currentProvider?: string;
 }
 
-function normalizePromptProvider(provider?: string | null): PromptProvider {
-  return provider === 'dsh' ? 'dsh' : 'qwen';
+function normalizePromptProvider(_provider?: string | null): PromptProvider {
+  return 'qwen';
 }
 
 function parsePromptCallbackPayload(json: string, fallbackProvider: PromptProvider): PromptCallbackPayload | null {

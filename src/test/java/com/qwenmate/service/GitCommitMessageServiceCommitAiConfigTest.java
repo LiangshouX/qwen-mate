@@ -23,7 +23,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
 
     @Test
     public void shouldReturnUnavailableErrorWhenNoCommitAiProviderIsResolved() {
-        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig(null, "qwen3-coder-plus", "deepseek-chat"));
+        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig(null, "qwen3-coder-plus", "alt-model"));
         ResultCapture callback = new ResultCapture();
 
         service.generateCommitMessage(Collections.<Change>emptyList(), callback);
@@ -35,7 +35,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
 
     @Test
     public void shouldRouteToResolvedQwenModel() {
-        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "deepseek-chat"));
+        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "alt-model"));
         ResultCapture callback = new ResultCapture();
 
         service.generateCommitMessage(Collections.<Change>emptyList(), callback);
@@ -46,21 +46,21 @@ public class GitCommitMessageServiceCommitAiConfigTest {
     }
 
     @Test
-    public void shouldRouteToResolvedDshModel() {
-        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("dsh", "qwen3-coder-plus", "deepseek-chat"));
+    public void shouldRouteToResolvedAlternateProviderModel() {
+        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("alt", "qwen3-coder-plus", "alt-model"));
         ResultCapture callback = new ResultCapture();
 
         service.generateCommitMessage(Collections.<Change>emptyList(), callback);
 
-        assertEquals("dsh", service.lastCliProvider);
-        assertEquals("deepseek-chat", service.lastCliModel);
+        assertEquals("alt", service.lastCliProvider);
+        assertEquals("alt-model", service.lastCliModel);
         assertEquals("fix: use cli routing", callback.success);
     }
 
     @Test
     public void shouldRouteToResolvedGrokCliProvider() {
         TestableGitCommitMessageService service = new TestableGitCommitMessageService(
-                buildConfigWithModels("grok", "qwen3-coder-plus", "deepseek-chat", "grok-4", null, null, null, null));
+                buildConfigWithModels("grok", "qwen3-coder-plus", "alt-model", "grok-4", null, null, null, null));
         ResultCapture callback = new ResultCapture();
 
         service.generateCommitMessage(Collections.<Change>emptyList(), callback);
@@ -73,7 +73,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
     @Test
     public void shouldRouteToResolvedKimiCliProvider() {
         TestableGitCommitMessageService service = new TestableGitCommitMessageService(
-                buildConfigWithModels("kimi", "qwen3-coder-plus", "deepseek-chat", null, "kimi-k2", null, null, null));
+                buildConfigWithModels("kimi", "qwen3-coder-plus", "alt-model", null, "kimi-k2", null, null, null));
         ResultCapture callback = new ResultCapture();
 
         service.generateCommitMessage(Collections.<Change>emptyList(), callback);
@@ -86,7 +86,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
     @Test
     public void shouldRouteToResolvedOmpCliProvider() {
         TestableGitCommitMessageService service = new TestableGitCommitMessageService(
-                buildConfigWithModels("omp", "qwen3-coder-plus", "deepseek-chat", null, null, null, null, "auto"));
+                buildConfigWithModels("omp", "qwen3-coder-plus", "alt-model", null, null, null, null, "auto"));
         ResultCapture callback = new ResultCapture();
 
         service.generateCommitMessage(Collections.<Change>emptyList(), callback);
@@ -98,7 +98,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
 
     @Test
     public void shouldIgnoreLineEndingOnlyDiffs() {
-        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "deepseek-chat"));
+        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "alt-model"));
 
         String diff = service.exposeGeneratedDiff(Collections.singletonList(
                 modification("README.md", "line 1\r\nline 2\r\n", "line 1\nline 2\n")
@@ -109,7 +109,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
 
     @Test
     public void shouldKeepContentChangesWhenLineEndingsAlsoChange() {
-        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "deepseek-chat"));
+        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "alt-model"));
 
         String diff = service.exposeGeneratedDiff(Collections.singletonList(
                 modification("README.md", "line 1\r\nold text\r\n", "line 1\nnew text\n")
@@ -120,7 +120,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
 
     @Test
     public void shouldKeepEarlierContentChangesWhenIgnoringLaterLineEndingOnlyDiff() {
-        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "deepseek-chat"));
+        TestableGitCommitMessageService service = new TestableGitCommitMessageService(buildConfig("qwen", "qwen3-coder-plus", "alt-model"));
 
         String diff = service.exposeGeneratedDiff(Arrays.asList(
                 modification("content.md", "old text\n", "new text\n"),
@@ -154,14 +154,14 @@ public class GitCommitMessageServiceCommitAiConfigTest {
         };
     }
 
-    private JsonObject buildConfig(String effectiveProvider, String qwenModel, String dshModel) {
-        return buildConfigWithModels(effectiveProvider, qwenModel, dshModel, null, null, null, null, null);
+    private JsonObject buildConfig(String effectiveProvider, String qwenModel, String altModel) {
+        return buildConfigWithModels(effectiveProvider, qwenModel, altModel, null, null, null, null, null);
     }
 
     private JsonObject buildConfigWithModels(
             String effectiveProvider,
             String qwenModel,
-            String dshModel,
+            String altModel,
             String grokModel,
             String kimiModel,
             String opencodeModel,
@@ -179,7 +179,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
 
         JsonObject models = new JsonObject();
         models.addProperty("qwen", qwenModel);
-        models.addProperty("dsh", dshModel);
+        models.addProperty("alt", altModel);
         if (grokModel != null) models.addProperty("grok", grokModel);
         if (kimiModel != null) models.addProperty("kimi", kimiModel);
         if (opencodeModel != null) models.addProperty("opencode", opencodeModel);
@@ -189,7 +189,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
 
         JsonObject availability = new JsonObject();
         availability.addProperty("qwen", true);
-        availability.addProperty("dsh", true);
+        availability.addProperty("alt", true);
         config.add("availability", availability);
         return config;
     }

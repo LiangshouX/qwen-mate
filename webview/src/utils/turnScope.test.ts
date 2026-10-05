@@ -55,10 +55,6 @@ const subagent = (overrides: Partial<SubagentInfo>): SubagentInfo => ({
 describe('finalizeTodosForSettledTurn', () => {
   const todos: TodoItem[] = [{ content: 'Implement', status: 'in_progress' }];
 
-  it('preserves plan state when the main turn settles', () => {
-    expect(finalizeTodosForSettledTurn(todos, false, 'dsh')).toEqual(todos);
-  });
-
   it('keeps the existing settled-task behavior', () => {
     expect(finalizeTodosForSettledTurn(todos, false, 'qwen')).toEqual([
       { content: 'Implement', status: 'completed' },

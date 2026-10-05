@@ -24,7 +24,7 @@ const NODE_PROCESS_SNAPSHOT = {
     {
       id: 'channel-1',
       kind: 'CHANNEL',
-      provider: 'dsh',
+      provider: 'qwen',
       pid: 3011,
       alive: true,
       startedAt: Date.now() - 60_000,
@@ -231,26 +231,6 @@ test('tabbing from a pointer-opened provider menu continues through the toolbar'
     await expect(toolbarButtons.nth(targetIndex)).toBeFocused();
   }
 });
-
-test('confirming a beta provider with Enter keeps the menu closed', async ({ page }) => {
-  await page.goto('/');
-  const providerButton = page.locator('.button-area-left .selector-button').nth(1);
-  await providerButton.focus();
-  await page.keyboard.press('ArrowDown');
-  await page.keyboard.press('ArrowDown');
-  await page.keyboard.press('ArrowDown');
-  await expect(page.locator('[data-provider-id="dsh"]')).toBeFocused();
-  await page.keyboard.press('Enter');
-  const confirm = page.locator('.alert-dialog .confirm-button');
-  await expect(confirm).toBeFocused();
-  await page.keyboard.press('Enter');
-
-  await expect(page.locator('.alert-dialog')).toHaveCount(0);
-  await expect(page.locator('.button-area').first()).toHaveAttribute('data-provider', 'dsh');
-  await expect(providerButton).toHaveAttribute('aria-expanded', 'false');
-  await expect(providerButton).toBeFocused();
-});
-
 
 test('config submenus stay visible across constrained viewports', async ({ page }) => {
   const errors = collectPageErrors(page);

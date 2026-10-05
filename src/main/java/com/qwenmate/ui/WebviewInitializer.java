@@ -4,11 +4,8 @@ import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.core.HandlerContext;
 import com.qwenmate.i18n.QwenMateBundle;
 import com.qwenmate.model.NodeDetectionResult;
-import com.qwenmate.provider.common.MarkerCliBridge;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
-import java.util.Map;
 import com.qwenmate.session.QwenMateSession;
-import com.qwenmate.session.SessionState;
 import com.qwenmate.startup.BridgePreloader;
 import com.qwenmate.util.FontConfigService;
 import com.qwenmate.util.HtmlLoader;
@@ -85,7 +82,6 @@ public class WebviewInitializer {
     public interface WebviewHost {
         Project getProject();
         QwenSDKBridge getQwenSDKBridge();
-        Map<String, MarkerCliBridge> getCliBridges();
         JPanel getMainPanel();
         HtmlLoader getHtmlLoader();
         HandlerContext getHandlerContext();
@@ -109,17 +105,6 @@ public class WebviewInitializer {
     private final AtomicInteger initializationGeneration = new AtomicInteger();
     /** Prevents duplicate background preparation for one browser lifecycle. */
     private final AtomicBoolean initializationInProgress = new AtomicBoolean();
-
-    private static void applyNodePathToCliBridges(Map<String, MarkerCliBridge> cliBridges, String path) {
-        if (cliBridges == null) {
-            return;
-        }
-        for (MarkerCliBridge bridge : cliBridges.values()) {
-            if (bridge != null) {
-                bridge.setNodeExecutable(path);
-            }
-        }
-    }
 
     /**
      * JCEF JS bridges for the current browser. Keeping each browser's queries
@@ -173,7 +158,6 @@ public class WebviewInitializer {
         }
 
         QwenSDKBridge qwenSDKBridge = host.getQwenSDKBridge();
-        Map<String, MarkerCliBridge> cliBridges = host.getCliBridges();
         PropertiesComponent props = PropertiesComponent.getInstance();
         String savedNodePath = props.getValue(NODE_PATH_PROPERTY_KEY);
 
@@ -182,7 +166,6 @@ public class WebviewInitializer {
         if (savedNodePath != null && !savedNodePath.trim().isEmpty()) {
             String trimmed = savedNodePath.trim();
             qwenSDKBridge.setNodeExecutable(trimmed);
-            applyNodePathToCliBridges(cliBridges, trimmed);
         }
 
         showLoadingPanel();
@@ -192,7 +175,6 @@ public class WebviewInitializer {
                 savedNodePath,
                 props,
                 qwenSDKBridge,
-                cliBridges,
                 sharedResolver));
     }
 
@@ -223,7 +205,6 @@ public class WebviewInitializer {
             String savedNodePath,
             PropertiesComponent props,
             QwenSDKBridge qwenSDKBridge,
-            Map<String, MarkerCliBridge> cliBridges,
             com.qwenmate.bridge.BridgeDirectoryResolver sharedResolver
     ) {
         try {
@@ -259,7 +240,6 @@ public class WebviewInitializer {
                     String detectedPath = detected.getNodePath();
                     props.setValue(NODE_PATH_PROPERTY_KEY, detectedPath);
                     qwenSDKBridge.setNodeExecutable(detectedPath);
-                    applyNodePathToCliBridges(cliBridges, detectedPath);
                     // Cache the verified version for dependency and session handlers. This extra
                     // probe remains off the EDT and preserves the previous cache contract.
                     qwenSDKBridge.verifyAndCacheNodePath(detectedPath);
@@ -272,7 +252,6 @@ public class WebviewInitializer {
                     LOG.warn("Failed to auto-detect Node.js path. Error: "
                             + (detected != null ? detected.getErrorMessage() : "Unknown error"));
                     qwenSDKBridge.setNodeExecutable("node");
-                    applyNodePathToCliBridges(cliBridges, "node");
                     nodeResult = detected;
                 }
             }
@@ -1367,7 +1346,6 @@ public class WebviewInitializer {
      */
     public void handleNodePathSave(String manualPath) {
         QwenSDKBridge qwenSDKBridge = this.host.getQwenSDKBridge();
-        Map<String, MarkerCliBridge> cliBridges = this.host.getCliBridges();
         JPanel mainPanel = this.host.getMainPanel();
 
         final boolean clearRequested = manualPath == null || manualPath.isEmpty();
@@ -1377,7 +1355,6 @@ public class WebviewInitializer {
             PropertiesComponent props = PropertiesComponent.getInstance();
             props.unsetValue(NODE_PATH_PROPERTY_KEY);
             qwenSDKBridge.setNodeExecutable(null);
-            applyNodePathToCliBridges(cliBridges, null);
             LOG.info("Cleared manual Node.js path, scheduling auto-detection on background thread");
             showLoadingPanel();
         }
@@ -1393,7 +1370,6 @@ public class WebviewInitializer {
                         props.setValue(NODE_PATH_PROPERTY_KEY, detectedPath);
                         qwenSDKBridge.verifyAndCacheNodePath(detectedPath);
                         qwenSDKBridge.setNodeExecutable(detectedPath);
-                        applyNodePathToCliBridges(cliBridges, detectedPath);
                         LOG.info("Auto-detected and saved Node.js path: " + detectedPath);
                     }
                     reinitializeUi(mainPanel);
@@ -1406,7 +1382,6 @@ public class WebviewInitializer {
                     // Only save if verification succeeds
                     props.setValue(NODE_PATH_PROPERTY_KEY, manualPath);
                     qwenSDKBridge.setNodeExecutable(manualPath);
-                    applyNodePathToCliBridges(cliBridges, manualPath);
                     LOG.info("Saved manual Node.js path: " + manualPath);
                     reinitializeUi(mainPanel);
                 } else {
@@ -1501,8 +1476,7 @@ public class WebviewInitializer {
         return htmlLoader.injectInitialPageState(
                 htmlContent,
                 tabProvider,
-                tabModel,
-                SessionState.discoverUserDshPresetIds());
+                tabModel);
     }
 
     /**

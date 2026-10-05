@@ -224,7 +224,6 @@
         "autoSummary": "現在のチャット CLI に追従 · 現在は {{provider}}",
         "autoUnavailable": "利用可能な CLI がありません。手動に切り替えて選択してください。",
         "provider": {
-          "dsh": "DeepSeek Harness",
           "qwen": "Qwen Code"
         }
       },
@@ -690,10 +689,6 @@
         "qwen": {
           "name": "Qwen Code",
           "description": "Alibaba Qwen terminal coding agent"
-        },
-        "dsh": {
-          "name": "DeepSeek Harness",
-          "description": "DeepSeek terminal agent CLI (dsh)"
         }
       },
       "installDialog": {
@@ -715,26 +710,6 @@
       "visibility": {
         "hide": "プロバイダー切り替えメニューに表示しない",
         "show": "プロバイダー切り替えメニューに表示する"
-      },
-      "dsh": {
-        "groupTitle": "DeepSeek Harness",
-        "cliRowTitle": "CLI install",
-        "cardTitle": "Local host",
-        "rowHint": "Start or adopt the local dsh web host",
-        "hint": "One persistent local dsh web host serves all sessions; the plugin adopts a running host instead of spawning a second one.",
-        "state": {
-          "checking": "Checking…",
-          "notInstalled": "Not installed",
-          "notRunning": "Not running",
-          "connected": "Connected"
-        },
-        "adopted": "adopted",
-        "adoptedHint": "Adopted an already-running host; it is never stopped by the plugin.",
-        "openWebUi": "Open DSH Web UI",
-        "startHost": "Start host",
-        "stopHost": "Stop host (plugin-spawned only)",
-        "autoStart": "Auto-start when needed",
-        "moreActions": "More"
       }
     },
     "configure": "Configure",
@@ -793,7 +768,6 @@
     "expand": "展開",
     "collapse": "折りたたむ",
     "clickToAnswer": "クリックして回答",
-    "dshTitle": "DeepSeek Harness has some questions for you",
     "invalidFormat": "Unsupported question data format. Please cancel and retry.",
     "loading": "Loading questions...",
     "planDetail": "Plan details"
@@ -1507,9 +1481,6 @@
       "title": "Beta Feature",
       "message": "This feature is still in Beta. If you encounter any bugs, please report them to the author promptly."
     },
-    "dsh": {
-      "label": "DeepSeek Harness"
-    },
     "manageCli": "CLI Settings"
   },
   "contextUsage": {
@@ -1544,32 +1515,6 @@
       "type": "Type",
       "path": "Path",
       "skill": "Skill"
-    }
-  },
-  "dshPresets": {
-    "title": "Select DeepSeek Harness agent preset",
-    "none": {
-      "label": "Default",
-      "description": "dsh default headless composition (full toolset)"
-    },
-    "standard": {
-      "label": "Standard",
-      "description": "Full coding agent with the standard toolset"
-    },
-    "code": {
-      "label": "PTC",
-      "description": "Standard capabilities with Code Mode"
-    },
-    "minimal": {
-      "label": "Minimal",
-      "description": "Bash and str_replace_editor only"
-    },
-    "cordis": {
-      "label": "Creator",
-      "description": "Standard capabilities plus composition authoring"
-    },
-    "user": {
-      "description": "Custom preset installed under the DSH home"
     }
   }
 }

@@ -141,7 +141,6 @@ const App = () => {
           currentSdkInstalled={model.currentSdkInstalled}
           alwaysThinkingEnabled={model.alwaysThinkingEnabled}
           reasoningEffort={model.reasoningEffort}
-          dshPreset={model.dshPreset}
           streamingEnabledSetting={model.streamingEnabledSetting}
           sendShortcut={model.sendShortcut}
           autoOpenFileEnabled={model.autoOpenFileEnabled}
@@ -152,7 +151,6 @@ const App = () => {
           onModelSelect={model.handleModelSelect}
           onAgentSelect={model.handleAgentSelect}
           onReasoningChange={model.handleReasoningChange}
-          onDshPresetChange={model.handleDshPresetChange}
           onToggleThinking={model.handleToggleThinking}
           onStreamingEnabledChange={model.handleStreamingEnabledChange}
           onAutoOpenFileEnabledChange={model.handleAutoOpenFileEnabledChange}

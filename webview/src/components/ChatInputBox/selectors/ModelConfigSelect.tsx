@@ -29,13 +29,11 @@ interface ModelConfigSelectProps {
   onRetry?: () => void;
   reasoningEffort?: ReasoningEffort;
   onReasoningChange?: (effort: ReasoningEffort) => void;
-  dshPreset?: string;
-  onDshPresetChange?: (preset: string) => void;
 }
 
 /**
  * Model-settings selector: one summary trigger whose popover keeps the model
- * list flat at the top; the function rows (DSH preset / effort) sit below it,
+ * list flat at the top; the function rows (effort) sit below it,
  * next to the trigger. Rows that offer a choice open fly-out submenus beside
  * them.
  */
@@ -49,8 +47,6 @@ export const ModelConfigSelect = ({
   onRetry,
   reasoningEffort = 'high',
   onReasoningChange,
-  dshPreset = '',
-  onDshPresetChange,
 }: ModelConfigSelectProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +55,6 @@ export const ModelConfigSelect = ({
   const {
     activeSubmenu,
     effortTriggerRef,
-    presetTriggerRef,
     openSubmenu,
     scheduleSubmenu,
     retainActiveSubmenu,
@@ -87,25 +82,19 @@ export const ModelConfigSelect = ({
   const currentModel = useCurrentModel(models, selectedModel);
   const {
     showEffortRow,
-    showPreset,
     showDivider,
   } = useModelConfigRows({
-    currentProvider,
     onReasoningChange,
-    onDshPresetChange,
     showEffort,
   });
   const {
-    dshPresetLabel,
     effortLabel,
     summaryText,
   } = useModelConfigSummary({
     t,
     currentModel,
     currentProvider,
-    dshPreset,
     showEffortRow,
-    showPreset,
     currentLevel,
   });
 
@@ -154,7 +143,7 @@ export const ModelConfigSelect = ({
     if (isOpen) {
       mainRecalculate();
     }
-  }, [isOpen, mainRecalculate, showEffortRow, showPreset]);
+  }, [isOpen, mainRecalculate, showEffortRow]);
 
   return (
     <div style={WRAPPER_STYLE}>
@@ -182,17 +171,12 @@ export const ModelConfigSelect = ({
           error={error}
           onRetry={onRetry}
           showDivider={showDivider}
-          showPreset={showPreset}
-          dshPreset={dshPreset}
-          onDshPresetChange={onDshPresetChange}
-          dshPresetLabel={dshPresetLabel}
           showEffortRow={showEffortRow}
           reasoningEffort={reasoningEffort}
           onReasoningChange={handleReasoningChange}
           effortLabel={effortLabel}
           activeSubmenu={activeSubmenu}
           effortTriggerRef={effortTriggerRef}
-          presetTriggerRef={presetTriggerRef}
           scheduleSubmenu={scheduleSubmenu}
           openSubmenu={openSubmenu}
         />

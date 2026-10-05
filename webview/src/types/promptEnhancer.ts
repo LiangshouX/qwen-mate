@@ -15,7 +15,6 @@ export const DEFAULT_PROMPT_ENHANCER_CONFIG: PromptEnhancerConfig = {
   models: { ...DEFAULT_AI_FEATURE_MODELS },
   availability: {
     qwen: false,
-    dsh: false,
   },
 };
 

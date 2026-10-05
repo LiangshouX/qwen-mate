@@ -34,10 +34,6 @@ describe('ModeSelect', () => {
     expect(openAndGetOptionIds('qwen')).toEqual(['plan', 'default', 'auto-edit', 'auto', 'yolo']);
   });
 
-  it('hides plan and provider-native auto for the dsh provider', () => {
-    expect(openAndGetOptionIds('dsh')).toEqual(['default', 'auto-edit', 'yolo']);
-  });
-
   it('shows a compact short label on the trigger and the full label in the menu', () => {
     render(<ModeSelect value="default" onChange={vi.fn()} provider="qwen" />);
 

@@ -69,7 +69,7 @@ public abstract class BaseSDKBridge {
     // ============================================================================
 
     /**
-     * Get the provider name (e.g., "qwen" or "dsh").
+     * Get the provider name (e.g., "qwen").
      */
     protected abstract String getProviderName();
 

@@ -4,4 +4,3 @@ export { ModelConfigSelect } from './ModelConfigSelect';
 export { ProviderSelect } from './ProviderSelect';
 export { ConfigSelect } from './ConfigSelect';
 export { ReasoningSelect } from './ReasoningSelect';
-export { default as DshPresetSelect } from './DshPresetSelect';

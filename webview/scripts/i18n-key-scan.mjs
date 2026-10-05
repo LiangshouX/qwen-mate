@@ -26,12 +26,11 @@ const MODE_IDS = ['plan', 'default', 'auto-edit', 'auto', 'yolo'];
 const MODE_FIELDS = ['label', 'shortLabel', 'tooltip', 'description'];
 const REASONING_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
 const ENTRYPOINTS = ['sdk-cli', 'claude-vscode', 'remote'];
-const DSH_STATES = ['checking', 'notInstalled', 'notRunning', 'connected'];
 const REPORT_VERDICTS = ['confirmed', 'plausible'];
 const REPORT_OUTCOMES = ['fixed', 'skipped', 'noChangeNeeded'];
 const AI_FEATURE_SETTINGS_PREFIXES = ['settings.commit.providerModel', 'settings.basic.promptEnhancer'];
 const AI_FEATURE_PROVIDER_PREFIX = 'settings.basic.promptEnhancer.provider';
-const AI_FEATURE_PROVIDER_IDS = ['qwen', 'dsh'];
+const AI_FEATURE_PROVIDER_IDS = ['qwen'];
 const AI_FEATURE_SETTINGS_SUFFIXES = [
   'label', 'modelLabel', 'modeLabel', 'modeAuto', 'modeManual',
   'autoUnavailable', 'autoSummary', 'providerUnavailable', 'currentProviderUnavailable',
@@ -57,7 +56,7 @@ const SKILL_HELP_SUFFIXES = [
   'tips.title', 'tips.item1', 'tips.item2', 'tips.item3', 'tips.item4', 'tips.item5',
   'learnMore.title', 'learnMore.description', 'learnMore.link1', 'learnMore.link2', 'learnMore.link3',
 ];
-const PROVIDER_IDS = ['qwen', 'dsh']; // providers.${providerId}.label family
+const PROVIDER_IDS = ['qwen']; // providers.${providerId}.label family
 // model dropdown source groups + follow-CLI label variants (modelSelectUtils/modelLabelUtils)
 const MODEL_EXTRA_KEYS = [
   'models.groups.cliConfig', 'models.groups.custom',
@@ -79,7 +78,6 @@ const expandFamilies = () => {
     keys.push(`history.entrypointLabel.${ep}`);
     keys.push(`history.entrypointTooltip.${ep}`);
   }
-  for (const s of DSH_STATES) keys.push(`settings.cli.dsh.state.${s}`);
   for (const v of REPORT_VERDICTS) keys.push(`tools.reportFindings.${v}`);
   for (const o of REPORT_OUTCOMES) keys.push(`tools.reportFindings.${o}`);
   for (const p of [...AI_FEATURE_SETTINGS_PREFIXES, ...COLOR_PREFIXES]) {

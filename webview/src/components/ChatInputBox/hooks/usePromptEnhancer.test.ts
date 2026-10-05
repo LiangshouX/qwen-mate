@@ -88,14 +88,14 @@ describe('applyEnhancedPromptPayload', () => {
         success: true,
         enhancedPrompt: 'ok',
         done: true,
-        provider: 'dsh',
+        provider: 'qwen',
         model: 'gpt-5.5',
         resolutionSource: 'weird',
       },
       { setEnhancedPrompt: vi.fn(), setIsEnhancing: vi.fn(), setUsageInfo }
     );
     expect(setUsageInfo).toHaveBeenCalledWith({
-      provider: 'dsh',
+      provider: 'qwen',
       model: 'gpt-5.5',
       resolutionSource: null,
     });

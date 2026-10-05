@@ -5,8 +5,6 @@ import com.qwenmate.bridge.EnvironmentConfigurator;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.core.BaseMessageHandler;
 import com.qwenmate.handler.core.HandlerContext;
-import com.qwenmate.provider.dsh.DshEnvSupport;
-import com.qwenmate.settings.QwenMateSettingsService;
 import com.qwenmate.startup.BridgePreloader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -20,15 +18,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Lists models for headless CLI providers (qwen / dsh) via channel-manager.
+ * Lists models for headless CLI providers (qwen) via channel-manager.
  *
- * <p>Frontend: {@code sendToJava('get_cli_models:dsh')} →
+ * <p>Frontend: {@code sendToJava('get_cli_models:qwen')} →
  * {@code window.setCliModels({ provider, models, ... })}.
  */
 public class CliModelsHandler extends BaseMessageHandler {
@@ -44,7 +41,7 @@ public class CliModelsHandler extends BaseMessageHandler {
     };
 
     private static final Set<String> SUPPORTED_PROVIDERS = Set.of(
-            "qwen", "dsh"
+            "qwen"
     );
 
     private final Gson gson = new Gson();
@@ -98,13 +95,7 @@ public class CliModelsHandler extends BaseMessageHandler {
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(bridgeDir);
             pb.redirectErrorStream(true);
-            Map<String, String> env = pb.environment();
             envConfigurator.updateProcessEnvironment(pb, node);
-            if ("dsh".equals(provider)) {
-                // DSH model catalog comes from the live host — honor the
-                // configured origin so the picker reflects the actual server.
-                DshEnvSupport.inject(env, new QwenMateSettingsService());
-            }
 
             LOG.info("[CliModels] Listing models for " + provider + ": " + String.join(" ", command));
 

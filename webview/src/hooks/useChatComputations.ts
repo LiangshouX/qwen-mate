@@ -120,9 +120,7 @@ export function deriveTodosForTurn(
   streamingActive: boolean,
   currentProvider: string,
 ): TodoItem[] {
-  const scopedMessages = currentProvider === 'dsh'
-    ? sliceLatestConversationTurn(turnMessages)
-    : turnMessages;
+  const scopedMessages = turnMessages;
   let latestTodos: ReturnType<typeof extractTodosFromToolUse> = null;
   let sawEmptyClaudeSnapshot = false;
   for (let i = scopedMessages.length - 1; i >= 0; i--) {
@@ -142,10 +140,6 @@ export function deriveTodosForTurn(
         break;
       }
       if (todos && isExplicitEmptySnapshot) {
-        if (currentProvider === 'dsh') {
-          latestTodos = todos;
-          break;
-        }
         sawEmptyClaudeSnapshot = true;
       }
     }
@@ -281,12 +275,11 @@ export function useChatComputations({
 
   // Plans belong to the current user turn while streaming. Unlike subagents,
   // a text-only new turn must not temporarily revive a previous turn's plan.
-  // Settled/history views scan the full transcript for Claude; Codex is always
-  // narrowed to its latest user turn inside deriveTodosForTurn.
+  // Settled/history views scan the full transcript.
   const todoScopeMessages = streamingActive ? latestTurnMessages : messages;
 
   const extractedSubagents = useSubagents({
-    messages: currentProvider === 'dsh' ? messages : statusScopeMessages,
+    messages: statusScopeMessages,
     getContentBlocks,
     findToolResult,
     getToolResultRaw,

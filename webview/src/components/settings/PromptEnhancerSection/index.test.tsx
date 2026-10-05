@@ -32,7 +32,6 @@ describe('PromptEnhancerSection', () => {
       models: { ...DEFAULT_AI_FEATURE_MODELS },
       availability: {
         qwen: true,
-        dsh: true,
       },
     };
 
@@ -70,7 +69,6 @@ describe('PromptEnhancerSection', () => {
           },
           availability: {
             qwen: true,
-            dsh: true,
           },
         }}
         onPromptEnhancerProviderChange={vi.fn()}

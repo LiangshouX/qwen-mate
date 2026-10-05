@@ -65,8 +65,6 @@ describe('ModelConfigSelect', () => {
     expect(screen.getByTestId('model-config-option-effort')).toBeTruthy();
     expect(screen.getByTestId('model-config-option-effort').textContent).toContain('High');
     expect(screen.queryByTestId('reasoning-selector-dropdown')).toBeNull();
-    // The preset row is DSH-only.
-    expect(screen.queryByTestId('model-config-option-preset')).toBeNull();
   });
 
   it('selects a model from the inline list without closing the popover', () => {
@@ -168,11 +166,6 @@ describe('ModelConfigSelect', () => {
   });
 
   describe('submenu hover delay', () => {
-    const dshModels = [
-      { id: 'grok-4.6', label: 'Grok 4.6' },
-      { id: 'deepseek-v4-flash', label: 'DeepSeek-V4-Flash' },
-    ];
-
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -181,58 +174,15 @@ describe('ModelConfigSelect', () => {
       vi.useRealTimers();
     });
 
-    it('does not steal the effort submenu while the pointer crosses the preset row', () => {
-      render(
-        <ModelConfigSelect
-          selectedModel="grok-4.6"
-          onModelSelect={vi.fn()}
-          models={dshModels}
-          currentProvider="dsh"
-          reasoningEffort="high"
-          onReasoningChange={vi.fn()}
-          dshPreset=""
-          onDshPresetChange={vi.fn()}
-        />,
-      );
-
-      fireEvent.click(screen.getByTestId('model-config-trigger'));
-      fireEvent.mouseEnter(screen.getByTestId('model-config-option-effort'));
-      act(() => {
-        vi.advanceTimersByTime(SUBMENU_TRIGGER_DELAY_MS);
-      });
-      expect(screen.getByTestId('reasoning-selector-dropdown')).toBeTruthy();
-
-      fireEvent.mouseEnter(screen.getByTestId('model-config-option-preset'));
-      expect(screen.getByTestId('reasoning-selector-dropdown')).toBeTruthy();
-      expect(screen.queryByTestId('dsh-preset-dropdown')).toBeNull();
-
-      act(() => {
-        vi.advanceTimersByTime(SUBMENU_HOVER_DELAY_MS - 1);
-      });
-      expect(screen.getByTestId('reasoning-selector-dropdown')).toBeTruthy();
-      expect(screen.queryByTestId('dsh-preset-dropdown')).toBeNull();
-
-      // Arriving in the fly-out (which stops mouseenter bubbling) still
-      // cancels the pending preset switch.
-      fireEvent.mouseOver(screen.getByTestId('reasoning-selector-dropdown'));
-      act(() => {
-        vi.advanceTimersByTime(SUBMENU_HOVER_DELAY_MS);
-      });
-      expect(screen.getByTestId('reasoning-selector-dropdown')).toBeTruthy();
-      expect(screen.queryByTestId('dsh-preset-dropdown')).toBeNull();
-    });
-
     it('dismisses the effort fly-out when the pointer moves onto the flat model list', () => {
       render(
         <ModelConfigSelect
-          selectedModel="grok-4.6"
+          selectedModel="qwen3-coder-plus"
           onModelSelect={vi.fn()}
-          models={dshModels}
-          currentProvider="dsh"
+          models={qwenModels}
+          currentProvider="qwen"
           reasoningEffort="high"
           onReasoningChange={vi.fn()}
-          dshPreset=""
-          onDshPresetChange={vi.fn()}
         />,
       );
 
@@ -252,45 +202,15 @@ describe('ModelConfigSelect', () => {
       expect(screen.getByTestId('model-config-dropdown')).toBeTruthy();
     });
 
-    it('opens the preset submenu after the pointer rests on it, or immediately on click', () => {
-      render(
-        <ModelConfigSelect
-          selectedModel="grok-4.6"
-          onModelSelect={vi.fn()}
-          models={dshModels}
-          currentProvider="dsh"
-          reasoningEffort="high"
-          onReasoningChange={vi.fn()}
-          dshPreset=""
-          onDshPresetChange={vi.fn()}
-        />,
-      );
-
-      fireEvent.click(screen.getByTestId('model-config-trigger'));
-      fireEvent.mouseEnter(screen.getByTestId('model-config-option-effort'));
-      fireEvent.mouseEnter(screen.getByTestId('model-config-option-preset'));
-
-      act(() => {
-        vi.advanceTimersByTime(SUBMENU_TRIGGER_DELAY_MS);
-      });
-      expect(screen.getByTestId('dsh-preset-dropdown')).toBeTruthy();
-      expect(screen.queryByTestId('reasoning-selector-dropdown')).toBeNull();
-
-      fireEvent.click(screen.getByTestId('model-config-option-effort'));
-      expect(screen.getByTestId('reasoning-selector-dropdown')).toBeTruthy();
-    });
-
     it('delays the first fly-out so a passing pointer does not trigger it', () => {
       render(
         <ModelConfigSelect
-          selectedModel="grok-4.6"
+          selectedModel="qwen3-coder-plus"
           onModelSelect={vi.fn()}
-          models={dshModels}
-          currentProvider="dsh"
+          models={qwenModels}
+          currentProvider="qwen"
           reasoningEffort="high"
           onReasoningChange={vi.fn()}
-          dshPreset=""
-          onDshPresetChange={vi.fn()}
         />,
       );
 

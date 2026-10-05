@@ -13,21 +13,19 @@ test('resolvePromptEnhancerRuntimeConfig prefers the Java-resolved effectiveProv
   const resolved = resolvePromptEnhancerRuntimeConfig({
     promptEnhancerConfig: {
       provider: null,
-      effectiveProvider: 'dsh',
+      effectiveProvider: 'qwen',
       resolutionSource: 'auto',
       models: {
         qwen: 'qwen-max',
-        dsh: 'deepseek-v4',
       },
       availability: {
         qwen: true,
-        dsh: true,
       },
     },
   });
 
-  assert.equal(resolved.provider, 'dsh');
-  assert.equal(resolved.model, 'deepseek-v4');
+  assert.equal(resolved.provider, 'qwen');
+  assert.equal(resolved.model, 'qwen-max');
 });
 
 test('resolvePromptEnhancerRuntimeConfig accepts qwen as effectiveProvider', () => {
@@ -38,11 +36,9 @@ test('resolvePromptEnhancerRuntimeConfig accepts qwen as effectiveProvider', () 
       resolutionSource: 'manual',
       models: {
         qwen: 'qwen-max',
-        dsh: 'deepseek-v4',
       },
       availability: {
         qwen: true,
-        dsh: true,
       },
     },
   });
@@ -69,24 +65,24 @@ test('resolvePromptEnhancerRuntimeConfig throws a strict error when a removed pr
 test('resolveAutoChatModel uses chat model in auto mode when provider matches', () => {
   assert.equal(
     resolveAutoChatModel({
-      provider: 'dsh',
+      provider: 'qwen',
       configuredModel: 'auto',
       resolutionSource: 'auto',
-      chatProvider: 'dsh',
-      chatModel: 'deepseek/deepseek-v4-flash',
+      chatProvider: 'qwen',
+      chatModel: 'qwen-plus',
     }),
-    'deepseek/deepseek-v4-flash'
+    'qwen-plus'
   );
 });
 
 test('resolveAutoChatModel keeps configured model in manual mode', () => {
   assert.equal(
     resolveAutoChatModel({
-      provider: 'dsh',
+      provider: 'qwen',
       configuredModel: 'auto',
       resolutionSource: 'manual',
-      chatProvider: 'dsh',
-      chatModel: 'deepseek/deepseek-v4-flash',
+      chatProvider: 'qwen',
+      chatModel: 'qwen-plus',
     }),
     'auto'
   );
@@ -98,8 +94,8 @@ test('resolveAutoChatModel ignores chat model when provider differs', () => {
       provider: 'qwen',
       configuredModel: 'qwen-max',
       resolutionSource: 'auto',
-      chatProvider: 'dsh',
-      chatModel: 'deepseek/deepseek-v4-flash',
+      chatProvider: 'other',
+      chatModel: 'other-model',
     }),
     'qwen-max'
   );
@@ -113,11 +109,9 @@ test('resolvePromptEnhancerRuntimeConfig auto follows chat model for qwen', () =
       resolutionSource: 'auto',
       models: {
         qwen: 'auto',
-        dsh: 'auto',
       },
       availability: {
         qwen: true,
-        dsh: true,
       },
     },
     chatProvider: 'qwen',

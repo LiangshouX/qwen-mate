@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { sendBridgeEvent } from '../../utils/bridge';
 import type { ModelInfo } from '../../components/ChatInputBox/types';
-import { DSH_MODELS } from '../../components/ChatInputBox/types';
-import { isCliOnlyProvider } from './cliProviders';
 
 type CliModelsByProvider = Record<string, ModelInfo[]>;
 
@@ -25,18 +23,13 @@ export function __resetCliModelsCacheForTests() {
   for (const key of Object.keys(catalogHasEntriesCache)) delete catalogHasEntriesCache[key];
 }
 
-function fallbackModels(providerId: string): ModelInfo[] {
-  if (providerId === 'dsh') return DSH_MODELS;
-  return [];
-}
-
 /**
  * Providers whose model list is discovered dynamically via `get_cli_models`.
  * Qwen uses the static QWEN_MODELS list plus user-defined custom models, so it
- * is not fetched here.
+ * is not fetched here — no current provider uses the dynamic catalog.
  */
-function supportsDynamicModels(providerId: string): boolean {
-  return isCliOnlyProvider(providerId) && providerId === 'dsh';
+function supportsDynamicModels(_providerId: string): boolean {
+  return false;
 }
 
 function normalizeModels(raw: unknown): ModelInfo[] {
@@ -59,7 +52,7 @@ function normalizeModels(raw: unknown): ModelInfo[] {
 }
 
 /**
- * Loads model catalogs for headless CLI providers (currently DSH) via
+ * Loads model catalogs for headless CLI providers via
  * channel-manager `listModels`. Falls back to static defaults until loaded.
  */
 export function useCliModels(currentProvider: string) {
@@ -120,7 +113,7 @@ export function useCliModels(currentProvider: string) {
       if (!payload?.provider) return;
       const provider = payload.provider;
       const models = normalizeModels(payload.models);
-      const resolvedModels = models.length > 0 ? models : fallbackModels(provider);
+      const resolvedModels = models;
       modelsCache[provider] = resolvedModels;
       catalogHasEntriesCache[provider] = models.length > 0;
       setModelsByProvider((prev) => ({
@@ -189,7 +182,7 @@ export function useCliModels(currentProvider: string) {
 
   const cliModels = modelsByProvider[currentProvider]?.length
     ? modelsByProvider[currentProvider]
-    : fallbackModels(currentProvider);
+    : [];
 
   return {
     cliModels,

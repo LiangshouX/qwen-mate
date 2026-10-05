@@ -4,9 +4,6 @@ import {
   retryDependencyStatusRequest,
 } from '../../utils/bridgeStartup';
 
-/** Providers that run without an npm SDK under ~/.qwenmate/dependencies/. */
-const SDKLESS_PROVIDERS = new Set(['dsh']);
-
 /** Provider id → SDK dependency id (only qwen ships an SDK). */
 const PROVIDER_TO_SDK: Record<string, string> = {
   qwen: 'qwen-sdk',
@@ -48,8 +45,6 @@ export function useUsageTracking() {
 
   const isSdkInstalled = useCallback(
     (providerId: string): boolean => {
-      // DSH runs against its own host process; do not gate on SDK status.
-      if (SDKLESS_PROVIDERS.has(providerId)) return true;
       const sdkId = PROVIDER_TO_SDK[providerId] || 'qwen-sdk';
       const status = sdkStatus[sdkId];
       if (status?.status === 'installed' || status?.installed === true) return true;
@@ -64,7 +59,6 @@ export function useUsageTracking() {
   );
 
   const isSdkStatusKnown = useCallback((providerId: string): boolean => {
-    if (SDKLESS_PROVIDERS.has(providerId)) return true;
     const sdkId = PROVIDER_TO_SDK[providerId] || 'qwen-sdk';
     const status = sdkStatus[sdkId];
     return status?.status === 'installed'

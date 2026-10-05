@@ -18,7 +18,7 @@ export interface BetaProviderNoticeState {
 }
 
 /**
- * Shared first-click Beta notice for beta CLI providers (e.g. DSH).
+ * Shared first-click Beta notice for beta CLI providers.
  * Used by ProviderSelect and BlinkingLogo so both entry points behave the same.
  *
  * The dialog is informational only: dismissing it (button, Escape, or overlay)

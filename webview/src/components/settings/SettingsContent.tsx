@@ -36,7 +36,7 @@ const TAB_PANELS: Partial<Record<SettingsTab, ComponentType<SettingsTabPanelProp
 
 interface SettingsContentProps {
   currentTab: SettingsTab;
-  currentProvider: 'qwen' | 'dsh' | string;
+  currentProvider: string;
   initialProviderSubTab?: ProviderManageTab;
   addToast: (message: string, type?: ToastMessage['type']) => void;
   themeSync: UseSettingsThemeSyncReturn;

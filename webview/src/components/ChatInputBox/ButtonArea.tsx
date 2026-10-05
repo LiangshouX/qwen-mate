@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ButtonAreaProps, PermissionMode, ReasoningEffort } from './types';
 import { DEFAULT_QWEN_MODEL_ID } from './types';
@@ -21,14 +21,12 @@ export const ButtonArea = ({
   permissionMode = 'default',
   currentProvider = 'qwen',
   reasoningEffort = 'high',
-  dshPreset = '',
   onSubmit,
   onStop,
   onModeSelect,
   onModelSelect,
   onProviderSelect,
   onReasoningChange,
-  onDshPresetChange,
   onEnhancePrompt,
   alwaysThinkingEnabled = false,
   onToggleThinking,
@@ -40,7 +38,7 @@ export const ButtonArea = ({
   onOpenCliSettings,
 }: ButtonAreaProps) => {
   const { t } = useTranslation();
-  const { cliModels, cliModelsLoading, cliModelsError, cliDefaultModel, cliCatalogHasEntries, refreshCliModels } = useCliModels(currentProvider);
+  const { cliModels, cliModelsLoading, cliModelsError, cliCatalogHasEntries, refreshCliModels } = useCliModels(currentProvider);
 
   // Select model list based on current provider — shared with Prompt Enhancer /
   // Commit AI settings so the three surfaces never diverge. The qwen list leads
@@ -56,31 +54,6 @@ export const ButtonArea = ({
       t,
     });
   }, [currentProvider, cliModels, cliCatalogHasEntries, qwenModelOptions, t]);
-
-  // When a dynamic model catalog arrives, ensure selection is a real entry.
-  useEffect(() => {
-    const isDynamicProvider = currentProvider === 'dsh';
-    if (!isDynamicProvider) return;
-    // Only correct once a *real* catalog arrived. Static fallback lists must
-    // not clobber the user's choice — especially when ChatScreen remounts after
-    // leaving history and briefly shows the fallback before the cache/fetch
-    // lands.
-    if (!cliCatalogHasEntries) return;
-    if (cliModelsLoading) return;
-    if (!availableModels.length || !onModelSelect) return;
-    const exists = availableModels.some((model) => model.id === selectedModel);
-    if (!exists) {
-      onModelSelect(cliDefaultModel ?? availableModels[0].id);
-    }
-  }, [
-    availableModels,
-    currentProvider,
-    onModelSelect,
-    selectedModel,
-    cliDefaultModel,
-    cliCatalogHasEntries,
-    cliModelsLoading,
-  ]);
 
   /**
    * Handle submit button click
@@ -126,10 +99,6 @@ export const ButtonArea = ({
     onReasoningChange?.(effort);
   }, [onReasoningChange]);
 
-  const handleDshPresetChange = useCallback((preset: string) => {
-    onDshPresetChange?.(preset);
-  }, [onDshPresetChange]);
-
   /**
    * Handle enhance prompt button click
    */
@@ -147,7 +116,6 @@ export const ButtonArea = ({
     selectedModel,
     permissionMode,
     reasoningEffort,
-    dshPreset,
     selectedAgent?.id ?? '',
     cliModelsLoading ? 'loading' : 'ready',
   ].join('|');
@@ -196,8 +164,6 @@ export const ButtonArea = ({
           onRetry={() => refreshCliModels(currentProvider)}
           reasoningEffort={reasoningEffort}
           onReasoningChange={handleReasoningChange}
-          dshPreset={dshPreset}
-          onDshPresetChange={handleDshPresetChange}
         />
       </div>
 

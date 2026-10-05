@@ -12,7 +12,6 @@
         <p>支持的引擎 / Supported engines:</p>
         <ul>
             <li><strong>Qwen Code</strong> - 通义千问 AI 编程助手（官方 TypeScript SDK 驱动，支持 qwen3-coder 等多模型）</li>
-            <li><strong>DeepSeek Harness</strong> <em>(Beta)</em></li>
         </ul>
 
         <p><strong>Connection &amp; proxy disclosure / 连接与代理说明：</strong></p>
@@ -49,7 +48,7 @@
             <li>即时获得 AI 驱动的代码辅助和智能建议</li>
         </ul>
 
-        <p><em>Keywords: Qwen, Qwen Code, Qwen3, DashScope, DeepSeek Harness, Code Generation, AI Coding, AI Coding Assistant</em></p>
+        <p><em>Keywords: Qwen, Qwen Code, Qwen3, DashScope, Code Generation, AI Coding, AI Coding Assistant</em></p>
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>

@@ -85,7 +85,7 @@ describe('useSubmitHandler', () => {
         attachments: [],
         sdkStatusLoading: false,
         sdkInstalled: false,
-        currentProvider: 'dsh',
+        currentProvider: 'qwen',
         clearInput: vi.fn(),
         externalAttachments: undefined,
         setInternalAttachments: vi.fn(),

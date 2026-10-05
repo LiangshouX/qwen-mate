@@ -2,12 +2,12 @@
  * Commit Message Generation Service — "provider ask" mode.
  *
  * Routes to services/ask-service.js: one-shot text generation on the Qwen SDK
- * engine. The provider parameter is converged to 'qwen' / 'dsh' (any other
+ * engine. The provider parameter is converged to 'qwen' (any other
  * value falls back to the same engine).
  *
  * stdin JSON: { prompt, provider, model }
  *   - prompt:   the full commit prompt (spec + git diff), assembled by Java
- *   - provider: 'qwen' | 'dsh'
+ *   - provider: 'qwen'
  *   - model:    resolved model id (empty / sentinel tokens mean the default model)
  *
  * stdout markers:

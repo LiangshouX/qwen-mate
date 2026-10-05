@@ -3,7 +3,7 @@
  * Detection only — the plugin never auto-installs these binaries.
  */
 
-export type CliToolId = 'qwen' | 'dsh';
+export type CliToolId = 'qwen';
 
 export interface CliToolStatus {
   id: CliToolId;
@@ -36,7 +36,7 @@ export interface CliToolDefinition {
 }
 
 /**
- * Static catalog — matches what the Java CliStatusDetector detects (qwen/dsh).
+ * Static catalog — matches what the Java CliStatusDetector detects (qwen).
  * Install commands match each CLI's official docs
  * and are shown in a dialog — never executed by the plugin.
  */
@@ -49,13 +49,5 @@ export const CLI_TOOL_DEFINITIONS: CliToolDefinition[] = [
     docsUrl: 'https://github.com/QwenLM/qwen-code',
     // npm is cross-platform — one command covers macOS / Linux / Windows.
     installCommand: 'npm install -g @qwen-code/qwen-code',
-  },
-  {
-    id: 'dsh',
-    nameKey: 'settings.cli.tools.dsh.name',
-    descriptionKey: 'settings.cli.tools.dsh.description',
-    binaryName: 'dsh',
-    docsUrl: 'https://github.com/deepseek-ai/dsh',
-    installCommand: 'npm i -g @deepseek-ai/dsh',
   },
 ];

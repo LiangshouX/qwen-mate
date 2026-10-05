@@ -45,16 +45,9 @@ const fallbackTranslate: Translate = (_key, options) => String(options?.defaultV
  * Keep all three UIs in lockstep so users never see divergent catalogs.
  */
 export function resolveProviderModels({
-  provider,
-  cliModels,
   qwenModelOptions = EMPTY_QWEN_MODEL_OPTIONS,
   t = fallbackTranslate,
 }: ResolveProviderModelsInput): ModelInfo[] {
-  if (provider === 'dsh') {
-    // Runtime catalog from the DSH host (static fallback list when offline).
-    return cliModels;
-  }
-
   // Qwen (default), in order:
   //   1. "Default (follow CLI config)" — empty id, never overrides the CLI
   //   2. models configured in ~/.qwen/settings.json (modelProviders)

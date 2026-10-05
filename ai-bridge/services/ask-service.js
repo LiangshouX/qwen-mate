@@ -6,16 +6,12 @@
  * Qwen Code SDK.
  *
  * Generation engine: the Qwen Code SDK (`@qwen-code/sdk`) `query()` API in
- * single-turn, deny-all-tools mode. The `dsh` provider is accepted for
- * compatibility with callers that pass their active chat provider, but DSH has
- * no stateless text API (its only generation path is a full chat turn with the
- * marker protocol against a live `dsh web` host), so those requests run on the
- * same Qwen SDK engine.
+ * single-turn, deny-all-tools mode.
  */
 
 import { loadQwenSdk } from '../utils/sdk-loader.js';
 
-export const ASK_PROVIDERS = ['qwen', 'dsh'];
+export const ASK_PROVIDERS = ['qwen'];
 
 // Same sentinel set the removed CLI askers used: these mean "no explicit model".
 const DEFAULT_MODEL_TOKENS = new Set([
@@ -26,7 +22,6 @@ const DEFAULT_MODEL_TOKENS = new Set([
   'config_default',
   '(default)',
   'qwen-default',
-  'dsh-default',
 ]);
 
 // Safety net so a hung generation never pins the caller's process forever.
@@ -185,7 +180,7 @@ async function generateWithQwenSdk({
  * One-shot text generation for an AI feature.
  *
  * @param {object} options
- * @param {'qwen'|'dsh'} options.provider
+ * @param {'qwen'} options.provider
  * @param {string} options.prompt
  * @param {string} [options.systemPrompt]
  * @param {string} [options.model]

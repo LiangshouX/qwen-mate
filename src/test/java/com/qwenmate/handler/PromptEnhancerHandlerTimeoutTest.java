@@ -43,7 +43,6 @@ public class PromptEnhancerHandlerTimeoutTest {
         config.addProperty("resolutionSource", "manual");
         JsonObject models = new JsonObject();
         models.addProperty("qwen", "qwen3-max");
-        models.addProperty("dsh", "gpt-5.5");
         config.add("models", models);
 
         JsonObject meta = PromptEnhancerHandler.buildUsageMeta(config);
@@ -80,9 +79,9 @@ public class PromptEnhancerHandlerTimeoutTest {
         config.add("models", models);
 
         JsonObject meta = PromptEnhancerHandler.buildUsageMeta(
-                config, "opencode", "opencode/deepseek-v4-flash-free");
+                config, "opencode", "opencode/acme-v4-flash-free");
         assertEquals("opencode", meta.get("provider").getAsString());
-        assertEquals("opencode/deepseek-v4-flash-free", meta.get("model").getAsString());
+        assertEquals("opencode/acme-v4-flash-free", meta.get("model").getAsString());
         assertEquals("auto", meta.get("resolutionSource").getAsString());
     }
 
@@ -96,7 +95,7 @@ public class PromptEnhancerHandlerTimeoutTest {
         config.add("models", models);
 
         JsonObject meta = PromptEnhancerHandler.buildUsageMeta(
-                config, "opencode", "opencode/deepseek-v4-flash-free");
+                config, "opencode", "opencode/acme-v4-flash-free");
         assertEquals("opencode-default", meta.get("model").getAsString());
     }
 
@@ -110,7 +109,7 @@ public class PromptEnhancerHandlerTimeoutTest {
         config.add("models", models);
 
         JsonObject meta = PromptEnhancerHandler.buildUsageMeta(
-                config, "opencode", "opencode/deepseek-v4-flash-free");
+                config, "opencode", "opencode/acme-v4-flash-free");
         assertEquals("qwen3-max", meta.get("model").getAsString());
     }
 }

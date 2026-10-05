@@ -27,10 +27,6 @@ const translations: Record<string, string> = {
   'settings.cli.copyFailed': 'Copy failed',
   'settings.cli.tools.qwen.name': 'Qwen Code',
   'settings.cli.tools.qwen.description': 'Qwen desc',
-  'settings.cli.tools.dsh.name': 'DeepSeek Harness',
-  'settings.cli.tools.dsh.description': 'DSH desc',
-  'settings.cli.dsh.groupTitle': 'DeepSeek Harness',
-  'settings.cli.dsh.cliRowTitle': 'CLI install',
   'settings.cli.installDialog.title': 'Install {{name}}',
   'settings.cli.installDialog.lead': 'Lead {{name}} {{binary}}',
   'settings.cli.installDialog.stepOpenTerminal': 'Open terminal',
@@ -62,10 +58,6 @@ vi.mock('../../shared/ProviderModelIcon', () => ({
   ProviderModelIcon: () => <span data-testid="provider-icon" />,
 }));
 
-vi.mock('./DshConnectionCard', () => ({
-  default: () => <div data-testid="dsh-connection-card">DSH connection</div>,
-}));
-
 describe('CliSection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -89,6 +81,7 @@ describe('CliSection', () => {
   it('renders installed and missing CLI tools from backend payload', async () => {
     render(<CliSection />);
 
+    // Missing tool: description meta plus the binary chip and install guide.
     await act(async () => {
       window.updateCliStatus?.(JSON.stringify({
         qwen: {
@@ -97,34 +90,30 @@ describe('CliSection', () => {
           binaryName: 'qwen',
           installed: false,
         },
-        dsh: {
-          id: 'dsh',
-          name: 'DeepSeek Harness',
-          binaryName: 'dsh',
-          installed: true,
-          version: '1.2.3',
-          path: '/usr/local/bin/dsh',
-        },
       }));
     });
 
     expect(screen.getByText('Qwen Code')).toBeTruthy();
-    expect(screen.getByText('DeepSeek Harness')).toBeTruthy();
-    expect(screen.getByText('CLI install')).toBeTruthy();
-    expect(screen.queryByText('One product, two steps')).toBeNull();
-    expect(screen.getByText('v1.2.3')).toBeTruthy();
-    expect(screen.getByText('/usr/local/bin/dsh')).toBeTruthy();
-    expect(screen.getByText('More coming soon')).toBeTruthy();
+    expect(screen.getByText('Qwen desc')).toBeTruthy();
+    expect(screen.getAllByText('Install guide').length).toBeGreaterThan(0);
 
-    const group = screen.getByTestId('dsh-group');
-    const harness = screen.getByText('DeepSeek Harness');
-    const cliRow = screen.getByText('CLI install');
-    const connection = screen.getByTestId('dsh-connection-card');
-    expect(group.contains(harness)).toBe(true);
-    expect(group.contains(cliRow)).toBe(true);
-    expect(group.contains(connection)).toBe(true);
-    expect(cliRow.compareDocumentPosition(connection) & Node.DOCUMENT_POSITION_FOLLOWING)
-      .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    // Installed tool: version and binary path replace the description meta.
+    await act(async () => {
+      window.updateCliStatus?.(JSON.stringify({
+        qwen: {
+          id: 'qwen',
+          name: 'Qwen Code',
+          binaryName: 'qwen',
+          installed: true,
+          version: '1.2.3',
+          path: '/usr/local/bin/qwen',
+        },
+      }));
+    });
+
+    expect(screen.getByText('v1.2.3')).toBeTruthy();
+    expect(screen.getByText('/usr/local/bin/qwen')).toBeTruthy();
+    expect(screen.getByText('More coming soon')).toBeTruthy();
   });
   it('persists switcher visibility when the eye toggle is clicked', async () => {
     render(<CliSection />);
@@ -159,25 +148,8 @@ describe('CliSection', () => {
     expect(toggle.getAttribute('aria-pressed')).toBe('false');
   });
 
-  it('hides the local host card until the DSH CLI is detected as installed', async () => {
+  it('shows the loading state while CLI detection is still pending', async () => {
     render(<CliSection />);
-
-    await act(async () => {
-      window.updateCliStatus?.(JSON.stringify({
-        qwen: { id: 'qwen', name: 'Qwen Code', binaryName: 'qwen', installed: false },
-        dsh: { id: 'dsh', name: 'DeepSeek Harness', binaryName: 'dsh', installed: false },
-      }));
-    });
-
-    expect(screen.getByText('DeepSeek Harness')).toBeTruthy();
-    expect(screen.getByText('CLI install')).toBeTruthy();
-    expect(screen.queryByText('Install the CLI first')).toBeNull();
-    expect(screen.queryByTestId('dsh-connection-card')).toBeNull();
-  });
-
-  it('does not show the local host card while CLI detection is still loading', async () => {
-    render(<CliSection />);
-    expect(screen.queryByTestId('dsh-connection-card')).toBeNull();
     expect(screen.getByText('Loading')).toBeTruthy();
   });
 
@@ -187,7 +159,6 @@ describe('CliSection', () => {
     await act(async () => {
       window.updateCliStatus?.(JSON.stringify({
         qwen: { id: 'qwen', name: 'Qwen Code', binaryName: 'qwen', installed: false },
-        dsh: { id: 'dsh', name: 'DeepSeek Harness', binaryName: 'dsh', installed: false },
       }));
     });
 

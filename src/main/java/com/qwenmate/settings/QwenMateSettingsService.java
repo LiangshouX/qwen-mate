@@ -159,120 +159,6 @@ public class QwenMateSettingsService {
         writeConfig(config);
     }
 
-    // ============================================================================
-    // DSH (DeepSeek Harness) connection settings — thin connection only:
-    // bin / host / port / autoStart. Provider keys and model catalog stay in
-    // the DSH Web UI ($DSH_HOME); the plugin never writes them.
-    // ============================================================================
-
-    private static final String DSH_SECTION_KEY = "dsh";
-    private static final String DSH_DEFAULT_HOST = "127.0.0.1";
-    private static final int DSH_DEFAULT_PORT = 3080;
-
-    public String getDshBin() throws IOException {
-        return getDshStringSetting("bin");
-    }
-
-    public void setDshBin(String value) throws IOException {
-        setDshStringSetting("bin", value);
-    }
-
-    public String getDshHost() throws IOException {
-        String value = getDshStringSetting("host");
-        return value.isEmpty() ? DSH_DEFAULT_HOST : value;
-    }
-
-    public void setDshHost(String value) throws IOException {
-        setDshStringSetting("host", value);
-    }
-
-    public int getDshPort() throws IOException {
-        JsonObject config = readConfig();
-        if (!config.has(DSH_SECTION_KEY) || config.get(DSH_SECTION_KEY).isJsonNull()) {
-            return DSH_DEFAULT_PORT;
-        }
-        JsonObject dsh = config.getAsJsonObject(DSH_SECTION_KEY);
-        if (!dsh.has("port") || dsh.get("port").isJsonNull()) {
-            return DSH_DEFAULT_PORT;
-        }
-        try {
-            int port = dsh.get("port").getAsInt();
-            return port > 0 && port <= 65535 ? port : DSH_DEFAULT_PORT;
-        } catch (Exception e) {
-            return DSH_DEFAULT_PORT;
-        }
-    }
-
-    public void setDshPort(int port) throws IOException {
-        JsonObject config = readConfig();
-        JsonObject dsh = config.has(DSH_SECTION_KEY) && !config.get(DSH_SECTION_KEY).isJsonNull()
-                ? config.getAsJsonObject(DSH_SECTION_KEY)
-                : new JsonObject();
-        if (port > 0 && port <= 65535 && port != DSH_DEFAULT_PORT) {
-            dsh.addProperty("port", port);
-        } else {
-            dsh.remove("port");
-        }
-        config.add(DSH_SECTION_KEY, dsh);
-        writeConfig(config);
-    }
-
-    public boolean getDshAutoStart() throws IOException {
-        JsonObject config = readConfig();
-        if (!config.has(DSH_SECTION_KEY) || config.get(DSH_SECTION_KEY).isJsonNull()) {
-            return true;
-        }
-        JsonObject dsh = config.getAsJsonObject(DSH_SECTION_KEY);
-        if (!dsh.has("autoStart") || dsh.get("autoStart").isJsonNull()) {
-            return true;
-        }
-        try {
-            return dsh.get("autoStart").getAsBoolean();
-        } catch (Exception e) {
-            return true;
-        }
-    }
-
-    public void setDshAutoStart(boolean autoStart) throws IOException {
-        JsonObject config = readConfig();
-        JsonObject dsh = config.has(DSH_SECTION_KEY) && !config.get(DSH_SECTION_KEY).isJsonNull()
-                ? config.getAsJsonObject(DSH_SECTION_KEY)
-                : new JsonObject();
-        if (autoStart) {
-            dsh.remove("autoStart");
-        } else {
-            dsh.addProperty("autoStart", false);
-        }
-        config.add(DSH_SECTION_KEY, dsh);
-        writeConfig(config);
-    }
-
-    private String getDshStringSetting(String field) throws IOException {
-        JsonObject config = readConfig();
-        if (!config.has(DSH_SECTION_KEY) || config.get(DSH_SECTION_KEY).isJsonNull()) {
-            return "";
-        }
-        JsonObject dsh = config.getAsJsonObject(DSH_SECTION_KEY);
-        if (!dsh.has(field) || dsh.get(field).isJsonNull()) {
-            return "";
-        }
-        return dsh.get(field).getAsString();
-    }
-
-    private void setDshStringSetting(String field, String value) throws IOException {
-        JsonObject config = readConfig();
-        JsonObject dsh = config.has(DSH_SECTION_KEY) && !config.get(DSH_SECTION_KEY).isJsonNull()
-                ? config.getAsJsonObject(DSH_SECTION_KEY)
-                : new JsonObject();
-        String v = value != null ? value.trim() : "";
-        if (v.isEmpty()) {
-            dsh.remove(field);
-        } else {
-            dsh.addProperty(field, v);
-        }
-        config.add(DSH_SECTION_KEY, dsh);
-        writeConfig(config);
-    }
     private static final String COMMIT_AI_KEY = "commitAi";
     private static final String PROMPT_ENHANCER_KEY = "promptEnhancer";
     private static final String AI_FEATURE_PROVIDER_KEY = "provider";
@@ -281,11 +167,9 @@ public class QwenMateSettingsService {
     private static final String AI_FEATURE_RESOLUTION_SOURCE_KEY = "resolutionSource";
     private static final String AI_FEATURE_AVAILABILITY_KEY = "availability";
     private static final String AI_FEATURE_PROVIDER_QWEN = "qwen";
-    private static final String AI_FEATURE_PROVIDER_DSH = "dsh";
     /** Same order as webview AVAILABLE_PROVIDERS / chat CLI selector. */
     private static final String[] AI_FEATURE_PROVIDERS = {
-            AI_FEATURE_PROVIDER_QWEN,
-            AI_FEATURE_PROVIDER_DSH
+            AI_FEATURE_PROVIDER_QWEN
     };
     private static final String AI_FEATURE_RESOLUTION_MANUAL = "manual";
     private static final String AI_FEATURE_RESOLUTION_AUTO = "auto";
@@ -293,7 +177,6 @@ public class QwenMateSettingsService {
     // Keep in sync with webview DEFAULT_AI_FEATURE_MODELS (ChatInputBox defaults).
     /** Empty model id means "follow the Qwen CLI config" ({@code ~/.qwen/settings.json}). */
     private static final String DEFAULT_AI_FEATURE_QWEN_MODEL = "";
-    private static final String DEFAULT_AI_FEATURE_DSH_MODEL = "auto";
     private static final String USER_LANGUAGE_CONFIG_KEY = "language";
 
     private final Gson gson;
@@ -1256,7 +1139,8 @@ public class QwenMateSettingsService {
     }
 
     public static String normalizePromptProvider(String provider) {
-        return "dsh".equalsIgnoreCase(provider) ? "dsh" : "qwen";
+        // qwen is the only supported prompt provider; any legacy value folds into it.
+        return AI_FEATURE_PROVIDER_QWEN;
     }
 
     private static boolean promptBelongsToProvider(JsonObject prompt, String provider) {
@@ -1717,7 +1601,7 @@ public class QwenMateSettingsService {
      *
      * <p>In auto mode (provider null), resolution prefers {@code preferredProvider}
      * when that CLI is available (typically the current chat session provider),
-     * then falls back to Qwen → DSH.
+     * then falls back to Qwen.
      */
     public JsonObject getPromptEnhancerConfig() throws IOException {
         return getPromptEnhancerConfig(null);
@@ -1732,7 +1616,7 @@ public class QwenMateSettingsService {
     }
 
     /**
-     * Persist prompt enhancer config with a full models map (qwen/dsh).
+     * Persist prompt enhancer config with a full models map (qwen).
      */
     public void setPromptEnhancerConfig(String provider, JsonObject models) throws IOException {
         setAiFeatureConfig(PROMPT_ENHANCER_KEY, provider, models, "prompt enhancer");
@@ -1741,7 +1625,7 @@ public class QwenMateSettingsService {
     /**
      * Get commit AI configuration. Auto mode prefers {@code preferredProvider}
      * when available (typically the current chat session provider), then falls
-     * back to Qwen → DSH — same resolution as prompt enhancer.
+     * back to Qwen — same resolution as prompt enhancer.
      */
     public JsonObject getCommitAiConfig() throws IOException {
         return getCommitAiConfig(null);
@@ -1862,7 +1746,7 @@ public class QwenMateSettingsService {
             Map<String, CliToolStatus> cliStatuses
     ) {
         try {
-            // TODO: dsh availability is probed via CLI presence only, not daemon reachability.
+            // TODO: availability is probed via CLI presence only, not daemon reachability.
             CliToolStatus status = cliStatuses != null ? cliStatuses.get(provider) : null;
             return status != null && status.isInstalled();
         } catch (Exception e) {
@@ -1904,9 +1788,7 @@ public class QwenMateSettingsService {
     }
 
     private String defaultModelForProvider(String provider) {
-        return AI_FEATURE_PROVIDER_DSH.equals(provider)
-                ? DEFAULT_AI_FEATURE_DSH_MODEL
-                : DEFAULT_AI_FEATURE_QWEN_MODEL;
+        return DEFAULT_AI_FEATURE_QWEN_MODEL;
     }
 
     private ResolvedAiFeatureProvider resolveAiFeatureProvider(
@@ -1922,7 +1804,7 @@ public class QwenMateSettingsService {
             }
             return new ResolvedAiFeatureProvider(null, AI_FEATURE_RESOLUTION_UNAVAILABLE);
         }
-        // Auto mode: follow current chat provider when available, then Qwen → DSH.
+        // Auto mode: follow current chat provider when available, then Qwen.
         String preferred = normalizeAiFeatureProvider(preferredProvider);
         if (preferred != null
                 && availability.has(preferred)
@@ -1978,7 +1860,7 @@ public class QwenMateSettingsService {
     /**
      * Persist user-configured model pricing for a provider family, replacing the whole map.
      *
-     * @param provider {@code "qwen"} or {@code "dsh"}
+     * @param provider {@code "qwen"}
      * @param pricing  map of model ID → pricing; empty or null clears the provider entry
      */
     public void setCustomModelPricing(String provider, Map<String, ModelPricing> pricing) throws IOException {
@@ -2005,42 +1887,6 @@ public class QwenMateSettingsService {
         writeConfig(config);
         LOG.info("[QwenMateSettings] Set user model pricing for " + provider
                 + ": " + (pricing == null ? 0 : pricing.size()) + " models");
-    }
-
-    /**
-     * Persist user-configured model context windows for a provider family, replacing the whole map.
-     */
-    public void setCustomModelContextWindows(String provider, Map<String, Integer> contextWindows) throws IOException {
-        JsonObject config = readConfig();
-
-        JsonObject root;
-        if (config.has("customModelContextWindows") && config.get("customModelContextWindows").isJsonObject()) {
-            root = config.getAsJsonObject("customModelContextWindows");
-        } else {
-            root = new JsonObject();
-            config.add("customModelContextWindows", root);
-        }
-
-        if (contextWindows == null || contextWindows.isEmpty()) {
-            root.remove(provider);
-        } else {
-            JsonObject providerNode = new JsonObject();
-            for (Map.Entry<String, Integer> entry : contextWindows.entrySet()) {
-                Integer value = entry.getValue();
-                if (value != null && value >= 1_000 && value % 1_000 == 0) {
-                    providerNode.addProperty(entry.getKey(), value);
-                }
-            }
-            if (providerNode.size() == 0) {
-                root.remove(provider);
-            } else {
-                root.add(provider, providerNode);
-            }
-        }
-
-        writeConfig(config);
-        LOG.info("[QwenMateSettings] Set user model context windows for " + provider
-                + ": " + (contextWindows == null ? 0 : contextWindows.size()) + " models");
     }
 
     private JsonObject serializeModelPricing(ModelPricing pricing) {

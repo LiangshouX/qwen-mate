@@ -177,7 +177,7 @@ public class GitCommitMessageService {
 
     /**
      * Best-effort current chat CLI for auto-mode resolution. Returns null when
-     * no chat window is open so resolution falls back to qwen → dsh.
+     * no chat window is open so resolution falls back to qwen.
      */
     @Nullable
     protected String resolvePreferredChatProvider() {

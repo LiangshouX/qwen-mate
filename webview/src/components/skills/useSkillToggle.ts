@@ -25,7 +25,6 @@ export function useSkillToggle(
   addToast: (message: string, type?: ToastMessage['type']) => void
 ) {
   const { t } = useTranslation();
-  const isCodex = currentProvider === 'dsh';
 
   // Skills currently being toggled (used to disable buttons and prevent duplicate clicks)
   const [togglingSkills, setTogglingSkills] = useState<Set<string>>(new Set());
@@ -74,7 +73,6 @@ export function useSkillToggle(
       name: skill.name,
       scope: skill.scope,
       enabled: skill.enabled,
-      ...(isCodex && skill.skillPath ? { skillPath: skill.skillPath } : {}),
     });
   };
 

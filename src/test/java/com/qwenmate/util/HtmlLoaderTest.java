@@ -3,8 +3,6 @@ package com.qwenmate.util;
 import org.junit.Assume;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -34,16 +32,13 @@ public class HtmlLoaderTest {
         HtmlLoader loader = new HtmlLoader(HtmlLoaderTest.class);
         String html = "<html><head><script src=\"main.js\"></script></head><body></body></html>";
 
-        String injected = loader.injectInitialPageState(
-                html, "qwen", "qwen3-max", List.of("custom"));
+        String injected = loader.injectInitialPageState(html, "qwen", "qwen3-max");
 
         int contextIndex = injected.indexOf("window.__CCG_PAGE_GENERATION__ = undefined");
-        int presetsIndex = injected.indexOf("window.__INITIAL_DSH_PRESETS__ = ['custom']");
         int providerIndex = injected.indexOf("window.__INITIAL_TAB_PROVIDER__ = 'qwen'");
         int bundleIndex = injected.indexOf("main.js");
         assertTrue(contextIndex > 0);
-        assertTrue(contextIndex < presetsIndex);
-        assertTrue(presetsIndex < providerIndex);
+        assertTrue(contextIndex < providerIndex);
         assertTrue(providerIndex < bundleIndex);
         assertTrue(injected.contains("window.__CCGUI_PAGE_CONTEXT_READY__ = false"));
         assertFalse(injected.contains("\\n    <script>"));

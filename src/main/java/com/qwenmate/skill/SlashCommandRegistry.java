@@ -59,7 +59,7 @@ public final class SlashCommandRegistry {
             new SlashCommand("/update-config", "Configure settings.json (hooks, permissions, env vars)", "bundled")
     );
 
-    // Codex built-in commands removed in the qwen/dsh convergence.
+    // Codex built-in commands removed in the provider convergence.
 
     /**
      * Gets the list of directories to scan for skills or commands.

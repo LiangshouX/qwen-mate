@@ -4,7 +4,7 @@ import type { McpInstallOption, McpMarketplaceEntry, McpMarketplaceSearchRespons
 import { sendToJava, openBrowser } from '../../utils/bridge';
 
 interface McpMarketplaceDialogProps {
-  currentProvider?: 'qwen' | 'dsh' | string;
+  currentProvider?: string;
   existingIds?: string[];
   onClose: () => void;
   onSelect: (server: McpServer) => void;
@@ -56,9 +56,8 @@ function isRiskyInstallOption(option: McpInstallOption): boolean {
 /**
  * MCP Marketplace Browser adapted from the former Swing registry browser.
  */
-export function McpMarketplaceDialog({ currentProvider = 'qwen', existingIds = [], onClose, onSelect }: McpMarketplaceDialogProps) {
+export function McpMarketplaceDialog({ existingIds = [], onClose, onSelect }: McpMarketplaceDialogProps) {
   const { t } = useTranslation();
-  const isCodexMode = currentProvider === 'dsh';
   const [sources, setSources] = useState<McpMarketplaceSource[]>([]);
   const [entries, setEntries] = useState<McpMarketplaceEntry[]>([]);
   const [selectedSourceId, setSelectedSourceId] = useState(readPreferredSourceId);
@@ -170,7 +169,7 @@ export function McpMarketplaceDialog({ currentProvider = 'qwen', existingIds = [
     if (!selectedEntry || !selectedInstallOption) {
       return;
     }
-    onSelect(createServerFromMarketplaceEntry(selectedEntry, selectedInstallOption, existingIds, isCodexMode));
+    onSelect(createServerFromMarketplaceEntry(selectedEntry, selectedInstallOption, existingIds));
     onClose();
   };
 
@@ -403,8 +402,7 @@ function InstallPreview({ option }: InstallPreviewProps) {
 function createServerFromMarketplaceEntry(
   entry: McpMarketplaceEntry,
   option: McpInstallOption,
-  existingIds: string[],
-  isCodexMode: boolean
+  existingIds: string[]
 ): McpServer {
   return {
     id: createUniqueServerId(entry, existingIds),
@@ -413,8 +411,8 @@ function createServerFromMarketplaceEntry(
     tags: entry.tags,
     server: createServerSpec(option, entry),
     apps: {
-      claude: !isCodexMode,
-      codex: isCodexMode,
+      claude: true,
+      codex: false,
       gemini: false,
     },
     homepage: entry.homepage,

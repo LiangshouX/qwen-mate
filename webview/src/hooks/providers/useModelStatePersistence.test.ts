@@ -14,19 +14,13 @@ function makeOptions(overrides: Partial<UseModelStatePersistenceOptions> = {}): 
   return {
     setCurrentProvider: vi.fn(),
     setSelectedQwenModel: vi.fn(),
-    setSelectedDshModel: vi.fn(),
     setQwenPermissionMode: vi.fn(),
-    setDshPermissionMode: vi.fn(),
     setPermissionMode: vi.fn(),
     setReasoningEffort: vi.fn(),
-    setDshPreset: vi.fn(),
     currentProvider: 'qwen',
     selectedQwenModel: 'qwen3-coder-plus',
-    selectedDshModel: 'auto',
     qwenPermissionMode: 'default' as PermissionMode,
-    dshPermissionMode: 'default' as PermissionMode,
     reasoningEffort: 'medium',
-    dshPreset: '',
     ...overrides,
   };
 }
@@ -77,8 +71,6 @@ describe('useModelStatePersistence — boot sync does not clobber the persisted 
     // Provider/model are webview-owned and must still sync.
     expect(bridgeEventsFor('set_provider')).toEqual([['set_provider', 'qwen']]);
     expect(bridgeEventsFor('set_model')).toEqual([['set_model', DEFAULT_QWEN_MODEL_ID]]);
-    // DSH preset only syncs for the dsh provider.
-    expect(bridgeEventsFor('set_dsh_preset')).toHaveLength(0);
   });
 
   it('migrates a legacy autoEdit mode to auto-edit during restore', () => {
@@ -142,15 +134,14 @@ describe('useModelStatePersistence — boot sync does not clobber the persisted 
   it('does not echo the stale HTML provider or model during watchdog recovery', () => {
     window.__CCGUI_RECOVERY_RELOAD__ = true;
     window.__CCGUI_RECOVERY_STATE_APPLIED__ = false;
-    (window as unknown as { __INITIAL_TAB_PROVIDER__?: unknown }).__INITIAL_TAB_PROVIDER__ = 'dsh';
-    (window as unknown as { __INITIAL_TAB_MODEL__?: unknown }).__INITIAL_TAB_MODEL__ = 'provider/model-a';
+    (window as unknown as { __INITIAL_TAB_PROVIDER__?: unknown }).__INITIAL_TAB_PROVIDER__ = 'qwen';
+    (window as unknown as { __INITIAL_TAB_MODEL__?: unknown }).__INITIAL_TAB_MODEL__ = 'qwen3-coder-plus';
 
     renderHook(() => useModelStatePersistence(makeOptions()));
     vi.advanceTimersByTime(200);
 
     expect(bridgeEventsFor('set_provider')).toHaveLength(0);
     expect(bridgeEventsFor('set_model')).toHaveLength(0);
-    expect(bridgeEventsFor('set_dsh_preset')).toHaveLength(0);
     expect(localStorage.getItem('model-selection-state')).toBeNull();
   });
 
@@ -293,52 +284,30 @@ describe('useModelStatePersistence — CLI provider persistence', () => {
     teardownWindow();
   });
 
-  it('restores a saved CLI provider instead of silently falling back to qwen', () => {
-    // Regression: the hydration allowlist must cover every CLI-only provider,
-    // so a saved dsh provider is not dropped and syncToBackend does not push
-    // set_provider qwen, clobbering the CLI session on restart. The model id
-    // only exists in the dynamic DSH catalog and must survive restart as-is.
-    const setCurrentProvider = vi.fn();
-    const setSelectedDshModel = vi.fn();
-    localStorage.setItem('model-selection-state', JSON.stringify({
-      provider: 'dsh',
-      dshModel: 'provider/model-a',
-    }));
-
-    renderHook(() => useModelStatePersistence(makeOptions({ setCurrentProvider, setSelectedDshModel })));
-    vi.advanceTimersByTime(200);
-
-    expect(setCurrentProvider).toHaveBeenCalledWith('dsh');
-    expect(setSelectedDshModel).toHaveBeenCalledWith('provider/model-a');
-    expect(bridgeEventsFor('set_provider')).toEqual([['set_provider', 'dsh']]);
-    expect(bridgeEventsFor('set_model')).toEqual([['set_model', 'provider/model-a']]);
-    expect(bridgeEventsFor('set_dsh_preset')).toEqual([['set_dsh_preset', '']]);
-  });
-
   it('honors a backend-supplied CLI provider via __INITIAL_TAB_PROVIDER__', () => {
     const setCurrentProvider = vi.fn();
-    (window as unknown as { __INITIAL_TAB_PROVIDER__?: unknown }).__INITIAL_TAB_PROVIDER__ = 'dsh';
-    (window as unknown as { __INITIAL_TAB_MODEL__?: unknown }).__INITIAL_TAB_MODEL__ = 'provider/model-a';
+    (window as unknown as { __INITIAL_TAB_PROVIDER__?: unknown }).__INITIAL_TAB_PROVIDER__ = 'qwen';
+    (window as unknown as { __INITIAL_TAB_MODEL__?: unknown }).__INITIAL_TAB_MODEL__ = 'vendor/custom-model';
 
     renderHook(() => useModelStatePersistence(makeOptions({ setCurrentProvider })));
     vi.advanceTimersByTime(200);
 
-    expect(setCurrentProvider).toHaveBeenCalledWith('dsh');
-    expect(bridgeEventsFor('set_provider')).toEqual([['set_provider', 'dsh']]);
-    expect(bridgeEventsFor('set_model')).toEqual([['set_model', 'provider/model-a']]);
+    expect(setCurrentProvider).toHaveBeenCalledWith('qwen');
+    expect(bridgeEventsFor('set_provider')).toEqual([['set_provider', 'qwen']]);
+    expect(bridgeEventsFor('set_model')).toEqual([['set_model', 'vendor/custom-model']]);
   });
 
-  it('persists CLI model and permission selections in the snapshot', () => {
+  it('persists model and permission selections in the snapshot', () => {
     renderHook(() => useModelStatePersistence(makeOptions({
-      currentProvider: 'dsh',
-      selectedDshModel: 'provider/model-a',
-      dshPermissionMode: 'auto-edit',
+      currentProvider: 'qwen',
+      selectedQwenModel: 'vendor/custom-model',
+      qwenPermissionMode: 'auto-edit',
     })));
 
     const saved = JSON.parse(localStorage.getItem('model-selection-state') ?? '{}');
-    expect(saved.provider).toBe('dsh');
-    expect(saved.dshModel).toBe('provider/model-a');
-    expect(saved.dshPermissionMode).toBe('auto-edit');
+    expect(saved.provider).toBe('qwen');
+    expect(saved.qwenModel).toBe('vendor/custom-model');
+    expect(saved.qwenPermissionMode).toBe('auto-edit');
   });
 });
 

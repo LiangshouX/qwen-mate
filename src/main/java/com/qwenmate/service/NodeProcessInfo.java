@@ -28,7 +28,7 @@ public final class NodeProcessInfo {
     /** What kind of process this is. */
     private final Kind kind;
 
-    /** "qwen" or "dsh"; null for orphans without an identifiable provider. */
+    /** "qwen"; null for orphans without an identifiable provider. */
     private final String provider;
 
     /** Operating system PID. */

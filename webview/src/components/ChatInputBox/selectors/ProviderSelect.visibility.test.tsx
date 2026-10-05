@@ -16,7 +16,6 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: string | Record<string, unknown>) => {
       const map: Record<string, string> = {
         'providers.qwen.label': 'Qwen Code',
-        'providers.dsh.label': 'DeepSeek Harness',
         'config.switchProvider': 'Switch provider',
       };
       const defaultValue = options && typeof options === 'object' && 'defaultValue' in options
@@ -39,32 +38,31 @@ describe('ProviderSelect CLI visibility', () => {
   };
 
   it('omits hidden CLI providers from the switcher menu', () => {
-    setCliProviderHidden('dsh', true);
+    setCliProviderHidden('qwen', true);
 
     render(<ProviderSelect value="qwen" />);
     const menu = openMenu();
 
-    expect(menu.queryByText('DeepSeek Harness')).toBeNull();
-    expect(menu.getByText('Qwen Code')).toBeTruthy();
+    expect(menu.queryByText('Qwen Code')).toBeNull();
   });
 
   it('reacts to visibility changes made while mounted', () => {
     render(<ProviderSelect value="qwen" />);
     const menu = openMenu();
-    expect(menu.getByText('DeepSeek Harness')).toBeTruthy();
+    expect(menu.getByText('Qwen Code')).toBeTruthy();
     act(() => {
-      setCliProviderHidden('dsh', true);
+      setCliProviderHidden('qwen', true);
     });
 
-    expect(menu.queryByText('DeepSeek Harness')).toBeNull();
+    expect(menu.queryByText('Qwen Code')).toBeNull();
   });
 
   it('keeps a hidden provider functional when it is the active selection', () => {
-    setCliProviderHidden('dsh', true);
+    setCliProviderHidden('qwen', true);
 
-    render(<ProviderSelect value="dsh" />);
+    render(<ProviderSelect value="qwen" />);
 
     // Trigger button still displays the active hidden provider.
-    expect(screen.getByRole('button').textContent).toContain('DeepSeek Harness');
+    expect(screen.getByRole('button').textContent).toContain('Qwen Code');
   });
 });

@@ -41,16 +41,13 @@ export interface ChatControllerModelSlice {
   sdkStatusLoading: UseMessageSenderOptions['sdkStatusLoading'];
   currentSdkInstalled: UseMessageSenderOptions['currentSdkInstalled'];
   reasoningEffort: UseMessageSenderOptions['reasoningEffort'];
-  dshPreset: UseMessageSenderOptions['dshPreset'];
   handleModeSelect: (mode: PermissionMode) => void;
   handleProviderSelect: (providerId: string) => void;
   currentProviderRef: UseWindowCallbacksOptions['currentProviderRef'];
   setPermissionMode: UseWindowCallbacksOptions['setPermissionMode'];
   setCurrentProvider: UseWindowCallbacksOptions['setCurrentProvider'];
   setQwenPermissionMode: UseWindowCallbacksOptions['setQwenPermissionMode'];
-  setDshPermissionMode: UseWindowCallbacksOptions['setDshPermissionMode'];
   setSelectedQwenModel: UseWindowCallbacksOptions['setSelectedQwenModel'];
-  setSelectedDshModel: UseWindowCallbacksOptions['setSelectedDshModel'];
   setReasoningEffort: UseWindowCallbacksOptions['setReasoningEffort'];
   setAlwaysThinkingEnabled: UseWindowCallbacksOptions['setAlwaysThinkingEnabled'];
   setStreamingEnabledSetting: UseWindowCallbacksOptions['setStreamingEnabledSetting'];
@@ -134,12 +131,12 @@ export const useAppChatController = ({
   const {
     currentProvider, selectedModel, permissionMode,
     selectedAgent, sdkStatusLoading, currentSdkInstalled,
-    reasoningEffort, dshPreset,
+    reasoningEffort,
     handleModeSelect, handleProviderSelect,
     currentProviderRef,
     setPermissionMode, setCurrentProvider,
-    setQwenPermissionMode, setDshPermissionMode,
-    setSelectedQwenModel, setSelectedDshModel,
+    setQwenPermissionMode,
+    setSelectedQwenModel,
     setReasoningEffort, setAlwaysThinkingEnabled, setStreamingEnabledSetting,
     setSendShortcut, setAutoOpenFileEnabled,
     setSdkStatus, setSdkStatusLoaded, setSdkStatusError, setSelectedAgent,
@@ -203,8 +200,8 @@ export const useAppChatController = ({
     setMessages, setStatus, setLoading, setLoadingStartTime,
     setIsThinking, setStreamingActive, setHistoryData,
     setCurrentSessionId, setUsagePercentage, setUsageUsedTokens, setUsageMaxTokens,
-    setPermissionMode, setCurrentProvider, setQwenPermissionMode, setDshPermissionMode,
-    setSelectedQwenModel, setSelectedDshModel,
+    setPermissionMode, setCurrentProvider, setQwenPermissionMode,
+    setSelectedQwenModel,
     setReasoningEffort, setAlwaysThinkingEnabled, setStreamingEnabledSetting,
     setSendShortcut, setAutoOpenFileEnabled,
     setSdkStatus, setSdkStatusLoaded, setSdkStatusError,
@@ -253,7 +250,7 @@ export const useAppChatController = ({
     interruptSession,
   } = useMessageSender({
     t, addToast,
-    currentProvider, selectedModel, permissionMode, reasoningEffort, selectedAgent, dshPreset,
+    currentProvider, selectedModel, permissionMode, reasoningEffort, selectedAgent,
     sdkStatusLoading, currentSdkInstalled,
     sentAttachmentsRef, chatInputRef, messagesContainerRef,
     isUserAtBottomRef, userPausedRef, isStreamingRef,
@@ -297,7 +294,7 @@ export const useAppChatController = ({
         setCurrentView('history');
         return;
       }
-      // /plan - switch to plan mode (Qwen only; DSH sends as normal text)
+      // /plan - switch to plan mode (Qwen only)
       if (PLAN_COMMANDS.has(command) && currentProvider === 'qwen') {
         handleModeSelect('plan');
         addToast(t('chat.planModeEnabled', { defaultValue: 'Plan mode enabled' }), 'info');

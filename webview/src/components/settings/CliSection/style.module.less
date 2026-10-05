@@ -636,36 +636,6 @@
   }
 }
 
-.dshGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border: 1px solid var(--border-primary, var(--border-secondary));
-  border-radius: 8px;
-  background: var(--bg-secondary);
-  overflow: visible;
-  transition: border-color 0.15s ease;
-
-  &.installed {
-    border-color: color-mix(in srgb, #4caf50 22%, var(--border-primary, var(--border-secondary)));
-  }
-}
-
-.dshGroupHeader {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  padding: 10px 14px 6px;
-}
-
-.dshGroupTitle {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  white-space: nowrap;
-}
-
 .nestedCard {
   margin: 0 8px 8px;
   background: var(--bg-primary, var(--bg-tertiary));
@@ -677,14 +647,6 @@
   .cliName {
     font-weight: 500;
   }
-}
-
-.dshGroup .nestedCard {
-  margin: 0 8px 8px;
-}
-
-.dshCard {
-  border-color: var(--border-primary, var(--border-secondary));
 }
 
 .moreMenu {

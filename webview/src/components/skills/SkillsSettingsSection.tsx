@@ -52,8 +52,6 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
 
-  const isCodex = currentProvider === 'dsh';
-
   const loadSkills = useCallback(() => {
     setLoading(true);
     sendToJava('get_all_skills', {});
@@ -70,7 +68,7 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
     secondaryCount,
     enabledCount,
     disabledCount,
-  } = useFilteredSkills(skills, isCodex, currentFilter, enabledFilter, searchQuery);
+  } = useFilteredSkills(skills, false, currentFilter, enabledFilter, searchQuery);
 
   // Initialization
   useEffect(() => {
@@ -181,9 +179,9 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
     sendToJava('import_skill', { scope });
   };
 
-  // Get the primary/secondary scope values based on provider
-  const primaryScope: SkillScope = isCodex ? 'user' : 'global';
-  const secondaryScope: SkillScope = isCodex ? 'repo' : 'local';
+  // Primary/secondary scope values
+  const primaryScope: SkillScope = 'global';
+  const secondaryScope: SkillScope = 'local';
 
   // Open in editor
   const handleOpen = (skill: Skill) => {
@@ -203,7 +201,6 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
         name: deletingSkill.name,
         scope: deletingSkill.scope,
         enabled: deletingSkill.enabled,
-        ...(isCodex && deletingSkill.skillPath ? { skillPath: deletingSkill.skillPath } : {}),
       });
       setExpandedSkills((prev) => {
         const newSet = new Set(prev);
@@ -225,7 +222,7 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
     <div className="skills-settings-section">
       {/* Toolbar */}
       <SkillToolbar
-        isCodex={isCodex}
+        isCodex={false}
         currentFilter={currentFilter}
         enabledFilter={enabledFilter}
         totalCount={totalCount}
@@ -269,9 +266,7 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
         <SkillConfirmDialog
           title={t('skills.deleteTitle')}
           message={t('skills.deleteMessage', {
-            scope: isCodex
-              ? ((deletingSkill.scope === 'user') ? t('skills.deleteMessageUser') : t('skills.deleteMessageRepo'))
-              : ((deletingSkill.scope === 'global') ? t('skills.deleteMessageGlobal') : t('skills.deleteMessageLocal')),
+            scope: (deletingSkill.scope === 'global') ? t('skills.deleteMessageGlobal') : t('skills.deleteMessageLocal'),
             name: deletingSkill.name
           })}
           confirmText={t('common.delete')}

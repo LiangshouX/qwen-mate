@@ -40,11 +40,11 @@ public class SessionTemplateServiceTest {
     public void saveTemplateOverwritesByName() {
         SessionTemplateService service = new SessionTemplateService();
         service.saveTemplate(new SessionTemplate("dup", "qwen", "a", "default", "low", null, true));
-        service.saveTemplate(new SessionTemplate("dup", "dsh", "b", "plan", "high", "/cwd", false));
+        service.saveTemplate(new SessionTemplate("dup", "alt", "b", "plan", "high", "/cwd", false));
 
         SessionTemplate loaded = service.getTemplate("dup");
         Assert.assertNotNull(loaded);
-        Assert.assertEquals("dsh", loaded.getProvider());
+        Assert.assertEquals("alt", loaded.getProvider());
         Assert.assertEquals("b", loaded.getModel());
         Assert.assertEquals("plan", loaded.getPermissionMode());
         Assert.assertEquals("high", loaded.getReasoningEffort());
@@ -71,7 +71,7 @@ public class SessionTemplateServiceTest {
     public void getAllTemplatesReturnsDefensiveCopies() {
         SessionTemplateService service = new SessionTemplateService();
         service.saveTemplate(new SessionTemplate("one", "qwen", "m1", "default", "medium", "/a", true));
-        service.saveTemplate(new SessionTemplate("two", "dsh", "m2", "plan", "high", "/b", false));
+        service.saveTemplate(new SessionTemplate("two", "alt", "m2", "plan", "high", "/b", false));
 
         List<SessionTemplate> firstRead = service.getAllTemplates();
         List<SessionTemplate> secondRead = service.getAllTemplates();
@@ -93,7 +93,7 @@ public class SessionTemplateServiceTest {
     public void xmlSerializationRoundTripPreservesAllFields() {
         SessionTemplateService original = new SessionTemplateService();
         original.saveTemplate(new SessionTemplate(
-                "xml-rt", "dsh", "qwen3-max",
+                "xml-rt", "alt", "qwen3-max",
                 "bypassPermissions", "high", "/work/dir", false));
 
         Element serialized = XmlSerializer.serialize(original.getState());
@@ -106,7 +106,7 @@ public class SessionTemplateServiceTest {
         SessionTemplate loaded = restored.getTemplate("xml-rt");
         Assert.assertNotNull("template must survive XML round-trip", loaded);
         Assert.assertEquals("xml-rt", loaded.getName());
-        Assert.assertEquals("dsh", loaded.getProvider());
+        Assert.assertEquals("alt", loaded.getProvider());
         Assert.assertEquals("qwen3-max", loaded.getModel());
         Assert.assertEquals("bypassPermissions", loaded.getPermissionMode());
         Assert.assertEquals("high", loaded.getReasoningEffort());

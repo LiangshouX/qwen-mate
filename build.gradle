@@ -354,7 +354,7 @@ tasks.named('runIde') {
     }
 }
 
-// Unified AI Bridge (qwen + dsh)
+// Unified AI Bridge (qwen)
 def aiBridgeDir = file("ai-bridge")
 def aiBridgePackDir = layout.buildDirectory.dir('ai-bridge-pack').get().asFile
 def aiBridgeArchive = new File(aiBridgePackDir, 'ai-bridge.zip')

@@ -10,7 +10,6 @@ export interface ApplyHistoryModelDeps {
   handleProviderSelect: (providerId: string) => void;
   handleAgentSelect: ChatScreenProps['onAgentSelect'];
   setSelectedQwenModel: (model: string) => void;
-  setSelectedDshModel: (model: string) => void;
 }
 
 interface CreateApplyHistoryModelOptions {
@@ -32,7 +31,6 @@ export const createApplyHistoryModel = ({
     handleProviderSelect,
     handleAgentSelect,
     setSelectedQwenModel,
-    setSelectedDshModel,
   } = modelState;
 
   return (provider, model, agent) => {
@@ -43,11 +41,7 @@ export const createApplyHistoryModel = ({
     if (model) {
       // handleModelSelect reads currentProvider; after provider switch state
       // may not have flushed yet — send bridge + setter for the target provider.
-      if (provider === 'dsh') {
-        setSelectedDshModel(model);
-      } else {
-        setSelectedQwenModel(model);
-      }
+      setSelectedQwenModel(model);
       sendBridgeEvent('set_model', model);
     }
     if (agent) {

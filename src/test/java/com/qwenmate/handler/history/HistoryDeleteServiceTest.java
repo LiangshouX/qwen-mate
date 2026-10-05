@@ -52,25 +52,25 @@ public class HistoryDeleteServiceTest {
 
     @Test
     public void quiescesOnlyTheMatchingProviderSessionBeforeDeletion() {
-        RecordingQwenMateSession matching = new RecordingQwenMateSession("session-1", "dsh");
+        RecordingQwenMateSession matching = new RecordingQwenMateSession("session-1", "qwen");
         HistoryDeleteService.quiesceActiveSessionForDeletion(
-                matching, Collections.singleton("session-1"), "dsh").join();
+                matching, Collections.singleton("session-1"), "qwen").join();
         assertTrue(matching.interrupted);
 
-        RecordingQwenMateSession otherSession = new RecordingQwenMateSession("session-2", "dsh");
+        RecordingQwenMateSession otherSession = new RecordingQwenMateSession("session-2", "qwen");
         HistoryDeleteService.quiesceActiveSessionForDeletion(
-                otherSession, Collections.singleton("session-1"), "dsh").join();
+                otherSession, Collections.singleton("session-1"), "qwen").join();
         assertFalse(otherSession.interrupted);
 
-        RecordingQwenMateSession otherProvider = new RecordingQwenMateSession("session-1", "qwen");
+        RecordingQwenMateSession otherProvider = new RecordingQwenMateSession("session-1", "other");
         HistoryDeleteService.quiesceActiveSessionForDeletion(
-                otherProvider, Collections.singleton("session-1"), "dsh").join();
+                otherProvider, Collections.singleton("session-1"), "qwen").join();
         assertFalse(otherProvider.interrupted);
     }
 
     @Test
     public void failedQuiesceDoesNotStartDeletionContinuation() {
-        RecordingQwenMateSession matching = new RecordingQwenMateSession("session-1", "dsh") {
+        RecordingQwenMateSession matching = new RecordingQwenMateSession("session-1", "qwen") {
             @Override
             public CompletableFuture<Void> interrupt() {
                 CompletableFuture<Void> failed = new CompletableFuture<>();
@@ -81,7 +81,7 @@ public class HistoryDeleteServiceTest {
         AtomicBoolean deletionStarted = new AtomicBoolean(false);
 
         CompletableFuture<Void> deletion = HistoryDeleteService.quiesceActiveSessionForDeletion(
-                matching, Collections.singleton("session-1"), "dsh")
+                matching, Collections.singleton("session-1"), "qwen")
                 .thenRun(() -> deletionStarted.set(true));
 
         try {
@@ -96,7 +96,7 @@ public class HistoryDeleteServiceTest {
     @Test
     public void abortedDeletionReloadsHistoryAfterOptimisticFrontendRemoval() throws Exception {
         HandlerContext context = new HandlerContext(null, null, null, null);
-        context.setSession(new RecordingQwenMateSession("session-1", "dsh") {
+        context.setSession(new RecordingQwenMateSession("session-1", "qwen") {
             @Override
             public CompletableFuture<Void> interrupt() {
                 CompletableFuture<Void> failed = new CompletableFuture<>();
@@ -107,10 +107,10 @@ public class HistoryDeleteServiceTest {
         RecordingHistoryLoadService historyLoadService = new RecordingHistoryLoadService(context);
         HistoryDeleteService service = new HistoryDeleteService(context, null, historyLoadService);
 
-        service.handleDeleteSession("session-1", "dsh");
+        service.handleDeleteSession("session-1", "qwen");
 
         assertTrue(historyLoadService.awaitReload());
-        assertEquals("dsh", historyLoadService.provider);
+        assertEquals("qwen", historyLoadService.provider);
     }
 
     private static class RecordingQwenMateSession extends QwenMateSession {
@@ -119,7 +119,7 @@ public class HistoryDeleteServiceTest {
         private boolean interrupted;
 
         private RecordingQwenMateSession(String sessionId, String provider) {
-            super(null, null, null);
+            super(null, null);
             this.sessionId = sessionId;
             this.provider = provider;
         }

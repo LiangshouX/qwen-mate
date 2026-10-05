@@ -13,7 +13,6 @@ describe('useSettingsBasicActions', () => {
     models: { ...DEFAULT_AI_FEATURE_MODELS },
     availability: {
       qwen: true,
-      dsh: true,
     },
   };
 
@@ -50,8 +49,8 @@ describe('useSettingsBasicActions', () => {
     act(() => {
       result.current.setCommitAiConfig({
         ...defaultCommitAiConfig,
-        provider: 'dsh',
-        effectiveProvider: 'dsh',
+        provider: 'qwen',
+        effectiveProvider: 'qwen',
         resolutionSource: 'manual',
       });
     });
@@ -62,43 +61,21 @@ describe('useSettingsBasicActions', () => {
       result.current.handleCommitAiModelChange('provider/model-a');
     });
 
-    expect(result.current.commitAiConfig.models.dsh).toBe('provider/model-a');
+    expect(result.current.commitAiConfig.models.qwen).toBe('provider/model-a');
     expect(result.current.promptEnhancerConfig).toEqual(promptEnhancerBefore);
     expect(window.sendToJava).toHaveBeenCalledWith(
       `set_commit_ai_config:${JSON.stringify({
-        provider: 'dsh',
+        provider: 'qwen',
         models: {
           ...defaultCommitAiConfig.models,
-          dsh: 'provider/model-a',
+          qwen: 'provider/model-a',
         },
       })}`
     );
   });
 
-  it('can select a beta CLI provider for commit AI settings', () => {
-    const { result } = renderHook(() => useSettingsBasicActions({}));
-
-    act(() => {
-      result.current.setCommitAiConfig({
-        ...defaultCommitAiConfig,
-        availability: { ...defaultCommitAiConfig.availability, dsh: true },
-      });
-    });
-
-    act(() => {
-      result.current.handleCommitAiProviderChange('dsh');
-    });
-
-    expect(result.current.commitAiConfig.provider).toBe('dsh');
-    expect(result.current.commitAiConfig.effectiveProvider).toBe('dsh');
-    expect(result.current.commitAiConfig.resolutionSource).toBe('manual');
-    expect(window.sendToJava).toHaveBeenCalledWith(
-      expect.stringContaining('"provider":"dsh"')
-    );
-  });
-
   it('prompt enhancer auto mode follows current chat provider when available', () => {
-    const { result } = renderHook(() => useSettingsBasicActions({ currentProvider: 'dsh' }));
+    const { result } = renderHook(() => useSettingsBasicActions({ currentProvider: 'qwen' }));
 
     act(() => {
       result.current.setPromptEnhancerConfig({
@@ -108,7 +85,6 @@ describe('useSettingsBasicActions', () => {
         models: { ...DEFAULT_AI_FEATURE_MODELS },
         availability: {
           qwen: true,
-          dsh: true,
         },
       });
     });
@@ -118,22 +94,21 @@ describe('useSettingsBasicActions', () => {
     });
 
     expect(result.current.promptEnhancerConfig.provider).toBeNull();
-    expect(result.current.promptEnhancerConfig.effectiveProvider).toBe('dsh');
+    expect(result.current.promptEnhancerConfig.effectiveProvider).toBe('qwen');
     expect(result.current.promptEnhancerConfig.resolutionSource).toBe('auto');
   });
 
   it('commit AI auto mode falls back to qwen when the chat provider is unavailable', () => {
-    const { result } = renderHook(() => useSettingsBasicActions({ currentProvider: 'dsh' }));
+    const { result } = renderHook(() => useSettingsBasicActions({ currentProvider: 'other-cli' }));
 
     act(() => {
       result.current.setCommitAiConfig({
         provider: null,
-        effectiveProvider: 'dsh',
+        effectiveProvider: 'qwen',
         resolutionSource: 'auto',
         models: { ...DEFAULT_AI_FEATURE_MODELS },
         availability: {
           qwen: true,
-          dsh: false,
         },
       });
     });
@@ -144,58 +119,6 @@ describe('useSettingsBasicActions', () => {
 
     expect(result.current.commitAiConfig.provider).toBeNull();
     expect(result.current.commitAiConfig.effectiveProvider).toBe('qwen');
-    expect(result.current.commitAiConfig.resolutionSource).toBe('auto');
-  });
-
-  it('prompt enhancer auto effectiveProvider updates when chat CLI changes', () => {
-    const { result, rerender } = renderHook(
-      ({ currentProvider }) => useSettingsBasicActions({ currentProvider }),
-      { initialProps: { currentProvider: 'qwen' } },
-    );
-
-    act(() => {
-      result.current.setPromptEnhancerConfig({
-        provider: null,
-        effectiveProvider: 'qwen',
-        resolutionSource: 'auto',
-        models: { ...DEFAULT_AI_FEATURE_MODELS },
-        availability: {
-          qwen: true,
-          dsh: true,
-        },
-      });
-    });
-
-    rerender({ currentProvider: 'dsh' });
-
-    expect(result.current.promptEnhancerConfig.provider).toBeNull();
-    expect(result.current.promptEnhancerConfig.effectiveProvider).toBe('dsh');
-    expect(result.current.promptEnhancerConfig.resolutionSource).toBe('auto');
-  });
-
-  it('commit AI auto effectiveProvider updates when chat CLI changes', () => {
-    const { result, rerender } = renderHook(
-      ({ currentProvider }) => useSettingsBasicActions({ currentProvider }),
-      { initialProps: { currentProvider: 'qwen' } },
-    );
-
-    act(() => {
-      result.current.setCommitAiConfig({
-        provider: null,
-        effectiveProvider: 'qwen',
-        resolutionSource: 'auto',
-        models: { ...DEFAULT_AI_FEATURE_MODELS },
-        availability: {
-          qwen: true,
-          dsh: true,
-        },
-      });
-    });
-
-    rerender({ currentProvider: 'dsh' });
-
-    expect(result.current.commitAiConfig.provider).toBeNull();
-    expect(result.current.commitAiConfig.effectiveProvider).toBe('dsh');
     expect(result.current.commitAiConfig.resolutionSource).toBe('auto');
   });
 

@@ -63,23 +63,12 @@ describe('ReasoningSelect', () => {
     expect(onChange).toHaveBeenCalledWith('high');
   });
 
-  it('renders the picker for qwen and dsh regardless of model', () => {
-    const first = render(
-      <ReasoningSelect
-        value="high"
-        onChange={vi.fn()}
-        currentProvider="qwen"
-        selectedModel="qwen3-coder-plus"
-      />,
-    );
-    expect(screen.getByRole('button')).toBeTruthy();
-    first.unmount();
-
+  it('renders the picker regardless of model', () => {
     render(
       <ReasoningSelect
         value="high"
         onChange={vi.fn()}
-        currentProvider="dsh"
+        currentProvider="qwen"
         selectedModel="auto"
       />,
     );

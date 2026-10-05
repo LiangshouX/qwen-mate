@@ -1,11 +1,10 @@
 /**
  * Stdin reader utility module (unified version).
- * Supports the Qwen SDK channel and the DSH channel.
+ * Supports the Qwen SDK channel.
  */
 
 const STDIN_ENV_BY_PROVIDER = {
   qwen: 'QWEN_USE_STDIN',
-  dsh: 'DSH_USE_STDIN',
 };
 
 /**
@@ -18,7 +17,7 @@ function stdinEnvKeyForProvider(provider) {
 
 /**
  * Read JSON data from stdin.
- * @param {string} provider - 'qwen' | 'dsh'
+ * @param {string} provider - 'qwen'
  * @returns {Promise<Object|null>} The parsed JSON object, or null
  */
 export async function readStdinData(provider = 'qwen') {

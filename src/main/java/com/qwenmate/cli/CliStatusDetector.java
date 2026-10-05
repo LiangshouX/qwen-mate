@@ -99,7 +99,7 @@ public final class CliStatusDetector {
      * several child processes per tool, so back-to-back {@code get_cli_status}
      * requests reuse the last detection.
      *
-     * @return map keyed by tool id (qwen / dsh)
+     * @return map keyed by tool id (qwen)
      */
     public static Map<String, CliToolStatus> detectAll() {
         long now = System.currentTimeMillis();
@@ -194,16 +194,6 @@ public final class CliStatusDetector {
         List<String> dirs = new ArrayList<>();
         if (home == null || home.isBlank()) {
             return dirs;
-        }
-        switch (tool) {
-            case DSH:
-                // Hermes (the DSH-native installer) keeps node + dsh together.
-                dirs.add(join(home, ".hermes", "node", "bin"));
-                dirs.add(join(home, ".dsh", "bin"));
-                dirs.add(join(home, ".local", "bin"));
-                break;
-            default:
-                break;
         }
         // Shared npm / package-manager locations
         if (PlatformUtils.isWindows()) {
@@ -303,7 +293,6 @@ public final class CliStatusDetector {
 
     private static String[] envKeysFor(CliToolId tool) {
         return switch (tool) {
-            case DSH -> new String[]{"DSH_BIN", "DSH_PATH", "DSH_CLI_PATH"};
             case QWEN -> new String[]{"QWEN_BIN", "QWEN_PATH", "QWEN_CLI_PATH"};
         };
     }
@@ -521,7 +510,6 @@ public final class CliStatusDetector {
         }
         extras.addAll(versionManagerBinDirs(home));
         extras.addAll(List.of(
-                join(home, ".dsh", "bin"),
                 join(home, ".local", "bin"),
                 join(home, ".cargo", "bin"),
                 "/opt/homebrew/bin",

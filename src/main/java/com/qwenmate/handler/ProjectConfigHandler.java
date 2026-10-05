@@ -408,7 +408,7 @@ public class ProjectConfigHandler {
             JsonObject models = json != null && json.has("models") && json.get("models").isJsonObject()
                     ? json.getAsJsonObject("models")
                     : new JsonObject();
-            // Full models map (qwen/dsh) — matches chat CLI list.
+            // Full models map (qwen) — matches chat CLI list.
             setter.apply(provider, models);
             pushJson(jsCallback, getter.get());
         } catch (Exception e) {

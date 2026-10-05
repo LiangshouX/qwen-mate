@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import type { ModelInfo, ReasoningEffort } from '../types';
-import { DshPresetSelect } from './DshPresetSelect';
 import { ModelConfigSubmenuRow } from './ModelConfigSubmenuRow';
 import { ModelSelect } from './ModelSelect';
 import { ReasoningSelect } from './ReasoningSelect';
@@ -32,10 +31,6 @@ interface ModelConfigDropdownProps {
   onRetry?: () => void;
   // Function rows below the model list.
   showDivider: boolean;
-  showPreset: boolean;
-  dshPreset: string;
-  onDshPresetChange?: (preset: string) => void;
-  dshPresetLabel: string;
   showEffortRow: boolean;
   reasoningEffort: ReasoningEffort;
   onReasoningChange: (effort: ReasoningEffort) => void;
@@ -43,14 +38,13 @@ interface ModelConfigDropdownProps {
   // Fly-out submenu state.
   activeSubmenu: ActiveSubmenu;
   effortTriggerRef: React.RefObject<HTMLDivElement | null>;
-  presetTriggerRef: React.RefObject<HTMLDivElement | null>;
   scheduleSubmenu: (submenu: ActiveSubmenu) => void;
   openSubmenu: (submenu: ActiveSubmenu) => void;
 }
 
 /**
  * The model-settings popover: the flat model list on top, then the function
- * rows (DSH preset / effort) whose choices open fly-out submenus beside them.
+ * rows (effort) whose choices open fly-out submenus beside them.
  */
 export const ModelConfigDropdown = ({
   dropdownRef,
@@ -66,17 +60,12 @@ export const ModelConfigDropdown = ({
   error,
   onRetry,
   showDivider,
-  showPreset,
-  dshPreset,
-  onDshPresetChange,
-  dshPresetLabel,
   showEffortRow,
   reasoningEffort,
   onReasoningChange,
   effortLabel,
   activeSubmenu,
   effortTriggerRef,
-  presetTriggerRef,
   scheduleSubmenu,
   openSubmenu,
 }: ModelConfigDropdownProps) => {
@@ -90,7 +79,7 @@ export const ModelConfigDropdown = ({
       onMouseOverCapture={onMouseOverCapture}
     >
       {/* The flat list has no hover row of its own; entering it must
-          dismiss any open fly-out (effort / preset). It sits at the top so
+          dismiss any open fly-out (effort). It sits at the top so
           model switching — the most frequent action — never crosses the
           submenu rows. */}
       <div className="model-config-models" onMouseEnter={() => scheduleSubmenu('none')}>
@@ -108,27 +97,6 @@ export const ModelConfigDropdown = ({
       </div>
 
       {showDivider && <div className="selector-divider" />}
-
-      <ModelConfigSubmenuRow
-        visible={showPreset && !!onDshPresetChange}
-        active={activeSubmenu === 'preset'}
-        testId="model-config-option-preset"
-        label={t('modelConfig.preset', { defaultValue: 'Preset' })}
-        valueLabel={dshPresetLabel}
-        triggerRef={presetTriggerRef}
-        onHover={() => scheduleSubmenu('preset')}
-        onOpen={() => openSubmenu('preset')}
-      >
-        {onDshPresetChange && (
-          <DshPresetSelect
-            value={dshPreset}
-            onChange={onDshPresetChange}
-            embedded
-            triggerRef={presetTriggerRef}
-            onClose={onClose}
-          />
-        )}
-      </ModelConfigSubmenuRow>
 
       <ModelConfigSubmenuRow
         visible={showEffortRow}

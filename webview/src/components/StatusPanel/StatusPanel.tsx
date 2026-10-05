@@ -242,7 +242,7 @@ const StatusPanel = ({ todos, fileChanges, subagents, subagentHistories, current
         >
           <span className="codicon codicon-checklist" />
           <span className="tab-label">
-            {t(currentProvider === 'dsh' ? 'statusPanel.todoTab' : 'statusPanel.tasksTab')}
+            {t('statusPanel.tasksTab')}
           </span>
           {hasTodos && (
             <span className="tab-progress">

@@ -32,7 +32,6 @@ public class SettingsHandler extends BaseMessageHandler {
     // preventing notifications to disposed webviews (issue #1586).
     private ThemeConfigService.RegisteredCallback themeCallbackHandle;
     private final TokenTrackerHandler tokenTrackerHandler;
-    private final DshPresetHandler dshPresetHandler;
     private final QwenConfigHandler qwenConfigHandler;
 
     private static final String[] SUPPORTED_TYPES = {
@@ -41,7 +40,6 @@ public class SettingsHandler extends BaseMessageHandler {
         "set_model",
         "set_provider",
         "set_reasoning_effort",
-        "set_dsh_preset",
         "get_node_path",
         "set_node_path",
         // Qwen auth configuration (Settings → Qwen 配置)
@@ -120,7 +118,6 @@ public class SettingsHandler extends BaseMessageHandler {
         this.nodePathHandler = new NodePathHandler(context);
         this.projectConfigHandler = new ProjectConfigHandler(context);
         this.tokenTrackerHandler = new TokenTrackerHandler(context);
-        this.dshPresetHandler = new DshPresetHandler(context);
         this.qwenConfigHandler = new QwenConfigHandler(context);
         // Register theme change listener to automatically notify frontend when IDE theme changes
         registerThemeChangeListener();
@@ -175,9 +172,6 @@ public class SettingsHandler extends BaseMessageHandler {
                 return true;
             case "set_reasoning_effort":
                 modelProviderHandler.handleSetReasoningEffort(content);
-                return true;
-            case "set_dsh_preset":
-                dshPresetHandler.handleSetDshPreset(content);
                 return true;
             // Node path
             case "get_node_path":

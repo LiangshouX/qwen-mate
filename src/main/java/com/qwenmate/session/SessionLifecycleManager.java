@@ -6,7 +6,6 @@ import com.qwenmate.model.SessionTemplate;
 import com.qwenmate.settings.QwenMateSettingsService;
 import com.qwenmate.handler.UsagePushService;
 import com.qwenmate.handler.core.HandlerContext;
-import com.qwenmate.provider.common.MarkerCliBridge;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
 import com.qwenmate.skill.SlashCommandRegistry;
 import com.qwenmate.util.JsUtils;
@@ -17,7 +16,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.jcef.JBCefBrowser;
 
 import java.io.File;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.LongConsumer;
 
@@ -37,8 +35,6 @@ public class SessionLifecycleManager {
         Project getProject();
 
         QwenSDKBridge getQwenSDKBridge();
-
-        Map<String, MarkerCliBridge> getCliBridges();
 
         QwenMateSession getSession();
 
@@ -422,8 +418,7 @@ public class SessionLifecycleManager {
     private QwenMateSession createDefaultSession() {
         return new QwenMateSession(
                 host.getProject(),
-                host.getQwenSDKBridge(),
-                host.getCliBridges());
+                host.getQwenSDKBridge());
     }
 
     /**

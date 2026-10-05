@@ -4,7 +4,7 @@ import type { ConflictStrategy } from './import';
  * Prompt scope type - determines where prompts are stored
  */
 export type PromptScope = 'global' | 'project';
-export type PromptProvider = 'qwen' | 'dsh';
+export type PromptProvider = 'qwen';
 
 /**
  * Prompt library configuration

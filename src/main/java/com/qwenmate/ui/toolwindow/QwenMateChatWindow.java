@@ -6,10 +6,7 @@ import com.qwenmate.handler.history.HistoryHandler;
 import com.qwenmate.handler.core.MessageDispatcher;
 import com.qwenmate.handler.PermissionHandler;
 import com.qwenmate.permission.PermissionService;
-import com.qwenmate.provider.common.MarkerCliBridge;
-import com.qwenmate.provider.dsh.DshCliBridge;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
-import com.qwenmate.session.SessionProviderRouter;
 import com.qwenmate.provider.common.DaemonBridge;
 import com.qwenmate.provider.common.MessageCallback;
 import com.qwenmate.session.QwenMateSession;
@@ -68,7 +65,6 @@ public class QwenMateChatWindow {
     private static final Logger LOG = Logger.getInstance(QwenMateChatWindow.class);
     private final JPanel mainPanel;
     private final QwenSDKBridge qwenSDKBridge;
-    private final Map<String, MarkerCliBridge> cliBridges;
     private final Project project;
     private final QwenMateSettingsService settingsService;
     private final HtmlLoader htmlLoader;
@@ -213,7 +209,6 @@ public class QwenMateChatWindow {
     public QwenMateChatWindow(Project project, boolean skipRegister) {
         this.project = project;
         this.qwenSDKBridge = new QwenSDKBridge();
-        this.cliBridges = SessionProviderRouter.registerCliBridges(new DshCliBridge());
         this.settingsService = new QwenMateSettingsService();
         this.htmlLoader = new HtmlLoader(getClass());
         this.mainPanel = new JPanel(new BorderLayout());
@@ -277,7 +272,7 @@ public class QwenMateChatWindow {
                 () -> frontendReady
         );
 
-        this.session = new QwenMateSession(project, qwenSDKBridge, cliBridges);
+        this.session = new QwenMateSession(project, qwenSDKBridge);
 
         this.chatWindowDelegate = new ChatWindowDelegate(createDelegateHost());
         chatWindowDelegate.loadPermissionModeFromSettings();
@@ -296,11 +291,6 @@ public class QwenMateChatWindow {
             @Override
             public QwenSDKBridge getQwenSDKBridge() {
                 return qwenSDKBridge;
-            }
-
-            @Override
-            public Map<String, MarkerCliBridge> getCliBridges() {
-                return cliBridges;
             }
 
             @Override
@@ -1360,10 +1350,6 @@ public class QwenMateChatWindow {
         return qwenSDKBridge;
     }
 
-    public Map<String, MarkerCliBridge> getCliBridges() {
-        return cliBridges;
-    }
-
     /**
      * Get the project associated with this chat window.
      *
@@ -1378,7 +1364,7 @@ public class QwenMateChatWindow {
     }
 
     /**
-     * Returns the provider this tab is currently using ("qwen" or "dsh").
+     * Returns the provider id this tab is currently using.
      * Used by NodeProcessRegistry to label processes with the user-facing provider
      * rather than the underlying SDK type (a Qwen daemon may still be alive
      * after the user switched the tab to a CLI provider — the panel reflects the tab's
@@ -2890,11 +2876,6 @@ public class QwenMateChatWindow {
             }
 
             @Override
-            public Map<String, MarkerCliBridge> getCliBridges() {
-                return cliBridges;
-            }
-
-            @Override
             public JPanel getMainPanel() {
                 return mainPanel;
             }
@@ -3059,11 +3040,6 @@ public class QwenMateChatWindow {
             @Override
             public QwenSDKBridge getQwenSDKBridge() {
                 return qwenSDKBridge;
-            }
-
-            @Override
-            public Map<String, MarkerCliBridge> getCliBridges() {
-                return cliBridges;
             }
 
             @Override

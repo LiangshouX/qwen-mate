@@ -186,7 +186,7 @@ public class ModelProviderHandler {
         return context == null ? null : context.getCurrentModel();
     }
 
-    // TODO: daemon shutdown on provider switch removed in the qwen/dsh convergence (only one SDK bridge remains)
+    // TODO: daemon shutdown on provider switch removed in the provider convergence (only one SDK bridge remains)
 
     public void handleSetReasoningEffort(String content) {
         try {
