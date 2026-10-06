@@ -826,7 +826,7 @@ public class PermissionHandler extends BaseMessageHandler {
                 pendingAskUserQuestionRequests.put(requestId, pending);
             }
 
-            // Remind the user (via the opt-in system toast and sound) that Claude is waiting for an
+            // Remind the user (via the opt-in system toast and sound) that Qwen is waiting for an
             // answer. Triggered here — before the JS dialog render — so the toast fires
             // for every AskUserQuestion regardless of whether the webview is reachable.
             try {

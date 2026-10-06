@@ -99,7 +99,7 @@ public class SessionHandler extends BaseMessageHandler {
     }
 
     /**
-     * Send message to Claude
+     * Send message to Qwen
      * [FIX] Now parses JSON format to extract text, agent info and file tags
      */
     private void handleSendMessage(String content) {
@@ -142,7 +142,7 @@ public class SessionHandler extends BaseMessageHandler {
                 }
             }
 
-            // [FIX] Extract file tags from the message (for Codex context injection)
+            // [FIX] Extract file tags from the message (for CLI context injection)
             if (payload != null && payload.has("fileTags") && payload.get("fileTags").isJsonArray()) {
                 JsonArray fileTagsArray = payload.getAsJsonArray("fileTags");
                 fileTagPaths = new ArrayList<>();
@@ -254,7 +254,7 @@ public class SessionHandler extends BaseMessageHandler {
                 }
             }
 
-            // [FIX] Extract file tags from the payload (for Codex context injection)
+            // [FIX] Extract file tags from the payload (for CLI context injection)
             List<String> fileTagPaths = null;
             if (payload != null && payload.has("fileTags") && payload.get("fileTags").isJsonArray()) {
                 JsonArray fileTagsArray = payload.getAsJsonArray("fileTags");
@@ -290,7 +290,7 @@ public class SessionHandler extends BaseMessageHandler {
     }
 
     /**
-     * Send message with attachments to Claude
+     * Send message with attachments to Qwen
      * [FIX] Now accepts agent prompt and file tags parameters
      */
     private void sendMessageWithAttachments(

@@ -38,9 +38,9 @@ public class SessionIndexManagerConcurrencyTest {
                 final int workerId = worker;
                 tasks.add(() -> {
                     for (int iteration = 0; iteration < 40; iteration++) {
-                        manager.saveClaudeProjectIndex(
+                        manager.saveProjectIndex(
                                 "project-" + workerId, createProjectIndex(workerId, iteration));
-                        assertNotNull(manager.readClaudeIndex().projects);
+                        assertNotNull(manager.readSessionIndex().projects);
 
                         if (iteration % 7 == 0) {
                             manager.clearProjectIndex("qwen", "project-" + workerId);
@@ -59,8 +59,8 @@ public class SessionIndexManagerConcurrencyTest {
             executor.awaitTermination(5, TimeUnit.SECONDS);
         }
 
-        assertNotNull(manager.readClaudeIndex().projects);
-        assertNoTempFilesLeft(manager.getClaudeIndexPath().getParent());
+        assertNotNull(manager.readSessionIndex().projects);
+        assertNoTempFilesLeft(manager.getIndexPath().getParent());
     }
 
     private static SessionIndexManager.ProjectIndex createProjectIndex(int workerId, int iteration) {

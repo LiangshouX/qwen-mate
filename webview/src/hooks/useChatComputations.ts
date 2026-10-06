@@ -122,7 +122,7 @@ export function deriveTodosForTurn(
 ): TodoItem[] {
   const scopedMessages = turnMessages;
   let latestTodos: ReturnType<typeof extractTodosFromToolUse> = null;
-  let sawEmptyClaudeSnapshot = false;
+  let sawEmptyStreamSnapshot = false;
   for (let i = scopedMessages.length - 1; i >= 0; i--) {
     const msg = scopedMessages[i];
     if (msg.type !== 'assistant') continue;
@@ -140,13 +140,13 @@ export function deriveTodosForTurn(
         break;
       }
       if (todos && isExplicitEmptySnapshot) {
-        sawEmptyClaudeSnapshot = true;
+        sawEmptyStreamSnapshot = true;
       }
     }
     if (latestTodos) break;
   }
 
-  const accumulatedTasks = sawEmptyClaudeSnapshot
+  const accumulatedTasks = sawEmptyStreamSnapshot
     ? extractAccumulatedTasks(scopedMessages, getContentBlocks)
     : null;
   if (accumulatedTasks && accumulatedTasks.length > 0) {

@@ -22,11 +22,8 @@ public class SessionIndexCache {
     // Cache TTL: 5 minutes
     private static final long CACHE_TTL_MS = 5 * 60 * 1000;
 
-    // Claude cache: projectPath -> CacheEntry
-    private final Map<String, CacheEntry<?>> claudeCache = new ConcurrentHashMap<>();
-
-    // Codex cache: projectPath -> CacheEntry
-    private final Map<String, CacheEntry<?>> codexCache = new ConcurrentHashMap<>();
+    // Session cache: projectPath -> CacheEntry
+    private final Map<String, CacheEntry<?>> sessionCache = new ConcurrentHashMap<>();
 
     private SessionIndexCache() {
         // Private constructor
@@ -83,101 +80,46 @@ public class SessionIndexCache {
     }
 
     /**
-     * Returns the cached Claude session list.
+     * Returns the cached session list.
      * @param projectPath the project path
      * @param projectDir the project directory Path (used to check modification time)
      * @return the cached session list, or null if the cache is invalid
      */
     @SuppressWarnings("unchecked")
     public <T> List<T> getQwenMateSessions(String projectPath, Path projectDir) {
-        CacheEntry<T> entry = (CacheEntry<T>) claudeCache.get(projectPath);
+        CacheEntry<T> entry = (CacheEntry<T>) sessionCache.get(projectPath);
         if (entry == null) {
-            LOG.info("[SessionIndexCache] Claude cache miss: no entry for " + projectPath);
+            LOG.info("[SessionIndexCache] session cache miss: no entry for " + projectPath);
             return null;
         }
 
         long currentDirModified = getDirModifiedTime(projectDir);
         if (!entry.isValid(currentDirModified)) {
-            LOG.info("[SessionIndexCache] Claude cache invalid: expired or dir changed for " + projectPath);
-            claudeCache.remove(projectPath);
+            LOG.info("[SessionIndexCache] session cache invalid: expired or dir changed for " + projectPath);
+            sessionCache.remove(projectPath);
             return null;
         }
 
-        LOG.info("[SessionIndexCache] Claude cache hit for " + projectPath + ", sessions: " + entry.getSessions().size());
+        LOG.info("[SessionIndexCache] session cache hit for " + projectPath + ", sessions: " + entry.getSessions().size());
         return entry.getSessions();
     }
 
     /**
-     * Updates the Claude cache.
+     * Updates the session cache.
      */
-    public <T> void updateClaudeCache(String projectPath, Path projectDir, List<T> sessions) {
+    public <T> void updateSessionCache(String projectPath, Path projectDir, List<T> sessions) {
         long dirModified = getDirModifiedTime(projectDir);
         CacheEntry<T> entry = new CacheEntry<>(sessions, dirModified);
-        claudeCache.put(projectPath, entry);
-        LOG.info("[SessionIndexCache] Claude cache updated for " + projectPath + ", sessions: " + sessions.size());
-    }
-
-    /**
-     * Returns the cached Codex session list.
-     * @param projectPath the project path
-     * @param sessionsDir the sessions directory Path
-     * @return the cached session list, or null if the cache is invalid
-     */
-    @SuppressWarnings("unchecked")
-    public <T> List<T> getCodexSessions(String projectPath, Path sessionsDir) {
-        CacheEntry<T> entry = (CacheEntry<T>) codexCache.get(projectPath);
-        if (entry == null) {
-            LOG.info("[SessionIndexCache] Codex cache miss: no entry for " + projectPath);
-            return null;
-        }
-
-        // Codex sessions use nested year/month/day directories, so root directory
-        // timestamp is unreliable for detecting new files. Use TTL-only validation.
-        if (entry.isExpired()) {
-            LOG.info("[SessionIndexCache] Codex cache expired for " + projectPath);
-            codexCache.remove(projectPath);
-            return null;
-        }
-
-        LOG.info("[SessionIndexCache] Codex cache hit for " + projectPath + ", sessions: " + entry.getSessions().size());
-        return entry.getSessions();
-    }
-
-    /**
-     * Updates the Codex cache.
-     */
-    public <T> void updateCodexCache(String projectPath, Path sessionsDir, List<T> sessions) {
-        long dirModified = getDirModifiedTime(sessionsDir);
-        CacheEntry<T> entry = new CacheEntry<>(sessions, dirModified);
-        codexCache.put(projectPath, entry);
-        LOG.info("[SessionIndexCache] Codex cache updated for " + projectPath + ", sessions: " + sessions.size());
-    }
-
-    /**
-     * Clears all caches.
-     */
-    public void clearAll() {
-        claudeCache.clear();
-        codexCache.clear();
-        LOG.info("[SessionIndexCache] All caches cleared");
+        sessionCache.put(projectPath, entry);
+        LOG.info("[SessionIndexCache] session cache updated for " + projectPath + ", sessions: " + sessions.size());
     }
 
     /**
      * Clears the cache for a specific project.
      */
     public void clearProject(String projectPath) {
-        claudeCache.remove(projectPath);
-        codexCache.remove(projectPath);
+        sessionCache.remove(projectPath);
         LOG.info("[SessionIndexCache] Cache cleared for project: " + projectPath);
-    }
-
-    /**
-     * Clears all Codex caches.
-     * Codex uses "__all__" as the cache key, so deleting a session requires clearing the entire Codex cache.
-     */
-    public void clearAllCodexCache() {
-        codexCache.clear();
-        LOG.info("[SessionIndexCache] All Codex caches cleared");
     }
 
     /**

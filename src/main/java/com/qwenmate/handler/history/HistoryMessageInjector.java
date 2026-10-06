@@ -89,7 +89,7 @@ public class HistoryMessageInjector {
      * transport. Providers without a paginated history source degrade to the
      * "not available" notice.</p>
      */
-    void loadEarlierClaudeHistoryPage(String content) {
+    void loadEarlierHistoryPage(String content) {
         CompletableFuture.runAsync(() -> {
             String sessionId = null;
             Integer beforeTurn = null;
@@ -113,13 +113,13 @@ public class HistoryMessageInjector {
                     if (cwd == null) {
                         cwd = context.resolveEffectiveWorkingDirectory();
                     }
-                    session.getOrchestrator().loadEarlierClaudeHistoryPage(sessionId, cwd, beforeTurn);
+                    session.getOrchestrator().loadEarlierHistoryPage(sessionId, cwd, beforeTurn);
                 } else {
                     LOG.warn("[HistoryHandler] History page request for inactive session: " + sessionId);
                     notifyQwenMateHistoryPageError(sessionId, beforeTurn, "Session is not active");
                 }
             } catch (Exception e) {
-                LOG.error("[HistoryHandler] Failed to load earlier Claude history page: " + e.getMessage(), e);
+                LOG.error("[HistoryHandler] Failed to load earlier history page: " + e.getMessage(), e);
                 notifyQwenMateHistoryPageError(sessionId, beforeTurn, e.getMessage());
             }
         });

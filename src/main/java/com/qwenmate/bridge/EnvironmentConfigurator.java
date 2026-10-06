@@ -22,9 +22,9 @@ import java.util.regex.Pattern;
 public class EnvironmentConfigurator {
 
     private static final Logger LOG = Logger.getInstance(EnvironmentConfigurator.class);
-    private static final String CLAUDE_PERMISSION_ENV = "QWEN_MATE_PERMISSION_DIR";
+    private static final String QWEN_MATE_PERMISSION_DIR_ENV = "QWEN_MATE_PERMISSION_DIR";
     private static final String QWEN_MATE_SESSION_ID_ENV = "QWEN_MATE_SESSION_ID";
-    private static final String CLAUDE_PERMISSION_SAFETY_NET_ENV = "QWEN_MATE_PERMISSION_SAFETY_NET_MS";
+    private static final String QWEN_MATE_PERMISSION_SAFETY_NET_ENV = "QWEN_MATE_PERMISSION_SAFETY_NET_MS";
     private static final String HOME_ENV = "HOME";
     private static final Pattern WSL_MOUNT_PATH_PATTERN = Pattern.compile("^/mnt/([a-zA-Z])(?:/(.*))?$");
 
@@ -223,21 +223,21 @@ public class EnvironmentConfigurator {
         boolean isWsl = NodeDetector.isWslPath(nodeExecutable);
         String permissionDir = getPermissionDirectory();
         if (permissionDir != null) {
-            env.put(CLAUDE_PERMISSION_ENV, isWsl ? NodeDetector.convertToWslPath(permissionDir) : permissionDir);
+            env.put(QWEN_MATE_PERMISSION_DIR_ENV, isWsl ? NodeDetector.convertToWslPath(permissionDir) : permissionDir);
         }
         String sid = getSessionId();
         if (sid != null) {
             env.put(QWEN_MATE_SESSION_ID_ENV, sid);
         }
-        env.put(CLAUDE_PERMISSION_SAFETY_NET_ENV, String.valueOf(getPermissionSafetyNetMs()));
+        env.put(QWEN_MATE_PERMISSION_SAFETY_NET_ENV, String.valueOf(getPermissionSafetyNetMs()));
         propagateWslEnv(env, isWsl);
     }
 
     // Permission vars that must cross the Windows鈫扺SL boundary via WSLENV.
     private static final String[] WSL_PROPAGATED_KEYS = {
-            CLAUDE_PERMISSION_ENV,
+            QWEN_MATE_PERMISSION_DIR_ENV,
             QWEN_MATE_SESSION_ID_ENV,
-            CLAUDE_PERMISSION_SAFETY_NET_ENV
+            QWEN_MATE_PERMISSION_SAFETY_NET_ENV
     };
 
     /** Appends permission-bridge keys to WSLENV so they reach the daemon inside WSL. */
@@ -336,7 +336,7 @@ public class EnvironmentConfigurator {
             return cached;
         }
 
-        Path dir = Paths.get(System.getProperty("java.io.tmpdir"), "claude-permission");
+        Path dir = Paths.get(System.getProperty("java.io.tmpdir"), "qwenmate-permission");
         try {
             Files.createDirectories(dir);
             hardenPermissionDirectory(dir);

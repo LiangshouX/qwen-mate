@@ -504,7 +504,7 @@ public class PromptHandler extends BaseMessageHandler {
                 String exportTime = dateFormat.format(new Date());
 
                 JsonObject exportData = new JsonObject();
-                exportData.addProperty("format", "claude-code-prompts-export-v1");
+                exportData.addProperty("format", "qwenmate-prompts-export-v1");
                 exportData.addProperty("exportTime", exportTime);
                 exportData.addProperty("promptCount", prompts.size());
                 exportData.addProperty("provider", provider);
@@ -629,7 +629,7 @@ public class PromptHandler extends BaseMessageHandler {
                 JsonObject importData = JsonParser.parseString(fileContent).getAsJsonObject();
 
                 // Validate format
-                if (!importData.has("format") || !importData.get("format").getAsString().startsWith("claude-code-prompts-export-v")) {
+                if (!importData.has("format") || !importData.get("format").getAsString().startsWith("qwenmate-prompts-export-v")) {
                     Notifications.Bus.notify(new Notification(
                             "QwenMate",
                             "Import Failed",

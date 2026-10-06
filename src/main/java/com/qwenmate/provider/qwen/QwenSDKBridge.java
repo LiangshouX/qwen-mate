@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 /**
  * Qwen Code SDK bridge (Claude-template architecture).
  *
- * Java contract mirrors {@code ClaudeSDKBridge} send shape:
+ * Java contract mirrors the reference bridge send shape:
  * session/epoch/cwd/attachments/permissionMode/model/openedFiles/agentPrompt/streaming/reasoning.
  *
  * Node transport is ACP primary ({@code qwen agent stdio}) which emits Claude-compatible tags.
@@ -745,7 +745,7 @@ public class QwenSDKBridge extends BaseSDKBridge {
      * effect mid-turn (session/request_permission + always-approve), not only on
      * the next user message.
      *
-     * <p>Mirrors {@code ClaudeSDKBridge#setPermissionModeLive}: best-effort against
+     * <p>Mirrors the reference setPermissionModeLive contract: best-effort against
      * an already-running daemon only (no spawn). A fresh daemon has no runtime, so
      * {@code setPermissionModePersistent} would be a no-op.
      *

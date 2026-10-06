@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Bridge directory resolver.
- * Responsible for locating and managing the ai-bridge directory (unified bridge for Claude and Codex SDKs).
+ * Responsible for locating and managing the ai-bridge directory (bridge for the Qwen Code SDK).
  *
  * <p>This class is the public facade. Path discovery, archive extraction, and
  * signature verification are delegated to package-private helpers
@@ -163,7 +163,7 @@ public class BridgeDirectoryResolver {
         // Do not return a non-existent default path, as it would cause ProcessBuilder to use an incorrect working directory.
         // For example, when user.dir is "/", it would produce the invalid path "/ai-bridge".
         LOG.error("[BridgeResolver] Failed to find valid ai-bridge directory. " +
-                "Please ensure the plugin is properly installed or set CLAUDE_BRIDGE_PATH environment variable.");
+                "Please ensure the plugin is properly installed or set QWEN_MATE_BRIDGE_PATH environment variable.");
 
         // Check if this is a development environment (source directory missing node_modules)
         for (File dir : possibleDirs) {

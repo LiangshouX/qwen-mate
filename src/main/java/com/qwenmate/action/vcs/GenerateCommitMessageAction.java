@@ -310,7 +310,7 @@ public class GenerateCommitMessageAction extends AnAction implements DumbAware {
     }
 
     /**
-     * Prewarm the chat window's shared Claude daemon once per project when the
+     * Prewarm the chat window's shared Qwen daemon once per project when the
      * commit dialog (and thus this action) becomes visible. Retries until the
      * chat window exists.
      */

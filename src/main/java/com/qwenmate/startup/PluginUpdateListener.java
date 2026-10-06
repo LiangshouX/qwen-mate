@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class PluginUpdateListener implements ProjectActivity {
 
     private static final Logger LOG = Logger.getInstance(PluginUpdateListener.class);
-    private static final String LAST_VERSION_KEY = "claude.code.last.plugin.version";
+    private static final String LAST_VERSION_KEY = "qwenmate.last.plugin.version";
 
     @Nullable
     @Override

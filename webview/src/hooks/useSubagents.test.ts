@@ -15,7 +15,7 @@ const assistantWithAgent = (toolUseId: string): QwenMateMessage => ({
           input: {
             subagent_type: 'research',
             description: '分析后端历史索引服务的设计模式',
-            prompt: '分析 ClaudeHistoryIndexService',
+            prompt: '分析 QwenHistoryIndexService',
           },
         },
       ],

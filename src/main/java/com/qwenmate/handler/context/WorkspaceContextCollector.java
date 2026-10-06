@@ -126,7 +126,7 @@ public class WorkspaceContextCollector {
             String projectBasePath = project.getBasePath();
             if (projectBasePath != null) {
                 // Only translate to a WSL path when the configured node is a WSL binary,
-                // mirroring ClaudeSDKBridge#normalizeCwdForNode; a native node keeps the path as-is.
+                // mirroring QwenSDKBridge#normalizeCwdForNode; a native node keeps the path as-is.
                 String nodePath = NodeDetector.getInstance().getCachedNodePath();
                 String workspaceRoot = (nodePath != null && NodeDetector.isWslPath(nodePath))
                         ? NodeDetector.convertToWslPath(projectBasePath)

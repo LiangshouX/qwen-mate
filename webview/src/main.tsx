@@ -456,11 +456,13 @@ function applyLanguageConfig(rawConfig: { language: string; source?: string; ide
 
   // Validate that the language code is supported
   const supportedLanguages = ['zh', 'en', 'zh-TW', 'hi', 'es', 'fr', 'ja', 'ru', 'ko', 'pt-BR'];
-  const targetLanguage = supportedLanguages.includes(language) ? language : 'en';
+  const targetLanguage = supportedLanguages.includes(language) ? language : 'zh';
 
   debugLog('[Main] Applying language config:', config, 'target language:', targetLanguage, 'source:', source);
 
-  const selectionMode = source === 'user' ? 'manual' : 'followIdea';
+  // Only an explicit follow-IDE choice renders the "follow IDEA" dropdown state;
+  // the default and manual sources both show a concrete language.
+  const selectionMode = source === 'idea' ? 'followIdea' : 'manual';
 
   i18n.changeLanguage(targetLanguage)
     .then(() => {

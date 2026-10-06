@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Base SDK bridge class.
- * Contains common logic shared by ClaudeSDKBridge and CodexSDKBridge.
+ * Contains common logic shared by the provider SDK bridges.
  */
 public abstract class BaseSDKBridge {
 
@@ -43,7 +43,7 @@ public abstract class BaseSDKBridge {
     protected final Gson gson = new Gson();
     /**
      * Shared NodeDetector instance (singleton pattern).
-     * This ensures that ClaudeSDKBridge and CodexSDKBridge share the same cache,
+     * This ensures that the SDK bridge subclasses share the same cache,
      * avoiding redundant Node.js path detections across modes.
      */
     protected final NodeDetector nodeDetector = NodeDetector.getInstance();
@@ -700,7 +700,7 @@ public abstract class BaseSDKBridge {
                     return result;
                 }
 
-                File processTempDir = processManager.prepareClaudeTempDir();
+                File processTempDir = processManager.prepareProcessTempDir();
 
                 ProcessBuilder pb = new ProcessBuilder(command);
 

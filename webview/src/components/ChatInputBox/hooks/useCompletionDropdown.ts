@@ -96,7 +96,7 @@ export function useCompletionDropdown<T>({
   }, [state]);
 
   // Provider changes invalidate pending searches and the old list. Without this
-  // boundary, switching between Claude and Codex can let an older request win
+  // boundary, switching providers can let an older request win
   // after the new provider has already rendered.
   // The state reset stays here (sanctioned render-time adjustment); the
   // timer/abort cancellation lives in the provider-keyed effect cleanup

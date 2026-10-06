@@ -18,9 +18,9 @@ public class SessionStateTest {
     }
 
     @Test
-    public void setModelLeavesNonClaudeAndUnknownIdsUntouched() {
+    public void setModelLeavesOtherProviderAndUnknownIdsUntouched() {
         SessionState state = new SessionState();
-        // Non-Claude provider models must pass through unchanged.
+        // Other providers' model IDs must pass through unchanged.
         state.setModel("gpt-5.6-sol");
         Assert.assertEquals("gpt-5.6-sol", state.getModel());
         state.setModel("qwen3.5-plus");

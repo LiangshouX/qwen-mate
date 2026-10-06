@@ -35,7 +35,7 @@ public final class UserMessageSanitizer {
 
         String normalized = text.replace("\r\n", "\n").replace("\r", "\n");
         String strippedTags = stripSystemTags(normalized);
-        String strippedImages = stripCodexImagePlaceholders(strippedTags);
+        String strippedImages = stripImagePlaceholderBlocks(strippedTags);
         String strippedContext = stripAppendedContext(strippedImages);
         return strippedContext.trim();
     }
@@ -85,7 +85,7 @@ public final class UserMessageSanitizer {
         return text.substring(0, cutIndex);
     }
 
-    private static String stripCodexImagePlaceholders(String text) {
+    private static String stripImagePlaceholderBlocks(String text) {
         String result = text;
         int start = result.indexOf("<image ");
         while (start >= 0) {

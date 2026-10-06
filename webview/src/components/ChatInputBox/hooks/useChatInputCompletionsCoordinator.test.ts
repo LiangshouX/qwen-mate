@@ -182,7 +182,7 @@ describe('useChatInputCompletionsCoordinator', () => {
     expect(handleInput).not.toHaveBeenCalled();
   });
 
-  it('preserves the original Claude command label when selected', () => {
+  it('preserves the original command label when selected', () => {
     const editable = document.createElement('div');
     editable.innerText = '/';
 

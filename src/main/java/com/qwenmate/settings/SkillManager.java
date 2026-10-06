@@ -86,7 +86,7 @@ public class SkillManager {
         // Write config
         configWriter.accept(config);
 
-        // TODO: sync enabled skills to the qwen runtime if it needs a plugins list (Claude settings sync removed).
+        // TODO: sync enabled skills to the qwen runtime if it needs a plugins list (legacy provider settings sync removed).
         LOG.info("[SkillManager] Upserted skill: " + id);
     }
 

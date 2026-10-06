@@ -25,7 +25,7 @@ import javax.swing.*;
 public final class SendShortcutSync {
 
     private static final Logger LOG = Logger.getInstance(SendShortcutSync.class);
-    private static final String SEND_SHORTCUT_PROPERTY_KEY = "claude.code.send.shortcut";
+    private static final String SEND_SHORTCUT_PROPERTY_KEY = "qwenmate.send.shortcut";
 
     private SendShortcutSync() {}
 

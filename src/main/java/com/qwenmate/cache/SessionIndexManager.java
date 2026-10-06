@@ -27,12 +27,12 @@ public class SessionIndexManager {
 
     private static final Logger LOG = Logger.getInstance(SessionIndexManager.class);
 
-    private static final String CLAUDE_INDEX_FILE = "claude-session-index.json";
+    private static final String SESSION_INDEX_FILE = "session-index.json";
     private static final int INDEX_REPLACE_MAX_ATTEMPTS = 5;
     // Linear backoff base. Sleeps happen while holding indexFileLock, so keep the worst-case
     // total (sum 1..N-1 * base) within ~100ms to avoid blocking concurrent index reads/writes.
     private static final long INDEX_REPLACE_RETRY_DELAY_MS = 10L;
-    private static final Pattern CLAUDE_SESSION_FILE_PATTERN = Pattern.compile(
+    private static final Pattern SESSION_FILE_PATTERN = Pattern.compile(
             "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\.jsonl$",
             Pattern.CASE_INSENSITIVE
     );
@@ -78,6 +78,22 @@ public class SessionIndexManager {
     public SessionIndexManager(Path qwenmateCacheDir) {
         this.qwenmateCacheDir = qwenmateCacheDir;
         ensureCacheDir();
+        deleteLegacyIndexFile();
+    }
+
+    /**
+     * Removes the pre-rename {@code claude-session-index.json} left in the cache
+     * directory. The index is a regenerable cache, so no content migration is needed.
+     */
+    private void deleteLegacyIndexFile() {
+        try {
+            Path legacy = qwenmateCacheDir.resolve("claude-session-index.json");
+            if (Files.deleteIfExists(legacy)) {
+                LOG.info("[SessionIndexManager] Removed legacy index file: " + legacy);
+            }
+        } catch (IOException e) {
+            LOG.debug("[SessionIndexManager] Failed to remove legacy index file: " + e.getMessage());
+        }
     }
 
     private static final class Holder {
@@ -169,32 +185,32 @@ public class SessionIndexManager {
     }
 
     /**
-     * Returns the file path for the Claude index.
+     * Returns the file path for the session index.
      */
-    public Path getClaudeIndexPath() {
-        return qwenmateCacheDir.resolve(CLAUDE_INDEX_FILE);
+    public Path getIndexPath() {
+        return qwenmateCacheDir.resolve(SESSION_INDEX_FILE);
     }
 
     /**
-     * Reads the Claude index.
+     * Reads the session index.
      */
-    public SessionIndex readClaudeIndex() {
+    public SessionIndex readSessionIndex() {
         synchronized (indexFileLock) {
-            return readIndex(getClaudeIndexPath());
+            return readIndex(getIndexPath());
         }
     }
 
     /**
-     * Saves one Claude project entry while preserving concurrent updates to other projects.
+     * Saves one project entry while preserving concurrent updates to other projects.
      *
-     * @param projectPath  the Claude project path used as the index key
+     * @param projectPath  the project path used as the index key
      * @param projectIndex the refreshed project index
      */
-    public void saveClaudeProjectIndex(String projectPath, ProjectIndex projectIndex) {
+    public void saveProjectIndex(String projectPath, ProjectIndex projectIndex) {
         synchronized (indexFileLock) {
-            SessionIndex index = readIndex(getClaudeIndexPath());
+            SessionIndex index = readIndex(getIndexPath());
             index.projects.put(projectPath, projectIndex);
-            saveIndex(getClaudeIndexPath(), index);
+            saveIndex(getIndexPath(), index);
         }
     }
 
@@ -405,16 +421,16 @@ public class SessionIndexManager {
             }
 
             if (hasChangedFile) {
-                // Claude appends to existing JSONL files, which changes file metadata but not
+                // The CLI appends to existing JSONL files, which changes file metadata but not
                 // the project directory mtime. Let the existing incremental scanner refresh them.
                 return UpdateType.INCREMENTAL;
             }
 
             long currentDirModified = Files.getLastModifiedTime(projectDir).toMillis();
             if (currentDirModified > projectIndex.lastDirScanTime) {
-                // Detect a new Claude session that replaced another file while the total file
+                // Detect a new session that replaced another file while the total file
                 // count stayed constant. Non-UUID JSONL files are intentionally ignored by
-                // Claude's reader. Gated on the directory mtime so a file that exists but never
+                // the reader. Gated on the directory mtime so a file that exists but never
                 // produces an index entry (single-message, warmup, or truncated session) does
                 // not trigger a rescan on every read.
                 for (String currentPath : currentFileAttributes.keySet()) {
@@ -444,7 +460,7 @@ public class SessionIndexManager {
     private static boolean isQwenMateSessionFile(String relativePath) {
         int separator = relativePath.lastIndexOf('/');
         String fileName = separator >= 0 ? relativePath.substring(separator + 1) : relativePath;
-        return CLAUDE_SESSION_FILE_PATTERN.matcher(fileName).matches();
+        return SESSION_FILE_PATTERN.matcher(fileName).matches();
     }
 
     /**
@@ -496,7 +512,7 @@ public class SessionIndexManager {
     public void clearAllIndexes() {
         synchronized (indexFileLock) {
             try {
-                Files.deleteIfExists(getClaudeIndexPath());
+                Files.deleteIfExists(getIndexPath());
                 LOG.info("[SessionIndexManager] All indexes cleared");
             } catch (IOException e) {
                 LOG.error("[SessionIndexManager] Failed to clear indexes: " + e.getMessage(), e);
@@ -511,9 +527,9 @@ public class SessionIndexManager {
      */
     public void clearProjectIndex(String provider, String projectPath) {
         synchronized (indexFileLock) {
-            SessionIndex index = readIndex(getClaudeIndexPath());
+            SessionIndex index = readIndex(getIndexPath());
             index.projects.remove(projectPath);
-            saveIndex(getClaudeIndexPath(), index);
+            saveIndex(getIndexPath(), index);
         }
         LOG.info("[SessionIndexManager] Cleared index for " + provider + " project: " + projectPath);
     }

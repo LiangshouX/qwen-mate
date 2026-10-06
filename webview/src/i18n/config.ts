@@ -11,10 +11,12 @@ import ru from './locales/ru.json';
 import ko from './locales/ko.json';
 import ptBR from './locales/pt-BR.json';
 
-// Retrieve the saved language from localStorage; default to English if not set
+// Retrieve the saved language from localStorage; default to Chinese if not set
+// (matches LanguageConfigService.DEFAULT_LANGUAGE — the Java side pushes the
+// authoritative config shortly after startup).
 const getInitialLanguage = (): string => {
   const savedLanguage = localStorage.getItem('language');
-  return savedLanguage || 'en'; // Default to English
+  return savedLanguage || 'zh'; // Default to Chinese
 };
 
 i18n

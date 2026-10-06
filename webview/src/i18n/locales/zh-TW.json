@@ -794,7 +794,6 @@
     "restartRequired": "Please restart IDEA for this setting to take effect"
   },
   "config": {
-    "officialDocs": "官方文件",
     "switch": "切換",
     "switchProvider": "切換供應商",
     "nodeProcesses": {

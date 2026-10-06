@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 /**
- * Session management for Claude conversations.
+ * Session management for QwenMate conversations.
  * Maintains state and message history for a single chat session.
  */
 public class QwenMateSession {
@@ -149,7 +149,7 @@ public class QwenMateSession {
         }
 
         /**
-         * Called when Claude history page metadata is available (for pagination).
+         * Called when history page metadata is available (for pagination).
          * @param sessionId the session ID
          * @param fromTurn the first turn index in the current page
          * @param totalTurns total number of turns in the session
@@ -166,7 +166,7 @@ public class QwenMateSession {
         }
 
         /**
-         * Called when an earlier Claude history page fails to load.
+         * Called when an earlier history page fails to load.
          * @param sessionId the session ID, or null when unknown
          * @param message human-readable error description
          */
@@ -276,7 +276,8 @@ public class QwenMateSession {
     }
 
     /**
-     * 鎻愪緵搴曞眰浼氳瘽鐘舵€佽闂紝鐢ㄤ簬鍘嗗彶鎭㈠绛夐渶瑕佺洿鎺ラ噸寤轰細璇濆唴瀛樻€佺殑鍦烘櫙銆?     */
+     * 提供底层会话状态访问，用于历史恢复等需要直接重建会话内存态的场景。
+     */
     public SessionState getState() {
         return state;
     }
@@ -320,10 +321,10 @@ public class QwenMateSession {
     }
 
     /**
-     * Launch Claude agent.
+     * Launch the provider channel.
      * Reuses existing channelId if available, otherwise creates a new one.
      */
-    public CompletableFuture<String> launchClaude() {
+    public CompletableFuture<String> launchChannel() {
         if (state.getChannelId() != null) {
             return CompletableFuture.completedFuture(state.getChannelId());
         }
@@ -513,7 +514,7 @@ public class QwenMateSession {
         final String finalRequestedPermissionMode = requestedPermissionMode;
         final String finalRequestedReasoningEffort = requestedReasoningEffort;
 
-        return launchClaude().thenCompose(chId -> {
+        return launchChannel().thenCompose(chId -> {
             sendService.prepareContextCollector(contextCollector);
 
             return contextCollector.collectContext().thenCompose(openedFilesJson ->
@@ -586,14 +587,14 @@ public class QwenMateSession {
     }
 
     /**
-     * Restart the Claude agent.
+     * Restart the provider channel.
      */
     public CompletableFuture<Void> restart() {
         return interrupt().thenCompose(v -> {
             state.setChannelId(null);
             state.setBusy(false);
             callbackFacade.notifyStateChange(state.isBusy(), state.isLoading(), state.getError());
-            return launchClaude().thenApply(chId -> null);
+            return launchChannel().thenApply(chId -> null);
         });
     }
 

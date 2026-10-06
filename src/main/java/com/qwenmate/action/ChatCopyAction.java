@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 
 /**
- * IDEA Action for Ctrl+C in the Claude chat tool window.
+ * IDEA Action for Ctrl+C in the QwenMate chat tool window.
  * Forwards copy operation to WebView via execContextAction callback.
  */
 public class ChatCopyAction extends ChatToolWindowAction {

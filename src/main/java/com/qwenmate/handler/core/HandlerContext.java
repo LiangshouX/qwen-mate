@@ -85,7 +85,7 @@ public class HandlerContext {
     /**
      * Resolve the normalized effective working directory for the current project —
      * the custom working directory when configured and valid, otherwise the project
-     * base path. This is the directory Claude runs in and the key history is stored
+     * base path. This is the directory the CLI runs in and the key history is stored
      * under, so history readers must use this instead of the raw base path.
      *
      * <p>Null-safe: returns the raw base path when no settings service is wired.

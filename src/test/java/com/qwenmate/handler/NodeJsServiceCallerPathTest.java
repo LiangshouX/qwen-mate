@@ -25,7 +25,7 @@ public class NodeJsServiceCallerPathTest {
     @Rule
     public final TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-    private TestClaudeSDKBridge bridge;
+    private TestQwenSDKBridge bridge;
     private HandlerContext context;
 
     @Before
@@ -48,7 +48,7 @@ public class NodeJsServiceCallerPathTest {
                         + " getAllHistoryData: () => ({ items: ['ok'], counts: {} })"
                         + " };\n");
 
-        bridge = new TestClaudeSDKBridge(bridgeDir.toFile());
+        bridge = new TestQwenSDKBridge(bridgeDir.toFile());
         context = new HandlerContext(null, bridge, null, new HandlerContext.JsCallback() {
             @Override
             public void callJavaScript(String functionName, String... args) {
@@ -106,11 +106,11 @@ public class NodeJsServiceCallerPathTest {
         Files.writeString(path, content, StandardCharsets.UTF_8);
     }
 
-    private static final class TestClaudeSDKBridge extends QwenSDKBridge {
+    private static final class TestQwenSDKBridge extends QwenSDKBridge {
         private final File sdkDir;
         private final ProcessManager processManager = new ProcessManager();
 
-        private TestClaudeSDKBridge(File sdkDir) {
+        private TestQwenSDKBridge(File sdkDir) {
             this.sdkDir = sdkDir;
         }
 

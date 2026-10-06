@@ -102,7 +102,7 @@ public class PathUtils {
     /**
      * Return the canonical and legacy sanitized keys for a project path.
      *
-     * <p>The canonical key follows symlinks like Claude CLI. The raw key keeps
+     * <p>The canonical key follows symlinks like the Qwen CLI. The raw key keeps
      * sessions written by older bridge versions readable until they are naturally retired.
      *
      * @param path the original path

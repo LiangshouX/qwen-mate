@@ -278,7 +278,7 @@ export function registerMessageCallbacks(
               options.currentProviderRef.current,
             );
 
-            // FIX: In Claude mode, update streamingMessageIndexRef so that
+            // FIX: In qwen mode, update streamingMessageIndexRef so that
             // onContentDelta knows which assistant message to update.
             let lastAssistantIdx = findLastAssistantIndex(result);
             // Verify the found assistant belongs to the current streaming turn
@@ -858,7 +858,7 @@ export function registerMessageCallbacks(
         detail: info,
       }));
     } catch (error) {
-      console.error('[Frontend] Failed to parse Claude history page info:', error);
+      console.error('[Frontend] Failed to parse history page info:', error);
     }
   };
 
@@ -869,7 +869,7 @@ export function registerMessageCallbacks(
       window.dispatchEvent(new CustomEvent('qwen-history-page-error', { detail: error }));
       addToast(error.message || 'Failed to load earlier history', 'error');
     } catch (parseError) {
-      console.error('[Frontend] Failed to parse Claude history page error:', parseError);
+      console.error('[Frontend] Failed to parse history page error:', parseError);
     }
   };
 

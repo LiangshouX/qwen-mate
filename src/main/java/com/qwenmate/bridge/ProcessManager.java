@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class ProcessManager {
 
     private static final Logger LOG = Logger.getInstance(ProcessManager.class);
-    private static final String CLAUDE_TEMP_DIR_NAME = "claude-agent-tmp";
+    private static final String PROCESS_TEMP_DIR_NAME = "qwenmate-agent-tmp";
 
     private final Map<String, Process> activeChannelProcesses = new ConcurrentHashMap<>();
     private final Set<String> interruptedChannels = ConcurrentHashMap.newKeySet();
@@ -31,7 +31,7 @@ public class ProcessManager {
      *
      * <p>Use this when registering a short-lived child process whose channel
      * has no natural identifier (one-shot RPC calls, helper scripts, etc.).
-     * A unique suffix is mandatory: see {@code CodexSDKBridge#getMcpServerTools}
+     * A unique suffix is mandatory: see {@code BaseSDKBridge#getMcpServerTools}
      * (L10 fix) for why constant channel IDs corrupt the registry under
      * concurrent calls.
      */
@@ -194,15 +194,15 @@ public class ProcessManager {
     }
 
     /**
-     * Prepares the Claude temporary directory.
+     * Prepares the process temporary directory.
      */
-    public File prepareClaudeTempDir() {
+    public File prepareProcessTempDir() {
         String baseTemp = System.getProperty("java.io.tmpdir");
         if (baseTemp == null || baseTemp.isEmpty()) {
             return null;
         }
 
-        Path tempPath = Paths.get(baseTemp, CLAUDE_TEMP_DIR_NAME);
+        Path tempPath = Paths.get(baseTemp, PROCESS_TEMP_DIR_NAME);
         try {
             Files.createDirectories(tempPath);
             return tempPath.toFile();
@@ -213,17 +213,17 @@ public class ProcessManager {
     }
 
     /**
-     * Cleans up stale Claude cwd temp files older than the given threshold.
+     * Cleans up stale channel cwd temp files older than the given threshold.
      * Called during IDE shutdown to prevent temp file accumulation
      * without interfering with concurrent sessions.
      */
     public void cleanupStaleTempFiles() {
-        File tempDir = prepareClaudeTempDir();
+        File tempDir = prepareProcessTempDir();
         if (tempDir == null || !tempDir.exists()) {
             return;
         }
         File[] cwdFiles = tempDir.listFiles((dir, name) ->
-            name.startsWith("claude-") && name.endsWith("-cwd"));
+            name.startsWith("qwenmate-") && name.endsWith("-cwd"));
         if (cwdFiles == null || cwdFiles.length == 0) {
             return;
         }

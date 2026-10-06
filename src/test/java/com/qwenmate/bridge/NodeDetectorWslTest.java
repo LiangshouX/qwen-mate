@@ -293,7 +293,7 @@ public class NodeDetectorWslTest {
         String home = NodeDetector.resolveHomeForFileOps("/usr/bin/node");
         // Must be the backslash UNC form (\\wsl.localhost\...): the forward-slash form
         // (//wsl.localhost/...) collapses to a drive-relative path in Paths.get(...) on a
-        // Windows JVM, breaking every ~/.claude file scan.
+        // Windows JVM, breaking every ~/.qwen file scan.
         assertTrue("WSL node must resolve to the \\\\wsl UNC home", home.startsWith("\\\\"));
         assertFalse("WSL home must not be the forward-slash UNC form", home.startsWith("//"));
         assertFalse("WSL home must not be a drive-letter path", home.matches("(?i)[A-Z]:.*"));

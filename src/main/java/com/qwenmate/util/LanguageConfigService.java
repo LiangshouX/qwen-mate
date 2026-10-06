@@ -11,8 +11,9 @@ import java.util.Set;
 
 /**
  * Language configuration service.
- * Retrieves the current language setting from IDEA and provides it to the Webview.
- * Also supports saving user's manual language preference, which takes priority over IDEA's language.
+ * Resolves the UI language from the persisted preference, with three states:
+ * a manually chosen language, an explicit "follow IDEA language" choice, and
+ * the never-set state, which defaults to Chinese.
  */
 public class LanguageConfigService {
 
@@ -20,6 +21,11 @@ public class LanguageConfigService {
     private static final Set<String> SUPPORTED_LANGUAGES = Set.of(
             "zh", "en", "zh-TW", "hi", "es", "fr", "ja", "ru", "ko", "pt-BR"
     );
+
+    /** Stored config value meaning "follow the IDE language" (not a language code). */
+    public static final String FOLLOW_IDEA_LANGUAGE = "idea";
+    /** Product default language used when the user has never chosen one. */
+    public static final String DEFAULT_LANGUAGE = "zh";
 
     /**
      * Map IDEA locale codes to i18n-supported language codes.
@@ -84,6 +90,10 @@ public class LanguageConfigService {
             if (userLanguage == null || userLanguage.isEmpty()) {
                 return null;
             }
+            if (FOLLOW_IDEA_LANGUAGE.equals(userLanguage)) {
+                // Follow-IDE mode is not a manually chosen language.
+                return null;
+            }
             if (!SUPPORTED_LANGUAGES.contains(userLanguage)) {
                 LOG.warn("[LanguageConfig] Ignoring unsupported user language in ~/.qwenmate/config.json: " + userLanguage);
                 return null;
@@ -113,19 +123,20 @@ public class LanguageConfigService {
     }
 
     /**
-     * Clear user's manual language preference (reset to follow IDEA language).
+     * Switch to follow-IDE-language mode by storing the {@link #FOLLOW_IDEA_LANGUAGE}
+     * sentinel. Distinct from the never-set state, which defaults to Chinese.
      */
-    public static void clearUserLanguage(QwenMateSettingsService settingsService) throws IOException {
+    public static void setFollowIdeaLanguage(QwenMateSettingsService settingsService) throws IOException {
         if (settingsService == null) {
             throw new IllegalArgumentException("settingsService must not be null");
         }
-        settingsService.clearUserLanguage();
-        LOG.info("[LanguageConfig] Cleared user language preference, will follow IDEA language");
+        settingsService.setUserLanguage(FOLLOW_IDEA_LANGUAGE);
+        LOG.info("[LanguageConfig] Language mode set to follow IDEA language");
     }
 
     /**
      * Get the current language configuration.
-     * If user has manually set a language, use that; otherwise use IDEA's language.
+     * Resolution: manual language > explicit follow-IDE choice > product default (Chinese).
      *
      * @return a JsonObject containing the language configuration
      */
@@ -133,18 +144,17 @@ public class LanguageConfigService {
         JsonObject config = new JsonObject();
 
         try {
-            // Check if user has manually set a language preference
-            String userLanguage = getUserLanguage(settingsService);
+            String stored = settingsService != null ? settingsService.getUserLanguage() : null;
 
-            if (userLanguage != null && !userLanguage.isEmpty()) {
-                // Use user's manual language preference
-                config.addProperty("language", userLanguage);
+            if (stored != null && SUPPORTED_LANGUAGES.contains(stored)) {
+                // A manually chosen language always wins.
+                config.addProperty("language", stored);
                 config.addProperty("source", "user");
                 config.addProperty("ideaLocale", "");
 
-                LOG.info("[LanguageConfig] Using user's manual language: " + userLanguage);
-            } else {
-                // Use IDEA's language setting
+                LOG.info("[LanguageConfig] Using user's manual language: " + stored);
+            } else if (FOLLOW_IDEA_LANGUAGE.equals(stored)) {
+                // Explicit follow-IDE choice.
                 Locale currentLocale = DynamicBundle.getLocale();
                 String i18nLanguage = mapIdeaLocaleToI18n(currentLocale);
 
@@ -154,14 +164,24 @@ public class LanguageConfigService {
 
                 LOG.info("[LanguageConfig] Using IDEA language config: ideaLocale=" + currentLocale
                         + ", i18nLanguage=" + i18nLanguage);
+            } else {
+                // Never set (or an unsupported stored value): product default.
+                if (stored != null && !stored.isEmpty()) {
+                    LOG.warn("[LanguageConfig] Ignoring unsupported user language in ~/.qwenmate/config.json: " + stored);
+                }
+                config.addProperty("language", DEFAULT_LANGUAGE);
+                config.addProperty("source", "default");
+                config.addProperty("ideaLocale", "");
+
+                LOG.info("[LanguageConfig] No stored preference, using product default: " + DEFAULT_LANGUAGE);
             }
 
         } catch (Exception e) {
-            // Fall back to English on exception
-            config.addProperty("language", "en");
+            // Fall back to the product default on exception
+            config.addProperty("language", DEFAULT_LANGUAGE);
             config.addProperty("source", "fallback");
-            config.addProperty("ideaLocale", "en");
-            LOG.error("[LanguageConfig] Failed to get language config, using default (en): " + e.getMessage(), e);
+            config.addProperty("ideaLocale", "");
+            LOG.warn("[LanguageConfig] Failed to get language config, using default (" + DEFAULT_LANGUAGE + "): " + e.getMessage());
         }
 
         return config;
@@ -174,24 +194,5 @@ public class LanguageConfigService {
      */
     public static String getLanguageConfigJson(QwenMateSettingsService settingsService) {
         return getLanguageConfig(settingsService).toString();
-    }
-
-    /**
-     * Get the current i18n language code.
-     *
-     * @return the language code (zh, en, zh-TW, hi, es, fr, ja, ru, ko, pt-BR)
-     */
-    public static String getCurrentLanguage(QwenMateSettingsService settingsService) {
-        String userLanguage = getUserLanguage(settingsService);
-        if (userLanguage != null && !userLanguage.isEmpty()) {
-            return userLanguage;
-        }
-        try {
-            Locale currentLocale = DynamicBundle.getLocale();
-            return mapIdeaLocaleToI18n(currentLocale);
-        } catch (Exception e) {
-            LOG.error("[LanguageConfig] Failed to get current language: " + e.getMessage());
-            return "en";
-        }
     }
 }

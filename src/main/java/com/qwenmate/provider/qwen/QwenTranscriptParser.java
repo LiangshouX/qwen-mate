@@ -55,7 +55,7 @@ import java.util.Set;
  */
 public final class QwenTranscriptParser {
 
-    /** Longest title kept for history lists (mirrors the Claude lite reader). */
+    /** Longest title kept for history lists (mirrors the reference implementation's lite reader). */
     public static final int TITLE_MAX_CHARS = 200;
 
     private static final String USER_PROMPT_SUBMIT_CONTEXT_OPEN = "<qwen:user-prompt-submit-context>";

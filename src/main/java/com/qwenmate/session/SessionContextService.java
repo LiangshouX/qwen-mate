@@ -227,7 +227,7 @@ public class SessionContextService {
                     .append(activeFile).append("`\n\n");
                 sb.append("Read it with your file tools as needed.\n");
                 hasContent = true;
-                LOG.info("[Codex Context] Referenced active file: " + activeFile);
+                LOG.info("[Context] Referenced active file: " + activeFile);
             }
         }
 

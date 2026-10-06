@@ -356,9 +356,10 @@ public class QwenMateSettingsService {
     // ==================== Language Config Management ====================
 
     /**
-     * Get the manually configured UI language.
+     * Get the stored UI language preference.
      *
-     * @return configured language code, or null when the UI should follow the IDE language
+     * @return stored value: a language code, the follow-IDE sentinel ({@code idea}),
+     *         or null when the user has never chosen a language
      */
     public String getUserLanguage() throws IOException {
         JsonObject config = readConfig();
@@ -370,25 +371,15 @@ public class QwenMateSettingsService {
     }
 
     /**
-     * Persist the manually configured UI language.
+     * Persist the UI language preference.
      *
-     * @param language supported UI language code
+     * @param language supported UI language code, or the {@code idea} follow-IDE sentinel
      */
     public void setUserLanguage(String language) throws IOException {
         JsonObject config = readConfig();
         config.addProperty(USER_LANGUAGE_CONFIG_KEY, language);
         writeConfig(config);
         LOG.info("[QwenMateSettings] Set user language: " + language);
-    }
-
-    /**
-     * Clear the manual UI language override so the webview follows the IDE language.
-     */
-    public void clearUserLanguage() throws IOException {
-        JsonObject config = readConfig();
-        config.remove(USER_LANGUAGE_CONFIG_KEY);
-        writeConfig(config);
-        LOG.info("[QwenMateSettings] Cleared user language override");
     }
 
     // ==================== Working Directory Management ====================

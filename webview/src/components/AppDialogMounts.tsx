@@ -3,7 +3,7 @@ import type { AppDialogsProps } from './AppDialogs';
 import type { PermissionMode } from './ChatInputBox/types';
 
 type AppDialogMountsProps = Omit<AppDialogsProps, 'onPlanApprovalModeChange'> & {
-  /** Apply the execution mode chosen while approving a Claude plan. */
+  /** Apply the execution mode chosen while approving a plan. */
   onModeSelect: (mode: PermissionMode) => void;
 };
 

@@ -607,7 +607,7 @@ public class DaemonBridgeTest {
         assertTrue(bridge.start());
         assertTrue(heartbeatCheckReached.await(2, TimeUnit.SECONDS));
         CompletableFuture<Boolean> oldFuture = bridge.sendCommand(
-                "claude.send", new JsonObject(), new NoOpDaemonOutputCallback());
+                "qwen.send", new JsonObject(), new NoOpDaemonOutputCallback());
         firstProcess.markDeadWithoutClosingOutput();
 
         assertFalse(bridge.start());

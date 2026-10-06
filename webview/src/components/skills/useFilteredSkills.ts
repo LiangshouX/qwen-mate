@@ -12,7 +12,7 @@ export function useFilteredSkills(
   enabledFilter: SkillEnabledFilter,
   searchQuery: string
 ) {
-  // Compute Skills lists (provider-aware: Claude uses global/local, Codex uses user/repo)
+  // Compute Skills lists (provider-aware: Qwen uses global/local scopes)
   const primarySkillList = useMemo(
     () => Object.values(isCodex ? (skills.user ?? {}) : skills.global),
     [isCodex, skills.global, skills.user]

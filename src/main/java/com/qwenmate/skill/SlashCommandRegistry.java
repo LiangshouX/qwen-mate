@@ -42,7 +42,7 @@ public final class SlashCommandRegistry {
     // Includes commands that work via SDK or are handled by frontend locally
     // 'local-jsx' commands (TUI UI) that have GUI equivalents are included
     // Bundled skills from CLI that are userInvocable and work in GUI environment
-    public static final List<SlashCommand> CLAUDE_BUILTIN = List.of(
+    public static final List<SlashCommand> QWEN_BUILTIN = List.of(
             new SlashCommand("/compact", "Summarize conversation to free context", "builtin"),
             new SlashCommand("/context", "Visualize current context usage as a colored grid", "builtin"),
             new SlashCommand("/goal", "Keep working across turns until the goal condition is met", "builtin"),
@@ -58,8 +58,6 @@ public final class SlashCommandRegistry {
             new SlashCommand("/simplify", "Review changed code for reuse, quality, and efficiency", "bundled"),
             new SlashCommand("/update-config", "Configure settings.json (hooks, permissions, env vars)", "bundled")
     );
-
-    // Codex built-in commands removed in the provider convergence.
 
     /**
      * Gets the list of directories to scan for skills or commands.
@@ -117,7 +115,7 @@ public final class SlashCommandRegistry {
      * Gets the merged slash command list with an explicit home path (test hook).
      */
     static List<SlashCommand> getCommands(String provider, String cwd, String currentFilePath, String userHome) {
-        List<SlashCommand> builtins = CLAUDE_BUILTIN;
+        List<SlashCommand> builtins = QWEN_BUILTIN;
         Path currentFile = SlashCommandPathPolicy.toNormalizedPath(currentFilePath);
 
         List<SlashCommand> globalCmdCommands;

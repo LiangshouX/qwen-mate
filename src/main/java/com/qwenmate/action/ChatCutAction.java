@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 
 /**
- * IDEA Action for Ctrl+X in the Claude chat tool window.
+ * IDEA Action for Ctrl+X in the QwenMate chat tool window.
  * Forwards cut operation to WebView via execContextAction callback.
  */
 public class ChatCutAction extends ChatToolWindowAction {

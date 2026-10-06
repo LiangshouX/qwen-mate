@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class HistoryMessageInjectorTest {
 
     @Test
-    public void handleLoadSessionUsesPayloadProviderForClaudeEvenWhenCurrentProviderIsCodex() {
+    public void handleLoadSessionUsesPayloadProviderRegardlessOfCurrentProvider() {
         RecordingHistoryMessageInjector injector = new RecordingHistoryMessageInjector(createContext("D:/project/demo"));
         String[] callbackArgs = new String[4];
 
@@ -57,7 +57,7 @@ public class HistoryMessageInjectorTest {
     }
 
     @Test
-    public void handleLoadSessionCompletesHistoryLoadWhenClaudeCallbackMissing() {
+    public void handleLoadSessionCompletesHistoryLoadWhenCallbackMissing() {
         RecordingHistoryMessageInjector injector = new RecordingHistoryMessageInjector(createContext("D:/project/demo"));
 
         injector.handleLoadSession(
@@ -70,7 +70,7 @@ public class HistoryMessageInjectorTest {
     }
 
     @Test
-    public void restoresIsoTimestampWhenHydratingCodexMessagesIntoSessionState() {
+    public void restoresIsoTimestampWhenHydratingMessagesIntoSessionState() {
         JsonObject frontendMessage = frontendMessage("assistant", "done", "text");
         frontendMessage.addProperty("timestamp", "2026-07-28T12:50:07.123Z");
 

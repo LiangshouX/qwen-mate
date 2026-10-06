@@ -410,16 +410,16 @@ public class SettingsHandler extends BaseMessageHandler {
     }
 
     /**
-     * Handle clear_user_language: clear user's manual language preference.
+     * Handle clear_user_language: switch to follow-IDE-language mode.
      * Pushes the authoritative config on both success and failure so the
      * webview always reflects the persisted state.
      */
     private void handleClearUserLanguage() {
         try {
-            LanguageConfigService.clearUserLanguage(context.getSettingsService());
-            LOG.info("[SettingsHandler] Cleared user language preference");
+            LanguageConfigService.setFollowIdeaLanguage(context.getSettingsService());
+            LOG.info("[SettingsHandler] Language mode switched to follow IDEA language");
         } catch (Exception e) {
-            LOG.error("[SettingsHandler] Failed to clear user language: " + e.getMessage(), e);
+            LOG.error("[SettingsHandler] Failed to switch to follow-IDE language mode: " + e.getMessage(), e);
         } finally {
             pushLanguageConfig();
         }

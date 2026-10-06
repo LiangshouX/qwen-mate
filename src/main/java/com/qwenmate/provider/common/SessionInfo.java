@@ -2,7 +2,7 @@ package com.qwenmate.provider.common;
 
 /**
  * Common session information structure.
- * Used by both Claude and Codex history readers.
+ * Used by the session history readers.
  */
 public class SessionInfo {
     public String sessionId;

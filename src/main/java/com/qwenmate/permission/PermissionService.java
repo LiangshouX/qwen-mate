@@ -119,7 +119,7 @@ public class PermissionService {
             this.permissionDir = Paths.get(envDir);
             debugLog("INIT", "Using permission dir from env QWEN_MATE_PERMISSION_DIR: " + envDir);
         } else {
-            this.permissionDir = Paths.get(System.getProperty("java.io.tmpdir"), "claude-permission");
+            this.permissionDir = Paths.get(System.getProperty("java.io.tmpdir"), "qwenmate-permission");
             debugLog("INIT", "Env QWEN_MATE_PERMISSION_DIR not set, using tmp dir: " + this.permissionDir);
         }
         debugLog("INIT", "Session ID: " + this.sessionId);

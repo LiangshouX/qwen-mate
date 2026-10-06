@@ -53,12 +53,12 @@ export type SkillsMap = Record<string, Skill>;
 
 /**
  * Skills configuration structure
- * Claude uses global/local, Codex uses user/repo
+ * Qwen uses global/local scopes
  */
 export interface SkillsConfig {
-  /** Global skills (Claude only) */
+  /** Global skills (user-level) */
   global: SkillsMap;
-  /** Local skills (Claude only) */
+  /** Local skills (project-level) */
   local: SkillsMap;
   /** User-level skills (Codex only) */
   user?: SkillsMap;

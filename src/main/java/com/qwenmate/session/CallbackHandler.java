@@ -169,7 +169,7 @@ public class CallbackHandler {
     }
 
     /**
-     * Notify of Claude history page metadata (for pagination).
+     * Notify of history page metadata (for pagination).
      */
     public void notifyQwenMateHistoryPageInfo(String sessionId, int fromTurn, int totalTurns, boolean hasMore, boolean cursorReset, String sessionTitle) {
         if (callback != null) {
@@ -178,7 +178,7 @@ public class CallbackHandler {
     }
 
     /**
-     * Notify that an earlier Claude history page failed to load.
+     * Notify that an earlier history page failed to load.
      */
     public void notifyQwenMateHistoryPageError(String sessionId, String message) {
         if (callback != null) {

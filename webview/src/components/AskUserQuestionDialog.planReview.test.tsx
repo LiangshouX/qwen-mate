@@ -20,7 +20,7 @@ vi.mock('./utils/bridge', () => ({
 /**
  * Plan-review questions ask through this dialog and carry `detail` (the plan
  * under review) and `intent`; both were being dropped, which left a plan-review
- * question unreadable in cc-gui.
+ * question unreadable in the GUI.
  */
 
 const PLAN = [

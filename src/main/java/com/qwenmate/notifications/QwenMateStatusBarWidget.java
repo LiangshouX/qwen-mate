@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Minimalist StatusBar widget for Claude AI
+ * Minimalist StatusBar widget for Qwen Code
  */
 public class QwenMateStatusBarWidget implements CustomStatusBarWidget, StatusBarWidget, Disposable {
     private final Project project;

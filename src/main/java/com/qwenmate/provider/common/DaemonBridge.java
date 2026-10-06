@@ -476,7 +476,7 @@ public class DaemonBridge {
         // Complete all pending request futures so Java-side callers unblock.
         // Use onComplete(false) instead of onError() so that user-initiated aborts
         // are treated as a normal (unsuccessful) completion rather than an error,
-        // matching the graceful handling that Codex uses.
+        // matching the reference bridge's graceful abort handling.
         if (context != null) {
             for (RequestHandler handler : context.drainRequests()) {
                 handler.onAbort();
@@ -536,7 +536,7 @@ public class DaemonBridge {
      * as they arrive from the daemon. The returned future completes when the
      * daemon signals "done" for this request.
      *
-     * @param method   Command method (e.g., "claude.send")
+     * @param method   Command method (e.g., "qwen.send")
      * @param params   Command parameters (JSON object)
      * @param callback Callback for processing output lines
      * @return CompletableFuture that completes when the command finishes

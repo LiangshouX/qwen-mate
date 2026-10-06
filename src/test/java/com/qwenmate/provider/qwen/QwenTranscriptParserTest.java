@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Unit tests for the qwen transcript parser: format variants, tolerant parsing
- * and the Claude-template message shape used by the live QwenMessageHandler.
+ * and the message shape used by the live QwenMessageHandler.
  */
 public class QwenTranscriptParserTest {
 

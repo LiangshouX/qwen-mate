@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
  *
  * This activity runs in the background after the project is opened,
  * triggering the ai-bridge.zip extraction early so it's ready
- * when the user opens the Claude tool window.
+ * when the user opens the QwenMate tool window.
  */
 public class BridgePreloader implements ProjectActivity {
 

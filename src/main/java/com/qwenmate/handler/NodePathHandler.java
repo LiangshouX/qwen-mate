@@ -20,7 +20,7 @@ public class NodePathHandler {
 
     private static final Logger LOG = Logger.getInstance(NodePathHandler.class);
 
-    static final String NODE_PATH_PROPERTY_KEY = "claude.code.node.path";
+    static final String NODE_PATH_PROPERTY_KEY = "qwenmate.node.path";
 
     private final HandlerContext context;
     private final Gson gson = new Gson();

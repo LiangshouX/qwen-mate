@@ -2,7 +2,7 @@ package com.qwenmate.util;
 
 /**
  * Utility class for extracting content from XML-like tags.
- * Used by ClaudeHistoryReader and CodexHistoryReader to parse command messages.
+ * Used by QwenHistoryReader to parse command messages.
  */
 public final class TagExtractor {
 

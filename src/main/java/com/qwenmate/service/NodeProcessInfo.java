@@ -7,7 +7,7 @@ package com.qwenmate.service;
  *
  * <p>Three kinds:
  * <ul>
- *   <li>{@link Kind#DAEMON}: long-running Claude daemon process (per ChatWindow)</li>
+ *   <li>{@link Kind#DAEMON}: long-running Qwen daemon process (per ChatWindow)</li>
  *   <li>{@link Kind#CHANNEL}: per-request process tracked in a ProcessManager</li>
  *   <li>{@link Kind#ORPHAN}: detected via ProcessHandle.allProcesses() but not in any registry</li>
  * </ul>

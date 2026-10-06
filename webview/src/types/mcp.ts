@@ -125,7 +125,7 @@ export interface McpPreset {
 export type McpServerStatus = 'connected' | 'checking' | 'error' | 'unknown';
 
 /**
- * MCP server connection status info (from Claude SDK)
+ * MCP server connection status info (from the Qwen SDK)
  */
 export interface McpServerStatusInfo {
   /** Server name */

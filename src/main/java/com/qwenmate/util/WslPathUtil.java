@@ -233,7 +233,7 @@ public final class WslPathUtil {
                 // mis-handles the forward-slash form (//wsl.localhost/...) when fed to
                 // Paths.get(...).toAbsolutePath(): the leading // collapses and the path
                 // resolves drive-relative (C:\wsl.localhost\...), so Files.isRegularFile /
-                // File.listFiles silently return false and every ~/.claude scan comes back
+                // File.listFiles silently return false and every ~/.qwen scan comes back
                 // empty. Do NOT "normalize" this to forward slashes. convertToWslPath()
                 // accepts both slash forms, so callers that re-convert (e.g.
                 // EnvironmentConfigurator building the HOME env var) stay correct.

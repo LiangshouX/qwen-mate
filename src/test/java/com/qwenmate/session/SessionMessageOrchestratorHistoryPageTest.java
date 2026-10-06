@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class SessionMessageOrchestratorHistoryPageTest {
 
     @Test
-    public void loadEarlierClaudeHistoryPagePrependsOlderTurns() {
+    public void loadEarlierHistoryPagePrependsOlderTurns() {
         SessionState state = new SessionState();
         state.setProvider("qwen");
         state.setSessionId("session-page");
@@ -40,7 +40,7 @@ public class SessionMessageOrchestratorHistoryPageTest {
                 state, new MessageParser(), callbackFacade, historyAccess, (usedTokens, maxTokens) -> {
         });
 
-        orchestrator.loadEarlierClaudeHistoryPage("session-page", "/workspace", 2).join();
+        orchestrator.loadEarlierHistoryPage("session-page", "/workspace", 2).join();
 
         List<QwenMateSession.Message> messages = state.getMessages();
         assertEquals(4, messages.size());
@@ -57,7 +57,7 @@ public class SessionMessageOrchestratorHistoryPageTest {
     }
 
     @Test
-    public void loadEarlierClaudeHistoryPageReplacesTranscriptOnCursorReset() {
+    public void loadEarlierHistoryPageReplacesTranscriptOnCursorReset() {
         SessionState state = new SessionState();
         state.setProvider("qwen");
         state.setSessionId("session-page");
@@ -77,7 +77,7 @@ public class SessionMessageOrchestratorHistoryPageTest {
                 state, new MessageParser(), callbackFacade, historyAccess, (usedTokens, maxTokens) -> {
         });
 
-        orchestrator.loadEarlierClaudeHistoryPage("session-page", "/workspace", 99).join();
+        orchestrator.loadEarlierHistoryPage("session-page", "/workspace", 99).join();
 
         List<QwenMateSession.Message> messages = state.getMessages();
         assertEquals(2, messages.size());
@@ -88,7 +88,7 @@ public class SessionMessageOrchestratorHistoryPageTest {
     }
 
     @Test
-    public void loadEarlierClaudeHistoryPageNotifiesErrorWhenQueryFails() {
+    public void loadEarlierHistoryPageNotifiesErrorWhenQueryFails() {
         SessionState state = new SessionState();
         state.setProvider("qwen");
         state.setSessionId("session-page");
@@ -104,7 +104,7 @@ public class SessionMessageOrchestratorHistoryPageTest {
                 state, new MessageParser(), callbackFacade, historyAccess, (usedTokens, maxTokens) -> {
         });
 
-        orchestrator.loadEarlierClaudeHistoryPage("session-page", "/workspace", 2).join();
+        orchestrator.loadEarlierHistoryPage("session-page", "/workspace", 2).join();
 
         assertTrue(state.getMessages().isEmpty());
         assertEquals(1, callback.pageErrors.size());
@@ -113,7 +113,7 @@ public class SessionMessageOrchestratorHistoryPageTest {
     }
 
     @Test
-    public void loadEarlierClaudeHistoryPageDegradesGracefullyWithoutPageSupport() {
+    public void loadEarlierHistoryPageDegradesGracefullyWithoutPageSupport() {
         SessionState state = new SessionState();
         state.setProvider("qwen");
         state.setSessionId("session-page");
@@ -128,14 +128,14 @@ public class SessionMessageOrchestratorHistoryPageTest {
                 state, new MessageParser(), callbackFacade, new PagingHistoryAccess(), (usedTokens, maxTokens) -> {
         });
 
-        orchestrator.loadEarlierClaudeHistoryPage("session-page", "/workspace", 2).join();
+        orchestrator.loadEarlierHistoryPage("session-page", "/workspace", 2).join();
 
         assertEquals(1, callback.pageErrors.size());
         assertEquals("session-page|Earlier history pages are not available", callback.pageErrors.get(0));
     }
 
     @Test
-    public void loadEarlierClaudeHistoryPageIgnoresSessionsThatChangedWhileLoading() {
+    public void loadEarlierHistoryPageIgnoresSessionsThatChangedWhileLoading() {
         SessionState state = new SessionState();
         state.setProvider("qwen");
         state.setSessionId("other-session");
@@ -151,7 +151,7 @@ public class SessionMessageOrchestratorHistoryPageTest {
                 state, new MessageParser(), callbackFacade, historyAccess, (usedTokens, maxTokens) -> {
         });
 
-        orchestrator.loadEarlierClaudeHistoryPage("session-page", "/workspace", 1).join();
+        orchestrator.loadEarlierHistoryPage("session-page", "/workspace", 1).join();
 
         assertTrue(state.getMessages().isEmpty());
         assertTrue(callback.messageUpdates.isEmpty());

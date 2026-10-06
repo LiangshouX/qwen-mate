@@ -862,7 +862,6 @@
     "operationSuccess": "操作成功"
   },
   "config": {
-    "officialDocs": "官方文档",
     "switch": "切换",
     "switchProvider": "切换供应商",
     "nodeProcesses": {

@@ -44,13 +44,13 @@ public class EnvironmentConfiguratorPermissionTimeoutTest {
 
     @Test
     public void translatePermissionDirForNode_nullNode_returnsDirVerbatim() {
-        String dir = "C:\\Users\\foo\\AppData\\Local\\Temp\\claude-permission";
+        String dir = "C:\\Users\\foo\\AppData\\Local\\Temp\\qwenmate-permission";
         assertEquals(dir, EnvironmentConfigurator.translatePermissionDirForNode(dir, null));
     }
 
     @Test
     public void translatePermissionDirForNode_windowsNode_returnsDirVerbatim() {
-        String dir = "C:\\Users\\foo\\AppData\\Local\\Temp\\claude-permission";
+        String dir = "C:\\Users\\foo\\AppData\\Local\\Temp\\qwenmate-permission";
         assertEquals(dir,
                 EnvironmentConfigurator.translatePermissionDirForNode(dir, "C:\\Program Files\\nodejs\\node.exe"));
     }
@@ -59,11 +59,11 @@ public class EnvironmentConfiguratorPermissionTimeoutTest {
     public void translatePermissionDirForNode_wslNodeOnWindows_convertsToMntPath() {
         Assume.assumeTrue("WSL path translation is only meaningful on Windows", PlatformUtils.isWindows());
 
-        String dir = "C:\\Users\\foo\\AppData\\Local\\Temp\\claude-permission";
+        String dir = "C:\\Users\\foo\\AppData\\Local\\Temp\\qwenmate-permission";
         String translated = EnvironmentConfigurator.translatePermissionDirForNode(dir, "/usr/bin/node");
 
         assertNotNull(translated);
-        assertEquals("/mnt/c/Users/foo/AppData/Local/Temp/claude-permission", translated);
+        assertEquals("/mnt/c/Users/foo/AppData/Local/Temp/qwenmate-permission", translated);
     }
 
     @Test

@@ -534,7 +534,7 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
             } finally {
                 executor.shutdownNow();
             }
-        }, "Claude-Process-Cleanup-Hook"));
+        }, "QwenMate-Process-Cleanup-Hook"));
 
         LOG.info("[ShutdownHook] JVM Shutdown Hook registered");
     }

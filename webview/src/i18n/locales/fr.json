@@ -794,7 +794,6 @@
     "restartRequired": "Please restart IDEA for this setting to take effect"
   },
   "config": {
-    "officialDocs": "Documentation officielle",
     "switch": "Basculer",
     "switchProvider": "Changer de fournisseur",
     "nodeProcesses": {

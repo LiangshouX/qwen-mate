@@ -77,7 +77,7 @@ public class WorkingDirectoryManager {
 
     /**
      * Resolve the effective working directory for a project — the same directory
-     * Claude is launched in, normalized so that {@code ..}/{@code .} are collapsed.
+     * the CLI is launched in, normalized so that {@code ..}/{@code .} are collapsed.
      *
      * <p>This is the single source of truth used by both the session launchers and
      * the history readers. Keying history off this value (instead of the raw IDE

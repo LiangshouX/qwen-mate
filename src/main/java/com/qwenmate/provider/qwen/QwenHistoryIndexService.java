@@ -20,12 +20,12 @@ import java.util.stream.Stream;
 /**
  * Session index management for qwen transcripts.
  *
- * <p>Mirrors the reference {@code ClaudeHistoryIndexService}: a per-project scan
+ * <p>Mirrors the reference implementation's history index service: a per-project scan
  * backed by {@link SessionIndexManager} (durable index, mtime/size freshness) plus
  * {@link SessionIndexCache} (in-memory TTL cache) so the history panel does not
  * re-parse unchanged transcripts.</p>
  *
- * <p>Unlike the Claude lite reader, metadata always comes from a full transcript
+ * <p>Unlike the reference implementation's lite reader, metadata always comes from a full transcript
  * parse (the same {@link QwenTranscriptParser} used for restore), so title, message
  * count and timestamps are exact — qwen transcripts carry many non-message
  * telemetry rows that make line counting unreliable.</p>
@@ -85,7 +85,7 @@ class QwenHistoryIndexService {
         }
 
         Map<String, QwenHistoryReader.SessionInfo> bySessionId = new LinkedHashMap<>();
-        SessionIndexManager.ProjectIndex projectIndex = indexManager.readClaudeIndex().projects.get(projectPath);
+        SessionIndexManager.ProjectIndex projectIndex = indexManager.readSessionIndex().projects.get(projectPath);
         SessionIndexManager.UpdateType updateType = indexManager.getUpdateType(projectIndex, primaryChatsDir);
 
         List<SessionIndexManager.SessionIndexEntry> refreshedEntries = new ArrayList<>();
@@ -132,12 +132,12 @@ class QwenHistoryIndexService {
             refreshed.fileCount = countJsonlFiles(primaryChatsDir);
             refreshed.lastDirScanTime = System.currentTimeMillis();
             refreshed.sessions = refreshedEntries;
-            indexManager.saveClaudeProjectIndex(projectPath, refreshed);
+            indexManager.saveProjectIndex(projectPath, refreshed);
         }
 
         List<QwenHistoryReader.SessionInfo> sessions = new ArrayList<>(bySessionId.values());
         sessions.sort(Comparator.comparingLong((QwenHistoryReader.SessionInfo info) -> info.lastTimestamp).reversed());
-        SessionIndexCache.getInstance().updateClaudeCache(projectPath, primaryChatsDir, sessions);
+        SessionIndexCache.getInstance().updateSessionCache(projectPath, primaryChatsDir, sessions);
         LOG.info("[QwenHistoryIndexService] Project " + projectPath + ": " + sessions.size()
                 + " sessions (updateType=" + updateType + ")");
         return sessions;

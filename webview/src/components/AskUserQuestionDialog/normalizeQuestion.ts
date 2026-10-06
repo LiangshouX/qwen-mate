@@ -29,7 +29,7 @@ export function normalizeQuestion(raw: any): Question | null {
   });
   if (!questionText) return null;
   // `detail` (e.g. the plan under review) and `intent` are part of the question,
-  // not decoration: dropping them made a plan-review unanswerable in cc-gui.
+  // not decoration: dropping them made a plan-review unanswerable in the GUI.
   return {
     question: questionText,
     header,

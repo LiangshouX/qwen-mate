@@ -343,7 +343,7 @@ public class AgentHandler extends BaseMessageHandler {
                 String exportTime = dateFormat.format(new Date());
 
                 JsonObject exportData = new JsonObject();
-                exportData.addProperty("format", "claude-code-agents-export-v1");
+                exportData.addProperty("format", "qwenmate-agents-export-v1");
                 exportData.addProperty("exportTime", exportTime);
                 exportData.addProperty("agentCount", agents.size());
 
@@ -445,8 +445,8 @@ public class AgentHandler extends BaseMessageHandler {
                     String content = new String(Files.readAllBytes(fileToImport.toPath()), StandardCharsets.UTF_8);
                     JsonObject importData = gson.fromJson(content, JsonObject.class);
 
-                    if (!importData.has("format") || !importData.get("format").getAsString().equals("claude-code-agents-export-v1")) {
-                        throw new Exception("Invalid file format. Expected claude-code-agents-export-v1");
+                    if (!importData.has("format") || !importData.get("format").getAsString().equals("qwenmate-agents-export-v1")) {
+                        throw new Exception("Invalid file format. Expected qwenmate-agents-export-v1");
                     }
 
                     if (!importData.has("agents")) {

@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public class ErrorPanelBuilder {
 
     private static final Logger LOG = Logger.getInstance(ErrorPanelBuilder.class);
-    private static final String NODE_PATH_PROPERTY_KEY = "claude.code.node.path";
+    private static final String NODE_PATH_PROPERTY_KEY = "qwenmate.node.path";
 
     /**
      * Builds an error panel with a Node.js path input field.

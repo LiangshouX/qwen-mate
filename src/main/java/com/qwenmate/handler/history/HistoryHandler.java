@@ -81,7 +81,7 @@ public class HistoryHandler extends BaseMessageHandler {
                 return true;
             case "load_qwen_history_page":
                 LOG.debug("[HistoryHandler] Processing: load_qwen_history_page");
-                historyMessageInjector.loadEarlierClaudeHistoryPage(content);
+                historyMessageInjector.loadEarlierHistoryPage(content);
                 return true;
             case "delete_session":
                 LOG.info("[HistoryHandler] 处理: delete_session, sessionId=" + content);

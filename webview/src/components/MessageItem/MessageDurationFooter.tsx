@@ -27,13 +27,13 @@ interface TokenUsageInfo {
  * Extract whole-turn token usage from a message's raw JSON.
  *
  * Reads the `turnUsage` field stamped by the backend when a turn completes
- * (QwenMessageHandler.handleResult / CodexMessageHandler.handleResultMessage).
+ * (QwenMessageHandler.handleResult).
  * It aggregates every API call in the turn, normalized to the Claude usage
  * schema (input_tokens excludes cache; cache fields are separate).
  *
  * Do NOT read `raw.message.usage` or `raw.usage` here: those carry per-API-call
  * and session-cumulative values that feed the context-usage status bar, and
- * would understate (Claude) or overstate (Codex) what this turn consumed.
+ * would misstate what this turn consumed.
  *
  * Returns null when no turn usage is available (aborted turns, history replay).
  */

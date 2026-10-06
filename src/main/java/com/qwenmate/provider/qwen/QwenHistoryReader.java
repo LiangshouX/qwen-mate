@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * Qwen Code local history reader.
  *
  * <p>Reads session transcripts directly from disk (no daemon round-trip), mirroring
- * the architecture of the reference {@code ClaudeHistoryReader}: a facade over a
+ * the architecture of the reference implementation's history reader: a facade over a
  * transcript parser plus an index service that keeps {@link com.qwenmate.cache.SessionIndexManager}
  * warm.</p>
  *
@@ -114,7 +114,7 @@ public class QwenHistoryReader {
     }
 
     /**
-     * Load one session's messages in the Claude-template shape consumed by
+     * Load one session's messages in the message shape consumed by
      * {@code SessionMessageOrchestrator} (see {@link QwenTranscriptParser}).
      *
      * @param sessionId the session id

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Abstract base class for actions scoped to the Claude chat tool window.
+ * Abstract base class for actions scoped to the QwenMate chat tool window.
  * Only enabled when the CCG tool window is active and focused.
  */
 public abstract class ChatToolWindowAction extends AnAction implements DumbAware {

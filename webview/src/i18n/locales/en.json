@@ -862,7 +862,6 @@
     "operationSuccess": "Operation successful"
   },
   "config": {
-    "officialDocs": "Official Docs",
     "switch": "Switch",
     "switchProvider": "Switch provider",
     "nodeProcesses": {

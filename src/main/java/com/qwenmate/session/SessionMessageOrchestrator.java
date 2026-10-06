@@ -49,7 +49,7 @@ public class SessionMessageOrchestrator {
     private final SessionHistoryAccess historyAccess;
     private final UsageDisplay usageDisplay;
 
-    /** Turns per disk-backed history page (mirrors the reference Claude paginator). */
+    /** Turns per disk-backed history page (mirrors the reference implementation's paginator). */
     static final int HISTORY_TURN_PAGE_LIMIT = 30;
 
     /** Pagination metadata of the disk-backed transcript currently in state. */
@@ -228,7 +228,7 @@ public class SessionMessageOrchestrator {
      * @param beforeTurn exclusive turn cursor (first turn of the page currently shown)
      * @return a future completing when the page was applied or an error was reported
      */
-    public CompletableFuture<Void> loadEarlierClaudeHistoryPage(String sessionId, String cwd, Integer beforeTurn) {
+    public CompletableFuture<Void> loadEarlierHistoryPage(String sessionId, String cwd, Integer beforeTurn) {
         return CompletableFuture.runAsync(() -> {
             String requestedProvider = state.getProvider();
             try {

@@ -3,7 +3,7 @@ package com.qwenmate.provider.common;
 import java.util.Locale;
 
 /**
- * Shared cwd matching for history readers (Claude CLI providers, Grok, OpenCode, …).
+ * Shared cwd matching for session history readers.
  *
  * <p>Rules (case-insensitive after normalize):
  * <ul>

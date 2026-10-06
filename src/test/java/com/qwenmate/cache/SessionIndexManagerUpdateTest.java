@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Verifies that Claude index update detection follows individual session-file changes instead of
+ * Verifies that session index update detection follows individual session-file changes instead of
  * relying only on the project directory timestamp.
  */
 public class SessionIndexManagerUpdateTest {
@@ -159,15 +159,15 @@ public class SessionIndexManagerUpdateTest {
     }
 
     @Test
-    public void saveClaudeProjectIndex_preservesOtherProjects() throws IOException {
+    public void saveProjectIndex_preservesOtherProjects() throws IOException {
         SessionIndexManager manager = new SessionIndexManager(tmp.newFolder("project-merge-cache").toPath());
         SessionIndexManager.ProjectIndex firstProject = new SessionIndexManager.ProjectIndex();
         SessionIndexManager.ProjectIndex secondProject = new SessionIndexManager.ProjectIndex();
 
-        manager.saveClaudeProjectIndex("first", firstProject);
-        manager.saveClaudeProjectIndex("second", secondProject);
+        manager.saveProjectIndex("first", firstProject);
+        manager.saveProjectIndex("second", secondProject);
 
-        SessionIndexManager.SessionIndex saved = manager.readClaudeIndex();
+        SessionIndexManager.SessionIndex saved = manager.readSessionIndex();
         assertNotNull(saved.projects.get("first"));
         assertNotNull(saved.projects.get("second"));
         assertEquals(0, saved.projects.get("first").sessions.size());

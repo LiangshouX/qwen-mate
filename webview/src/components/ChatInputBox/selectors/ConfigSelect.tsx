@@ -12,7 +12,6 @@ import { useDropdownPosition } from '../../../hooks/useDropdownPosition';
 import { AgentMenuItem } from './AgentMenuItem';
 import { NodeProcessesMenuItem } from './NodeProcessesMenuItem';
 import { ConfigSwitchOption } from './ConfigSwitchOption';
-import { OfficialDocsOption } from './OfficialDocsOption';
 
 interface ConfigSelectProps {
   alwaysThinkingEnabled?: boolean;
@@ -279,15 +278,6 @@ export const ConfigSelect = ({
             value={alwaysThinkingEnabled}
             defaultChecked={false}
             onChange={onToggleThinking}
-            onMouseEnter={() => setActiveSubmenu('none')}
-          />
-
-          {/* Divider */}
-          <div style={FAINT_DIVIDER_STYLE} />
-
-          {/* Official Docs Item */}
-          <OfficialDocsOption
-            onClose={closeMenu}
             onMouseEnter={() => setActiveSubmenu('none')}
           />
         </div>

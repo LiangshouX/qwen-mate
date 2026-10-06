@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Quick Fix with Claude - Áp dụng các thay đổi thông minh dựa trên PSI context
+ * Quick Fix with QwenMate - Áp dụng các thay đổi thông minh dựa trên PSI context
  */
 public class QuickFixWithQwenMateAction extends AnAction implements DumbAware {
 

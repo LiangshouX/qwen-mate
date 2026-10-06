@@ -28,7 +28,7 @@ final class BridgePathLocator {
     /** Pre-rename distribution directory names, kept as compatibility candidates. */
     static final String[] LEGACY_PLUGIN_DIR_NAMES = {"qwenmate", "qwen-code-gui", "idea-claude-code-gui"};
     static final String BRIDGE_PATH_PROPERTY = "qwenmate.bridge.path";
-    static final String BRIDGE_PATH_ENV = "CLAUDE_BRIDGE_PATH";
+    static final String BRIDGE_PATH_ENV = "QWEN_MATE_BRIDGE_PATH";
 
     /**
      * Add every known plugin directory name under the given plugins root.

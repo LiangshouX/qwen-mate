@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import com.intellij.openapi.project.Project;
 
 /**
- * IDEA Action for inserting a newline in the Claude chat tool window input.
+ * IDEA Action for inserting a newline in the QwenMate chat tool window input.
  * Shortcut is dynamically managed: Ctrl+Enter when sendShortcut=enter, removed when cmdEnter mode.
  */
 public class ChatNewlineAction extends ChatToolWindowAction {

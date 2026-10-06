@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 
 /**
- * IDEA Action for Ctrl+V in the Claude chat tool window.
+ * IDEA Action for Ctrl+V in the QwenMate chat tool window.
  * Reads system clipboard and inserts text at the cursor in the focused element,
  * supporting contenteditable divs, input fields, and textareas.
  */

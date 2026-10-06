@@ -22,7 +22,7 @@ const ROOT_STYLE: React.CSSProperties = {
 
 interface HistoryViewProps {
   historyData: HistoryData | null;
-  currentProvider?: string; // Current provider (claude or codex)
+  currentProvider?: string; // Current provider (qwen)
   onLoadSession: (sessionId: string, provider?: string, model?: string, agent?: string) => void;
   onDeleteSession: (sessionId: string) => void; // Delete session callback
   onDeleteSessions: (sessionIds: string[]) => void; // Batch delete sessions callback

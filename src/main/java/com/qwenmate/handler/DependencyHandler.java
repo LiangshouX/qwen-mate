@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 public class DependencyHandler extends BaseMessageHandler {
 
     private static final Logger LOG = Logger.getInstance(DependencyHandler.class);
-    private static final String NODE_PATH_PROPERTY_KEY = "claude.code.node.path";
+    private static final String NODE_PATH_PROPERTY_KEY = "qwenmate.node.path";
 
     private static final String[] SUPPORTED_TYPES = {
         "get_dependency_status",      // Get all SDK statuses

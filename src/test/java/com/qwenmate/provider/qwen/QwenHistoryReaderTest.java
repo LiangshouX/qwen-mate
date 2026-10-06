@@ -141,7 +141,7 @@ public class QwenHistoryReaderTest {
         assertEquals(first, second);
         // Durable index entry written for the session.
         SessionIndexManager.ProjectIndex index = new SessionIndexManager(tempRoot.resolve("index-cache"))
-                .readClaudeIndex().projects.get(projectPath.toString());
+                .readSessionIndex().projects.get(projectPath.toString());
         assertNotNull(index);
         assertEquals(1, index.sessions.size());
         assertEquals("33333333-3333-4333-8333-333333333333", index.sessions.get(0).sessionId);

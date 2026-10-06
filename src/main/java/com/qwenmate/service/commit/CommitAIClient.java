@@ -37,7 +37,7 @@ import java.util.concurrent.TimeoutException;
  * <p>Why a separate process instead of the chat daemon's {@code sendMessage}:
  * {@code sendMessage} registers a persisted session, so every commit generation
  * would show up in the chat history. The {@code commit-message.js} script calls
- * the Qwen Code SDK {@code query()} (or Codex {@code startThread}) directly
+ * the Qwen Code SDK {@code query()} directly
  * with {@code maxTurns=1} and never resumes/persists a session — so generating a
  * commit message leaves <b>no trace in the history</b>. It also streams
  * {@code [CONTENT_DELTA]} tokens so the commit box renders incrementally.

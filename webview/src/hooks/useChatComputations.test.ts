@@ -104,7 +104,7 @@ describe('deriveTodosForTurn', () => {
     ]);
   });
 
-  it('lets Claude structured tasks survive an empty TodoWrite snapshot', () => {
+  it('lets structured tasks survive an empty TodoWrite snapshot', () => {
     const messages = [
       user('implement the fix'),
       assistant([toolUse('legacy-todos', 'TodoWrite', {

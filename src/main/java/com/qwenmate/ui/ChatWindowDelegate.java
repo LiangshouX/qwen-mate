@@ -60,8 +60,8 @@ import java.util.concurrent.TimeUnit;
 public class ChatWindowDelegate {
 
     private static final Logger LOG = Logger.getInstance(ChatWindowDelegate.class);
-    private static final String NODE_PATH_PROPERTY_KEY = "claude.code.node.path";
-    private static final String PERMISSION_MODE_PROPERTY_KEY = "claude.code.permission.mode";
+    private static final String NODE_PATH_PROPERTY_KEY = "qwenmate.node.path";
+    private static final String PERMISSION_MODE_PROPERTY_KEY = "qwenmate.permission.mode";
     private static final int STATUS_RESET_DELAY_SECONDS = 5;
 
     public enum TabAnswerStatus {
@@ -198,13 +198,13 @@ public class ChatWindowDelegate {
     /**
      * Intentionally a no-op for startup.
      * <p>
-     * The Claude settings.json provider sync was removed together with
-     * {@code ClaudeSettingsManager}; qwen configures auth through its own
+     * The legacy provider settings sync was removed;
+     * qwen configures auth through its own
      * settings block, so there is nothing to repair on window open.
      */
     public void syncActiveProvider() {
         // TODO: re-evaluate once qwen grows an equivalent managed-settings repair pass.
-        LOG.info("[QwenMateToolWindow] Provider settings repair skipped (claude settings sync removed)");
+        LOG.info("[QwenMateToolWindow] Provider settings repair skipped (legacy provider settings sync removed)");
     }
 
     public String setupPermissionService() {

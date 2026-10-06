@@ -56,7 +56,7 @@ import java.util.function.Supplier;
 public class WebviewInitializer {
 
     private static final Logger LOG = Logger.getInstance(WebviewInitializer.class);
-    private static final String NODE_PATH_PROPERTY_KEY = "claude.code.node.path";
+    private static final String NODE_PATH_PROPERTY_KEY = "qwenmate.node.path";
     private static final int BRIDGE_INJECTION_FAST_RETRY_INTERVAL_MS = 100;
     private static final int BRIDGE_INJECTION_SLOW_RETRY_INTERVAL_MS = 1000;
     private static final int BRIDGE_INJECTION_FAST_RETRY_ATTEMPTS = 50;

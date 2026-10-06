@@ -1,7 +1,6 @@
 /**
  * Shared inline styles for the ConfigSelect dropdown rows and the extracted
- * menu-item components (AgentMenuItem,
- * NodeProcessesMenuItem, OfficialDocsOption).
+ * menu-item components (AgentMenuItem, NodeProcessesMenuItem).
  */
 export const SELECTOR_OPTION_RELATIVE_STYLE: React.CSSProperties = { position: 'relative', overflow: 'visible' };
 
