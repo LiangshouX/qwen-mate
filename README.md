@@ -12,33 +12,41 @@ Based on [CC GUI](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) (MIT)
 
 A JetBrains IDE plugin that provides a visual interface for **Qwen Code** (official TypeScript SDK), making AI-assisted programming more efficient and intuitive.
 
-## Supported Engines
+## About Qwen Code
 
-- **Qwen Code** — 通义千问 AI 编程助手（官方 TypeScript SDK 驱动，支持 qwen3-coder 等多模型）
+Qwen Code is the Qwen team's open-source agentic coding tool for the terminal: describe what you want in plain language and it plans, writes, and debugs code, edits files, runs commands, and connects to external tools via MCP.
+
+QwenMate currently supports Qwen Code as its only engine, driving it through the official TypeScript SDK and ACP, and sharing the CLI's configuration (`~/.qwen/settings.json`) and session data: everything you set up in the terminal works here as-is.
 
 ## Key Features
 
 ### Intelligent Conversation
-- Context-aware AI coding assistant with streaming output & thinking display
-- @file reference support for precise code context
-- Image sending support for visual requirement description
-- Prompt enhancer for better AI understanding
+- Streaming output with thinking display
+- @file references, # agent invocation, ! prompt insertion
+- Image attachments for visual requirement description
+- Prompt enhancer that rewrites your input before sending
 
-### Agent System
-- Built-in Agent system for automated complex tasks
-- Skills slash command system (/init, /review, etc.)
-- MCP server support to extend AI capabilities
+### IDE Integration
+- Editor context actions to send selected code (`Ctrl+Alt+K` / `Cmd+Alt+K`), quick fix (`Ctrl+Shift+Q`)
+- Send file tree / console content, monitor run & debug output
+- Commit AI: generate Git commit messages in the commit panel
+- Approval dialogs before the AI performs sensitive actions like file edits
 
 ### Developer Experience
-- Comprehensive permission management and security controls
 - Code DIFF comparison and file navigation
+- MCP servers: built-in marketplace, add/edit/remove, connection status and tool lists
+- Skills: browse and manage Qwen Code skills
 - Dark/Light theme with IDE font synchronization
 - 10-language internationalization
 
 ### Session Management
 - History session records, restore, search and export
-- Session favorites and AI auto-naming
-- Usage statistics with per-turn cost tracking
+- Session favorites and AI-generated titles
+
+### Configuration & Dependencies (read-only)
+- Qwen config: reads `~/.qwen/settings.json` to show the model catalog and current model; authentication is managed by the Qwen Code CLI and cannot be edited in the plugin
+- CLI detection: read-only detection of the locally installed qwen CLI
+- SDK dependency management: install, update, or roll back the Qwen Code SDK, offline packages supported
 
 ## Installation (offline / internal)
 

@@ -7,48 +7,58 @@
     <resource-bundle>messages.QwenMateBundle</resource-bundle>
 
     <description><![CDATA[
-        <h2>QwenMate — visual GUI for Qwen Code on JetBrains IDEs</h2>
-        <h2>Qwen Code 可视化 GUI —— JetBrains IDE 插件，MIT 100% 开源</h2>
-        <p>支持的引擎 / Supported engines:</p>
+        <h2>QwenMate — Qwen Code 可视化 GUI for JetBrains IDEs</h2>
+        <p>QwenMate 把 Qwen Code 搬进 JetBrains IDE：在右侧工具窗口中对话、查看代码 Diff、管理历史会话，配合编辑器右键菜单与快捷键使用。MIT 开源，源码见 <a href="https://github.com/LiangshouX/qwen-mate">GitHub</a>。</p>
+        <p>QwenMate brings Qwen Code into JetBrains IDEs: chat, review diffs, and manage session history in a tool window, with editor context actions and keyboard shortcuts. Open source under the MIT license.</p>
+
+        <h3>关于 Qwen Code / About Qwen Code</h3>
+        <p>Qwen Code 是通义千问团队开源的终端 AI 编程智能体（agentic coding tool）：用自然语言规划、编写和调试代码，能直接编辑文件、执行命令，并通过 MCP 接入外部工具。QwenMate 目前仅支持 Qwen Code 这一个引擎，通过其官方 TypeScript SDK 与 ACP 接口驱动，与 CLI 共享配置（<code>~/.qwen/settings.json</code>）和会话数据：你在终端里配好的模型、认证、MCP、Skills，在插件里可以直接使用。</p>
+        <p>Qwen Code is the Qwen team's open-source agentic coding tool for the terminal. QwenMate drives it through the official TypeScript SDK and ACP, sharing the CLI's configuration and session data, so everything you set up in the terminal works here as-is.</p>
+
+        <h3>核心功能 / Features</h3>
         <ul>
-            <li><strong>Qwen Code</strong> - 通义千问 AI 编程助手（官方 TypeScript SDK 驱动，支持 qwen3-coder 等多模型）</li>
+            <li>智能对话：流式输出与思考过程展示；@ 引用文件、# 唤起智能体、! 插入提示词；图片附件 / Streaming chat with thinking display, @file references, agent and prompt shortcuts, image attachments</li>
+            <li>代码 Diff：可视化对比改动，并跳转到编辑器中定位 / Visual diff with editor navigation</li>
+            <li>会话管理：历史记录、恢复、收藏、搜索、导出，AI 自动生成会话标题 / Session history, restore, favorites, search, export, AI-generated titles</li>
+            <li>IDE 集成：编辑器右键发送选中代码（<kbd>Ctrl+Alt+K</kbd> / <kbd>Cmd+Alt+K</kbd>）、快速修复（<kbd>Ctrl+Shift+Q</kbd>）、文件树与控制台发送、运行/调试输出监听 / Editor popup actions, quick fix, run/debug output monitoring</li>
+            <li>Commit AI：在 Git 提交面板一键生成提交信息 / AI-generated Git commit messages</li>
+            <li>提示词增强：发送前自动改写输入 / Prompt enhancer</li>
+            <li>MCP 服务器：内置市场浏览、增删改配置、连接状态与工具列表 / MCP marketplace, server management, status and tool lists</li>
+            <li>Skills：浏览与管理 Qwen Code 技能 / Skills browsing and management</li>
+            <li>权限审批：AI 执行文件修改等敏感操作前弹窗确认 / Approval dialogs before sensitive tool calls</li>
+            <li>外观与国际化：深色/浅色主题、IDE 字体同步、10 种界面语言 / Light/dark themes, IDE font sync, 10 UI languages</li>
+            <li>SDK 依赖管理：在线安装、更新、回退 Qwen Code SDK，支持离线安装包 / Install, update, or roll back the Qwen Code SDK; offline packages supported</li>
+            <li>CLI 检测：只读检测本机 qwen 命令行的安装状态 / Read-only detection of your local qwen CLI</li>
+            <li>Qwen 配置（只读）：读取 <code>~/.qwen/settings.json</code> 展示模型目录与当前模型；认证（API Key / Base URL / 环境变量）由 Qwen Code CLI 管理，插件不提供修改入口 / Read-only view of the CLI's model catalog; authentication stays with the Qwen Code CLI and cannot be edited in the plugin</li>
         </ul>
 
-        <p><strong>Connection &amp; proxy disclosure / 连接与代理说明：</strong></p>
+        <h3>网络请求 / Network</h3>
         <ul>
-            <li>Requests are sent to the Qwen-compatible endpoint configured in <em>Settings → Qwen 配置</em> (API key / Base URL / environment variables). The plugin UI labels the active request route before it is used.</li>
-            <li>请求发送至【设置 → Qwen 配置】中配置的 Qwen 兼容端点（API Key / Base URL / 环境变量三种认证方式）。插件 UI 会在使用前明确标注请求路由方式。</li>
+            <li>AI 请求由本机运行的 Qwen Code 发往你在 CLI 配置中选定的模型端点（如百炼/DashScope 或任意 OpenAI 兼容端点），插件不代理、不中转 / AI requests go to the model endpoint you configured for the Qwen Code CLI; the plugin neither proxies nor relays them</li>
+            <li>SDK 安装与版本检查访问 npm registry（含你配置的镜像）/ SDK install and update checks reach the npm registry or your configured mirror</li>
+            <li>MCP 市场浏览访问 registry.modelcontextprotocol.io 与 api.github.com；状态检查会连接你自己配置的 MCP 服务器 / MCP marketplace browsing reaches registry.modelcontextprotocol.io and api.github.com; status checks connect to your own MCP servers</li>
+            <li>插件无遥测，不上报使用统计 / No telemetry, no usage reporting</li>
         </ul>
 
-        <p><strong>Credential &amp; file-access disclosure / 凭证与文件访问说明：</strong></p>
+        <h3>文件访问与凭证 / File access &amp; credentials</h3>
         <ul>
-            <li><strong>No silent credential scanning.</strong> The plugin never silently scans your disk for API keys or tokens. All credential sources require <strong>explicit user authorization</strong> via a confirmation dialog in the plugin UI.</li>
-            <li><strong>MCP server configuration</strong>: When the user opens the MCP settings page, the plugin reads MCP server definitions (server names, commands, arguments) from <code>~/.qwen/settings.json</code>. This file contains <strong>no credentials or tokens</strong> — only MCP server configuration metadata.</li>
-        </ul>
-        <p>插件不会静默扫描磁盘上的凭证。所有凭证来源均需用户在 UI 中显式授权确认。MCP 服务器配置仅在用户打开 MCP 设置页面时读取，该文件仅含服务器定义，不含任何凭证或令牌。</p>
-
-        <h2>核心功能</h2>
-        <ul>
-            <li><strong>上下文感知助手</strong>：智能编程助手，支持 @文件引用</li>
-            <li><strong>图片支持</strong>：发送图片可视化描述需求</li>
-            <li><strong>Agent 系统</strong>：内置智能体自动化执行复杂任务</li>
-            <li><strong>Skills 命令</strong>：斜杠命令系统（/init, /review 等）</li>
-            <li><strong>MCP 服务器</strong>：通过 MCP 协议扩展 AI 能力</li>
-            <li><strong>代码 DIFF</strong>：可视化代码对比和文件导航</li>
-            <li><strong>会话管理</strong>：历史记录、收藏、搜索和导出</li>
-            <li><strong>主题支持</strong>：深色/浅色主题，支持 IDE 字体同步</li>
-            <li><strong>权限控制</strong>：完善的安全管理</li>
-            <li><strong>Qwen 配置管理</strong>：认证方式 / API Key / Base URL 一站式配置</li>
+            <li>读取 <code>~/.qwen/settings.json</code>：模型目录用于模型选择器，mcpServers 定义用于 MCP 设置页 / Reads ~/.qwen/settings.json for the model catalog and MCP server definitions</li>
+            <li>MCP 设置页会把服务器增删改写回该文件，只改动 mcpServers 与启用状态相关字段，其余内容原样保留 / The MCP page writes server changes back to that file, touching only the mcpServers block and enable/disable state</li>
+            <li>读取 <code>~/.qwen/projects/</code> 下的会话记录用于历史面板；项目文件按你的指令读取以构建上下文与 Diff / Session transcripts under ~/.qwen/projects/ power the history panel; project files are read on demand for context and diffs</li>
+            <li>插件不扫描磁盘寻找密钥，也不提供 API Key 录入界面；凭证来自你为 Qwen Code 配置的 CLI 设置与环境变量，仅在本机注入 Qwen Code 进程 / The plugin never scans your disk for keys and offers no API key input; credentials come from your Qwen Code CLI configuration and environment variables and are injected only into the local Qwen Code process</li>
+            <li>插件自身数据（配置、SDK 依赖）存放在 <code>~/.qwenmate/</code> / Plugin data lives under ~/.qwenmate/</li>
         </ul>
 
-        <h2>使用方法</h2>
+        <h3>使用方法 / Getting started</h3>
         <ul>
-            <li>从右侧边栏打开 QwenMate 工具窗口</li>
-            <li>选中代码后使用 <kbd>Ctrl+Alt+K</kbd>（Win/Linux）或 <kbd>Cmd+Alt+K</kbd>（Mac）发送给 AI</li>
-            <li>即时获得 AI 驱动的代码辅助和智能建议</li>
+            <li>从右侧边栏打开 QwenMate 工具窗口 / Open the QwenMate tool window from the right sidebar</li>
+            <li>首次对话前按「设置 → SDK 依赖」安装 Qwen Code SDK（支持离线包）/ Install the Qwen Code SDK first via Settings → SDK Dependencies (offline packages supported)</li>
+            <li>选中代码后按 <kbd>Ctrl+Alt+K</kbd>（Win/Linux）或 <kbd>Cmd+Alt+K</kbd>（Mac）发送给 AI / Select code and press Ctrl+Alt+K (Win/Linux) or Cmd+Alt+K (Mac)</li>
         </ul>
 
-        <p><em>Keywords: Qwen, Qwen Code, Qwen3, DashScope, Code Generation, AI Coding, AI Coding Assistant</em></p>
+        <p><em>QwenMate is a community project and is not affiliated with, endorsed by, or sponsored by Alibaba Cloud or JetBrains. / QwenMate 为社区项目，与阿里云、JetBrains 无隶属或背书关系。</em></p>
+
+        <p><em>Keywords: Qwen, Qwen Code, Qwen3, DashScope, Code Generation, AI Coding, AI Coding Assistant, MCP</em></p>
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
