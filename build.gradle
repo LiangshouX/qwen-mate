@@ -160,6 +160,23 @@ intellijPlatform {
             ide('IU', '262.9437.22')
         }
     }
+
+    // Marketplace publishing token comes from the environment (repo secret
+    // PUBLISH_TOKEN in CI, local env var for manual publishPlugin) so it is
+    // never written into the build file or the repo.
+    publishing {
+        token = providers.environmentVariable('PUBLISH_TOKEN')
+    }
+
+    // Plugin signing with the Marketplace-issued certificate. All three values
+    // are environment-driven: when unset, signPlugin is skipped and
+    // publishPlugin would upload unsigned — configure the CI secrets (or local
+    // env) before relying on signed uploads.
+    signing {
+        certificateChain = providers.environmentVariable('CERTIFICATE_CHAIN')
+        privateKey = providers.environmentVariable('PRIVATE_KEY')
+        password = providers.environmentVariable('PRIVATE_KEY_PASSWORD')
+    }
 }
 
 sourceSets {

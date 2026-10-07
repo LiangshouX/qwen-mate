@@ -1,0 +1,100 @@
+name: Release
+
+# Release pipeline: tag push vX.Y.Z is the single release entry point.
+# One build produces the zip that is attached to the GitHub Release, and
+# (on manual dispatch) the same zip is published to JetBrains Marketplace,
+# so both channels ship byte-identical artifacts.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      publish_marketplace:
+        description: 'Publish the built zip to JetBrains Marketplace'
+        type: boolean
+        default: false
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: |
+            webview/package-lock.json
+            ai-bridge/package-lock.json
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # node_modules/ is gitignored, so install before buildWebview runs.
+      # ai-bridge installs its own deps inside packageAiBridge when missing.
+      - name: Install webview dependencies
+        working-directory: webview
+        run: npm ci
+
+      # sdk-packages/ (offline SDK tgz + extracted qwen-sdk) is entirely
+      # gitignored, so a CI checkout has no sdk-packages/ and buildPlugin
+      # would silently ship a zip WITHOUT the offline SDK packages.
+      # Restore it from a self-hosted archive: zip sdk-packages/ contents
+      # (install-offline.bat at the zip root) and publish it somewhere
+      # reachable, then set the repo variable SDK_PACKAGES_URL.
+      - name: Restore sdk-packages (not in git)
+        env:
+          SDK_PACKAGES_URL: ${{ vars.SDK_PACKAGES_URL }}
+        run: |
+          if [ -n "$SDK_PACKAGES_URL" ]; then
+            curl -fsSL "$SDK_PACKAGES_URL" -o /tmp/sdk-packages.zip
+            unzip -q /tmp/sdk-packages.zip -d sdk-packages
+            ls sdk-packages/
+          else
+            echo "::warning::sdk-packages/ not restored (set repo variable SDK_PACKAGES_URL); the zip will lack offline SDK packages"
+          fi
+
+      - name: Build plugin
+        run: ./gradlew buildPlugin
+
+      # Marketplace-grade check (COMPATIBILITY_PROBLEMS / INTERNAL_API_USAGES);
+      # fails the release before anything is published.
+      - name: Verify plugin
+        run: ./gradlew verifyPlugin
+
+      - name: Extract changelog section for release notes
+        run: |
+          awk '/^#####/{if(found) exit; found=1} found' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+          cat release-notes.md
+
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" build/distributions/*.zip \
+            --title "QwenMate $GITHUB_REF_NAME" \
+            --notes-file release-notes.md
+
+      # Requires repo secrets: PUBLISH_TOKEN (permanent Marketplace token);
+      # CERTIFICATE_CHAIN / PRIVATE_KEY / PRIVATE_KEY_PASSWORD to sign the
+      # upload. Without the signing secrets the upload goes unsigned.
+      - name: Publish to JetBrains Marketplace
+        if: github.event_name == 'workflow_dispatch' && inputs.publish_marketplace
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+        run: ./gradlew publishPlugin

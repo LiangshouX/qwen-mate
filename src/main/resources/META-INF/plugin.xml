@@ -1,12 +1,13 @@
 <idea-plugin>
     <id>com.qwenmate</id>
     <name>QwenMate</name>
-    <vendor>QwenMate Contributors</vendor>
+    <vendor email="xiaoliangshou.bit@gmail.com" url="https://github.com/LiangshouX">LiangshouX</vendor>
 
     <!-- Resource bundle for i18n -->
     <resource-bundle>messages.QwenMateBundle</resource-bundle>
 
     <description><![CDATA[
+        <h2>QwenMate - Visual GUI for Qwen Code in JetBrains IDEs</h2>
         <h2>QwenMate — Qwen Code 可视化 GUI for JetBrains IDEs</h2>
         <p>QwenMate 把 Qwen Code 搬进 JetBrains IDE：在右侧工具窗口中对话、查看代码 Diff、管理历史会话，配合编辑器右键菜单与快捷键使用。MIT 开源，源码见 <a href="https://github.com/LiangshouX/qwen-mate">GitHub</a>。</p>
         <p>QwenMate brings Qwen Code into JetBrains IDEs: chat, review diffs, and manage session history in a tool window, with editor context actions and keyboard shortcuts. Open source under the MIT license.</p>
