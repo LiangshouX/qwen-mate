@@ -96,6 +96,32 @@ test('keeps the legacy result-text fallback when no partial stream occurred', as
   assert.ok(!lines.includes('[STREAM_END]'), 'non-streamed turns keep the onComplete fallback path');
 });
 
+test('emits the runtime slash-command list from the system init message', async () => {
+  const { lines } = await captureMarkers(() => toAsyncIterable([
+    {
+      type: 'system',
+      subtype: 'init',
+      session_id: 'sess-init',
+      slash_commands: ['compress', 'resume', 'help'],
+    },
+    { type: 'result', subtype: 'success', is_error: false, result: 'ok' },
+  ]));
+
+  const marker = lines.find((line) => line.startsWith('[SLASH_COMMANDS]'));
+  assert.ok(marker, 'the runtime command list must be forwarded to Java');
+  assert.deepEqual(JSON.parse(marker.slice('[SLASH_COMMANDS]'.length)), ['compress', 'resume', 'help']);
+  assert.ok(lines.includes('[SESSION_ID] sess-init'), 'session id still forwarded from the same message');
+});
+
+test('omits the marker when the CLI reports no slash commands', async () => {
+  const { lines } = await captureMarkers(() => toAsyncIterable([
+    { type: 'system', subtype: 'init', session_id: 'sess-init' },
+    { type: 'result', subtype: 'success', is_error: false, result: 'ok' },
+  ]));
+
+  assert.ok(!lines.some((line) => line.startsWith('[SLASH_COMMANDS]')));
+});
+
 // ─── File-IPC approval flow (Node writes request, polls response) ───
 
 const PERMISSION_ENV_KEYS = [

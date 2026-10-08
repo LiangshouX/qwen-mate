@@ -3,6 +3,7 @@ package com.qwenmate.session;
 import com.qwenmate.handler.PermissionHandler;
 import com.qwenmate.permission.PermissionRequest;
 import com.qwenmate.util.JsUtils;
+import com.google.gson.Gson;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -178,17 +179,16 @@ public class SessionCallbackAdapter implements QwenMateSession.SessionCallback {
 
     @Override
     public void onSlashCommandsReceived(List<String> slashCommands) {
-        // No longer send old-format (string array) commands to the frontend.
-        // Reasons:
-        // 1. The full command list (with descriptions) was already fetched from getSlashCommands() during init.
-        // 2. The commands received here are in old format (names only, no descriptions).
-        // 3. Sending to frontend would overwrite the full command list, losing descriptions.
-        int incomingCount = slashCommands != null ? slashCommands.size() : 0;
-        LOG.debug("onSlashCommandsReceived called (old format, ignored). incoming=" + incomingCount);
-
-        if (slashCommands != null && !slashCommands.isEmpty() && !slashCommandsFetchedSupplier.getAsBoolean()) {
-            LOG.debug("Received " + incomingCount + " slash commands (old format), but keeping existing commands with descriptions");
+        if (isInactive() || slashCommands == null || slashCommands.isEmpty()) {
+            return;
         }
+        // Names only: the static registry owns descriptions, this list tells the
+        // webview which commands the running CLI actually accepts so the palette can
+        // drop the ones this mode rejects ("not supported in this mode").
+        String json = new Gson().toJson(slashCommands);
+        jsTarget.callJavaScript("updateRuntimeSlashCommands", JsUtils.escapeJs(json));
+        LOG.debug("Runtime slash commands forwarded: " + slashCommands.size()
+                          + " (static list fetched=" + slashCommandsFetchedSupplier.getAsBoolean() + ")");
     }
 
     @Override

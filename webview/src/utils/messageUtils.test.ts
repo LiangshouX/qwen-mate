@@ -938,6 +938,34 @@ describe('isCompactCommandMessage', () => {
     };
     expect(isCompactCommandMessage(msg)).toBe(false);
   });
+
+  it('detects the Qwen Code /compress command', () => {
+    const msg: QwenMateMessage = {
+      type: 'user',
+      content: '',
+      timestamp: '1',
+      raw: {
+        content: [
+          { type: 'text', text: '<command-name>/compress</command-name><command-message>compress</command-message>' },
+        ],
+      },
+    };
+    expect(isCompactCommandMessage(msg)).toBe(true);
+  });
+
+  it('detects /compress-fast and /summarize but not unrelated commands', () => {
+    const withCommand = (name: string): QwenMateMessage => ({
+      type: 'user',
+      content: '',
+      timestamp: '1',
+      raw: { content: `<command-name>${name}</command-name>` },
+    });
+
+    expect(isCompactCommandMessage(withCommand('/compress-fast'))).toBe(true);
+    expect(isCompactCommandMessage(withCommand('/summarize'))).toBe(true);
+    expect(isCompactCommandMessage(withCommand('/compressing'))).toBe(false);
+    expect(isCompactCommandMessage(withCommand('/context'))).toBe(false);
+  });
 });
 
 describe('isCompactStdoutMessage', () => {
@@ -1125,7 +1153,7 @@ describe('buildCompactNotification', () => {
     expect(result!.content).toBe('/compact 注意保留cli源码地址');
   });
 
-  it('falls back to /compact when formatCommandForDisplay returns null', () => {
+  it('falls back to the tagged command name when formatCommandForDisplay returns null', () => {
     const messages: QwenMateMessage[] = [
       {
         type: 'user',

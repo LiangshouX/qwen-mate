@@ -238,15 +238,23 @@ export function isTaskNotificationOnlyMessage(message: QwenMateMessage): boolean
 // ---------------------------------------------------------------------------
 
 /**
+ * Compaction commands recognized by the CLI. Qwen Code uses /compress
+ * (+ /compress-fast, /summarize); /compact stays for older transcripts.
+ */
+const COMPACT_COMMAND_NAMES = ['/compress', '/compress-fast', '/summarize', '/compact'];
+
+/**
  * Check if a message is a compact command message.
- * Only detects backend/history messages containing <command-name>/compact</command-name>
- * XML tags. Optimistic streaming messages (plain "/compact" text without tags) are
- * NOT detected — they render as normal user messages until the backend responds.
+ * Only detects backend/history messages containing a
+ * <command-name>&lt;compaction command&gt;</command-name> XML tag. Optimistic
+ * streaming messages (plain "/compress" text without tags) are NOT detected:
+ * they render as normal user messages until the backend responds.
  */
 export function isCompactCommandMessage(message: QwenMateMessage): boolean {
   if (message.type !== MESSAGE_TYPES.USER) return false;
   const texts = extractTextsFromRaw(message.raw);
-  return texts.some(t => t.includes('<command-name>/compact</command-name>'));
+  return texts.some(t => COMPACT_COMMAND_NAMES.some(name =>
+    t.includes(`<command-name>${name}</command-name>`)));
 }
 
 /**
@@ -351,8 +359,11 @@ export function buildCompactNotification(group: QwenMateMessage[]): QwenMateMess
   const commandMsg = group.find(m => isCompactCommandMessage(m));
   if (!commandMsg) return null;
 
-  let headerText = '/compact';
   const commandTexts = extractTextsFromRaw(commandMsg.raw);
+  // Fallback label: the command name found in the tag (Qwen Code uses /compress).
+  const taggedName = COMPACT_COMMAND_NAMES.find(name =>
+    commandTexts.some(t => t.includes(`<command-name>${name}</command-name>`)));
+  let headerText = taggedName ?? '/compress';
   for (const text of commandTexts) {
     const display = formatCommandForDisplay(text);
     if (display) {

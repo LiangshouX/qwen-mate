@@ -13,6 +13,7 @@ import {
   endStream,
   emitSessionId,
   emitUsage,
+  emitSlashCommands,
   emitMessageMarker,
   emitSendError,
 } from '../../utils/marker-protocol.js';
@@ -142,11 +143,16 @@ export async function consumeQueryStream(result, sessionId) {
   let lastUsage = null;
 
   for await (const message of result) {
-    // System message with session ID
-    if (message.type === 'system' && message.session_id && !sawSessionId) {
-      sawSessionId = true;
-      emitSessionId(message.session_id);
-      sessionId = message.session_id;
+    // System init message: session ID plus the command surface this mode exposes
+    if (message.type === 'system') {
+      if (message.session_id && !sawSessionId) {
+        sawSessionId = true;
+        emitSessionId(message.session_id);
+        sessionId = message.session_id;
+      }
+      if (Array.isArray(message.slash_commands)) {
+        emitSlashCommands(message.slash_commands);
+      }
     }
 
     // Partial/streaming messages

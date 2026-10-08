@@ -38,25 +38,99 @@ public final class SlashCommandRegistry {
     public record SkillScanDir(String path, String scope) {
     }
 
-    // Built-in commands (GUI-relevant only; CLI-only and frontend-local ones are excluded)
-    // Includes commands that work via SDK or are handled by frontend locally
-    // 'local-jsx' commands (TUI UI) that have GUI equivalents are included
-    // Bundled skills from CLI that are userInvocable and work in GUI environment
+    // Built-in commands mirroring the Qwen Code CLI command surface
+    // (docs: users/features/commands). Descriptions are the official English ones
+    // so the palette matches the CLI. Commands that the plugin intercepts locally
+    // (source "gui") are executed by the webview instead of the CLI.
+    // The runtime list pushed by the CLI init message prunes entries that the
+    // headless/SDK mode does not register; this table is the static fallback used
+    // before the first turn and for commands the CLI does not report.
     public static final List<SlashCommand> QWEN_BUILTIN = List.of(
-            new SlashCommand("/compact", "Summarize conversation to free context", "builtin"),
-            new SlashCommand("/context", "Visualize current context usage as a colored grid", "builtin"),
-            new SlashCommand("/goal", "Keep working across turns until the goal condition is met", "builtin"),
-            new SlashCommand("/init", "Initialize a new QWEN.md file with codebase documentation", "builtin"),
-            new SlashCommand("/mcp", "List configured MCP servers and their connection status", "builtin"),
-            new SlashCommand("/plan", "Switch to plan mode", "builtin"),
-            new SlashCommand("/resume", "Resume a previous conversation", "builtin"),
-            new SlashCommand("/review", "Review a pull request", "builtin"),
-            // Bundled skills (userInvocable, no ANT-only restriction)
-            new SlashCommand("/batch", "Execute large-scale changes in parallel across isolated worktrees", "bundled"),
-            new SlashCommand("/debug", "Enable debug logging and diagnose session issues", "bundled"),
-            new SlashCommand("/loop", "Run a prompt or command on a recurring interval", "bundled"),
-            new SlashCommand("/simplify", "Review changed code for reuse, quality, and efficiency", "bundled"),
-            new SlashCommand("/update-config", "Configure settings.json (hooks, permissions, env vars)", "bundled")
+            // Session & project management
+            new SlashCommand("/init", "Analyze the current directory and create an initial context file", "builtin"),
+            new SlashCommand("/summary", "Generate a project summary from conversation history", "builtin"),
+            new SlashCommand("/compress", "Replace chat history with a summary to save tokens", "builtin"),
+            new SlashCommand("/compress-fast", "Strip old tool output and thinking to free context", "builtin"),
+            new SlashCommand("/recap", "Generate a one-line summary of the current session", "builtin"),
+            new SlashCommand("/restore", "Restore project files to a checkpoint", "builtin"),
+            new SlashCommand("/delete", "Delete a previous session", "builtin"),
+            new SlashCommand("/branch", "Branch the current conversation into a new session", "builtin"),
+            new SlashCommand("/fork", "Spawn a background agent that inherits the full conversation", "builtin"),
+            new SlashCommand("/rewind", "Rewind the conversation to an earlier turn", "builtin"),
+            new SlashCommand("/export", "Export session history to a file", "builtin"),
+            new SlashCommand("/rename", "Rename or tag the current session", "builtin"),
+            // Handled by the plugin UI (history view / plan mode / context dialog)
+            new SlashCommand("/resume", "Resume a previous conversation", "gui"),
+            new SlashCommand("/continue", "Resume the most recent conversation", "gui"),
+            new SlashCommand("/plan", "Toggle plan mode", "gui"),
+            new SlashCommand("/context", "Show context window usage breakdown", "gui"),
+            // Interface & workspace control
+            new SlashCommand("/clear", "Clear conversation history and free context", "gui"),
+            new SlashCommand("/history", "Control history display preferences", "builtin"),
+            new SlashCommand("/diff", "Open the interactive diff viewer", "builtin"),
+            new SlashCommand("/theme", "Change the visual theme", "builtin"),
+            new SlashCommand("/vim", "Toggle Vim editing mode for the input area", "builtin"),
+            new SlashCommand("/voice", "Toggle voice dictation", "builtin"),
+            new SlashCommand("/directory", "Manage the multi-directory workspace", "builtin"),
+            new SlashCommand("/cd", "Move the session to a new working directory", "builtin"),
+            new SlashCommand("/editor", "Open a dialog to choose a supported editor", "builtin"),
+            new SlashCommand("/statusline", "Configure the status line", "builtin"),
+            new SlashCommand("/terminal-setup", "Configure terminal multiline-input shortcuts", "builtin"),
+            // Language
+            new SlashCommand("/language", "View or change language settings", "builtin"),
+            // Tools & model management
+            new SlashCommand("/mcp", "List configured MCP servers and tools", "builtin"),
+            new SlashCommand("/import-config", "Import MCP servers from Claude configuration", "builtin"),
+            new SlashCommand("/tools", "Show the list of currently available tools", "builtin"),
+            new SlashCommand("/skills", "Open the Skills panel to browse and start skills", "builtin"),
+            new SlashCommand("/learn", "Create a reusable project skill from a file, URL or text", "builtin"),
+            new SlashCommand("/curator", "Inspect, pin, archive, or restore inactive auto-skills", "builtin"),
+            new SlashCommand("/approval-mode", "Change the tool approval mode", "builtin"),
+            new SlashCommand("/peers", "View held peer messages and trusted controllers", "builtin"),
+            new SlashCommand("/model", "Switch the session model", "builtin"),
+            new SlashCommand("/effort", "Set reasoning effort for thinking models", "builtin"),
+            new SlashCommand("/output-style", "Select an output style", "builtin"),
+            new SlashCommand("/extensions", "Manage extensions", "builtin"),
+            new SlashCommand("/memory", "Open the Memory Manager", "builtin"),
+            new SlashCommand("/remember", "Save a persistent memory entry", "builtin"),
+            new SlashCommand("/forget", "Remove matching entries from auto-memory", "builtin"),
+            new SlashCommand("/dream", "Run auto-memory consolidation", "builtin"),
+            new SlashCommand("/hooks", "Manage Qwen Code hooks", "builtin"),
+            new SlashCommand("/reload-plugins", "Reload extension changes from disk", "builtin"),
+            new SlashCommand("/permissions", "Manage permission rules", "builtin"),
+            new SlashCommand("/agents", "Manage subagents", "builtin"),
+            new SlashCommand("/arena", "Manage Arena sessions", "builtin"),
+            new SlashCommand("/goal", "Keep working until a validator confirms the objective", "builtin"),
+            new SlashCommand("/tasks", "List background tasks", "builtin"),
+            new SlashCommand("/workflows", "Inspect workflow runs", "builtin"),
+            new SlashCommand("/lsp", "Show LSP server status", "builtin"),
+            new SlashCommand("/trust", "Manage folder trust settings", "builtin"),
+            // Bundled skills (user-invocable, work in the GUI environment)
+            new SlashCommand("/review", "Multi-agent code review", "bundled"),
+            new SlashCommand("/coordinate", "Coordinate a read-only worker and a worktree writer", "bundled"),
+            new SlashCommand("/loop", "Run a prompt on a recurring schedule", "bundled"),
+            new SlashCommand("/goal-draft", "Turn a vague intent into a verifiable /goal objective", "bundled"),
+            new SlashCommand("/simplify", "Review recent changes and apply safe cleanup edits", "bundled"),
+            new SlashCommand("/qc-helper", "Answer questions about Qwen Code usage and configuration", "bundled"),
+            new SlashCommand("/batch", "Execute batch operations on multiple files in parallel", "bundled"),
+            // Side question & second opinion
+            new SlashCommand("/btw", "Ask a quick side question without interrupting the conversation", "builtin"),
+            new SlashCommand("/advisor", "Run an independent read-only review and return a second opinion", "builtin"),
+            // Info, settings & help
+            new SlashCommand("/help", "Show help for available commands", "builtin"),
+            new SlashCommand("/status", "Show version info and paths", "builtin"),
+            new SlashCommand("/stats", "Open the usage statistics dashboard", "builtin"),
+            new SlashCommand("/settings", "Open the settings editor", "builtin"),
+            new SlashCommand("/config", "Get or set any config value via dotted-path keys", "builtin"),
+            new SlashCommand("/auth", "Change authentication method", "builtin"),
+            new SlashCommand("/doctor", "Run installation and environment diagnostics", "builtin"),
+            new SlashCommand("/docs", "Open the full Qwen Code documentation", "builtin"),
+            new SlashCommand("/ide", "Manage IDE integration", "builtin"),
+            new SlashCommand("/insight", "Generate programming insights from chat history", "builtin"),
+            new SlashCommand("/setup-github", "Set up GitHub Actions", "builtin"),
+            new SlashCommand("/bug", "File an issue about Qwen Code", "builtin"),
+            new SlashCommand("/copy", "Copy reply, code, LaTeX or Mermaid to the clipboard", "builtin"),
+            new SlashCommand("/quit", "Exit Qwen Code immediately", "builtin")
     );
 
     /**

@@ -577,6 +577,13 @@ if (typeof window !== 'undefined' && !window.updateSlashCommands) {
   };
 }
 
+// Pre-register updateRuntimeSlashCommands (CLI runtime command list) before React initializes
+if (typeof window !== 'undefined' && !window.updateRuntimeSlashCommands) {
+  window.updateRuntimeSlashCommands = (json: string) => {
+    window.__pendingRuntimeSlashCommands = json;
+  };
+}
+
 // Pre-register updateDollarCommands to handle backend calls that arrive before React initializes
 if (typeof window !== 'undefined' && !window.updateDollarCommands) {
   window.updateDollarCommands = (json: string) => {

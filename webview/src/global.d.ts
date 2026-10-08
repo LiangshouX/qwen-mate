@@ -450,6 +450,16 @@ interface Window {
   updateSlashCommands?: (json: string) => void;
 
   /**
+   * Runtime slash-command names the running CLI registered for this mode.
+   * Payload: JSON array of names without the leading "/" (e.g. ["compress", ...]).
+   * Used to prune static suggestions the headless mode rejects.
+   */
+  updateRuntimeSlashCommands?: (json: string) => void;
+
+  /** Pending runtime slash-command payload before provider initialization */
+  __pendingRuntimeSlashCommands?: string;
+
+  /**
    * Update dollar commands list (for $ autocomplete)
    */
   updateDollarCommands?: (json: string) => void;

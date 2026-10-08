@@ -75,6 +75,9 @@ public class QwenMessageHandler implements MessageCallback {
                 case "thread_id":
                     handleSessionId(content);
                     break;
+                case "slash_commands":
+                    handleSlashCommands(content);
+                    break;
                 case "stream_start":
                     handleStreamStart();
                     break;
@@ -296,6 +299,40 @@ public class QwenMessageHandler implements MessageCallback {
             state.setSessionId(id.trim());
             callbackHandler.notifySessionIdReceived(id.trim());
             LOG.info("Captured Qwen session ID: " + id.trim());
+        }
+    }
+
+    /**
+     * Runtime slash-command names the CLI registered for the current mode.
+     * Forwarded so the suggestion palette can drop commands this mode rejects
+     * ("not supported in this mode") and surface ones the static table missed.
+     */
+    private void handleSlashCommands(String jsonContent) {
+        if (jsonContent == null || jsonContent.isEmpty()) {
+            return;
+        }
+        try {
+            JsonArray names = gson.fromJson(jsonContent, JsonArray.class);
+            if (names == null || names.size() == 0) {
+                return;
+            }
+            List<String> commands = new ArrayList<>(names.size());
+            for (JsonElement element : names) {
+                if (element.isJsonPrimitive()) {
+                    String name = element.getAsString();
+                    if (name != null && !name.isEmpty()) {
+                        commands.add(name);
+                    }
+                }
+            }
+            if (commands.isEmpty()) {
+                return;
+            }
+            state.setSlashCommands(commands);
+            callbackHandler.notifySlashCommandsReceived(commands);
+            LOG.debug("Qwen runtime slash commands: " + commands.size());
+        } catch (Exception e) {
+            LOG.debug("Qwen slash command parse skipped: " + e.getMessage());
         }
     }
 

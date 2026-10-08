@@ -23,6 +23,16 @@ export function emitUsage(usage) {
   }
 }
 
+/**
+ * Runtime slash-command names registered by the CLI for the current mode.
+ * Names only, no leading "/" — the plugin's static registry carries descriptions.
+ */
+export function emitSlashCommands(commands) {
+  if (Array.isArray(commands) && commands.length > 0) {
+    console.log(`[SLASH_COMMANDS] ${JSON.stringify(commands)}`);
+  }
+}
+
 export function emitMessageMarker(messageObject) {
   console.log(`[MESSAGE] ${JSON.stringify(messageObject)}`);
 }

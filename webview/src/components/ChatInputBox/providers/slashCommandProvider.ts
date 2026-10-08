@@ -4,7 +4,9 @@ import i18n from '../../../i18n/config';
 import { debugError, debugLog, debugWarn } from '../../../utils/debug.js';
 
 /**
- * Local command list (commands to be filtered out)
+ * Commands never suggested because the Qwen CLI does not have them (Claude Code
+ * legacy names). Every Qwen Code command stays listed — including TUI-only ones
+ * such as /theme, which the CLI itself answers with "not supported in this mode".
  */
 const HIDDEN_COMMANDS = new Set([
   '/cost',
@@ -12,7 +14,6 @@ const HIDDEN_COMMANDS = new Set([
   '/release-notes',
   '/security-review',
   '/todo',
-  '/doctor',
 ]);
 
 /**
@@ -20,6 +21,13 @@ const HIDDEN_COMMANDS = new Set([
  * These commands are handled directly on the frontend, no need to send to SDK
  */
 const NEW_SESSION_COMMAND_ALIASES = new Set(['/clear', '/new', '/reset']);
+
+/**
+ * Commands the plugin executes itself instead of forwarding to the CLI
+ * (see useMessageSender handleSubmit: resume→history, plan→plan mode, context→dialog).
+ * Kept in the palette even when the CLI runtime list does not contain them.
+ */
+const GUI_HANDLED_COMMANDS = new Set(['/clear', '/resume', '/continue', '/plan', '/context']);
 
 function getLocalNewSessionCommands(): CommandItem[] {
   return [{
@@ -38,6 +46,12 @@ function getLocalNewSessionCommands(): CommandItem[] {
 type LoadingState = 'idle' | 'loading' | 'success' | 'failed';
 
 let cachedSdkCommands: CommandItem[] = [];
+/**
+ * Command names the running CLI registered for this mode (payload has no leading
+ * "/"). null until the first turn delivers one — until then the full static
+ * table is suggested, so commands like /compress are pickable before any turn.
+ */
+let runtimeCommandNames: Set<string> | null = null;
 let loadingState: LoadingState = 'idle';
 let lastRefreshTime = 0;
 let callbackRegistered = false;
@@ -53,6 +67,8 @@ const MAX_RETRY_COUNT = 3;
 
 export function resetSlashCommandsState() {
   cachedSdkCommands = [];
+  // A new session may run in another cwd / CLI build; wait for its own runtime list.
+  runtimeCommandNames = null;
   loadingState = 'idle';
   lastRefreshTime = 0;
   retryCount = 0;
@@ -154,6 +170,28 @@ export function setupSlashCommandsCallback() {
   };
   callbackRegistered = true;
   debugLog('[SlashCommand] Callback registered');
+
+  window.updateRuntimeSlashCommands = (json: string) => {
+    try {
+      const parsed: unknown = JSON.parse(json);
+      if (!Array.isArray(parsed)) return;
+      const names = parsed
+        .filter((name): name is string => typeof name === 'string' && name.length > 0)
+        .map((name) => (name.startsWith('/') ? name : `/${name}`));
+      if (names.length > 0) {
+        runtimeCommandNames = new Set(names);
+        debugLog('[SlashCommand] Runtime list applied: ' + names.length + ' commands');
+      }
+    } catch (error) {
+      debugWarn('[SlashCommand] Failed to parse runtime commands:', error);
+    }
+  };
+
+  if (window.__pendingRuntimeSlashCommands) {
+    const pending = window.__pendingRuntimeSlashCommands;
+    window.__pendingRuntimeSlashCommands = undefined;
+    window.updateRuntimeSlashCommands(pending);
+  }
 
   if (window.__pendingSlashCommands) {
     debugLog('[SlashCommand] Processing pending commands');
@@ -268,8 +306,32 @@ function formatCommandDescription(description: string, source?: string): string 
   return `${description} ${suffix}`;
 }
 
+/**
+ * Calibrate the static/scanned list against the CLI runtime list: keep the
+ * GUI-handled commands, drop commands this mode rejects, and surface runtime
+ * commands the static table does not know about.
+ */
+function applyRuntimeCalibration(commands: CommandItem[]): CommandItem[] {
+  const runtime = runtimeCommandNames;
+  if (!runtime) {
+    return commands;
+  }
+  const kept = commands.filter(cmd => GUI_HANDLED_COMMANDS.has(cmd.label) || runtime.has(cmd.label));
+  const known = new Set(kept.map(cmd => cmd.label));
+  const extras = [...runtime]
+    .filter(label => !known.has(label) && !isHiddenCommand(label))
+    .map(label => ({
+      id: `runtime${label.replace(/^\//, '')}`,
+      label,
+      description: '',
+      category: getCategoryFromCommand(label),
+      contentType: 'command' as const,
+    }));
+  return [...kept, ...extras];
+}
+
 function filterCommands(commands: CommandItem[], query: string): CommandItem[] {
-  const visibleCommands = commands.filter(cmd => !isHiddenCommand(cmd.label));
+  const visibleCommands = applyRuntimeCalibration(commands).filter(cmd => !isHiddenCommand(cmd.label));
   const localCommands = getLocalNewSessionCommands();
   const merged = [...localCommands, ...visibleCommands];
 

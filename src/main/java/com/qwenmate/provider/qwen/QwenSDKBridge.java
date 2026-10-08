@@ -191,6 +191,14 @@ public class QwenSDKBridge extends BaseSDKBridge {
             }
             return;
         }
+        if (line.startsWith("[SLASH_COMMANDS]")) {
+            // Runtime command names the CLI registered for this mode (JSON array, no "/" prefix).
+            String payload = line.substring("[SLASH_COMMANDS]".length()).trim();
+            if (!payload.isEmpty()) {
+                callback.onMessage("slash_commands", payload);
+            }
+            return;
+        }
         if (line.startsWith("[MESSAGE]")) {
             String jsonStr = line.substring("[MESSAGE]".length()).trim();
             try {
