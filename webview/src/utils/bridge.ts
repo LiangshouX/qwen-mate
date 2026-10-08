@@ -2,7 +2,7 @@ import { isJavaFqcnCandidate, normalizeFileNavigationTarget, parseFileLinkTarget
 
 const BRIDGE_UNAVAILABLE_WARNED = new Set<string>();
 /** Canonical GitHub repository URL, used by star/promo banners across the UI. */
-export const GITHUB_REPO_URL = 'https://github.com/zhukunpenglinyutong/qwen-mate';
+export const GITHUB_REPO_URL = 'https://github.com/LiangshouX/qwen-mate';
 
 const SAFE_BROWSER_PROTOCOLS = /^(https?|mailto):/i;
 

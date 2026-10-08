@@ -78,7 +78,7 @@
     "sdkStatusLoading": "正在检查 SDK 状态...",
     "sdkStatusUnavailable": "无法检查 SDK 状态。",
     "retrySdkStatus": "重试",
-    "openSourceBanner": "本项目保证100%开源和免费（谨防盗版项目）",
+    "openSourceBanner": "本项目完全开源免费，仅在官方仓库发布",
     "openSourceBannerStar": "点个 Star",
     "openSourceBannerStarAria": "前往 GitHub 点 Star",
     "goInstallSdk": "前往安装",

@@ -78,7 +78,7 @@
     "sdkStatusLoading": "Checking SDK status...",
     "sdkStatusUnavailable": "無法檢查 SDK 狀態。",
     "retrySdkStatus": "重試",
-    "openSourceBanner": "本專案保證100%開源和免費（謹防盜版項目）",
+    "openSourceBanner": "本專案完全開源免費，僅在官方倉庫發布",
     "openSourceBannerStar": "點個 Star",
     "openSourceBannerStarAria": "前往 GitHub 點 Star",
     "goInstallSdk": "前往安裝",

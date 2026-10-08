@@ -78,7 +78,7 @@
     "sdkStatusLoading": "Verificando status do SDK...",
     "sdkStatusUnavailable": "Não foi possível verificar o status do SDK.",
     "retrySdkStatus": "Tentar novamente",
-    "openSourceBanner": "Este projeto é garantidamente 100% open source e gratuito (cuidado com projetos piratas)",
+    "openSourceBanner": "Projeto totalmente open source e gratuito, publicado apenas no repositório oficial",
     "openSourceBannerStar": "Star",
     "openSourceBannerStarAria": "Abrir o repositório no GitHub e dar uma estrela",
     "goInstallSdk": "Ir para Instalação",
