@@ -1,5 +1,7 @@
 package com.qwenmate.action.editor;
 
+import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.ui.Messages;
 import com.qwenmate.i18n.QwenMateBundle;
 import com.qwenmate.ui.toolwindow.QwenMateChatWindow;
 import com.qwenmate.ui.toolwindow.QwenMateToolWindow;
@@ -82,7 +84,7 @@ public class SendSelectionToTerminalAction extends AnAction implements DumbAware
                 .nonBlocking(() -> {
                     return buildSelectionReference(e);
                 })
-                .finishOnUiThread(com.intellij.openapi.application.ModalityState.defaultModalityState(), selectionInfo -> {
+                .finishOnUiThread(ModalityState.defaultModalityState(), selectionInfo -> {
                     if (!selectionInfo.isSuccess()) {
                         SelectionReferenceFailureHandler.showBuildFailure(
                                 selectionInfo,
@@ -182,7 +184,7 @@ public class SendSelectionToTerminalAction extends AnAction implements DumbAware
         LOG.error(message);
         if (project != null) {
             ApplicationManager.getApplication().invokeLater(() -> {
-                com.intellij.openapi.ui.Messages.showErrorDialog(project, message, QwenMateBundle.message("dialog.error.title"));
+                Messages.showErrorDialog(project, message, QwenMateBundle.message("dialog.error.title"));
             });
         }
     }
@@ -194,7 +196,7 @@ public class SendSelectionToTerminalAction extends AnAction implements DumbAware
         LOG.info(message);
         if (project != null) {
             ApplicationManager.getApplication().invokeLater(() -> {
-                com.intellij.openapi.ui.Messages.showInfoMessage(project, message, QwenMateBundle.message("dialog.info.title"));
+                Messages.showInfoMessage(project, message, QwenMateBundle.message("dialog.info.title"));
             });
         }
     }

@@ -1,6 +1,7 @@
 package com.qwenmate.settings;
 
 import com.google.gson.Gson;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 
 import java.io.IOException;
@@ -50,8 +51,8 @@ public class ProjectPromptManager extends AbstractPromptManager {
         Path dir = getStoragePath().getParent();
         Path filePath = getStoragePath();
 
-        com.intellij.openapi.diagnostic.Logger LOG =
-            com.intellij.openapi.diagnostic.Logger.getInstance(ProjectPromptManager.class);
+        Logger LOG =
+            Logger.getInstance(ProjectPromptManager.class);
 
         LOG.warn("[ProjectPromptManager] Ensuring directory exists: " + dir);
         LOG.warn("[ProjectPromptManager] Target file path: " + filePath);

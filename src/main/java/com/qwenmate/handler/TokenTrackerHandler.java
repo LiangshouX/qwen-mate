@@ -1,5 +1,6 @@
 package com.qwenmate.handler;
 
+import com.google.gson.JsonElement;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.core.HandlerContext;
 import com.qwenmate.util.PlatformUtils;
@@ -194,7 +195,7 @@ public class TokenTrackerHandler {
                     .uri(URI.create("http://127.0.0.1:" + port + path))
                     .timeout(TT_PROXY_TIMEOUT);
             if (payload.has("headers") && payload.get("headers").isJsonObject()) {
-                for (Map.Entry<String, com.google.gson.JsonElement> entry
+                for (Map.Entry<String, JsonElement> entry
                         : payload.getAsJsonObject("headers").entrySet()) {
                     String name = entry.getKey();
                     if (isRestrictedHeader(name) || entry.getValue().isJsonNull()) {

@@ -1,5 +1,6 @@
 package com.qwenmate.ui;
 
+import java.awt.event.ActionListener;
 import org.junit.Assert;
 import org.junit.Test;
 import org.cef.browser.CefBrowser;
@@ -325,7 +326,7 @@ public class WebviewInitializerTest {
     private static void fireTimer(Timer timer) {
         Assert.assertNotNull(timer);
         timer.stop();
-        for (java.awt.event.ActionListener listener : timer.getActionListeners()) {
+        for (ActionListener listener : timer.getActionListeners()) {
             listener.actionPerformed(new ActionEvent(timer, ActionEvent.ACTION_PERFORMED, "test"));
         }
     }

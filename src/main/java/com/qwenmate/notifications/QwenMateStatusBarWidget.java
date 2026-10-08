@@ -1,5 +1,6 @@
 package com.qwenmate.notifications;
 
+import com.intellij.util.Consumer;
 import com.qwenmate.i18n.QwenMateBundle;
 import com.qwenmate.settings.QwenMateSettingsService;
 import com.intellij.openapi.Disposable;
@@ -65,7 +66,7 @@ public class QwenMateStatusBarWidget implements CustomStatusBarWidget, StatusBar
 
             @Nullable
             @Override
-            public com.intellij.util.Consumer<MouseEvent> getClickConsumer() {
+            public Consumer<MouseEvent> getClickConsumer() {
                 return null;
             }
         };

@@ -1,9 +1,13 @@
 package com.qwenmate.handler;
 
 import com.qwenmate.handler.core.HandlerContext;
+import com.qwenmate.permission.PermissionManager;
+import com.qwenmate.permission.PermissionRequest;
 import com.qwenmate.permission.PermissionService;
 import com.qwenmate.settings.QwenMateSettingsService;
 import com.google.gson.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -484,16 +488,16 @@ public class PermissionHandlerTest {
 
     @Test
     public void legacyTimeoutCannotResolveReplacementInPermissionManager() {
-        com.qwenmate.permission.PermissionManager manager = new com.qwenmate.permission.PermissionManager();
-        com.qwenmate.permission.PermissionRequest old = manager.createRequest("reused", "Bash", Map.of(), null, null);
-        com.qwenmate.permission.PermissionRequest current = manager.createRequest("reused", "Bash", Map.of(), null, null);
+        PermissionManager manager = new PermissionManager();
+        PermissionRequest old = manager.createRequest("reused", "Bash", Map.of(), null, null);
+        PermissionRequest current = manager.createRequest("reused", "Bash", Map.of(), null, null);
 
         manager.handlePermissionDecision(old, false, false, "Timed out");
 
         assertTrue(old.getResultFuture().isDone());
         assertFalse(current.getResultFuture().isDone());
         manager.handlePermissionDecision(current, true, true, "");
-        assertEquals(com.qwenmate.permission.PermissionRequest.PermissionResult.Behavior.ALLOW,
+        assertEquals(PermissionRequest.PermissionResult.Behavior.ALLOW,
                 current.getResultFuture().join().getBehavior());
         assertTrue(manager.createRequest("next", "Bash", Map.of(), null, null).getResultFuture().isDone());
     }
@@ -503,8 +507,8 @@ public class PermissionHandlerTest {
         FakeSafetyNetScheduler scheduler = new FakeSafetyNetScheduler();
         PermissionHandler configuredHandler = new PermissionHandler(contextStub(), scheduler, new FakeEdtDispatcher(),
                 new FakeAskUserQuestionVisualNotifier(), new FakeAskUserQuestionSoundNotifier());
-        com.qwenmate.permission.PermissionRequest request =
-                new com.qwenmate.permission.PermissionRequest("legacy", "Bash", Map.of(), null, null);
+        PermissionRequest request =
+                new PermissionRequest("legacy", "Bash", Map.of(), null, null);
         configuredHandler.showPermissionDialog(request);
         assertNotNull(findScriptContaining("showPermissionDialog"));
         configuredHandler.handle("permission_decision",
@@ -697,7 +701,7 @@ public class PermissionHandlerTest {
     }
 
     private static class RecordingJsCallback implements HandlerContext.JsCallback {
-        private final java.util.List<String> executedScripts = new java.util.ArrayList<>();
+        private final List<String> executedScripts = new ArrayList<>();
 
         @Override
         public void callJavaScript(String functionName, String... args) {

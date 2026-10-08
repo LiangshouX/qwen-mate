@@ -1,10 +1,12 @@
 package com.qwenmate.ui.toolwindow;
 
+import com.intellij.ui.jcef.JBCefOSRHandlerFactory;
 import com.qwenmate.action.SendShortcutSync;
 import com.qwenmate.handler.core.HandlerContext;
 import com.qwenmate.handler.history.HistoryHandler;
 import com.qwenmate.handler.core.MessageDispatcher;
 import com.qwenmate.handler.PermissionHandler;
+import com.qwenmate.notifications.QwenMateNotifier;
 import com.qwenmate.permission.PermissionService;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
 import com.qwenmate.provider.common.DaemonBridge;
@@ -40,6 +42,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.util.Alarm;
+import java.util.regex.Pattern;
 import org.cef.browser.CefBrowser;
 
 import javax.swing.*;
@@ -224,7 +227,7 @@ public class QwenMateChatWindow {
             }
         });
 
-        this.mainPanel.setBackground(com.qwenmate.util.ThemeConfigService.getBackgroundColor());
+        this.mainPanel.setBackground(ThemeConfigService.getBackgroundColor());
         this.mainPanel.addHierarchyListener(surfaceRefreshHierarchyListener);
 
         this.webviewEventQueue = new WebviewEventQueue<JBCefBrowser>(
@@ -396,7 +399,7 @@ public class QwenMateChatWindow {
                 JBCefBrowser currentBrowser = browser;
                 if (currentBrowser != null) {
                     try {
-                        java.awt.Component browserComp = currentBrowser.getComponent();
+                        Component browserComp = currentBrowser.getComponent();
                         if (browserComp != null) {
                             browserComp.setBackground(bgColor);
                         }
@@ -2115,7 +2118,7 @@ public class QwenMateChatWindow {
             return false;
         }
         try {
-            org.cef.browser.CefBrowser cefBrowser = targetBrowser.getCefBrowser();
+            CefBrowser cefBrowser = targetBrowser.getCefBrowser();
             cefBrowser.executeJavaScript(jsCode, cefBrowser.getURL(), 0);
             return true;
         } catch (Exception | LinkageError e) {
@@ -2126,8 +2129,8 @@ public class QwenMateChatWindow {
 
     // ==================== JavaScript Bridge ====================
 
-    private static final java.util.regex.Pattern SAFE_JS_FUNCTION_NAME =
-            java.util.regex.Pattern.compile("^[a-zA-Z_$][a-zA-Z0-9_$.]*$");
+    private static final Pattern SAFE_JS_FUNCTION_NAME =
+            Pattern.compile("^[a-zA-Z_$][a-zA-Z0-9_$.]*$");
 
     boolean callJavaScript(String functionName, String... args) {
         if (functionName == null || !SAFE_JS_FUNCTION_NAME.matcher(functionName).matches()) {
@@ -2611,10 +2614,10 @@ public class QwenMateChatWindow {
             return;
         }
         if ("qwen".equals(session.getProvider()) && session.getError() == null) {
-            com.qwenmate.notifications.QwenMateNotifier.showSuccess(
+            QwenMateNotifier.showSuccess(
                 project,
-                com.qwenmate.notifications.QwenMateNotifier.buildTitleFromSession(session),
-                com.qwenmate.notifications.QwenMateNotifier.buildPreviewFromSession(session, "Task completed"));
+                QwenMateNotifier.buildTitleFromSession(session),
+                QwenMateNotifier.buildPreviewFromSession(session, "Task completed"));
         }
     }
 
@@ -2634,7 +2637,7 @@ public class QwenMateChatWindow {
             callJavaScript("onPermissionDenied");
             callJavaScript("onStreamEnd");
             callJavaScript("showLoading", "false");
-            com.qwenmate.notifications.QwenMateNotifier.clearStatus(project);
+            QwenMateNotifier.clearStatus(project);
         }));
     }
 
@@ -2896,7 +2899,7 @@ public class QwenMateChatWindow {
             }
 
             @Override
-            public com.intellij.ui.jcef.JBCefOSRHandlerFactory getOsrHandlerFactory() {
+            public JBCefOSRHandlerFactory getOsrHandlerFactory() {
                 return surfaceFrameFence.createHandlerFactory();
             }
 

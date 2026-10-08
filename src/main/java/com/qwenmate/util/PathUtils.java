@@ -3,7 +3,10 @@ package com.qwenmate.util;
 import com.qwenmate.model.PathCheckResult;
 
 import java.io.File;
+import java.nio.file.Paths;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +68,7 @@ public class PathUtils {
             return normalizeWslUncLexically(path);
         }
         try {
-            return java.nio.file.Paths.get(path).toAbsolutePath().normalize().toString();
+            return Paths.get(path).toAbsolutePath().normalize().toString();
         } catch (Exception e) {
             return path;
         }
@@ -93,7 +96,7 @@ public class PathUtils {
             return path;
         }
         try {
-            return java.nio.file.Paths.get(path).toRealPath().toString();
+            return Paths.get(path).toRealPath().toString();
         } catch (Exception e) {
             return path;
         }
@@ -181,7 +184,7 @@ public class PathUtils {
     private static String normalizeWslUncLexically(String path) {
         String p = path.replace('\\', '/');
         String[] segments = p.substring(2).split("/");
-        java.util.Deque<String> stack = new java.util.ArrayDeque<>();
+        Deque<String> stack = new ArrayDeque<>();
         for (String seg : segments) {
             if (seg.isEmpty() || ".".equals(seg)) {
                 continue;

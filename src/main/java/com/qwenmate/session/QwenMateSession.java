@@ -1,5 +1,6 @@
 package com.qwenmate.session;
 
+import com.qwenmate.config.TimeoutConfig;
 import com.qwenmate.permission.PermissionManager;
 import com.qwenmate.permission.PermissionRequest;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Session management for QwenMate conversations.
@@ -35,13 +37,13 @@ public class QwenMateSession {
     private volatile boolean manuallyInterrupted = false;
 
     // Session state manager
-    private final com.qwenmate.session.SessionState state;
+    private final SessionState state;
 
     // Message processors
-    private final com.qwenmate.session.MessageParser messageParser;
+    private final MessageParser messageParser;
 
     // Context collector
-    private final com.qwenmate.session.EditorContextCollector contextCollector;
+    private final EditorContextCollector contextCollector;
     private final SessionContextService contextService;
     private final QwenSDKBridge qwenSDKBridge;
     private final SessionProviderRouter providerRouter;
@@ -181,9 +183,9 @@ public class QwenMateSession {
         this.project = project;
 
         // Initialize managers
-        this.state = new com.qwenmate.session.SessionState();
-        this.messageParser = new com.qwenmate.session.MessageParser();
-        this.contextCollector = new com.qwenmate.session.EditorContextCollector(project);
+        this.state = new SessionState();
+        this.messageParser = new MessageParser();
+        this.contextCollector = new EditorContextCollector(project);
         this.callbackFacade = new SessionCallbackFacade(project);
         this.contextService = new SessionContextService(project);
         this.qwenSDKBridge = qwenSDKBridge;
@@ -223,7 +225,7 @@ public class QwenMateSession {
         callbackFacade.setCallback(callback);
     }
 
-    public com.qwenmate.session.EditorContextCollector getContextCollector() {
+    public EditorContextCollector getContextCollector() {
         return contextCollector;
     }
 
@@ -372,12 +374,12 @@ public class QwenMateSession {
                         callbackFacade.notifyStateChange(state.isBusy(), state.isLoading(), state.getError());
                         throw new RuntimeException("Failed to launch: " + e.getMessage(), e);
                     }
-                }).orTimeout(com.qwenmate.config.TimeoutConfig.QUICK_OPERATION_TIMEOUT,
-                        com.qwenmate.config.TimeoutConfig.QUICK_OPERATION_UNIT)
+                }).orTimeout(TimeoutConfig.QUICK_OPERATION_TIMEOUT,
+                        TimeoutConfig.QUICK_OPERATION_UNIT)
                 .exceptionally(ex -> {
-                    if (ex instanceof java.util.concurrent.TimeoutException) {
+                    if (ex instanceof TimeoutException) {
                         String timeoutMsg = "Channel launch timed out (" +
-                                com.qwenmate.config.TimeoutConfig.QUICK_OPERATION_TIMEOUT + "s), please retry";
+                                TimeoutConfig.QUICK_OPERATION_TIMEOUT + "s), please retry";
                         LOG.warn(timeoutMsg);
                         state.setError(timeoutMsg);
                         state.setChannelId(null);

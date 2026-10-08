@@ -1,6 +1,7 @@
 package com.qwenmate.ui.detached;
 
 import com.qwenmate.i18n.QwenMateBundle;
+import com.qwenmate.settings.TabStateService;
 import com.qwenmate.ui.toolwindow.QwenMateChatWindow;
 import com.qwenmate.ui.toolwindow.QwenMateToolWindow;
 import com.intellij.ide.ui.LafManager;
@@ -19,6 +20,7 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
+import java.net.URL;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -86,7 +88,7 @@ public class DetachedChatFrame extends JFrame {
     private void setupUI() {
         // Set window icon (use PNG since ImageIcon doesn't support SVG)
         try {
-            java.net.URL iconUrl = getClass().getResource("/icons/logo-16.png");
+            URL iconUrl = getClass().getResource("/icons/logo-16.png");
             if (iconUrl != null) {
                 setIconImage(new ImageIcon(iconUrl).getImage());
             }
@@ -327,7 +329,7 @@ public class DetachedChatFrame extends JFrame {
                     .getToolWindow(QwenMateToolWindow.TOOL_WINDOW_ID);
             if (toolWindow != null) {
                 int actualCount = toolWindow.getContentManager().getContentCount();
-                com.qwenmate.settings.TabStateService.getInstance(this.project)
+                TabStateService.getInstance(this.project)
                         .saveTabCount(actualCount);
             }
         } catch (Exception e) {

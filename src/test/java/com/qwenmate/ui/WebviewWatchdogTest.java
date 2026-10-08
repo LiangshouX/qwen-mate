@@ -179,7 +179,7 @@ public class WebviewWatchdogTest {
 
     private static WebviewWatchdog createWatchdog() {
         return new WebviewWatchdog(
-                new javax.swing.JPanel(),
+                new JPanel(),
                 () -> null,
                 () -> { },
                 () -> { },

@@ -1,10 +1,13 @@
 package com.qwenmate.handler.history;
 
+import com.google.gson.Gson;
 import com.qwenmate.handler.core.HandlerContext;
 import com.qwenmate.session.QwenMateSession;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.intellij.openapi.project.Project;
+import com.qwenmate.util.JsUtils;
+import java.util.ArrayList;
 import org.junit.Test;
 
 import java.util.List;
@@ -91,7 +94,7 @@ public class HistoryMessageInjectorTest {
 
     @Test
     public void partitionsHistoryByMessageCountAndTargetPayloadSize() {
-        List<JsonObject> messages = new java.util.ArrayList<>();
+        List<JsonObject> messages = new ArrayList<>();
         for (int i = 0; i < 120; i++) {
             messages.add(frontendMessage(
                     i % 2 == 0 ? "user" : "assistant",
@@ -105,8 +108,8 @@ public class HistoryMessageInjectorTest {
         assertEquals(120, batches.stream().mapToInt(List::size).sum());
         for (List<JsonObject> batch : batches) {
             assertTrue(batch.size() <= HistoryMessageInjector.HISTORY_BATCH_MESSAGE_LIMIT);
-            assertTrue(com.qwenmate.util.JsUtils.escapeJs(
-                    new com.google.gson.Gson().toJson(batch)).length()
+            assertTrue(JsUtils.escapeJs(
+                    new Gson().toJson(batch)).length()
                     <= HistoryMessageInjector.HISTORY_BATCH_TARGET_CHAR_LIMIT);
         }
     }
@@ -124,12 +127,12 @@ public class HistoryMessageInjectorTest {
         assertEquals(1, batches.get(0).size());
         assertEquals(oversized, batches.get(0).get(0));
 
-        String payload = new com.google.gson.Gson().toJson(batches.get(0));
+        String payload = new Gson().toJson(batches.get(0));
         List<String> chunks = HistoryMessageInjector.splitHistoryPayload(payload);
         assertTrue(chunks.size() > 1);
         assertEquals(payload, String.join("", chunks));
         for (String chunk : chunks) {
-            assertTrue(com.qwenmate.util.JsUtils.escapeJs(chunk).length()
+            assertTrue(JsUtils.escapeJs(chunk).length()
                     <= HistoryMessageInjector.HISTORY_BATCH_TARGET_CHAR_LIMIT);
         }
     }
@@ -143,7 +146,7 @@ public class HistoryMessageInjectorTest {
         assertTrue(chunks.size() > 1);
         assertEquals(payload, String.join("", chunks));
         for (String chunk : chunks) {
-            assertTrue(com.qwenmate.util.JsUtils.escapeJs(chunk).length()
+            assertTrue(JsUtils.escapeJs(chunk).length()
                     <= HistoryMessageInjector.HISTORY_BATCH_TARGET_CHAR_LIMIT);
             if (!chunk.isEmpty()) {
                 assertFalse(Character.isHighSurrogate(chunk.charAt(chunk.length() - 1)));

@@ -1,5 +1,6 @@
 package com.qwenmate.util;
 
+import java.io.File;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -61,7 +62,7 @@ public class PathUtilsGuardWorkingDirectoryTest {
     public void clampsCwdThatEscapesViaDotDot() {
         // /tmp/proj/../elsewhere normalizes to /tmp/elsewhere — outside the project.
         String project = Paths.get(tmpdir(), "proj").toString();
-        String escape = project + java.io.File.separator + ".." + java.io.File.separator + "elsewhere";
+        String escape = project + File.separator + ".." + File.separator + "elsewhere";
         assertEquals(project, PathUtils.guardWorkingDirectory(escape, project));
     }
 
@@ -70,8 +71,8 @@ public class PathUtilsGuardWorkingDirectoryTest {
         // /tmp/proj/sub/./file normalizes to /tmp/proj/sub/file — still inside — and
         // the original (non-normalized) cwd form is returned verbatim.
         String project = Paths.get(tmpdir(), "proj").toString();
-        String inside = project + java.io.File.separator + "sub" + java.io.File.separator + "."
-                + java.io.File.separator + "file";
+        String inside = project + File.separator + "sub" + File.separator + "."
+                + File.separator + "file";
         assertEquals(inside, PathUtils.guardWorkingDirectory(inside, project));
     }
 }

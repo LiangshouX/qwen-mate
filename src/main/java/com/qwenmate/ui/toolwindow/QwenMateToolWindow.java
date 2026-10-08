@@ -1,5 +1,11 @@
 package com.qwenmate.ui.toolwindow;
 
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ProjectManagerListener;
+import com.intellij.openapi.ui.Messages;
 import com.qwenmate.i18n.QwenMateBundle;
 import com.qwenmate.settings.TabStateService;
 import com.qwenmate.startup.BridgePreloader;
@@ -18,6 +24,10 @@ import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
 import com.intellij.ui.content.ContentManagerEvent;
 import com.intellij.ui.content.ContentManagerListener;
+import com.qwenmate.util.ThemeConfigService;
+import java.util.IdentityHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -49,8 +59,8 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
     private static volatile boolean shutdownHookRegistered = false;
     private static final String TAB_NAME_PREFIX = "AI";
     /** Matches tab names like "AI1", "AI1..." (answering) or "AI1 (completed)" — extracts the numeric part. */
-    private static final java.util.regex.Pattern TAB_NAME_PATTERN =
-            java.util.regex.Pattern.compile("^" + TAB_NAME_PREFIX + "(\\d+)");
+    private static final Pattern TAB_NAME_PATTERN =
+            Pattern.compile("^" + TAB_NAME_PREFIX + "(\\d+)");
     private static final Set<Content> detachingContents =
             Collections.newSetFromMap(new ConcurrentHashMap<>());
 
@@ -73,7 +83,7 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
             }
             // Extract the leading number after the "AI" prefix so status suffixes
             // like "AI1..." (answering) or "AI1 (completed)" still count.
-            java.util.regex.Matcher matcher = TAB_NAME_PATTERN.matcher(displayName);
+            Matcher matcher = TAB_NAME_PATTERN.matcher(displayName);
             if (matcher.find()) {
                 try {
                     int number = Integer.parseInt(matcher.group(1));
@@ -116,7 +126,7 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
     }
 
     private static Set<QwenMateChatWindow> collectProjectChatWindows(@NotNull Project project) {
-        Set<QwenMateChatWindow> windows = Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+        Set<QwenMateChatWindow> windows = Collections.newSetFromMap(new IdentityHashMap<>());
         QwenMateChatWindow mainWindow = instances.get(project);
         if (mainWindow != null) {
             windows.add(mainWindow);
@@ -140,7 +150,7 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
     }
 
     private static Set<QwenMateChatWindow> collectAllChatWindows() {
-        Set<QwenMateChatWindow> windows = Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+        Set<QwenMateChatWindow> windows = Collections.newSetFromMap(new IdentityHashMap<>());
         windows.addAll(instances.values());
         windows.addAll(contentToWindowMap.values());
         windows.addAll(DetachedWindowManager.getAllDetachedChatWindows());
@@ -263,29 +273,29 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
         }
 
         if (PlatformUtils.isPluginDevMode()) {
-            com.intellij.openapi.actionSystem.AnAction devToolsAction =
-                    com.intellij.openapi.actionSystem.ActionManager.getInstance()
+            AnAction devToolsAction =
+                    ActionManager.getInstance()
                             .getAction("QwenMate.OpenDevToolsAction");
             if (devToolsAction != null) {
-                toolWindow.setTitleActions(java.util.List.of(devToolsAction));
+                toolWindow.setTitleActions(List.of(devToolsAction));
             }
         }
 
-        com.intellij.openapi.actionSystem.AnAction renameTabAction =
-                com.intellij.openapi.actionSystem.ActionManager.getInstance()
+        AnAction renameTabAction =
+                ActionManager.getInstance()
                         .getAction("QwenMate.RenameTabAction");
-        com.intellij.openapi.actionSystem.AnAction detachTabAction =
-                com.intellij.openapi.actionSystem.ActionManager.getInstance()
+        AnAction detachTabAction =
+                ActionManager.getInstance()
                         .getAction("QwenMate.DetachTabAction");
-        com.intellij.openapi.actionSystem.AnAction saveAsTemplateAction =
-                com.intellij.openapi.actionSystem.ActionManager.getInstance()
+        AnAction saveAsTemplateAction =
+                ActionManager.getInstance()
                         .getAction("QwenMate.SaveAsTemplateAction");
-        com.intellij.openapi.actionSystem.AnAction createFromTemplateAction =
-                com.intellij.openapi.actionSystem.ActionManager.getInstance()
+        AnAction createFromTemplateAction =
+                ActionManager.getInstance()
                         .getAction("QwenMate.CreateFromTemplateAction");
 
-        com.intellij.openapi.actionSystem.DefaultActionGroup gearActions =
-                new com.intellij.openapi.actionSystem.DefaultActionGroup();
+        DefaultActionGroup gearActions =
+                new DefaultActionGroup();
         if (renameTabAction != null) {
             gearActions.add(renameTabAction);
         }
@@ -354,16 +364,16 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
                 }
 
                 String tabName = content.getDisplayName();
-                int result = com.intellij.openapi.ui.Messages.showYesNoDialog(
+                int result = Messages.showYesNoDialog(
                     project,
                     QwenMateBundle.message("tab.close.confirm.message", tabName),
                     QwenMateBundle.message("tab.close.confirm.title"),
                     QwenMateBundle.message("tab.close.confirm.yes"),
                     QwenMateBundle.message("tab.close.confirm.no"),
-                    com.intellij.openapi.ui.Messages.getQuestionIcon()
+                    Messages.getQuestionIcon()
                 );
 
-                if (result != com.intellij.openapi.ui.Messages.YES) {
+                if (result != Messages.YES) {
                     event.consume();
                 }
             }
@@ -385,7 +395,7 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
 
     private JPanel createLoadingPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(com.qwenmate.util.ThemeConfigService.getBackgroundColor());
+        panel.setBackground(ThemeConfigService.getBackgroundColor());
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
@@ -565,8 +575,8 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
             return;
         }
         project.getMessageBus().connect(lifecycleDisposable).subscribe(
-                com.intellij.openapi.project.ProjectManager.TOPIC,
-                new com.intellij.openapi.project.ProjectManagerListener() {
+                ProjectManager.TOPIC,
+                new ProjectManagerListener() {
                     @Override
                     public void projectClosing(@NotNull Project closingProject) {
                         if (closingProject.equals(project)) {

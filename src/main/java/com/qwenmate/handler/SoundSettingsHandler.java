@@ -1,5 +1,7 @@
 package com.qwenmate.handler;
 
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.qwenmate.handler.core.HandlerContext;
 
 import com.qwenmate.settings.QwenMateSettingsService;
@@ -184,8 +186,8 @@ public class SoundSettingsHandler {
     public void handleBrowseSoundFile() {
         ApplicationManager.getApplication().invokeLater(() -> {
             try {
-                com.intellij.openapi.fileChooser.FileChooserDescriptor descriptor =
-                    new com.intellij.openapi.fileChooser.FileChooserDescriptor(
+                FileChooserDescriptor descriptor =
+                    new FileChooserDescriptor(
                         true, false, false, false, false, false
                     )
                     .withFileFilter(file -> {
@@ -199,7 +201,7 @@ public class SoundSettingsHandler {
                     .withTitle("Select Sound File")
                     .withDescription("Select a WAV, MP3, or AIFF audio file");
 
-                com.intellij.openapi.fileChooser.FileChooser.chooseFile(
+                FileChooser.chooseFile(
                     descriptor,
                     context.getProject(),
                     null,

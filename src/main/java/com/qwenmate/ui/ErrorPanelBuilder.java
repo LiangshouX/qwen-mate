@@ -3,6 +3,7 @@ package com.qwenmate.ui;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.diagnostic.Logger;
 
+import com.qwenmate.i18n.QwenMateBundle;
 import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
@@ -53,7 +54,7 @@ public class ErrorPanelBuilder {
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         bottomPanel.setBackground(new Color(30, 30, 30));
 
-        JLabel nodeLabel = new JLabel(com.qwenmate.i18n.QwenMateBundle.message("error.nodePathLabel"));
+        JLabel nodeLabel = new JLabel(QwenMateBundle.message("error.nodePathLabel"));
         nodeLabel.setForeground(Color.WHITE);
         nodeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -74,7 +75,7 @@ public class ErrorPanelBuilder {
             LOG.warn("Failed to preload Node.js path: " + e.getMessage());
         }
 
-        JButton saveAndRetryButton = new JButton(com.qwenmate.i18n.QwenMateBundle.message("error.saveButton"));
+        JButton saveAndRetryButton = new JButton(QwenMateBundle.message("error.saveButton"));
         saveAndRetryButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         saveAndRetryButton.addActionListener(e -> {
             String manualPath = nodeField.getText();

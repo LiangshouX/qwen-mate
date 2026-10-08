@@ -1,5 +1,6 @@
 package com.qwenmate.handler;
 
+import com.intellij.openapi.application.ModalityState;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.core.BaseMessageHandler;
 import com.qwenmate.handler.core.HandlerContext;
@@ -342,7 +343,7 @@ public class SkillHandler extends BaseMessageHandler {
                     // Find the file in a background thread (this is a slow operation)
                     return LocalFileSystem.getInstance().findFileByPath(NodeDetector.toVfsPath(fileToOpen));
                 })
-                .finishOnUiThread(com.intellij.openapi.application.ModalityState.defaultModalityState(), virtualFile -> {
+                .finishOnUiThread(ModalityState.defaultModalityState(), virtualFile -> {
                     // Open the file on the UI thread
                     if (virtualFile != null) {
                         FileEditorManager.getInstance(context.getProject()).openFile(virtualFile, true);

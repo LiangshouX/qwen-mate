@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.OptionalInt;
+import org.jetbrains.annotations.TestOnly;
 
 /**
  * Reads model options from the Qwen Code CLI configuration ({@code ~/.qwen/settings.json}).
@@ -36,7 +37,7 @@ public final class QwenCliConfigReader {
     private QwenCliConfigReader() {
     }
 
-    @org.jetbrains.annotations.TestOnly
+    @TestOnly
     public static void setSettingsPathOverrideForTests(Path path) {
         settingsPathOverride = path;
     }
@@ -157,7 +158,7 @@ public final class QwenCliConfigReader {
             return OptionalInt.empty();
         }
         String wanted = modelId.trim();
-        for (com.google.gson.JsonElement entry : listModelOptions()) {
+        for (JsonElement entry : listModelOptions()) {
             JsonObject item = entry.getAsJsonObject();
             if (wanted.equals(item.get("id").getAsString())
                     && item.has("contextWindowSize")) {

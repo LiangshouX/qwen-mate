@@ -1,6 +1,7 @@
 package com.qwenmate.util;
 
 import com.intellij.openapi.diagnostic.Logger;
+import java.io.File;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -57,16 +58,16 @@ public final class PluginMetadata {
     }
 
     @Nullable
-    public static java.io.File getPluginDirectory(Class<?> anchorClass) {
+    public static File getPluginDirectory(Class<?> anchorClass) {
         try {
             CodeSource codeSource = anchorClass.getProtectionDomain().getCodeSource();
             if (codeSource == null || codeSource.getLocation() == null) {
                 return null;
             }
 
-            java.io.File location = new java.io.File(codeSource.getLocation().toURI());
+            File location = new File(codeSource.getLocation().toURI());
             if (location.isFile()) {
-                java.io.File parent = location.getParentFile();
+                File parent = location.getParentFile();
                 return parent != null && "lib".equals(parent.getName()) ? parent.getParentFile() : parent;
             }
             return location;

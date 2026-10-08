@@ -1,5 +1,7 @@
 package com.qwenmate.ui.toolwindow;
 
+import java.lang.reflect.Method;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -115,14 +117,14 @@ public class WebviewEventQueueTest {
         queue.enqueueRaw("newPage()");
 
         // Simulate an old sender waiting for the lock while a new-page event is queued.
-        java.lang.reflect.Method enqueue = WebviewEventQueue.class.getDeclaredMethod("enqueue", WebviewEventQueue.JsCall.class);
+        Method enqueue = WebviewEventQueue.class.getDeclaredMethod("enqueue", WebviewEventQueue.JsCall.class);
         enqueue.setAccessible(true);
         enqueue.invoke(queue, delayedCall);
         scheduled.remove(0).run();
 
         assertEquals(1, scripts.size());
         assertTrue(scripts.get(0).contains("newPage()"));
-        org.junit.Assert.assertFalse(scripts.get(0).contains("oldPage()"));
+        Assert.assertFalse(scripts.get(0).contains("oldPage()"));
     }
 
     @Test

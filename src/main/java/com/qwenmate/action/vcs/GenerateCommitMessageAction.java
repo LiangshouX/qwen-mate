@@ -20,6 +20,7 @@ import com.intellij.openapi.vcs.CommitMessageI;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.changes.Change;
 import com.intellij.openapi.vcs.changes.ChangeListManager;
+import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -242,7 +243,7 @@ public class GenerateCommitMessageAction extends AnAction implements DumbAware {
         // 3. VcsDataKeys.CHANGES.
         Change[] changesArray = e.getData(VcsDataKeys.CHANGES);
         if (changesArray != null && changesArray.length > 0) {
-            return java.util.Arrays.asList(changesArray);
+            return Arrays.asList(changesArray);
         }
 
         // 4. Last resort — all changes.

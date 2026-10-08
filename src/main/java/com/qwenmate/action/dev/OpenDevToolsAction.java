@@ -24,6 +24,8 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.jcef.JBCefBrowser;
+import java.awt.datatransfer.StringSelection;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -266,8 +268,8 @@ public class OpenDevToolsAction extends AnAction {
     }
 
     private void copyToClipboard(String text) {
-        java.awt.datatransfer.StringSelection selection = new java.awt.datatransfer.StringSelection(text);
-        java.awt.Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+        StringSelection selection = new StringSelection(text);
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
     }
 
     private void showNotification(Project project, String message, NotificationType type) {
@@ -318,9 +320,9 @@ public class OpenDevToolsAction extends AnAction {
      */
     private static class DevToolsOption {
         final String name;
-        final java.util.function.Consumer<Project> action;
+        final Consumer<Project> action;
 
-        DevToolsOption(String name, java.util.function.Consumer<Project> action) {
+        DevToolsOption(String name, Consumer<Project> action) {
             this.name = name;
             this.action = action;
         }

@@ -17,6 +17,8 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import com.intellij.ui.content.ContentManagerEvent;
 import com.intellij.ui.content.ContentManagerListener;
+import com.intellij.util.concurrency.AppExecutorUtil;
+import java.util.concurrent.TimeUnit;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import org.jetbrains.annotations.NotNull;
@@ -118,12 +120,12 @@ public class RunConfigMonitorService implements ProjectActivity {
                 LOG.debug("Content added to " + windowName + ": " + event.getContent().getDisplayName());
                 // Small delay to allow the content to be fully initialized
                 // Use AppExecutorUtil instead of deprecated Alarm() constructor
-                com.intellij.util.concurrency.AppExecutorUtil.getAppScheduledExecutorService()
+                AppExecutorUtil.getAppScheduledExecutorService()
                     .schedule(() -> ApplicationManager.getApplication().invokeLater(() -> {
                         if (currentProject != null && !currentProject.isDisposed()) {
                             attachToExistingDescriptors(currentProject);
                         }
-                    }), 500, java.util.concurrent.TimeUnit.MILLISECONDS);
+                    }), 500, TimeUnit.MILLISECONDS);
             }
 
             @Override
@@ -206,11 +208,11 @@ public class RunConfigMonitorService implements ProjectActivity {
                 public void processTerminated(@NotNull ProcessEvent event) {
                     // Clean up after a delay to allow final output to be captured
                     // Use AppExecutorUtil instead of deprecated Alarm() constructor
-                    com.intellij.util.concurrency.AppExecutorUtil.getAppScheduledExecutorService()
+                    AppExecutorUtil.getAppScheduledExecutorService()
                         .schedule(() -> {
                             monitoredHandlers.remove(processHandler);
                             // Keep buffer for a while in case user wants to read it
-                        }, 5000, java.util.concurrent.TimeUnit.MILLISECONDS);
+                        }, 5000, TimeUnit.MILLISECONDS);
                 }
             });
         }

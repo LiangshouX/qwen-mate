@@ -1,5 +1,6 @@
 package com.qwenmate.util;
 
+import java.io.File;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -12,8 +13,8 @@ public class PathUtilsNormalizeAbsoluteTest {
     @Test
     public void collapsesTrailingDotDot() {
         String base = Paths.get(System.getProperty("java.io.tmpdir")).toAbsolutePath().toString();
-        String input = base + java.io.File.separator + "a" + java.io.File.separator + "b"
-                + java.io.File.separator + "..";
+        String input = base + File.separator + "a" + File.separator + "b"
+                + File.separator + "..";
         String expected = Paths.get(base, "a").toString();
 
         assertEquals(expected, PathUtils.normalizeAbsolute(input));

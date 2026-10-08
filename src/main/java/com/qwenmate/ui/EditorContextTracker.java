@@ -1,5 +1,6 @@
 package com.qwenmate.ui;
 
+import com.intellij.openapi.editor.SelectionModel;
 import com.qwenmate.settings.QwenMateSettingsService;
 import com.qwenmate.util.IgnoreRuleMatcher;
 import com.qwenmate.util.JsUtils;
@@ -125,7 +126,7 @@ public class EditorContextTracker {
 
                         selectionInfo = "@" + path;
 
-                        com.intellij.openapi.editor.SelectionModel selectionModel = editor.getSelectionModel();
+                        SelectionModel selectionModel = editor.getSelectionModel();
                         if (selectionModel.hasSelection()) {
                             int startLine = editor.getDocument().getLineNumber(selectionModel.getSelectionStart()) + 1;
                             int endLine = editor.getDocument().getLineNumber(selectionModel.getSelectionEnd()) + 1;

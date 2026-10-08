@@ -1,5 +1,6 @@
 package com.qwenmate.service;
 
+import com.intellij.openapi.editor.SelectionModel;
 import com.qwenmate.notifications.QwenMateNotifier;
 import com.intellij.diff.DiffContentFactory;
 import com.intellij.diff.DiffManager;
@@ -52,7 +53,7 @@ public class QuickFixService {
 
         if (matcher.find()) {
             final String newCode = matcher.group(1).trim();
-            final com.intellij.openapi.editor.SelectionModel selectionModel = editor.getSelectionModel();
+            final SelectionModel selectionModel = editor.getSelectionModel();
 
             final String oldCode;
             final int startOffset;

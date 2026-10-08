@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.registry.Registry;
+import com.intellij.ui.jcef.JBCefApp;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefBrowserBuilder;
@@ -350,7 +351,7 @@ public final class JBCefBrowserFactory {
         try {
             return determineJcefSupport(
                     Registry.is(JCEF_ENABLED_REGISTRY_KEY, true),
-                    com.intellij.ui.jcef.JBCefApp::isSupported,
+                    JBCefApp::isSupported,
                     JBCefBrowserFactory::isJbrMissingJcefRemoteApi,
                     JBCefBrowserFactory::isAndroidStudioJcefPluginMissing
             );

@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -14,6 +15,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.search.SearchScope;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -513,7 +515,7 @@ public class JavaContextCollector {
 
     private static void addClassFromType(PsiType type, Set<PsiClass> classes, Project project) {
         if (type == null) { return; }
-        PsiClass cls = com.intellij.psi.util.PsiUtil.resolveClassInType(type);
+        PsiClass cls = PsiUtil.resolveClassInType(type);
         if (cls != null && isProjectClass(cls, project)) {
             classes.add(cls);
         }
@@ -524,7 +526,7 @@ public class JavaContextCollector {
         if (file == null) { return false; }
         VirtualFile vFile = file.getVirtualFile();
         if (vFile == null) { return false; }
-        return com.intellij.openapi.roots.ProjectFileIndex.getInstance(project).isInContent(vFile);
+        return ProjectFileIndex.getInstance(project).isInContent(vFile);
     }
 
     private static JsonObject collectClassDetails(PsiClass cls) {

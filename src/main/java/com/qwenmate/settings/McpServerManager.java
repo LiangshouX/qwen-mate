@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -610,7 +611,7 @@ public class McpServerManager {
                 } else {
                     String url = serverSpec.get("url").getAsString();
                     try {
-                        new java.net.URI(url).toURL();
+                        new URI(url).toURL();
                     } catch (Exception e) {
                         errors.add("Invalid URL format");
                     }

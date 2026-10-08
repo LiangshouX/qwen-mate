@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.function.LongConsumer;
 
 /**
@@ -555,7 +556,7 @@ public class StreamMessageCoalescer {
             String messagesJson = MessageJsonConverter.convertMessagesToJson(transport.messages());
             int payloadChars = messagesJson.length();
             String escapedMessagesJson = JsUtils.escapeJs(messagesJson);
-            long payloadBuildMs = java.util.concurrent.TimeUnit.NANOSECONDS.toMillis(
+            long payloadBuildMs = TimeUnit.NANOSECONDS.toMillis(
                     System.nanoTime() - buildStartedAt);
             if (isCurrentDeliveryEpoch(snapshotDeliveryEpoch)) {
                 lastPayloadChars = payloadChars;

@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.fileTypes.FileTypes;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightVirtualFile;
 import org.junit.Assert;
 import org.junit.Test;
@@ -153,7 +154,7 @@ public class SelectionReferenceBuilderTest {
         return createEditor(selectedText, startLineNumber, endLineNumber, 1);
     }
 
-    private static com.intellij.openapi.vfs.VirtualFile createFile(String path) {
+    private static VirtualFile createFile(String path) {
         return new LightVirtualFile("Foo.java", FileTypes.PLAIN_TEXT, "") {
             @Override
             public String getPath() {

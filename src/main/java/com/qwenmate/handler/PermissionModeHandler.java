@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.qwenmate.session.SessionState;
 
 /**
  * Handles native auto approval, full auto, and other permission mode get/set operations.
@@ -27,7 +28,7 @@ public class PermissionModeHandler {
     }
 
     private String normalizeModeForCurrentProvider(String mode) {
-        String normalized = mode == null ? "default" : com.qwenmate.session.SessionState.migratePermissionMode(mode);
+        String normalized = mode == null ? "default" : SessionState.migratePermissionMode(mode);
         if (normalized.isEmpty()) {
             normalized = "default";
         }

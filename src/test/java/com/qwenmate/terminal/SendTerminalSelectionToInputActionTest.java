@@ -1,5 +1,6 @@
 package com.qwenmate.terminal;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -14,6 +15,8 @@ import com.intellij.openapi.actionSystem.KeyboardShortcut;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.actionSystem.TimerListener;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
+import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.util.ActionCallback;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -290,7 +293,7 @@ public class SendTerminalSelectionToInputActionTest {
         }
 
         @Override
-        public void registerAction(String actionId, AnAction action, com.intellij.openapi.extensions.PluginId pluginId) {
+        public void registerAction(String actionId, AnAction action, PluginId pluginId) {
             registerAction(actionId, action);
         }
 
@@ -299,7 +302,7 @@ public class SendTerminalSelectionToInputActionTest {
         }
 
         @Override
-        public void replaceAction(String actionId, com.intellij.openapi.actionSystem.AnAction newAction) {
+        public void replaceAction(String actionId, AnAction newAction) {
         }
 
         @Override
@@ -336,18 +339,18 @@ public class SendTerminalSelectionToInputActionTest {
         }
 
         @Override
-        public com.intellij.openapi.util.ActionCallback tryToExecute(AnAction action,
+        public ActionCallback tryToExecute(AnAction action,
                                                                      InputEvent inputEvent,
                                                                      Component contextComponent,
                                                                      String place,
                                                                      boolean now) {
-            return com.intellij.openapi.util.ActionCallback.DONE;
+            return ActionCallback.DONE;
         }
 
         @SuppressWarnings("removal")
         @Override
         public void addAnActionListener(AnActionListener listener,
-                                        com.intellij.openapi.Disposable parentDisposable) {
+                                        Disposable parentDisposable) {
         }
 
         @Override

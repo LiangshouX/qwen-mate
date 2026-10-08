@@ -1,5 +1,6 @@
 package com.qwenmate.action.editor;
 
+import com.intellij.openapi.ui.Messages;
 import com.qwenmate.i18n.QwenMateBundle;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -144,10 +145,10 @@ public class CopySelectionReferenceAction extends AnAction implements DumbAware 
 
         ApplicationManager.getApplication().invokeLater(() -> {
             if (error) {
-                com.intellij.openapi.ui.Messages.showErrorDialog(project, message, title);
+                Messages.showErrorDialog(project, message, title);
                 return;
             }
-            com.intellij.openapi.ui.Messages.showInfoMessage(project, message, title);
+            Messages.showInfoMessage(project, message, title);
         });
     }
 }

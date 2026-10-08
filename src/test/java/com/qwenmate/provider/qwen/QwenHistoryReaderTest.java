@@ -5,6 +5,7 @@ import com.qwenmate.cache.SessionIndexManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.nio.file.StandardOpenOption;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -153,7 +154,7 @@ public class QwenHistoryReaderTest {
         Path file = chatsDir.resolve("33333333-3333-4333-8333-333333333333.jsonl");
         Files.writeString(file, conversationRecord("user-6", "assistant-5", "user",
                         "late prompt", "2026-09-30T09:00:00.000Z").replace("session-1", "33333333-3333-4333-8333-333333333333"),
-                StandardCharsets.UTF_8, java.nio.file.StandardOpenOption.APPEND);
+                StandardCharsets.UTF_8, StandardOpenOption.APPEND);
         Files.setLastModifiedTime(file, FileTime.from(Instant.parse("2026-09-30T09:00:00.000Z")));
         SessionIndexCache.getInstance().clearProject(projectPath.toString());
 

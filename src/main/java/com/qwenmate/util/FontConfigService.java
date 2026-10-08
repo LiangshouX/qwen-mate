@@ -9,6 +9,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -102,7 +103,7 @@ public class FontConfigService {
             // safe to call off the EDT. UIManager.getFont returning null is virtually
             // impossible in a running IDE; the ternaries below fall back to a sane default
             // if it ever does.
-            java.awt.Font uiFont = UIManager.getFont("Label.font");
+            Font uiFont = UIManager.getFont("Label.font");
 
             String fontName = uiFont != null ? uiFont.getFamily() : "Dialog";
             int fontSize = uiFont != null ? toLogicalFontSize(uiFont.getSize()) : 13;

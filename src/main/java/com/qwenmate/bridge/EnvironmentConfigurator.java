@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -299,7 +302,7 @@ public class EnvironmentConfigurator {
         if (this.sessionId == null) {
             synchronized (this) {
                 if (this.sessionId == null) {
-                    this.sessionId = java.util.UUID.randomUUID().toString();
+                    this.sessionId = UUID.randomUUID().toString();
                 }
             }
         }
@@ -353,11 +356,11 @@ public class EnvironmentConfigurator {
      */
     private void hardenPermissionDirectory(Path dir) {
         try {
-            if (!Files.getFileStore(dir).supportsFileAttributeView(java.nio.file.attribute.PosixFileAttributeView.class)) {
+            if (!Files.getFileStore(dir).supportsFileAttributeView(PosixFileAttributeView.class)) {
                 return;
             }
             Files.setPosixFilePermissions(dir,
-                    java.nio.file.attribute.PosixFilePermissions.fromString("rwx------"));
+                    PosixFilePermissions.fromString("rwx------"));
         } catch (UnsupportedOperationException | IOException ignored) {
             // Filesystem (e.g. Windows NTFS, FAT32) does not support POSIX perms.
             // The directory still inherits the user's tmpdir ACL, which is acceptable.

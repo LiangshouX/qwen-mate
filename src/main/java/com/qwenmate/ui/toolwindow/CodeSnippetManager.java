@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manages code snippet delivery to chat windows across tabs.
@@ -212,7 +213,7 @@ public class CodeSnippetManager {
                     scheduleCodeSnippetRetry(project, selectionInfo, retriesLeft - 1);
                 }
             });
-        }, delay, java.util.concurrent.TimeUnit.MILLISECONDS);
+        }, delay, TimeUnit.MILLISECONDS);
     }
 
     /** Schedule structured file-reference delivery while the selected tab initializes. */
@@ -243,6 +244,6 @@ public class CodeSnippetManager {
                     scheduleFileReferencesRetry(project, filePaths, retriesLeft - 1);
                 }
             });
-        }, delay, java.util.concurrent.TimeUnit.MILLISECONDS);
+        }, delay, TimeUnit.MILLISECONDS);
     }
 }

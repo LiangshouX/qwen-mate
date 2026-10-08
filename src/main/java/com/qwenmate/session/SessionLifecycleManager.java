@@ -8,6 +8,7 @@ import com.qwenmate.handler.UsagePushService;
 import com.qwenmate.handler.core.HandlerContext;
 import com.qwenmate.provider.qwen.QwenSDKBridge;
 import com.qwenmate.skill.SlashCommandRegistry;
+import com.qwenmate.util.EditorFileUtils;
 import com.qwenmate.util.JsUtils;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;
@@ -412,7 +413,7 @@ public class SessionLifecycleManager {
     }
 
     private String getCurrentEditorFilePath() {
-        return com.qwenmate.util.EditorFileUtils.getCurrentEditorFilePath(this.host.getProject());
+        return EditorFileUtils.getCurrentEditorFilePath(this.host.getProject());
     }
 
     private QwenMateSession createDefaultSession() {

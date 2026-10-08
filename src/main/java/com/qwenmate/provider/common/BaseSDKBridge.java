@@ -19,6 +19,7 @@ import com.intellij.util.concurrency.AppExecutorUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -415,7 +416,7 @@ public abstract class BaseSDKBridge {
             processManager.registerProcess(channelId, process);
             final Process running = process;
 
-            try (java.io.OutputStream stdin = running.getOutputStream()) {
+            try (OutputStream stdin = running.getOutputStream()) {
                 stdin.write(params.toString().getBytes(StandardCharsets.UTF_8));
                 stdin.flush();
             } catch (Exception e) {
@@ -733,7 +734,7 @@ public abstract class BaseSDKBridge {
                     processManager.registerProcess(channelId, process);
 
                     // Write to stdin
-                    try (java.io.OutputStream stdin = process.getOutputStream()) {
+                    try (OutputStream stdin = process.getOutputStream()) {
                         stdin.write(stdinJson.getBytes(StandardCharsets.UTF_8));
                         stdin.flush();
                     } catch (Exception e) {

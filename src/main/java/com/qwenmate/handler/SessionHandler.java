@@ -1,5 +1,6 @@
 package com.qwenmate.handler;
 
+import com.intellij.openapi.util.Computable;
 import com.qwenmate.handler.core.BaseMessageHandler;
 import com.qwenmate.handler.core.HandlerContext;
 
@@ -431,7 +432,7 @@ public class SessionHandler extends BaseMessageHandler {
     private String resolveWorkingDirectoryFromActiveFile(String projectPath) {
         try {
             VirtualFile[] selectedFiles = ApplicationManager.getApplication().runReadAction(
-                    (com.intellij.openapi.util.Computable<VirtualFile[]>) () ->
+                    (Computable<VirtualFile[]>) () ->
                             FileEditorManager.getInstance(context.getProject()).getSelectedFiles()
             );
             if (selectedFiles == null || selectedFiles.length == 0) {

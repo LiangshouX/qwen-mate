@@ -1,5 +1,7 @@
 package com.qwenmate.util;
 
+import java.util.Comparator;
+import java.util.stream.Stream;
 import org.junit.Test;
 
 import java.io.File;
@@ -62,8 +64,8 @@ public class PathUtilsRealPathTest {
         if (!Files.exists(dir)) {
             return;
         }
-        try (java.util.stream.Stream<Path> paths = Files.walk(dir)) {
-            paths.sorted(java.util.Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        try (Stream<Path> paths = Files.walk(dir)) {
+            paths.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
         }
     }
 }

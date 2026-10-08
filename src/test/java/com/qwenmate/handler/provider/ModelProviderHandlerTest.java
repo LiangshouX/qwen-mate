@@ -5,6 +5,7 @@ import com.qwenmate.handler.core.HandlerContext;
 import com.qwenmate.provider.CustomModelContextWindowProvider;
 import com.qwenmate.session.QwenMateSession;
 import com.google.gson.JsonObject;
+import com.qwenmate.settings.QwenCliConfigReader;
 import org.junit.Test;
 
 import java.nio.file.Files;
@@ -30,7 +31,7 @@ public class ModelProviderHandlerTest {
     @Test
     public void shouldUseBuiltinQwenContextWindowsWhenNothingConfigured() throws Exception {
         // Isolate from the developer's real ~/.qwen/settings.json.
-        com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(
+        QwenCliConfigReader.setSettingsPathOverrideForTests(
                 Path.of("does-not-exist", "settings.json"));
         try {
             // Mirrors the Qwen Code CLI tokenLimits table.
@@ -43,13 +44,13 @@ public class ModelProviderHandlerTest {
             assertEquals(256_000, ModelProviderHandler.getModelContextLimit("qwen-max"));
             assertEquals(200_000, ModelProviderHandler.getModelContextLimit("totally-unknown-model"));
         } finally {
-            com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(null);
+            QwenCliConfigReader.setSettingsPathOverrideForTests(null);
         }
     }
 
     @Test
     public void shouldPreferCliConfigContextWindowOverBuiltin() throws Exception {
-        com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(
+        QwenCliConfigReader.setSettingsPathOverrideForTests(
                 writeSettings("""
                         {
                           "modelProviders": {
@@ -62,13 +63,13 @@ public class ModelProviderHandlerTest {
         try {
             assertEquals(128_000, ModelProviderHandler.getModelContextLimit("qwen3-coder-plus"));
         } finally {
-            com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(null);
+            QwenCliConfigReader.setSettingsPathOverrideForTests(null);
         }
     }
 
     @Test
     public void followCliDefaultResolvesConfiguredModelWindow() throws Exception {
-        com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(
+        QwenCliConfigReader.setSettingsPathOverrideForTests(
                 writeSettings("""
                         {
                           "model": { "name": "mimo-v2.5-pro" },
@@ -83,7 +84,7 @@ public class ModelProviderHandlerTest {
             // Empty model = "follow CLI config": must pick up the configured model's window.
             assertEquals(1_000_000, ModelProviderHandler.getModelContextLimit(""));
         } finally {
-            com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(null);
+            QwenCliConfigReader.setSettingsPathOverrideForTests(null);
         }
     }
 

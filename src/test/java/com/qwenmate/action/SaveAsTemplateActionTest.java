@@ -1,5 +1,6 @@
 package com.qwenmate.action;
 
+import com.intellij.openapi.project.Project;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class SaveAsTemplateActionTest {
         private boolean errorShown = false;
 
         @Override
-        protected void showErrorDialog(com.intellij.openapi.project.Project project, String message, String title) {
+        protected void showErrorDialog(Project project, String message, String title) {
             errorShown = true;
         }
     }

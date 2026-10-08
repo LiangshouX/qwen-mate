@@ -1,6 +1,7 @@
 package com.qwenmate.ui;
 
 import com.qwenmate.i18n.QwenMateBundle;
+import com.qwenmate.notifications.QwenMateNotifier;
 import com.qwenmate.session.QwenMateSession;
 import com.qwenmate.settings.QwenMateSettingsService;
 import com.qwenmate.handler.AgentHandler;
@@ -48,6 +49,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.util.concurrency.AppExecutorUtil;
 
+import java.util.UUID;
 import javax.swing.*;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
@@ -122,7 +124,7 @@ public class ChatWindowDelegate {
     private volatile String pendingQuickFixPrompt = null;
     private volatile MessageCallback pendingQuickFixCallback = null;
     // Reference to the SettingsHandler for clean theme-callback unregistration on dispose.
-    private com.qwenmate.handler.SettingsHandler settingsHandler;
+    private SettingsHandler settingsHandler;
 
     public ChatWindowDelegate(DelegateHost host) {
         this.host = host;
@@ -177,7 +179,7 @@ public class ChatWindowDelegate {
                     session.setPermissionMode(mode);
                     host.persistTabSessionState();
                     LOG.info("Loaded permission mode from settings: " + mode);
-                    com.qwenmate.notifications.QwenMateNotifier.setMode(host.getProject(), mode);
+                    QwenMateNotifier.setMode(host.getProject(), mode);
                 }
             }
         } catch (Exception e) {
@@ -214,7 +216,7 @@ public class ChatWindowDelegate {
 
         if (sessionId == null || sessionId.isEmpty()) {
             LOG.warn("Failed to get session ID from bridges, generating fallback UUID");
-            sessionId = java.util.UUID.randomUUID().toString();
+            sessionId = UUID.randomUUID().toString();
         }
 
         applySessionIdToBridges(sessionId);
@@ -371,10 +373,10 @@ public class ChatWindowDelegate {
 
             QwenMateSession session = host.getSession();
             String mode = session != null ? session.getPermissionMode() : "default";
-            com.qwenmate.notifications.QwenMateNotifier.setMode(project, mode);
+            QwenMateNotifier.setMode(project, mode);
 
             String model = session != null ? session.getModel() : "";
-            com.qwenmate.notifications.QwenMateNotifier.setModel(project, model);
+            QwenMateNotifier.setModel(project, model);
 
             try {
                 QwenMateSettingsService settingsService = host.getSettingsService();
@@ -383,7 +385,7 @@ public class ChatWindowDelegate {
                     JsonObject agent = settingsService.getAgent(selectedId);
                     if (agent != null) {
                         String agentName = agent.has("name") ? agent.get("name").getAsString() : "Agent";
-                        com.qwenmate.notifications.QwenMateNotifier.setAgent(project, agentName);
+                        QwenMateNotifier.setAgent(project, agentName);
                     }
                 }
             } catch (Exception e) {

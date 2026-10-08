@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -167,7 +168,7 @@ public class ProcessManager {
      * Filters out dead processes inline so callers don't need to re-check isAlive().
      */
     public Map<String, Process> getActiveChannelSnapshot() {
-        Map<String, Process> snapshot = new java.util.HashMap<>();
+        Map<String, Process> snapshot = new HashMap<>();
         for (Map.Entry<String, Process> entry : activeChannelProcesses.entrySet()) {
             Process process = entry.getValue();
             if (process != null && process.isAlive()) {

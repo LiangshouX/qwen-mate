@@ -1,5 +1,6 @@
 package com.qwenmate.terminal;
 
+import com.intellij.openapi.actionSystem.DataKey;
 import com.qwenmate.i18n.QwenMateBundle;
 import com.qwenmate.util.SelectionTextUtils;
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -29,8 +30,8 @@ public class SendTerminalSelectionToInputAction extends AnAction implements Dumb
     static final String TERMINAL_REWORKED_CONTEXT_MENU = "Terminal.ReworkedTerminalContextMenu";
     // Coupled to the internal DataKey name used by IntelliJ's reworked terminal (2024.3+).
     // If JetBrains renames this key, the feature degrades silently (returns null).
-    private static final com.intellij.openapi.actionSystem.DataKey<Object> TERMINAL_VIEW_DATA_KEY =
-            com.intellij.openapi.actionSystem.DataKey.create("TerminalView");
+    private static final DataKey<Object> TERMINAL_VIEW_DATA_KEY =
+            DataKey.create("TerminalView");
 
     // Reflective method names for reworked terminal API (not public, may change across IDE versions)
     private static final String METHOD_GET_TEXT_SELECTION_MODEL = "getTextSelectionModel";

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -482,7 +483,7 @@ final class McpRegistryEntryMapper {
             return false;
         }
         try {
-            String host = new java.net.URI(source.getUrl()).getHost();
+            String host = new URI(source.getUrl()).getHost();
             return host != null && host.equalsIgnoreCase("registry.modelcontextprotocol.io");
         } catch (Exception e) {
             return false;

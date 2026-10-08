@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.OptionalInt;
+import org.jetbrains.annotations.TestOnly;
 
 /**
  * Reads user-configured model context windows from {@code ~/.qwenmate/config.json}.
@@ -54,12 +55,12 @@ public final class CustomModelContextWindowProvider {
         return local;
     }
 
-    @org.jetbrains.annotations.TestOnly
+    @TestOnly
     public static void setInstanceForTests(CustomModelContextWindowProvider testInstance) {
         instance = testInstance;
     }
 
-    @org.jetbrains.annotations.TestOnly
+    @TestOnly
     public static CustomModelContextWindowProvider createForTests(Path configFilePath) {
         return new CustomModelContextWindowProvider(new ConfigPathManager() {
             @Override

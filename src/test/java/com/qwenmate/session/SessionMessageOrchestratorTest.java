@@ -4,6 +4,8 @@ import com.qwenmate.permission.PermissionRequest;
 import com.qwenmate.provider.common.SessionHistoryNotFoundException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.qwenmate.settings.QwenCliConfigReader;
+import java.nio.file.Path;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -373,8 +375,8 @@ public class SessionMessageOrchestratorTest {
     @Test
     public void loadFromServerFallsBackToStaticModelContextWindow() {
         // Isolate from the developer's real ~/.qwen/settings.json.
-        com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(
-                java.nio.file.Path.of("does-not-exist", "settings.json"));
+        QwenCliConfigReader.setSettingsPathOverrideForTests(
+                Path.of("does-not-exist", "settings.json"));
         try {
             SessionState state = new SessionState();
             state.setProvider("qwen");
@@ -401,7 +403,7 @@ public class SessionMessageOrchestratorTest {
             // qwen3-coder-plus → 1M per the built-in Qwen window table.
             assertEquals(List.of("12000:1000000"), callback.usageUpdates);
         } finally {
-            com.qwenmate.settings.QwenCliConfigReader.setSettingsPathOverrideForTests(null);
+            QwenCliConfigReader.setSettingsPathOverrideForTests(null);
         }
     }
 

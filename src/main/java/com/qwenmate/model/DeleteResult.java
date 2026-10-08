@@ -1,5 +1,9 @@
 package com.qwenmate.model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+
 /**
  * Delete operation result class.
  * Represents the outcome of a file or configuration deletion, including success/failure status and error details.
@@ -112,10 +116,10 @@ public class DeleteResult {
         String message = e.getMessage();
         String suggestion = null;
 
-        if (e instanceof java.io.FileNotFoundException) {
+        if (e instanceof FileNotFoundException) {
             type = ErrorType.FILE_NOT_FOUND;
             suggestion = "请检查文件是否存在";
-        } else if (e instanceof java.nio.file.AccessDeniedException ||
+        } else if (e instanceof AccessDeniedException ||
                    (message != null && message.toLowerCase().contains("access denied"))) {
             type = ErrorType.PERMISSION_DENIED;
             suggestion = "请检查文件权限，或以管理员身份运行";
@@ -123,7 +127,7 @@ public class DeleteResult {
                    message.toLowerCase().contains("being used"))) {
             type = ErrorType.FILE_LOCKED;
             suggestion = "请关闭可能占用文件的程序后重试";
-        } else if (e instanceof java.io.IOException) {
+        } else if (e instanceof IOException) {
             type = ErrorType.IO_ERROR;
             suggestion = "请检查磁盘空间和文件系统状态";
         }

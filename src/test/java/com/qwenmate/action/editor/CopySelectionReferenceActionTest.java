@@ -1,5 +1,6 @@
 package com.qwenmate.action.editor;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPopupMenu;
@@ -14,10 +15,13 @@ import com.intellij.openapi.actionSystem.TimerListener;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.fileTypes.FileTypes;
+import com.intellij.openapi.util.ActionCallback;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightVirtualFile;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -285,7 +289,7 @@ public class CopySelectionReferenceActionTest {
 
         @Override
         public void registerAction(String actionId, AnAction action,
-                                   com.intellij.openapi.extensions.PluginId pluginId) {
+                                   PluginId pluginId) {
         }
 
         @Override
@@ -302,7 +306,7 @@ public class CopySelectionReferenceActionTest {
         }
 
         @Override
-        public java.util.List<String> getActionIdList(String idPrefix) {
+        public List<String> getActionIdList(String idPrefix) {
             return Collections.emptyList();
         }
 
@@ -329,17 +333,17 @@ public class CopySelectionReferenceActionTest {
         }
 
         @Override
-        public com.intellij.openapi.util.ActionCallback tryToExecute(AnAction action,
+        public ActionCallback tryToExecute(AnAction action,
                                                                      InputEvent inputEvent,
                                                                      Component contextComponent,
                                                                      String place,
                                                                      boolean now) {
-            return com.intellij.openapi.util.ActionCallback.DONE;
+            return ActionCallback.DONE;
         }
 
         @Override
         public void addAnActionListener(AnActionListener listener,
-                                        com.intellij.openapi.Disposable parentDisposable) {
+                                        Disposable parentDisposable) {
         }
 
         @Override

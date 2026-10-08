@@ -6,12 +6,15 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.util.io.FileUtil;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -120,8 +123,8 @@ final class BridgeArchiveExtractor {
             process = pb.start();
 
             // Read output to prevent blocking
-            try (java.io.BufferedReader reader = new java.io.BufferedReader(
-                    new java.io.InputStreamReader(process.getInputStream()))) {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     LOG.debug("[BridgeResolver] unzip: " + line);
@@ -129,7 +132,7 @@ final class BridgeArchiveExtractor {
             }
 
             // Add timeout (5 minutes) to prevent hanging
-            if (!process.waitFor(5, java.util.concurrent.TimeUnit.MINUTES)) {
+            if (!process.waitFor(5, TimeUnit.MINUTES)) {
                 LOG.warn("[BridgeResolver] Unzip process timeout, killing...");
                 process.destroyForcibly();
                 return false;

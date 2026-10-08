@@ -16,6 +16,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import com.qwenmate.settings.LegacyDataDirMigrator;
@@ -161,7 +162,7 @@ public class SkillService {
 
         // 1. Scan the active directory (enabled = true)
         List<String> activeDirs = new ArrayList<>(getActiveSkillsDirs(scope, workspaceRoot));
-        java.util.Collections.reverse(activeDirs);
+        Collections.reverse(activeDirs);
         for (String activeDir : activeDirs) {
             if (activeDir == null) {
                 continue;
@@ -197,7 +198,7 @@ public class SkillService {
         }
         JsonObject skills = new JsonObject();
         List<String> reversed = new ArrayList<>(activeDirs);
-        java.util.Collections.reverse(reversed);
+        Collections.reverse(reversed);
         for (String dir : reversed) {
             JsonObject scanned = scanSkillsDirectory(dir, scope, true);
             for (String key : scanned.keySet()) {

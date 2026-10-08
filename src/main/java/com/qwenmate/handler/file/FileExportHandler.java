@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 
+import com.qwenmate.i18n.QwenMateBundle;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -44,11 +45,11 @@ public class FileExportHandler extends BaseMessageHandler {
     public boolean handle(String type, String content) {
         if ("save_markdown".equals(type)) {
             LOG.info("[FileExportHandler] 处理: save_markdown");
-            handleSaveFile(content, ".md", com.qwenmate.i18n.QwenMateBundle.message("file.saveMarkdownDialog"));
+            handleSaveFile(content, ".md", QwenMateBundle.message("file.saveMarkdownDialog"));
             return true;
         } else if ("save_json".equals(type)) {
             LOG.info("[FileExportHandler] 处理: save_json");
-            handleSaveFile(content, ".json", com.qwenmate.i18n.QwenMateBundle.message("file.saveJsonDialog"));
+            handleSaveFile(content, ".json", QwenMateBundle.message("file.saveJsonDialog"));
             return true;
         }
         return false;
@@ -120,11 +121,11 @@ public class FileExportHandler extends BaseMessageHandler {
             try (FileWriter writer = new FileWriter(fileToSave, StandardCharsets.UTF_8)) {
                 writer.write(content);
                 LOG.info("[FileExportHandler] 文件保存成功: " + fileToSave.getAbsolutePath());
-                notifySuccess(com.qwenmate.i18n.QwenMateBundle.message("file.saved"));
+                notifySuccess(QwenMateBundle.message("file.saved"));
             } catch (IOException e) {
                 LOG.error("[FileExportHandler] 保存文件失败: " + e.getMessage(), e);
-                String errorDetail = e.getMessage() != null ? e.getMessage() : com.qwenmate.i18n.QwenMateBundle.message("file.saveFailed");
-                notifyError(com.qwenmate.i18n.QwenMateBundle.message("file.saveFailedWithReason", errorDetail));
+                String errorDetail = e.getMessage() != null ? e.getMessage() : QwenMateBundle.message("file.saveFailed");
+                notifyError(QwenMateBundle.message("file.saveFailedWithReason", errorDetail));
             }
         });
     }
@@ -140,8 +141,8 @@ public class FileExportHandler extends BaseMessageHandler {
 
     private void notifyError(String message) {
         ApplicationManager.getApplication().invokeLater(() -> {
-            String errorDetail = message != null ? message : com.qwenmate.i18n.QwenMateBundle.message("file.unknownError");
-            String errorMsg = escapeJs(com.qwenmate.i18n.QwenMateBundle.message("file.saveFailedWithReason", errorDetail));
+            String errorDetail = message != null ? message : QwenMateBundle.message("file.unknownError");
+            String errorMsg = escapeJs(QwenMateBundle.message("file.saveFailedWithReason", errorDetail));
             String jsCode = "if (window.addToast) { " +
                 "  window.addToast('" + errorMsg + "', 'error'); " +
                 "}";

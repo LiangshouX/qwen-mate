@@ -1,6 +1,9 @@
 package com.qwenmate.provider.common;
 
 import com.google.gson.JsonObject;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -713,7 +716,7 @@ public class DaemonBridgeTest {
         StubProcess process = new StubProcess();
         return new DaemonBridge.DaemonGenerationContext(
                 process,
-                new java.io.BufferedWriter(new java.io.OutputStreamWriter(process.getOutputStream())),
+                new BufferedWriter(new OutputStreamWriter(process.getOutputStream())),
                 generation,
                 0,
                 nanos(0));
@@ -841,23 +844,23 @@ public class DaemonBridgeTest {
             }
         };
 
-        private ControlledProcess(long processId) throws java.io.IOException {
+        private ControlledProcess(long processId) throws IOException {
             this.processId = processId;
             this.stdoutWriter = new PipedOutputStream(stdout);
         }
 
-        private void emitReady() throws java.io.IOException {
+        private void emitReady() throws IOException {
             stdoutWriter.write(("{\"type\":\"daemon\",\"event\":\"ready\","
                     + "\"sdkPreloaded\":true}\n").getBytes(StandardCharsets.UTF_8));
             stdoutWriter.flush();
         }
 
-        private void emitIdleShutdownRequest(long token) throws java.io.IOException {
+        private void emitIdleShutdownRequest(long token) throws IOException {
             emitLine("{\"type\":\"daemon\",\"event\":\"idle_shutdown_request\","
                     + "\"token\":" + token + "}");
         }
 
-        private void emitLine(String line) throws java.io.IOException {
+        private void emitLine(String line) throws IOException {
             stdoutWriter.write((line + "\n").getBytes(StandardCharsets.UTF_8));
             stdoutWriter.flush();
         }
@@ -866,7 +869,7 @@ public class DaemonBridgeTest {
             return ((ByteArrayOutputStream) stdin).toString(StandardCharsets.UTF_8);
         }
 
-        private void exit() throws java.io.IOException {
+        private void exit() throws IOException {
             markDeadWithoutClosingOutput();
             closeOutput();
         }
@@ -875,7 +878,7 @@ public class DaemonBridgeTest {
             alive.set(false);
         }
 
-        private void closeOutput() throws java.io.IOException {
+        private void closeOutput() throws IOException {
             stdoutWriter.close();
         }
 

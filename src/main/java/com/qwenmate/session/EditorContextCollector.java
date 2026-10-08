@@ -1,5 +1,6 @@
 package com.qwenmate.session;
 
+import com.intellij.openapi.application.ModalityState;
 import com.qwenmate.handler.context.ContextCollector;
 import com.qwenmate.handler.context.WorkspaceContextCollector;
 import com.qwenmate.util.EditorFileUtils;
@@ -99,7 +100,7 @@ public class EditorContextCollector {
                     return new JsonObject();
                 }
             })
-            .finishOnUiThread(com.intellij.openapi.application.ModalityState.defaultModalityState(), future::complete)
+            .finishOnUiThread(ModalityState.defaultModalityState(), future::complete)
             .submit(AppExecutorUtil.getAppExecutorService());
 
         return future;

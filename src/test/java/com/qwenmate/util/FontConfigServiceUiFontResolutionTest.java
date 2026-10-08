@@ -2,6 +2,7 @@ package com.qwenmate.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.nio.file.StandardOpenOption;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -216,7 +217,7 @@ public class FontConfigServiceUiFontResolutionTest {
         }
 
         byte[] padding = new byte[6 * 1024 * 1024];
-        Files.write(fontFile, padding, java.nio.file.StandardOpenOption.APPEND);
+        Files.write(fontFile, padding, StandardOpenOption.APPEND);
         fontFile.toFile().deleteOnExit();
         return fontFile;
     }

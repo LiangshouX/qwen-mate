@@ -1,8 +1,10 @@
 package com.qwenmate.handler;
 
+import com.google.gson.JsonArray;
 import com.qwenmate.handler.core.BaseMessageHandler;
 import com.qwenmate.handler.core.HandlerContext;
 
+import com.qwenmate.i18n.QwenMateBundle;
 import com.qwenmate.startup.BridgePreloader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -237,7 +239,7 @@ public class McpServerHandler extends BaseMessageHandler {
                             JsonObject errorResult = new JsonObject();
                             errorResult.addProperty("serverId", serverId);
                             errorResult.addProperty("error", e.getMessage());
-                            errorResult.add("tools", new com.google.gson.JsonArray());
+                            errorResult.add("tools", new JsonArray());
                             callJavaScript("window.updateMcpServerTools", escapeJs(gson.toJson(errorResult)));
                         });
                         return null;
@@ -249,7 +251,7 @@ public class McpServerHandler extends BaseMessageHandler {
                     JsonObject errorResult = new JsonObject();
                     errorResult.addProperty("serverId", serverId);
                     errorResult.addProperty("error", e.getMessage());
-                    errorResult.add("tools", new com.google.gson.JsonArray());
+                    errorResult.add("tools", new JsonArray());
                     callJavaScript("window.updateMcpServerTools", escapeJs(gson.toJson(errorResult)));
                 });
             }
@@ -273,7 +275,7 @@ public class McpServerHandler extends BaseMessageHandler {
         } catch (Exception e) {
             LOG.error("[McpServerHandler] Failed to add MCP server: " + e.getMessage(), e);
             ApplicationManager.getApplication().invokeLater(() -> {
-                String errorMsg = escapeJs(com.qwenmate.i18n.QwenMateBundle.message("mcp.addServerFailedWithReason", e.getMessage()));
+                String errorMsg = escapeJs(QwenMateBundle.message("mcp.addServerFailedWithReason", e.getMessage()));
                 callJavaScript("window.showError", errorMsg);
             });
         }
@@ -296,7 +298,7 @@ public class McpServerHandler extends BaseMessageHandler {
         } catch (Exception e) {
             LOG.error("[McpServerHandler] Failed to update MCP server: " + e.getMessage(), e);
             ApplicationManager.getApplication().invokeLater(() -> {
-                String errorMsg = escapeJs(com.qwenmate.i18n.QwenMateBundle.message("mcp.updateServerFailedWithReason", e.getMessage()));
+                String errorMsg = escapeJs(QwenMateBundle.message("mcp.updateServerFailedWithReason", e.getMessage()));
                 callJavaScript("window.showError", errorMsg);
             });
         }
@@ -320,8 +322,8 @@ public class McpServerHandler extends BaseMessageHandler {
                 });
             } else {
                 ApplicationManager.getApplication().invokeLater(() -> {
-                    String reason = com.qwenmate.i18n.QwenMateBundle.message("mcp.serverNotFound");
-                    String errorMsg = escapeJs(com.qwenmate.i18n.QwenMateBundle.message(
+                    String reason = QwenMateBundle.message("mcp.serverNotFound");
+                    String errorMsg = escapeJs(QwenMateBundle.message(
                             "mcp.deleteServerFailedWithReason", reason));
                     callJavaScript("window.showError", errorMsg);
                 });
@@ -329,7 +331,7 @@ public class McpServerHandler extends BaseMessageHandler {
         } catch (Exception e) {
             LOG.error("[McpServerHandler] Failed to delete MCP server: " + e.getMessage(), e);
             ApplicationManager.getApplication().invokeLater(() -> {
-                String errorMsg = escapeJs(com.qwenmate.i18n.QwenMateBundle.message("mcp.deleteServerFailedWithReason", e.getMessage()));
+                String errorMsg = escapeJs(QwenMateBundle.message("mcp.deleteServerFailedWithReason", e.getMessage()));
                 callJavaScript("window.showError", errorMsg);
             });
         }

@@ -1,5 +1,6 @@
 package com.qwenmate.ui;
 
+import com.qwenmate.bridge.BridgeDirectoryResolver;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.core.HandlerContext;
 import com.qwenmate.i18n.QwenMateBundle;
@@ -25,6 +26,7 @@ import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefOSRHandlerFactory;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefJSQuery;
+import java.util.concurrent.TimeUnit;
 import org.cef.CefClient;
 import org.cef.browser.CefBrowser;
 import org.cef.browser.CefFrame;
@@ -145,7 +147,7 @@ public class WebviewInitializer {
 
         int initializationId = this.initializationGeneration.incrementAndGet();
         // Use the shared resolver from BridgePreloader for consistent state.
-        com.qwenmate.bridge.BridgeDirectoryResolver sharedResolver =
+        BridgeDirectoryResolver sharedResolver =
                 BridgePreloader.getSharedResolver();
 
         // Check extraction state without blocking the EDT. The future continuation releases
@@ -180,7 +182,7 @@ public class WebviewInitializer {
 
     private void waitForBridgeExtraction(
             int initializationId,
-            com.qwenmate.bridge.BridgeDirectoryResolver sharedResolver
+            BridgeDirectoryResolver sharedResolver
     ) {
         sharedResolver.getExtractionFuture()
                 .thenAcceptAsync(ready -> {
@@ -205,7 +207,7 @@ public class WebviewInitializer {
             String savedNodePath,
             PropertiesComponent props,
             QwenSDKBridge qwenSDKBridge,
-            com.qwenmate.bridge.BridgeDirectoryResolver sharedResolver
+            BridgeDirectoryResolver sharedResolver
     ) {
         try {
             if (!isCurrentInitialization(initializationId)) {
@@ -1316,7 +1318,7 @@ public class WebviewInitializer {
         int delayMs = backoffDelaysMs[attempt];
         LOG.info("[QwenMateToolWindow] Retry attempt " + (attempt + 1) + "/" + maxRetries
                 + ", waiting " + delayMs + "ms...");
-        CompletableFuture.delayedExecutor(delayMs, java.util.concurrent.TimeUnit.MILLISECONDS)
+        CompletableFuture.delayedExecutor(delayMs, TimeUnit.MILLISECONDS)
                 .execute(() -> {
                     if (!isCurrentInitialization(expectedInitializationId) || host.isDisposed()) {
                         return;

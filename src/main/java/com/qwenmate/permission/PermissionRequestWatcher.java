@@ -6,6 +6,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Polls the permission directory and dispatches session-scoped request files.
@@ -126,7 +127,7 @@ class PermissionRequestWatcher {
         debugLog.accept("WATCH_LOOP", "Polling loop ended");
     }
 
-    private void dispatchFiles(File[] files, String tag, java.util.function.Consumer<Path> consumer) {
+    private void dispatchFiles(File[] files, String tag, Consumer<Path> consumer) {
         for (File file : files) {
             if (!file.exists()) {
                 continue;

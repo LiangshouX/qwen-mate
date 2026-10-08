@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
@@ -19,6 +20,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.jetbrains.annotations.TestOnly;
 
 /**
  * Node.js detector.
@@ -85,7 +87,7 @@ public class NodeDetector {
      * Node.js path and may cause performance degradation. All existing
      * references to the old instance will become stale.</p>
      */
-    @org.jetbrains.annotations.TestOnly
+    @TestOnly
     public static void resetInstance() {
         synchronized (lock) {
             instance = null;
@@ -353,7 +355,7 @@ public class NodeDetector {
             if (nvmDir.exists() && nvmDir.isDirectory()) {
                 File[] versionDirs = nvmDir.listFiles(File::isDirectory);
                 if (versionDirs != null) {
-                    java.util.Arrays.sort(versionDirs, (a, b) -> b.getName().compareTo(a.getName()));
+                    Arrays.sort(versionDirs, (a, b) -> b.getName().compareTo(a.getName()));
                     for (File versionDir : versionDirs) {
                         if (versionDir.getName().startsWith("v")) {
                             String nodePath = versionDir.getAbsolutePath() + "\\node.exe";
@@ -372,7 +374,7 @@ public class NodeDetector {
             if (nvmDir.exists() && nvmDir.isDirectory()) {
                 File[] versionDirs = nvmDir.listFiles();
                 if (versionDirs != null) {
-                    java.util.Arrays.sort(versionDirs, (a, b) -> b.getName().compareTo(a.getName()));
+                    Arrays.sort(versionDirs, (a, b) -> b.getName().compareTo(a.getName()));
                     for (File versionDir : versionDirs) {
                         if (versionDir.isDirectory()) {
                             String nodePath = versionDir.getAbsolutePath() + "/bin/node";
@@ -394,7 +396,7 @@ public class NodeDetector {
                                                                 name.equals("node") || name.startsWith("node@"));
                     if (nodeDirs != null) {
                         // Sort by version number descending, prefer newer versions
-                        java.util.Arrays.sort(nodeDirs, (a, b) -> {
+                        Arrays.sort(nodeDirs, (a, b) -> {
                             // node@22 > node@20 > node@18 > node
                             String aName = a.getName();
                             String bName = b.getName();

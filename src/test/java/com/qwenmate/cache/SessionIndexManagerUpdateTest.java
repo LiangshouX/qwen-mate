@@ -1,5 +1,7 @@
 package com.qwenmate.cache;
 
+import java.nio.file.StandardOpenOption;
+import java.util.Locale;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -38,7 +40,7 @@ public class SessionIndexManagerUpdateTest {
 
         assertEquals(SessionIndexManager.UpdateType.NONE, manager.getUpdateType(projectIndex, projectDir));
 
-        Files.writeString(sessionFile, "appended\n", java.nio.file.StandardOpenOption.APPEND);
+        Files.writeString(sessionFile, "appended\n", StandardOpenOption.APPEND);
         Files.setLastModifiedTime(sessionFile, FileTime.fromMillis(INDEXED_FILE_MTIME + 2_000));
         Files.setLastModifiedTime(projectDir, FileTime.fromMillis(DIRECTORY_MTIME));
 
@@ -61,7 +63,7 @@ public class SessionIndexManagerUpdateTest {
         Files.writeString(
                 sessionFile,
                 "appended\n",
-                java.nio.file.StandardOpenOption.APPEND
+                StandardOpenOption.APPEND
         );
         Files.setLastModifiedTime(sessionFile, FileTime.fromMillis(INDEXED_FILE_MTIME));
         Files.setLastModifiedTime(projectDir, FileTime.fromMillis(DIRECTORY_MTIME));
@@ -97,7 +99,7 @@ public class SessionIndexManagerUpdateTest {
     @Test
     public void getUpdateType_acceptsUppercaseFilenameAndLegacyMissingPath() throws IOException {
         Path projectDir = tmp.newFolder("uppercase-session").toPath();
-        Path sessionFile = projectDir.resolve(SESSION_ID.toUpperCase(java.util.Locale.ROOT) + ".jsonl");
+        Path sessionFile = projectDir.resolve(SESSION_ID.toUpperCase(Locale.ROOT) + ".jsonl");
         Files.writeString(sessionFile, "session\n");
         Files.setLastModifiedTime(sessionFile, FileTime.fromMillis(INDEXED_FILE_MTIME));
         Files.setLastModifiedTime(projectDir, FileTime.fromMillis(DIRECTORY_MTIME));

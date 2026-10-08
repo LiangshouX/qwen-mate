@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -18,11 +19,11 @@ public class WorkingDirectoryManager {
     private static final Logger LOG = Logger.getInstance(WorkingDirectoryManager.class);
 
     private final Function<Void, JsonObject> configReader;
-    private final java.util.function.Consumer<JsonObject> configWriter;
+    private final Consumer<JsonObject> configWriter;
 
     public WorkingDirectoryManager(
             Function<Void, JsonObject> configReader,
-            java.util.function.Consumer<JsonObject> configWriter) {
+            Consumer<JsonObject> configWriter) {
         this.configReader = configReader;
         this.configWriter = configWriter;
     }

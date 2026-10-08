@@ -15,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import org.jetbrains.annotations.TestOnly;
 
 /**
  * Reads user-configured model pricing from {@code ~/.qwenmate/config.json}
@@ -72,7 +73,7 @@ public final class CustomPricingProvider {
      * read the developer's real {@code ~/.qwenmate/config.json}. Pass {@code null} to restore
      * the default lazily-created instance.
      */
-    @org.jetbrains.annotations.TestOnly
+    @TestOnly
     public static void setInstanceForTests(CustomPricingProvider testInstance) {
         instance = testInstance;
     }
@@ -81,7 +82,7 @@ public final class CustomPricingProvider {
      * Build an isolated provider that reads pricing from the given config file path, for tests
      * outside this package that cannot reach the package-private constructor.
      */
-    @org.jetbrains.annotations.TestOnly
+    @TestOnly
     public static CustomPricingProvider createForTests(Path configFilePath) {
         return new CustomPricingProvider(new ConfigPathManager() {
             @Override

@@ -1,12 +1,16 @@
 package com.qwenmate.provider.common;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
@@ -54,7 +58,7 @@ public class SessionLiteReader {
     public LiteSessionFile readSessionLite(Path path) {
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ)) {
             long fileSize = channel.size();
-            long mtime = java.nio.file.Files.getLastModifiedTime(path).toMillis();
+            long mtime = Files.getLastModifiedTime(path).toMillis();
 
             if (fileSize == 0) {
                 return null;
@@ -306,29 +310,29 @@ public class SessionLiteReader {
         // Content array format: [{"type":"text","text":"actual text"},...]
         if (line.contains("\"content\":[") || line.contains("\"content\": [")) {
             try {
-                com.google.gson.JsonObject entry = GSON.fromJson(line, com.google.gson.JsonObject.class);
+                JsonObject entry = GSON.fromJson(line, JsonObject.class);
                 if (entry == null || !entry.has("message")) {
                     return null;
                 }
 
-                com.google.gson.JsonElement messageElem = entry.get("message");
+                JsonElement messageElem = entry.get("message");
                 if (messageElem == null || !messageElem.isJsonObject()) {
                     return null;
                 }
 
-                com.google.gson.JsonObject message = messageElem.getAsJsonObject();
+                JsonObject message = messageElem.getAsJsonObject();
                 if (!message.has("content")) {
                     return null;
                 }
 
-                com.google.gson.JsonElement contentElem = message.get("content");
+                JsonElement contentElem = message.get("content");
                 if (contentElem.isJsonArray()) {
                     // Array format: extract text from type:"text" blocks
-                    com.google.gson.JsonArray contentArray = contentElem.getAsJsonArray();
+                    JsonArray contentArray = contentElem.getAsJsonArray();
                     StringBuilder sb = new StringBuilder();
-                    for (com.google.gson.JsonElement block : contentArray) {
+                    for (JsonElement block : contentArray) {
                         if (block.isJsonObject()) {
-                            com.google.gson.JsonObject blockObj = block.getAsJsonObject();
+                            JsonObject blockObj = block.getAsJsonObject();
                             if (blockObj.has("type") && "text".equals(blockObj.get("type").getAsString())) {
                                 if (blockObj.has("text") && !blockObj.get("text").isJsonNull()) {
                                     if (sb.length() > 0) {

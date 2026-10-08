@@ -4,6 +4,7 @@ import com.qwenmate.i18n.QwenMateBundle;
 import com.qwenmate.notifications.QwenMateNotifier;
 import com.qwenmate.provider.common.MessageCallback;
 import com.qwenmate.provider.common.SDKResult;
+import com.qwenmate.service.QuickFixService;
 import com.qwenmate.ui.toolwindow.QwenMateChatWindow;
 import com.qwenmate.ui.toolwindow.QwenMateToolWindow;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
@@ -264,7 +265,7 @@ public class QuickFixWithQwenMateAction extends AnAction implements DumbAware {
 
             @Override
             public void onComplete(SDKResult result) {
-                com.qwenmate.service.QuickFixService.handleAIResponse(project, editor, result.finalResult);
+                QuickFixService.handleAIResponse(project, editor, result.finalResult);
             }
         });
     }

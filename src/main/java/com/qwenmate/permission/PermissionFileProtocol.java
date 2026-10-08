@@ -5,10 +5,12 @@ import com.google.gson.JsonObject;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 /**
  * Owns request/response file naming, session-scoped cleanup, polling helpers,
@@ -110,7 +112,7 @@ class PermissionFileProtocol {
         );
     }
 
-    private void cleanupSessionFilesMatching(java.util.function.Predicate<File> shouldDelete, String reason) {
+    private void cleanupSessionFilesMatching(Predicate<File> shouldDelete, String reason) {
         try {
             if (!permissionDir.toFile().exists()) {
                 return;
@@ -150,7 +152,7 @@ class PermissionFileProtocol {
         writeJson(resolveResponsePath(PLAN_APPROVAL_RESPONSE_FILE_PREFIX, requestId), response, "PLAN_RESPONSE");
     }
 
-    private void deleteFiles(String prefix, java.util.function.Predicate<File> shouldDelete) {
+    private void deleteFiles(String prefix, Predicate<File> shouldDelete) {
         File[] files = listFiles((dir, name) -> name.startsWith(prefix) && name.endsWith(".json"));
         if (files == null) {
             return;
@@ -191,7 +193,7 @@ class PermissionFileProtocol {
         }
     }
 
-    private File[] listFiles(java.io.FilenameFilter filter) {
+    private File[] listFiles(FilenameFilter filter) {
         File dir = permissionDir.toFile();
         if (!dir.exists()) {
             return new File[0];

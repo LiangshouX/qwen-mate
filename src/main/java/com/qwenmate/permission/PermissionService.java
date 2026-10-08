@@ -6,6 +6,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 
+import java.io.IOException;
 import javax.swing.*;
 import java.nio.file.*;
 import java.util.Set;
@@ -126,7 +127,7 @@ public class PermissionService {
         try {
             Files.createDirectories(permissionDir);
             debugLog("INIT", "Permission directory created/verified: " + permissionDir);
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             debugLog("INIT_ERROR", "Failed to create permission dir: " + e.getMessage());
             LOG.error("Error occurred", e);
         }
@@ -260,7 +261,7 @@ public class PermissionService {
             debugLog(logTag, "File missing while reading: " + fileName);
             processingRequests.remove(fileName);
             return null;
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             debugLog(logTag, "Error reading file: " + e.getMessage());
             LOG.error("Error occurred", e);
             processingRequests.remove(fileName);

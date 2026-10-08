@@ -1,5 +1,7 @@
 package com.qwenmate.dependency;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.qwenmate.bridge.EnvironmentConfigurator;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.model.NodeDetectionResult;
@@ -950,7 +952,7 @@ public class DependencyManager {
         List<String> versions = new ArrayList<>();
 
         try {
-            com.google.gson.JsonElement element = JsonParser.parseString(rawJson);
+            JsonElement element = JsonParser.parseString(rawJson);
             if (!element.isJsonArray()) {
                 return versions;
             }
@@ -962,14 +964,14 @@ public class DependencyManager {
             // element is itself an array, `isJsonPrimitive()` is false, and the whole
             // list is silently dropped (causing the misleading "remote versions
             // unavailable" fallback).
-            com.google.gson.JsonArray array = element.getAsJsonArray();
+            JsonArray array = element.getAsJsonArray();
             while (!array.isEmpty()
                     && array.get(0).isJsonArray()
                     && array.size() == 1) {
                 array = array.get(0).getAsJsonArray();
             }
 
-            for (com.google.gson.JsonElement item : array) {
+            for (JsonElement item : array) {
                 if (!item.isJsonPrimitive()) {
                     continue;
                 }

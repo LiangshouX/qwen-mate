@@ -10,6 +10,7 @@ import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.changes.Change;
 import com.intellij.openapi.vcs.changes.ContentRevision;
 import com.intellij.openapi.vcs.history.VcsRevisionNumber;
+import java.util.Collection;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -220,7 +221,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
         }
 
         @Override
-        protected String generateGitDiff(java.util.Collection<Change> changes) {
+        protected String generateGitDiff(Collection<Change> changes) {
             return "diff";
         }
 
@@ -241,7 +242,7 @@ public class GitCommitMessageServiceCommitAiConfigTest {
             callback.onSuccess("fix: use cli routing");
         }
 
-        private String exposeGeneratedDiff(java.util.Collection<Change> changes) {
+        private String exposeGeneratedDiff(Collection<Change> changes) {
             return super.generateGitDiff(changes);
         }
     }
