@@ -123,6 +123,8 @@ public class ChatWindowDelegate {
     private ScheduledFuture<?> statusResetTask;
     private volatile String pendingQuickFixPrompt = null;
     private volatile MessageCallback pendingQuickFixCallback = null;
+    /** One prewarm per frontend (re)load: the first send must not pay daemon+SDK cold start. */
+    private volatile boolean qwenPrewarmed = false;
     // Reference to the SettingsHandler for clean theme-callback unregistration on dispose.
     private SettingsHandler settingsHandler;
 
@@ -516,11 +518,38 @@ public class ChatWindowDelegate {
         });
     }
 
+    /**
+     * Start the shared Qwen daemon and preload the SDK as soon as the frontend
+     * can send, so the first turn does not inline daemon spawn + SDK load
+     * (observed as ~0.8s of the send→first-token budget). Fire-and-forget; a
+     * failed prewarm just falls back to the on-demand path in getDaemonBridge().
+     */
+    private void prewarmQwenDaemonOnce() {
+        if (qwenPrewarmed) {
+            return;
+        }
+        try {
+            Project project = host.getProject();
+            QwenSDKBridge bridge = host.getQwenSDKBridge();
+            if (project == null || bridge == null || host.isDisposed() || project.getBasePath() == null) {
+                return;
+            }
+            qwenPrewarmed = true;
+            QwenMateSession session = host.getSession();
+            String epoch = session != null ? session.getRuntimeSessionEpoch() : null;
+            bridge.prewarmDaemonAsync(project.getBasePath(), epoch);
+            LOG.info("Prewarming Qwen daemon + SDK on frontend ready (epoch=" + epoch + ")");
+        } catch (Throwable t) {
+            LOG.warn("Qwen daemon prewarm failed: " + t.getMessage());
+        }
+    }
+
     public void handleFrontendReady() {
         LOG.info("Received frontend_ready signal, frontend is now ready to receive data");
         boolean runtimeRecovery = host.isRuntimeRecoveryPage();
         host.setFrontendReady(true);
         host.getWebviewWatchdog().markFrontendReady();
+        prewarmQwenDaemonOnce();
 
         host.callJavaScript(
             "window.updateLinkifyCapabilities",

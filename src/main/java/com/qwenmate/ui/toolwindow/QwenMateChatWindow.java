@@ -2607,6 +2607,13 @@ public class QwenMateChatWindow {
         if (session == null) {
             return;
         }
+        // setWaiting() at send time had no completion-side counterpart, so the
+        // status bar kept showing the send-time funnel/"Waiting for Qwen" until
+        // some unrelated refresh. Reset it here for every naturally-ended or
+        // interrupted turn; an errored turn keeps the error state set by showError.
+        if (session.getError() == null) {
+            QwenMateNotifier.clearStatus(project);
+        }
         // Suppress the task-completion notification (sound + toast) when the user
         // manually stopped the turn. Only natural completions should produce a sound.
         if (session.isManuallyInterrupted()) {
