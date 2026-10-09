@@ -28,7 +28,8 @@ const SDKS = [
   {
     id: 'qwen-sdk',
     npmPackage: '@qwen-code/sdk',
-    version: 'latest',
+    // Pinned: offline delivery must be reproducible ('latest' drifts).
+    version: '0.1.18',
     required: true,
   },
 ];
