@@ -50,6 +50,17 @@ public class QwenMessageHandler implements MessageCallback {
     private boolean streamEndedThisTurn = false;
     private boolean isThinking = false;
 
+    /** Wall-clock anchor of the current turn (set on message_start) for [Qwen][Timing] logs. */
+    private long turnStartMillis = 0;
+    private boolean firstDeltaLogged = false;
+
+    private String elapsed() {
+        if (turnStartMillis <= 0) {
+            return "(no turn start)";
+        }
+        return (System.currentTimeMillis() - turnStartMillis) + "ms";
+    }
+
     public QwenMessageHandler(SessionState state, CallbackHandler callbackHandler) {
         this.state = state;
         this.callbackHandler = callbackHandler;
@@ -113,6 +124,8 @@ public class QwenMessageHandler implements MessageCallback {
                     break;
                 case "message_start":
                     // lifecycle marker; stream_start drives UI
+                    turnStartMillis = System.currentTimeMillis();
+                    firstDeltaLogged = false;
                     break;
                 case "message_end":
                     handleMessageEnd();
@@ -152,6 +165,9 @@ public class QwenMessageHandler implements MessageCallback {
         synchronized (state.getMessageStateLock()) {
             boolean streamEndedBeforeComplete = streamEndedThisTurn;
             boolean wasStreaming = isStreaming;
+
+            LOG.info("[Qwen][Timing] complete at " + elapsed()
+                    + " (streamEndSeen=" + streamEndedBeforeComplete + ", wasStreaming=" + wasStreaming + ")");
 
             isStreaming = false;
             streamEndedThisTurn = false;
@@ -340,12 +356,15 @@ public class QwenMessageHandler implements MessageCallback {
         isStreaming = true;
         streamEndedThisTurn = false;
         resetStreamingAccumulator();
+        LOG.info("[Qwen][Timing] stream_start at " + elapsed());
         callbackHandler.notifyStreamStart();
     }
 
     private void handleStreamEnd() {
         streamEndedThisTurn = true;
         isStreaming = false;
+        LOG.info("[Qwen][Timing] stream_end at " + elapsed()
+                + " (busy=false loading=false pushed to UI on this callback)");
         if (isThinking) {
             isThinking = false;
             callbackHandler.notifyThinkingStatusChanged(false);
@@ -375,6 +394,10 @@ public class QwenMessageHandler implements MessageCallback {
     private void handleContentDelta(String content) {
         if (content == null || content.isEmpty()) {
             return;
+        }
+        if (!firstDeltaLogged) {
+            firstDeltaLogged = true;
+            LOG.info("[Qwen][Timing] first_content_delta at " + elapsed());
         }
         if (isThinking) {
             isThinking = false;

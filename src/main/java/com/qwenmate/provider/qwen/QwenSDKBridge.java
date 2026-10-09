@@ -156,6 +156,24 @@ public class QwenSDKBridge extends BaseSDKBridge {
             return;
         }
 
+        // Turn timing milestones from persistent-query-service (see emitTiming).
+        // INFO on purpose: without these the send→first-token→stream-end budget
+        // is invisible and "GUI slower than CLI" cannot be bisected from logs.
+        if (line.startsWith("[TIMING]")) {
+            String payload = line.substring("[TIMING]".length()).trim();
+            LOG.info("[Qwen][Timing] " + payload);
+            return;
+        }
+
+        // AskUserQuestion lifecycle from Node (see emitAskEvent). The fast-deny
+        // paths used to be silent, making "model continued without waiting for
+        // an answer" undiagnosable — every ask exit path lands here as INFO.
+        if (line.startsWith("[ASK_EVENT]")) {
+            String payload = line.substring("[ASK_EVENT]".length()).trim();
+            LOG.info("[Qwen][AskEvent] " + payload);
+            return;
+        }
+
         if (line.startsWith("[STDIN_ERROR]")
                 || line.startsWith("[STDIN_PARSE_ERROR]")
                 || line.startsWith("[COMMAND_ERROR]")

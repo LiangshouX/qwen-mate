@@ -66,14 +66,65 @@ function buildUserMessage(text, sessionId) {
 }
 
 function emitContentDelta(text) {
-  if (text) console.log(`[CONTENT_DELTA] ${JSON.stringify(text)}`);
+  if (text) {
+    noteDelta('text');
+    console.log(`[CONTENT_DELTA] ${JSON.stringify(text)}`);
+  }
+}
+
+// ─── Turn timing instrumentation ───
+// One [TIMING] line per milestone, forwarded by QwenSDKBridge.processOutputLine
+// as an INFO log. This is the only way to see where a turn's wall time goes
+// (CLI spawn vs. first token vs. end-of-turn result) — the phases below used to
+// be invisible, which made "GUI slower than CLI" unfalsifiable from logs.
+let turnBaseMillis = 0;
+let lastDeltaMillis = 0;
+let lastActivityMillis = 0;
+let lastEventKind = null;
+let firstDeltaKind = null;
+let toolEventsAfterDelta = 0;
+
+function emitTiming(event, extra) {
+  const at = Date.now();
+  const base = turnBaseMillis || at;
+  console.log(`[TIMING] ${JSON.stringify({ event, relMs: at - base, at, ...extra })}`);
+}
+
+// Single choke point for every outgoing delta: records first/last delta
+// milestones so the end-of-turn tail (last token → result) is measurable.
+function noteDelta(kind) {
+  const now = Date.now();
+  lastDeltaMillis = now;
+  lastActivityMillis = now;
+  lastEventKind = kind;
+  toolEventsAfterDelta = 0;
+  if (!firstDeltaKind) {
+    firstDeltaKind = kind;
+    emitTiming('first_delta', { kind });
+  }
+}
+
+// Tool markers are activity too: a turn can go delta-silent for minutes while
+// tools run (CLI keeps printing, so it never looks stalled). Tracking them
+// separates "tail = tool execution" from "tail = true silence waiting on the
+// gateway/CLI to close the turn".
+function noteActivity(kind) {
+  lastActivityMillis = Date.now();
+  lastEventKind = kind;
+  if (lastDeltaMillis > 0) {
+    toolEventsAfterDelta += 1;
+  }
 }
 
 function emitThinkingDelta(text) {
-  if (text) console.log(`[THINKING_DELTA] ${JSON.stringify(text)}`);
+  if (text) {
+    noteDelta('thinking');
+    console.log(`[THINKING_DELTA] ${JSON.stringify(text)}`);
+  }
 }
 
 function emitToolUse(toolUse) {
+  noteActivity('tool_use');
   emitMessageMarker({
     type: 'assistant',
     message: {
@@ -89,6 +140,7 @@ function emitToolUse(toolUse) {
 }
 
 function emitToolResult(toolResult) {
+  noteActivity('tool_result');
   // SDK ToolResultBlock fields are snake_case ({ tool_use_id, is_error }).
   // Reading camelCase here dropped the id entirely: findToolResult could never
   // match the result (tool cards spun forever) and useFileChanges counted
@@ -149,6 +201,7 @@ export async function consumeQueryStream(result, sessionId) {
         sawSessionId = true;
         emitSessionId(message.session_id);
         sessionId = message.session_id;
+        emitTiming('session_init');
       }
       if (Array.isArray(message.slash_commands)) {
         emitSlashCommands(message.slash_commands);
@@ -243,6 +296,21 @@ export async function consumeQueryStream(result, sessionId) {
 
     // Result message
     if (message.type === 'result') {
+      // Tail composition of this turn:
+      //   deltaTailMs        — last text/thinking token → result (UI output stops)
+      //   silentMs           — last ANY outbound event (incl. tool markers) → result
+      //   lastEvent          — what the UI was last showing
+      //   toolEventsAfterDelta — tool markers emitted inside the delta-tail
+      // deltaTailMs big + silentMs small + tools>0  ⇒ tail was tool execution
+      // (CLI shows scrolling tool output, GUI must too — not a gateway stall).
+      // Both big                                  ⇒ true silence waiting on the
+      // gateway/CLI to close the turn.
+      const timingExtra = {};
+      if (lastDeltaMillis > 0) timingExtra.deltaTailMs = Date.now() - lastDeltaMillis;
+      if (lastActivityMillis > 0) timingExtra.silentMs = Date.now() - lastActivityMillis;
+      if (lastEventKind) timingExtra.lastEvent = lastEventKind;
+      if (toolEventsAfterDelta > 0) timingExtra.toolEventsAfterDelta = toolEventsAfterDelta;
+      emitTiming('result_received', timingExtra);
       if (message.usage) {
         lastUsage = message.usage;
       }
@@ -314,6 +382,7 @@ export function buildCanUseTool(params) {
     // every approval mode: the CLI auto-confirms a bare allow with no answers
     // and the turn continues with "No valid answers were provided".
     if (isAskUserQuestionTool(toolName)) {
+      emitAskEvent('can_use_tool_entered', { requestId: `ask_${Date.now()}` });
       return requestAskUserAnswers(toolName, input, { signal, cwd: params.cwd });
     }
 
@@ -469,11 +538,19 @@ function normalizeAskAnswers(questions, answers) {
 // ask-user-question-*.json, waits for Java's answer dialog, then resolves
 // canUseTool with updatedInput.answers — the CLI treats a bare allow as
 // "proceed with no answers", so the choices must travel with the allow.
+// Every exit path emits [ASK_EVENT] (→ Java INFO log): the fast-deny paths
+// used to be completely silent, which made "model continued without waiting
+// for an answer" undiagnosable from logs.
+function emitAskEvent(stage, extra = {}) {
+  console.log(`[ASK_EVENT] ${JSON.stringify({ stage, at: Date.now(), ...extra })}`);
+}
+
 export function requestAskUserAnswers(toolName, input, { signal, cwd } = {}) {
   return new Promise((resolve) => {
     const requestId = `ask_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const config = resolvePermissionIpcConfig();
     if (!config.ok) {
+      emitAskEvent('deny_no_ipc', { requestId, reason: config.reason });
       resolve({ behavior: 'deny', message: `Permission bridge unavailable: ${config.reason}` });
       return;
     }
@@ -481,6 +558,11 @@ export function requestAskUserAnswers(toolName, input, { signal, cwd } = {}) {
     const questions = Array.isArray(input?.questions) ? input.questions : [];
     const entry = { resolve, input, questions, timer: null, poll: null, cleanup: null };
     pendingPermissions.set(requestId, entry);
+    emitAskEvent('request_written', {
+      requestId,
+      questionCount: questions.length,
+      safetyNetMs: config.safetyNetMs,
+    });
 
     entry.cleanup = () => {
       if (entry.timer) {
@@ -498,23 +580,31 @@ export function requestAskUserAnswers(toolName, input, { signal, cwd } = {}) {
       writeAskQuestionRequest(config, requestId, { toolName, questions, cwd });
     } catch (error) {
       pendingPermissions.delete(requestId);
+      emitAskEvent('deny_write_failed', { requestId, error: String(error?.message || error) });
       resolve({ behavior: 'deny', message: `Ask question request failed: ${error.message}` });
       return;
     }
 
     entry.poll = pollAskQuestionResponse(config, requestId, {
       onResult: (answers) => {
-        const updatedInput = { ...entry.input, answers: normalizeAskAnswers(entry.questions, answers) };
+        const normalized = normalizeAskAnswers(entry.questions, answers);
+        emitAskEvent('answers_received', {
+          requestId,
+          answerKeys: Object.keys(normalized || {}),
+        });
+        const updatedInput = { ...entry.input, answers: normalized };
         respondToPermission(requestId, true, undefined, updatedInput);
       },
     });
 
     entry.timer = setTimeout(() => {
+      emitAskEvent('deny_timeout', { requestId, timeoutMs: config.safetyNetMs + PERMISSION_FALLBACK_EXTRA_MS });
       respondToPermission(requestId, false, 'Ask user question timed out');
     }, config.safetyNetMs + PERMISSION_FALLBACK_EXTRA_MS);
 
     if (signal) {
       signal.addEventListener('abort', () => {
+        emitAskEvent('deny_aborted', { requestId });
         respondToPermission(requestId, false, 'Request cancelled');
       }, { once: true });
     }
@@ -537,8 +627,18 @@ export async function sendMessagePersistent(params = {}) {
   const runtimeKey = makeRuntimeKey(params);
 
   try {
+    // Timing base for every [TIMING] line of this turn (see emitTiming).
+    turnBaseMillis = Date.now();
+    lastDeltaMillis = 0;
+    lastActivityMillis = 0;
+    lastEventKind = null;
+    firstDeltaKind = null;
+    toolEventsAfterDelta = 0;
+    emitTiming('turn_start');
+
     // Load SDK
     const sdk = await loadQwenSdk();
+    emitTiming('sdk_ready');
     const queryFn = sdk?.query;
     if (typeof queryFn !== 'function') {
       throw new Error('Qwen SDK does not export a query() function');
@@ -587,11 +687,15 @@ export async function sendMessagePersistent(params = {}) {
     activeTurnRuntime = runtimeKey;
 
     const result = queryFn({ prompt, options });
+    // query() returns once the CLI child process is spawned and the Query is
+    // constructed — everything after this waits on the CLI, not on us.
+    emitTiming('query_created');
     const outcome = await consumeQueryStream(result, requestSessionId);
 
     activeTurns.delete(runtimeKey);
     activeTurnRuntime = null;
 
+    emitTiming('turn_end');
     console.log('[MESSAGE_END]');
 
     // Emit final result
