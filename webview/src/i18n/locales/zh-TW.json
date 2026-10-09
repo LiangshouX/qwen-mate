@@ -203,6 +203,13 @@
         "disabled": "Disabled",
         "hint": "When enabled, AI responses will appear character by character in real-time, instead of waiting for the complete response. May consume more resources."
       },
+      "managedMemory": {
+        "label": "托管自動記憶（Managed Memory）",
+        "enabled": "已開啟",
+        "disabled": "已關閉",
+        "hint": "關閉（預設）可修正模型停止輸出後 GUI 長時間等待的問題：CLI 每輪結束後會執行背景記憶任務並阻塞該輪完成。開啟後在 GUI 內還原 Qwen CLI 預設的記憶擷取與整理；不影響獨立使用的 Qwen CLI。",
+        "hintOverridden": "偵測到 Qwen CLI 設定（使用者/專案/企業）已設定 memory 鍵，將以該設定為準，此開關僅作為預設值。"
+      },
       "autoOpenFile": {
         "label": "發送已開啟的檔案路徑",
         "enabled": "已啟用",

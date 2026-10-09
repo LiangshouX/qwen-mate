@@ -27,6 +27,9 @@ function renderBehaviorTab(overrides: Partial<ComponentProps<typeof BehaviorTab>
     onCommitGenerationEnabledChange: vi.fn(),
     aiTitleGenerationEnabled: true,
     onAiTitleGenerationEnabledChange: vi.fn(),
+    managedMemoryEnabled: false,
+    onManagedMemoryEnabledChange: vi.fn(),
+    managedMemoryOverridden: false,
     taskCompletionNotificationEnabled: false,
     onTaskCompletionNotificationEnabledChange: vi.fn(),
     askUserQuestionNotificationEnabled: false,
@@ -171,6 +174,28 @@ describe('BehaviorTab system notification focus gate toggle', () => {
     });
 
     expect(screen.getByText('settings.basic.systemNotificationOnlyWhenUnfocused.label')).toBeTruthy();
+  });
+});
+
+describe('BehaviorTab managed memory toggle', () => {
+  it('renders unchecked by default and fires the change callback with true on click', () => {
+    const onManagedMemoryEnabledChange = vi.fn();
+    renderBehaviorTab({ onManagedMemoryEnabledChange });
+
+    const checkbox = screen.getByRole('checkbox', {
+      name: /settings.basic.managedMemory.disabled/i,
+    }) as HTMLInputElement;
+    expect(checkbox.checked).toBe(false);
+
+    fireEvent.click(checkbox);
+    expect(onManagedMemoryEnabledChange).toHaveBeenCalledWith(true);
+  });
+
+  it('shows the override hint when CLI config pins the memory keys', () => {
+    renderBehaviorTab({ managedMemoryOverridden: true });
+
+    expect(screen.getByText('settings.basic.managedMemory.hintOverridden')).toBeTruthy();
+    expect(screen.queryByText('settings.basic.managedMemory.hint')).toBeNull();
   });
 });
 

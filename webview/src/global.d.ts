@@ -350,6 +350,11 @@ interface Window {
   updateAiTitleGenerationEnabled?: (json: string) => void;
 
   /**
+   * Update managed auto-memory enabled state (+ CLI-override hint)
+   */
+  updateManagedMemoryEnabled?: (json: string) => void;
+
+  /**
    * Update status bar widget enabled state
    */
   updateStatusBarWidgetEnabled?: (json: string) => void;

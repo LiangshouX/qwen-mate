@@ -203,6 +203,13 @@
         "disabled": "已关闭",
         "hint": "开启后，AI 回复将实时逐字显示，而非等待完整响应后一次性展示。可能会消耗更多资源。"
       },
+      "managedMemory": {
+        "label": "托管记忆（Managed Memory）",
+        "enabled": "已开启",
+        "disabled": "已关闭",
+        "hint": "关闭（默认）可修复模型停止输出后 GUI 长时间等待的问题：CLI 每轮结束后会执行后台记忆任务并阻塞本轮完成。开启后在 GUI 内恢复 Qwen CLI 默认的记忆提取与整理；不影响独立使用的 Qwen CLI。",
+        "hintOverridden": "检测到 Qwen CLI 配置（用户/项目/企业）已设置 memory 键，将以该配置为准，此开关仅作为默认值。"
+      },
       "autoOpenFile": {
         "label": "发送打开的文件路径",
         "enabled": "已开启",

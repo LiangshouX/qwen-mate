@@ -203,6 +203,13 @@
         "disabled": "비활성화",
         "hint": "활성화하면 AI 응답이 실시간으로 한 글자씩 표시됩니다. 완전한 응답을 기다리지 않습니다. 리소스를 더 많이 사용할 수 있습니다."
       },
+      "managedMemory": {
+        "label": "관리형 자동 메모리(Managed Memory)",
+        "enabled": "켜짐",
+        "disabled": "꺼짐",
+        "hint": "꺼짐(기본값) 유지 시 모델 출력이 끝난 뒤 GUI가 오래 기다리는 문제가 수정됩니다. CLI는 각 턴 종료 후 백그라운드 메모리 작업을 실행해 턴 완료를 차단합니다. 켜면 GUI 내에서만 Qwen CLI 기본 메모리 추출·정리가 복원됩니다(독립 Qwen CLI에는 영향 없음).",
+        "hintOverridden": "Qwen CLI 설정(사용자/프로젝트/기업)에 memory 키가 지정되어 있어 해당 설정이 우선하며, 이 스위치는 기본값으로만 작동합니다."
+      },
       "autoOpenFile": {
         "label": "파일 자동 열기",
         "enabled": "활성화",

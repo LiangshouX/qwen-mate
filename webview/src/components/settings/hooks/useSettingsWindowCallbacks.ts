@@ -38,6 +38,7 @@ export const SETTINGS_BOOTSTRAP_BRIDGE_MESSAGES = [
   'get_sound_notification_config:',
   'get_commit_generation_enabled:',
   'get_ai_title_generation_enabled:',
+  'get_managed_memory_enabled:',
   'get_status_bar_widget_enabled:',
   'get_task_completion_notification_enabled:',
   'get_ask_user_question_notification_enabled:',
@@ -71,6 +72,8 @@ export interface SettingsWindowCallbacksDeps {
   // AI feature toggle setters
   setCommitGenerationEnabled?: (enabled: boolean) => void;
   setAiTitleGenerationEnabled?: (enabled: boolean) => void;
+  setManagedMemoryEnabled?: (enabled: boolean) => void;
+  setManagedMemoryOverridden?: (overridden: boolean) => void;
   setStatusBarWidgetEnabled?: (enabled: boolean) => void;
   setTaskCompletionNotificationEnabled?: (enabled: boolean) => void;
   setAskUserQuestionNotificationEnabled?: (enabled: boolean) => void;
@@ -328,6 +331,22 @@ export function useSettingsWindowCallbacks(deps: SettingsWindowCallbacksDeps) {
       }
     };
 
+    // Managed auto-memory config callback. The setter echo (from the toggle)
+    // carries only managedMemoryEnabled — preserve the override flag then.
+    window.updateManagedMemoryEnabled = (jsonStr: string) => {
+      try {
+        const data = JSON.parse(jsonStr);
+        if (typeof data.managedMemoryEnabled === 'boolean') {
+          d().setManagedMemoryEnabled?.(data.managedMemoryEnabled);
+        }
+        if (typeof data.managedMemoryOverridden === 'boolean') {
+          d().setManagedMemoryOverridden?.(data.managedMemoryOverridden);
+        }
+      } catch (error) {
+        console.error('[SettingsView] Failed to parse managed memory config:', error);
+      }
+    };
+
     // Status bar widget config callback
     window.updateStatusBarWidgetEnabled = (jsonStr: string) => {
       try {
@@ -524,6 +543,7 @@ export function useSettingsWindowCallbacks(deps: SettingsWindowCallbacksDeps) {
       window.updateSoundNotificationConfig = undefined;
       window.updateCommitGenerationEnabled = undefined;
       window.updateAiTitleGenerationEnabled = undefined;
+      window.updateManagedMemoryEnabled = undefined;
       window.updateStatusBarWidgetEnabled = undefined;
       window.updateTaskCompletionNotificationEnabled = undefined;
       window.updateAskUserQuestionNotificationEnabled = undefined;

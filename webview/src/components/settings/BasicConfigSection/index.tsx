@@ -76,6 +76,10 @@ interface BasicConfigSectionProps {
   // AI title generation configuration
   aiTitleGenerationEnabled?: boolean;
   onAiTitleGenerationEnabledChange?: (enabled: boolean) => void;
+  // Managed auto-memory switch (方案 G)
+  managedMemoryEnabled?: boolean;
+  onManagedMemoryEnabledChange?: (enabled: boolean) => void;
+  managedMemoryOverridden?: boolean;
   // New-session confirm dialog (positive semantics: true = shown)
   newSessionConfirmEnabled?: boolean;
   onNewSessionConfirmEnabledChange?: (enabled: boolean) => void;
@@ -175,6 +179,9 @@ const BasicConfigSection = (props: BasicConfigSectionProps) => {
           onStatusBarWidgetEnabledChange={props.onStatusBarWidgetEnabledChange}
           aiTitleGenerationEnabled={props.aiTitleGenerationEnabled}
           onAiTitleGenerationEnabledChange={props.onAiTitleGenerationEnabledChange}
+          managedMemoryEnabled={props.managedMemoryEnabled}
+          onManagedMemoryEnabledChange={props.onManagedMemoryEnabledChange}
+          managedMemoryOverridden={props.managedMemoryOverridden}
           newSessionConfirmEnabled={props.newSessionConfirmEnabled}
           onNewSessionConfirmEnabledChange={props.onNewSessionConfirmEnabledChange}
           soundNotificationEnabled={props.soundNotificationEnabled}

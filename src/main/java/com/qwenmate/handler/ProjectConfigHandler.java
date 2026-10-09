@@ -3,13 +3,16 @@ package com.qwenmate.handler;
 import com.qwenmate.handler.core.HandlerContext;
 
 import com.qwenmate.i18n.QwenMateBundle;
+import com.qwenmate.settings.QwenCliConfigReader;
 import com.qwenmate.settings.QwenMateSettingsService;
 import com.qwenmate.action.SendShortcutSync;
 import com.qwenmate.util.FontConfigService;
+import com.qwenmate.util.PlatformUtils;
 import com.qwenmate.util.ThemeConfigService;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
@@ -660,6 +663,89 @@ public class ProjectConfigHandler {
             settingsService::setAiTitleGenerationEnabled,
             "window.updateAiTitleGenerationEnabled",
             "Failed to save AI title generation config");
+    }
+
+    // ---- Managed memory (方案 G) ------------------------------------------
+
+    public void handleGetManagedMemoryEnabled() {
+        respondWithJson("window.updateManagedMemoryEnabled",
+            () -> {
+                JsonObject payload = new JsonObject();
+                payload.addProperty("managedMemoryEnabled", settingsService.getManagedMemoryEnabled());
+                payload.addProperty("managedMemoryOverridden", hasCliManagedMemoryOverride());
+                return payload;
+            },
+            jsonOf("managedMemoryEnabled", false),
+            "Failed to get managed memory enabled");
+    }
+
+    public void handleSetManagedMemoryEnabled(String content) {
+        handleBooleanToggle(content, "managedMemoryEnabled", false, "managed memory enabled",
+            settingsService::setManagedMemoryEnabled,
+            "window.updateManagedMemoryEnabled",
+            "Failed to save managed memory config");
+    }
+
+    /**
+     * True when a higher-priority CLI settings layer (user
+     * {@code ~/.qwen/settings.json}, workspace {@code .qwen/settings.json}, or
+     * enterprise system settings) pins the memory keys. The GUI switch injects
+     * at the LOWEST layer (system-defaults), so those layers win and the UI
+     * must say the CLI config takes precedence.
+     */
+    private boolean hasCliManagedMemoryOverride() {
+        try {
+            if (settingsHasManagedMemoryKeys(QwenCliConfigReader.readSettings())) {
+                return true;
+            }
+        } catch (Exception e) {
+            LOG.warn("[ProjectConfigHandler] Failed to read CLI user settings for memory override: " + e.getMessage());
+        }
+        try {
+            String projectPath = context.getProject().getBasePath();
+            if (projectPath != null) {
+                File workspaceSettings = new File(projectPath, ".qwen/settings.json");
+                if (workspaceSettings.exists()
+                        && settingsHasManagedMemoryKeys(readSettingsFile(workspaceSettings))) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            LOG.warn("[ProjectConfigHandler] Failed to read workspace settings for memory override: " + e.getMessage());
+        }
+        File systemSettings = new File(systemSettingsPath());
+        try {
+            return systemSettings.exists()
+                    && settingsHasManagedMemoryKeys(readSettingsFile(systemSettings));
+        } catch (Exception e) {
+            LOG.warn("[ProjectConfigHandler] Failed to read system settings for memory override: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static JsonObject readSettingsFile(File file) throws Exception {
+        try (java.io.Reader reader = new java.io.FileReader(file, java.nio.charset.StandardCharsets.UTF_8)) {
+            return JsonParser.parseReader(reader).getAsJsonObject();
+        }
+    }
+
+    private static boolean settingsHasManagedMemoryKeys(JsonObject settings) {
+        if (settings == null || !settings.has("memory") || !settings.get("memory").isJsonObject()) {
+            return false;
+        }
+        JsonObject memory = settings.getAsJsonObject("memory");
+        return memory.has("enableManagedAutoMemory") || memory.has("enableManagedAutoDream");
+    }
+
+    /** Platform default of the CLI system settings file (mirrors CLI getSystemSettingsPath). */
+    private static String systemSettingsPath() {
+        if (PlatformUtils.isWindows()) {
+            return "C:\\ProgramData\\qwen-code\\settings.json";
+        }
+        if (PlatformUtils.isMac()) {
+            return "/Library/Application Support/QwenCode/settings.json";
+        }
+        return "/etc/qwen-code/settings.json";
     }
 
     public void handleGetStatusBarWidgetEnabled() {

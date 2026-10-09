@@ -29,6 +29,7 @@ import {
   writeAskQuestionRequest,
   writePermissionRequest,
 } from './permission-file-ipc.js';
+import { managedMemoryQueryEnv } from './managed-memory-env.js';
 
 // ─── Runtime registry (mirrors the upstream SDK pattern) ───
 
@@ -656,6 +657,11 @@ export async function sendMessagePersistent(params = {}) {
     // Stretch the SDK/CLI canUseTool timeout over the whole approval dialog
     // window; the 60s default cancels the command while the dialog is open.
     options.timeout = { canUseTool: permissionCanUseToolTimeoutMs() };
+
+    // Managed memory off (default): point the CLI at our system-defaults
+    // fragment so headless turns stop blocking `result` on memory tasks.
+    const memoryEnv = managedMemoryQueryEnv();
+    if (memoryEnv) options.env = memoryEnv;
 
     // Attachments → content blocks
     let prompt;

@@ -22,6 +22,14 @@ export interface BehaviorTabProps {
   aiTitleGenerationEnabled?: boolean;
   onAiTitleGenerationEnabledChange?: (enabled: boolean) => void;
   /**
+   * Managed auto-memory (方案 G): off by default because headless turns block
+   * on memory tasks, which leaves the GUI waiting long after output stops.
+   */
+  managedMemoryEnabled?: boolean;
+  onManagedMemoryEnabledChange?: (enabled: boolean) => void;
+  /** CLI config (user/workspace/system) pins memory keys → the switch is only a default. */
+  managedMemoryOverridden?: boolean;
+  /**
    * Whether the "create new session with existing messages" confirm dialog is
    * enabled (i.e. shown). Positive semantics: `true` = dialog shows, `false` =
    * silently create the new session. Default `true` to preserve safer behaviour
@@ -69,6 +77,9 @@ const BehaviorTab = ({
   onStatusBarWidgetEnabledChange = () => {},
   aiTitleGenerationEnabled = true,
   onAiTitleGenerationEnabledChange = () => {},
+  managedMemoryEnabled = false,
+  onManagedMemoryEnabledChange = () => {},
+  managedMemoryOverridden = false,
   newSessionConfirmEnabled = true,
   onNewSessionConfirmEnabledChange = () => {},
   soundNotificationEnabled = false,
@@ -119,6 +130,19 @@ const BehaviorTab = ({
         enabledLabel={t('settings.basic.streaming.enabled')}
         disabledLabel={t('settings.basic.streaming.disabled')}
         hint={t('settings.basic.streaming.hint')}
+      />
+
+      {/* Managed auto-memory configuration (方案 G) */}
+      <ToggleSettingSection
+        icon="codicon-database"
+        label={t('settings.basic.managedMemory.label')}
+        checked={managedMemoryEnabled}
+        onChange={onManagedMemoryEnabledChange}
+        enabledLabel={t('settings.basic.managedMemory.enabled')}
+        disabledLabel={t('settings.basic.managedMemory.disabled')}
+        hint={managedMemoryOverridden
+          ? t('settings.basic.managedMemory.hintOverridden')
+          : t('settings.basic.managedMemory.hint')}
       />
 
       {/* Auto open file configuration */}

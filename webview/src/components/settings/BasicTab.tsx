@@ -69,6 +69,9 @@ const BasicTab = ({ themeSync, basicActions, addToast }: BasicTabProps) => {
       }}
       aiTitleGenerationEnabled={basicActions.aiTitleGenerationEnabled}
       onAiTitleGenerationEnabledChange={basicActions.handleAiTitleGenerationEnabledChange}
+      managedMemoryEnabled={basicActions.managedMemoryEnabled}
+      onManagedMemoryEnabledChange={basicActions.handleManagedMemoryEnabledChange}
+      managedMemoryOverridden={basicActions.managedMemoryOverridden}
       newSessionConfirmEnabled={!basicActions.skipNewSessionConfirm}
       onNewSessionConfirmEnabledChange={(enabled) => {
         // Optimistic local update so the toggle reflects instantly even if

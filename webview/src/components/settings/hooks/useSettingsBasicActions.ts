@@ -87,6 +87,10 @@ export interface UseSettingsBasicActionsReturn {
   commitGenerationEnabled: boolean;
   aiTitleGenerationEnabled: boolean;
   statusBarWidgetEnabled: boolean;
+  /** Managed auto-memory switch (方案 G); default false keeps the end-of-turn stall fixed. */
+  managedMemoryEnabled: boolean;
+  /** True when CLI config (user/workspace/system) pins memory keys and wins over the GUI switch. */
+  managedMemoryOverridden: boolean;
   taskCompletionNotificationEnabled: boolean;
   askUserQuestionNotificationEnabled: boolean;
   detailedOutputEnabled: boolean;
@@ -120,6 +124,7 @@ export interface UseSettingsBasicActionsReturn {
   handleSaveProjectCommitPrompt: () => void;
   handleCommitGenerationEnabledChange: (enabled: boolean) => void;
   handleAiTitleGenerationEnabledChange: (enabled: boolean) => void;
+  handleManagedMemoryEnabledChange: (enabled: boolean) => void;
   handleStatusBarWidgetEnabledChange: (enabled: boolean) => void;
   handleTaskCompletionNotificationEnabledChange: (enabled: boolean) => void;
   handleAskUserQuestionNotificationEnabledChange: (enabled: boolean) => void;
@@ -172,6 +177,8 @@ export interface UseSettingsBasicActionsReturn {
   /** @internal */ setSkipNewSessionConfirm: (enabled: boolean) => void;
   /** @internal */ setCommitGenerationEnabled: (enabled: boolean) => void;
   /** @internal */ setAiTitleGenerationEnabled: (enabled: boolean) => void;
+  /** @internal */ setManagedMemoryEnabled: (enabled: boolean) => void;
+  /** @internal */ setManagedMemoryOverridden: (overridden: boolean) => void;
   /** @internal */ setStatusBarWidgetEnabled: (enabled: boolean) => void;
   /** @internal */ setTaskCompletionNotificationEnabled: (enabled: boolean) => void;
   /** @internal */ setAskUserQuestionNotificationEnabled: (enabled: boolean) => void;
@@ -277,6 +284,13 @@ export function useSettingsBasicActions({
 
   // AI session title generation toggle (default: true)
   const [aiTitleGenerationEnabled, setAiTitleGenerationEnabled] = useState<boolean>(true);
+
+  // Managed auto-memory toggle (default: false — headless turns block on
+  // managed memory tasks, so memory stays off until the user opts in)
+  const [managedMemoryEnabled, setManagedMemoryEnabled] = useState<boolean>(false);
+  // Set by the backend when user/workspace/system CLI config pins the memory
+  // keys: those layers outrank the GUI switch's system-defaults injection.
+  const [managedMemoryOverridden, setManagedMemoryOverridden] = useState<boolean>(false);
 
   // Status bar widget toggle (default: true)
   const [statusBarWidgetEnabled, setStatusBarWidgetEnabled] = useState<boolean>(true);
@@ -486,6 +500,14 @@ export function useSettingsBasicActions({
     setAiTitleGenerationEnabled(enabled);
     const payload = { aiTitleGenerationEnabled: enabled };
     sendToJava(`set_ai_title_generation_enabled:${JSON.stringify(payload)}`);
+  }, []);
+
+  // Managed auto-memory toggle change handler (applies from the next message;
+  // the CLI respawns per turn so no restart is needed)
+  const handleManagedMemoryEnabledChange = useCallback((enabled: boolean) => {
+    setManagedMemoryEnabled(enabled);
+    const payload = { managedMemoryEnabled: enabled };
+    sendToJava(`set_managed_memory_enabled:${JSON.stringify(payload)}`);
   }, []);
 
   // Status bar widget toggle change handler
@@ -791,6 +813,11 @@ export function useSettingsBasicActions({
     aiTitleGenerationEnabled,
     setAiTitleGenerationEnabled,
     handleAiTitleGenerationEnabledChange,
+    managedMemoryEnabled,
+    setManagedMemoryEnabled,
+    managedMemoryOverridden,
+    setManagedMemoryOverridden,
+    handleManagedMemoryEnabledChange,
     statusBarWidgetEnabled,
     setStatusBarWidgetEnabled,
     handleStatusBarWidgetEnabledChange,

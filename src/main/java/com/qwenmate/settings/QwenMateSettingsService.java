@@ -1576,6 +1576,80 @@ public class QwenMateSettingsService {
         LOG.info("[QwenMateSettings] Set AI title generation enabled: " + enabled);
     }
 
+    // ==================== Managed Memory Config Management ====================
+
+    private static final String MANAGED_MEMORY_KEY = "managedMemoryEnabled";
+    private static final String MANAGED_MEMORY_PROJECTION_FILE = "managed-memory.json";
+
+    /**
+     * Get the GUI-side managed auto-memory switch (方案 G).
+     *
+     * <p>Default {@code false}: headless turns block on managed auto-memory
+     * tasks before emitting {@code result}, so memory stays off unless the
+     * user opts in here. Interactive Qwen CLI is unaffected either way.
+     *
+     * @return whether managed auto-memory is enabled for GUI-spawned CLI processes
+     */
+    public boolean getManagedMemoryEnabled() throws IOException {
+        JsonObject config = readConfig();
+        boolean enabled = config.has(MANAGED_MEMORY_KEY)
+                && !config.get(MANAGED_MEMORY_KEY).isJsonNull()
+                && config.get(MANAGED_MEMORY_KEY).getAsBoolean();
+        // Self-heal the projection (upgrade, manual deletion) so the UI state
+        // and the Node bridge's env injection cannot drift apart.
+        syncManagedMemoryProjection(enabled);
+        return enabled;
+    }
+
+    /**
+     * Set the GUI-side managed auto-memory switch and its Node projection.
+     *
+     * @param enabled whether managed auto-memory is enabled
+     */
+    public void setManagedMemoryEnabled(boolean enabled) throws IOException {
+        JsonObject config = readConfig();
+        config.addProperty(MANAGED_MEMORY_KEY, enabled);
+        writeConfig(config);
+        syncManagedMemoryProjection(enabled);
+        LOG.info("[QwenMateSettings] Set managed memory enabled: " + enabled);
+    }
+
+    /**
+     * Project the toggle to {@code ~/.qwenmate/managed-memory.json} — the Node
+     * bridge reads that file to decide whether to inject
+     * {@code QWEN_CODE_SYSTEM_DEFAULTS_PATH} into the CLI spawn env (it never
+     * reads config.json). Best-effort: on failure the safe default (memory off,
+     * Node-side) stays in effect.
+     */
+    private void syncManagedMemoryProjection(boolean enabled) {
+        try {
+            Path dir = pathManager.getConfigDir();
+            Files.createDirectories(dir);
+            Path projection = dir.resolve(MANAGED_MEMORY_PROJECTION_FILE);
+            String content = "{\"managedMemoryEnabled\":" + enabled + "}\n";
+            String current = Files.exists(projection)
+                    ? Files.readString(projection, StandardCharsets.UTF_8)
+                    : null;
+            if (content.equals(current)) {
+                return;
+            }
+            Path temp = Files.createTempFile(dir, "managed-memory-", ".tmp");
+            try {
+                Files.writeString(temp, content, StandardCharsets.UTF_8);
+                try {
+                    Files.move(temp, projection, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                } catch (AtomicMoveNotSupportedException ignored) {
+                    Files.move(temp, projection, StandardCopyOption.REPLACE_EXISTING);
+                }
+            } finally {
+                Files.deleteIfExists(temp);
+            }
+            LOG.info("[QwenMateSettings] Synced managed-memory projection: " + enabled);
+        } catch (Exception e) {
+            LOG.warn("[QwenMateSettings] Failed to sync managed-memory projection: " + e.getMessage());
+        }
+    }
+
     // ==================== Prompt Enhancer Config Management ====================
 
     /**

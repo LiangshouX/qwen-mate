@@ -10,6 +10,7 @@
  */
 
 import { loadQwenSdk } from '../utils/sdk-loader.js';
+import { managedMemoryQueryEnv } from './qwen/managed-memory-env.js';
 
 export const ASK_PROVIDERS = ['qwen'];
 
@@ -115,6 +116,10 @@ async function generateWithQwenSdk({
 
   const abortController = new AbortController();
   const options = buildAskQueryOptions({ cwd, model, abortController });
+  // Same managed-memory env as chat turns: a one-shot query also awaits
+  // `result`, so memory tasks would stall titles/prompts by the same margin.
+  const memoryEnv = managedMemoryQueryEnv();
+  if (memoryEnv) options.env = memoryEnv;
   const timeoutHandle = setTimeout(
     () => abortController.abort(),
     timeoutMs > 0 ? timeoutMs : DEFAULT_TIMEOUT_MS

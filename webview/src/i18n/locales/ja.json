@@ -203,6 +203,13 @@
         "disabled": "Disabled",
         "hint": "When enabled, AI responses will appear character by character in real-time, instead of waiting for the complete response. May consume more resources."
       },
+      "managedMemory": {
+        "label": "管理された自動メモリ（Managed Memory）",
+        "enabled": "有効",
+        "disabled": "無効",
+        "hint": "無効のまま（デフォルト）にすると、モデルの出力終了後に GUI が長く待つ問題を修正できます。CLI は各ターン終了後にバックグラウンドのメモリタスクを実行し、ターン完了をブロックします。有効にすると GUI 内で Qwen CLI のデフォルトのメモリ抽出・整理が復元されます（単独の Qwen CLI には影響しません）。",
+        "hintOverridden": "Qwen CLI 設定（ユーザー/プロジェクト/企業）で memory キーが設定されているため、そちらが優先されます。このスイッチはデフォルト値として機能します。"
+      },
       "autoOpenFile": {
         "label": "開いたファイルパスを送信",
         "enabled": "有効",

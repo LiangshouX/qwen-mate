@@ -203,6 +203,13 @@
         "disabled": "Desativado",
         "hint": "Quando ativado, as respostas da IA aparecem caractere por caractere em tempo real, em vez de aguardar a resposta completa. Pode consumir mais recursos."
       },
+      "managedMemory": {
+        "label": "Memória automática gerenciada (Managed Memory)",
+        "enabled": "Ativada",
+        "disabled": "Desativada",
+        "hint": "Manter desligado (padrão) corrige a espera longa da GUI após o modelo parar: tarefas de memória em segundo plano bloqueiam o fim do turno. Ligado restaura os padrões de memória do Qwen CLI apenas dentro da GUI; o CLI Qwen independente não é afetado.",
+        "hintOverridden": "A configuração do Qwen CLI (usuário/projeto/empresa) define as chaves memory e tem prioridade; esta alternativa apenas define o valor padrão."
+      },
       "autoOpenFile": {
         "label": "Enviar Caminho do Arquivo Aberto",
         "enabled": "Ativado",

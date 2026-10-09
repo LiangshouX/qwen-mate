@@ -203,6 +203,13 @@
         "disabled": "Disabled",
         "hint": "When enabled, AI responses will appear character by character in real-time, instead of waiting for the complete response. May consume more resources."
       },
+      "managedMemory": {
+        "label": "Mémoire automatique gérée (Managed Memory)",
+        "enabled": "Activée",
+        "disabled": "Désactivée",
+        "hint": "Laissez désactivé (par défaut) pour corriger l'attente prolongée de l'GUI après l'arrêt du modèle : les tâches de mémoire en arrière-plan bloquent la fin de tour. Activé restaure les réglages par défaut de Qwen CLI dans l'GUI uniquement ; le CLI Qwen autonome n'est pas affecté.",
+        "hintOverridden": "La configuration Qwen CLI (utilisateur/projet/entreprise) définit les clés memory — elle prime ; ce commutateur ne fixe que la valeur par défaut."
+      },
       "autoOpenFile": {
         "label": "Envoyer le chemin du fichier ouvert",
         "enabled": "Activé",

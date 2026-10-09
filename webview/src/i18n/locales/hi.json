@@ -203,6 +203,13 @@
         "disabled": "Disabled",
         "hint": "When enabled, AI responses will appear character by character in real-time, instead of waiting for the complete response. May consume more resources."
       },
+      "managedMemory": {
+        "label": "प्रबंधित ऑटो-मेमोरी (Managed Memory)",
+        "enabled": "चालू",
+        "disabled": "बंद",
+        "hint": "बंद (डिफ़ॉल्ट) रखने पर मॉडल के आउटपुट रुकने के बाद GUI की लंबी प्रतीक्षा ठीक होती है। CLI हर टर्न के बाद बैकग्राउंड मेमोरी कार्य चलाकर टर्न पूर्ण होने को रोकता है। चालू करने पर केवल GUI के भीतर Qwen CLI की डिफ़ॉल्ट मेमोरी सेटिंग बहाल होती हैं; स्वतंत्र Qwen CLI प्रभावित नहीं होता।",
+        "hintOverridden": "Qwen CLI कॉन्फ़िगरेशन (उपयोगकर्ता/प्रोजेक्ट/एंटरप्राइज़) में memory कुंजियाँ सेट हैं — वही प्राथमिकता पाती हैं; यह स्विच केवल डिफ़ॉल्ट सेट करता है।"
+      },
       "autoOpenFile": {
         "label": "खुली फ़ाइल पथ भेजें",
         "enabled": "सक्षम",

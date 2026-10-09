@@ -72,6 +72,8 @@ public class SettingsHandler extends BaseMessageHandler {
         "set_commit_generation_enabled",
         "get_status_bar_widget_enabled",
         "set_status_bar_widget_enabled",
+        "get_managed_memory_enabled",
+        "set_managed_memory_enabled",
 
         "get_task_completion_notification_enabled",
         "set_task_completion_notification_enabled",
@@ -296,6 +298,12 @@ public class SettingsHandler extends BaseMessageHandler {
                 return true;
             case "set_ai_title_generation_enabled":
                 projectConfigHandler.handleSetAiTitleGenerationEnabled(content);
+                return true;
+            case "get_managed_memory_enabled":
+                projectConfigHandler.handleGetManagedMemoryEnabled();
+                return true;
+            case "set_managed_memory_enabled":
+                projectConfigHandler.handleSetManagedMemoryEnabled(content);
                 return true;
             case "get_ide_theme":
                 projectConfigHandler.handleGetIdeTheme();
