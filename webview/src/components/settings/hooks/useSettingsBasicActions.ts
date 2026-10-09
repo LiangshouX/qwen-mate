@@ -508,6 +508,9 @@ export function useSettingsBasicActions({
     setManagedMemoryEnabled(enabled);
     const payload = { managedMemoryEnabled: enabled };
     sendToJava(`set_managed_memory_enabled:${JSON.stringify(payload)}`);
+    // Settings owns the window callback while open — announce so the
+    // app-level quick toggle (input-box popup) stays in sync.
+    window.dispatchEvent(new CustomEvent('managedMemoryEnabledChanged', { detail: { enabled } }));
   }, []);
 
   // Status bar widget toggle change handler

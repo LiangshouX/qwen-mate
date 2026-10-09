@@ -17,6 +17,8 @@ export interface UseProviderSettingsOptions {
  */
 export function useProviderSettings({ addToast, t }: UseProviderSettingsOptions) {
   const [streamingEnabledSetting, setStreamingEnabledSetting] = useState(true);
+  // Managed auto-memory switch: OFF (default) keeps end-of-turn responsive.
+  const [managedMemoryEnabledSetting, setManagedMemoryEnabledSetting] = useState(false);
   const [sendShortcut, setSendShortcut] = useState<'enter' | 'cmdEnter'>('enter');
   const [autoOpenFileEnabled, setAutoOpenFileEnabled] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<SelectedAgent | null>(null);
@@ -68,6 +70,27 @@ export function useProviderSettings({ addToast, t }: UseProviderSettingsOptions)
     );
   }, [t, addToast]);
 
+  const handleManagedMemoryEnabledChange = useCallback((enabled: boolean) => {
+    setManagedMemoryEnabledSetting(enabled);
+    sendBridgeEvent('set_managed_memory_enabled', JSON.stringify({ managedMemoryEnabled: enabled }));
+    addToast(
+      enabled ? t('settings.basic.managedMemory.enabled') : t('settings.basic.managedMemory.disabled'),
+      'success',
+    );
+  }, [t, addToast]);
+
+  // The settings page owns window.updateManagedMemoryEnabled while open (same
+  // single-slot convention as streaming), so it announces changes through this
+  // event to keep the app-level state — and the input-box quick toggle — in sync.
+  useEffect(() => {
+    const onSettingsChange = (event: Event) => {
+      const enabled = (event as CustomEvent<{ enabled: boolean }>).detail?.enabled;
+      if (typeof enabled === 'boolean') setManagedMemoryEnabledSetting(enabled);
+    };
+    window.addEventListener('managedMemoryEnabledChanged', onSettingsChange);
+    return () => window.removeEventListener('managedMemoryEnabledChanged', onSettingsChange);
+  }, []);
+
   const handleSendShortcutChange = useCallback((shortcut: 'enter' | 'cmdEnter') => {
     setSendShortcut(shortcut);
     sendBridgeEvent('set_send_shortcut', JSON.stringify({ sendShortcut: shortcut }));
@@ -85,6 +108,8 @@ export function useProviderSettings({ addToast, t }: UseProviderSettingsOptions)
   return {
     streamingEnabledSetting,
     setStreamingEnabledSetting,
+    managedMemoryEnabledSetting,
+    setManagedMemoryEnabledSetting,
     sendShortcut,
     setSendShortcut,
     autoOpenFileEnabled,
@@ -97,6 +122,7 @@ export function useProviderSettings({ addToast, t }: UseProviderSettingsOptions)
     setReasoningEffort,
     handleAgentSelect,
     handleStreamingEnabledChange,
+    handleManagedMemoryEnabledChange,
     handleSendShortcutChange,
     handleAutoOpenFileEnabledChange,
   };

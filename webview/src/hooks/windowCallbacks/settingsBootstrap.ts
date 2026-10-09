@@ -26,6 +26,7 @@ export const startInitialSettingsRequest = (): void => {
     }
     if (window.sendToJava) {
       window.sendToJava('get_streaming_enabled:');
+      window.sendToJava('get_managed_memory_enabled:');
       window.sendToJava('get_send_shortcut:');
       window.sendToJava('get_auto_open_file_enabled:');
       window.sendToJava('get_permission_dialog_timeout:');
@@ -105,6 +106,12 @@ export const drainPendingSettings = (): void => {
     const pending = w.__pendingStreamingEnabled as string;
     delete w.__pendingStreamingEnabled;
     window.updateStreamingEnabled?.(pending);
+  }
+
+  if (w.__pendingManagedMemoryEnabled) {
+    const pending = w.__pendingManagedMemoryEnabled as string;
+    delete w.__pendingManagedMemoryEnabled;
+    window.updateManagedMemoryEnabled?.(pending);
   }
 
   if (w.__pendingSendShortcut) {

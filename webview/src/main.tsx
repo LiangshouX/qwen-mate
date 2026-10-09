@@ -629,6 +629,15 @@ if (typeof window !== 'undefined' && !window.updateStreamingEnabled) {
   };
 }
 
+// Pre-register updateManagedMemoryEnabled for early backend responses (same pending pattern as streaming)
+if (typeof window !== 'undefined' && !window.updateManagedMemoryEnabled) {
+  debugLog('[Main] Pre-registering updateManagedMemoryEnabled placeholder');
+  window.updateManagedMemoryEnabled = (json: string) => {
+    debugLog('[Main] Storing pending managed memory status, length=' + (json ? json.length : 0));
+    window.__pendingManagedMemoryEnabled = json;
+  };
+}
+
 // Pre-register updateSendShortcut to handle backend status responses that arrive before React initializes
 if (typeof window !== 'undefined' && !window.updateSendShortcut) {
   debugLog('[Main] Pre-registering updateSendShortcut placeholder');

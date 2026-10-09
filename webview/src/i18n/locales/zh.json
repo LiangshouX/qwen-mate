@@ -207,7 +207,7 @@
         "label": "托管记忆（Managed Memory）",
         "enabled": "已开启",
         "disabled": "已关闭",
-        "hint": "关闭（默认）可修复模型停止输出后 GUI 长时间等待的问题：CLI 每轮结束后会执行后台记忆任务并阻塞本轮完成。开启后在 GUI 内恢复 Qwen CLI 默认的记忆提取与整理；不影响独立使用的 Qwen CLI。",
+        "hint": "关闭（默认）：模型停止输出后立即结束等待；开启：结束后还需等待后台记忆任务完成，可能额外等待数十秒到数分钟。",
         "hintOverridden": "检测到 Qwen CLI 配置（用户/项目/企业）已设置 memory 键，将以该配置为准，此开关仅作为默认值。"
       },
       "autoOpenFile": {

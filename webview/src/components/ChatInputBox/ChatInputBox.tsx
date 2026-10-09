@@ -56,6 +56,8 @@ export const ChatInputBox = memo(forwardRef<ChatInputBoxHandle, ChatInputBoxProp
       onToggleThinking,
       streamingEnabled,
       onStreamingEnabledChange,
+      managedMemoryEnabled,
+      onManagedMemoryEnabledChange,
       sendShortcut = 'enter',
       selectedAgent,
       onAgentSelect,
@@ -243,6 +245,8 @@ export const ChatInputBox = memo(forwardRef<ChatInputBoxHandle, ChatInputBoxProp
           onToggleThinking={onToggleThinking}
           streamingEnabled={streamingEnabled}
           onStreamingEnabledChange={onStreamingEnabledChange}
+          managedMemoryEnabled={managedMemoryEnabled}
+          onManagedMemoryEnabledChange={onManagedMemoryEnabledChange}
           selectedAgent={selectedAgent}
           onAgentSelect={(agent) => onAgentSelect?.(agent)}
           onOpenAgentSettings={onOpenAgentSettings}

@@ -333,6 +333,10 @@ export function useSettingsWindowCallbacks(deps: SettingsWindowCallbacksDeps) {
 
     // Managed auto-memory config callback. The setter echo (from the toggle)
     // carries only managedMemoryEnabled — preserve the override flag then.
+    // Save the previous owner (the app-level callback) so closing Settings
+    // restores it instead of clearing the slot — the input-box quick toggle
+    // keeps receiving echoes after Settings has been visited once.
+    const previousUpdateManagedMemoryEnabled = window.updateManagedMemoryEnabled;
     window.updateManagedMemoryEnabled = (jsonStr: string) => {
       try {
         const data = JSON.parse(jsonStr);
@@ -341,6 +345,13 @@ export function useSettingsWindowCallbacks(deps: SettingsWindowCallbacksDeps) {
         }
         if (typeof data.managedMemoryOverridden === 'boolean') {
           d().setManagedMemoryOverridden?.(data.managedMemoryOverridden);
+        }
+        // Mirror to the app-level state (useProviderSettings) while Settings
+        // owns the callback slot, so the quick toggle never goes stale.
+        if (typeof data.managedMemoryEnabled === 'boolean') {
+          window.dispatchEvent(new CustomEvent('managedMemoryEnabledChanged', {
+            detail: { enabled: data.managedMemoryEnabled },
+          }));
         }
       } catch (error) {
         console.error('[SettingsView] Failed to parse managed memory config:', error);
@@ -543,7 +554,7 @@ export function useSettingsWindowCallbacks(deps: SettingsWindowCallbacksDeps) {
       window.updateSoundNotificationConfig = undefined;
       window.updateCommitGenerationEnabled = undefined;
       window.updateAiTitleGenerationEnabled = undefined;
-      window.updateManagedMemoryEnabled = undefined;
+      window.updateManagedMemoryEnabled = previousUpdateManagedMemoryEnabled;
       window.updateStatusBarWidgetEnabled = undefined;
       window.updateTaskCompletionNotificationEnabled = undefined;
       window.updateAskUserQuestionNotificationEnabled = undefined;

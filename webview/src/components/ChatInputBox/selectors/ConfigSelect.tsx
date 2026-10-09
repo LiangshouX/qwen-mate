@@ -18,6 +18,8 @@ interface ConfigSelectProps {
   onToggleThinking?: (enabled: boolean) => void;
   streamingEnabled?: boolean;
   onStreamingEnabledChange?: (enabled: boolean) => void;
+  managedMemoryEnabled?: boolean;
+  onManagedMemoryEnabledChange?: (enabled: boolean) => void;
   selectedAgent?: SelectedAgent | null;
   onAgentSelect?: (agent: SelectedAgent) => void;
   onOpenAgentSettings?: () => void;
@@ -61,6 +63,8 @@ export const ConfigSelect = ({
   onToggleThinking,
   streamingEnabled,
   onStreamingEnabledChange,
+  managedMemoryEnabled,
+  onManagedMemoryEnabledChange,
   selectedAgent,
   onAgentSelect,
   onOpenAgentSettings,
@@ -265,6 +269,19 @@ export const ConfigSelect = ({
             value={streamingEnabled}
             defaultChecked
             onChange={onStreamingEnabledChange}
+            onMouseEnter={() => setActiveSubmenu('none')}
+          />
+
+          {/* Divider */}
+          <div style={FAINT_DIVIDER_STYLE} />
+
+          {/* Managed auto-memory Switch Item (off = end-of-turn stays responsive) */}
+          <ConfigSwitchOption
+            icon="codicon-database"
+            label={t('settings.basic.managedMemory.label')}
+            value={managedMemoryEnabled}
+            defaultChecked={false}
+            onChange={onManagedMemoryEnabledChange}
             onMouseEnter={() => setActiveSubmenu('none')}
           />
 

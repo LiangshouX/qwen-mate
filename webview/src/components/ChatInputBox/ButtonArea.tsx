@@ -32,6 +32,8 @@ export const ButtonArea = ({
   onToggleThinking,
   streamingEnabled = true,
   onStreamingEnabledChange,
+  managedMemoryEnabled = false,
+  onManagedMemoryEnabledChange,
   selectedAgent,
   onAgentSelect,
   onOpenAgentSettings,
@@ -139,6 +141,8 @@ export const ButtonArea = ({
           onToggleThinking={onToggleThinking}
           streamingEnabled={streamingEnabled}
           onStreamingEnabledChange={onStreamingEnabledChange}
+          managedMemoryEnabled={managedMemoryEnabled}
+          onManagedMemoryEnabledChange={onManagedMemoryEnabledChange}
           selectedAgent={selectedAgent}
           onAgentSelect={onAgentSelect}
           onOpenAgentSettings={onOpenAgentSettings}

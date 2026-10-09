@@ -913,6 +913,7 @@ interface Window {
    * Pending streaming enabled status before React initialization
    */
   __pendingStreamingEnabled?: string;
+  __pendingManagedMemoryEnabled?: string;
 
   /**
    * Pending send shortcut status before React initialization

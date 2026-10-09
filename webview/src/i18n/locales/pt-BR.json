@@ -207,7 +207,7 @@
         "label": "Memória automática gerenciada (Managed Memory)",
         "enabled": "Ativada",
         "disabled": "Desativada",
-        "hint": "Manter desligado (padrão) corrige a espera longa da GUI após o modelo parar: tarefas de memória em segundo plano bloqueiam o fim do turno. Ligado restaura os padrões de memória do Qwen CLI apenas dentro da GUI; o CLI Qwen independente não é afetado.",
+        "hint": "Desligado (padrão): a espera termina assim que o modelo para. Ligado: aguarda as tarefas de memória em segundo plano, o que costuma somar dezenas de segundos ou minutos.",
         "hintOverridden": "A configuração do Qwen CLI (usuário/projeto/empresa) define as chaves memory e tem prioridade; esta alternativa apenas define o valor padrão."
       },
       "autoOpenFile": {

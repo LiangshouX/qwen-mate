@@ -48,6 +48,7 @@ describe('useWindowCallbacks integration', () => {
     setReasoningEffort: vi.fn(),
     setAlwaysThinkingEnabled: vi.fn(),
     setStreamingEnabledSetting: vi.fn(),
+    setManagedMemoryEnabledSetting: vi.fn(),
     setSendShortcut: vi.fn(),
     setAutoOpenFileEnabled: vi.fn(),
     setPermissionDialogTimeoutSeconds: vi.fn(),

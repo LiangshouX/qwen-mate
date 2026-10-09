@@ -26,6 +26,7 @@ export function registerUsageModeCallbacks(options: UseWindowCallbacksOptions): 
     setReasoningEffort,
     setAlwaysThinkingEnabled,
     setStreamingEnabledSetting,
+    setManagedMemoryEnabledSetting,
     setSendShortcut,
     setAutoOpenFileEnabled,
     setPermissionDialogTimeoutSeconds,
@@ -155,6 +156,17 @@ export function registerUsageModeCallbacks(options: UseWindowCallbacksOptions): 
       setStreamingEnabledSetting(data.streamingEnabled ?? true);
     } catch (error) {
       console.error('[Frontend] Failed to parse streaming enabled:', error);
+    }
+  };
+
+  window.updateManagedMemoryEnabled = (jsonStr: string) => {
+    try {
+      const data = JSON.parse(jsonStr);
+      if (typeof data.managedMemoryEnabled === 'boolean') {
+        setManagedMemoryEnabledSetting(data.managedMemoryEnabled);
+      }
+    } catch (error) {
+      console.error('[Frontend] Failed to parse managed memory enabled:', error);
     }
   };
 

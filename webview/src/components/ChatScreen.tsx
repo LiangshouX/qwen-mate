@@ -91,6 +91,7 @@ export interface ChatScreenProps {
   alwaysThinkingEnabled: ProviderState['alwaysThinkingEnabled'];
   reasoningEffort: ProviderState['reasoningEffort'];
   streamingEnabledSetting: ProviderState['streamingEnabledSetting'];
+  managedMemoryEnabledSetting: ProviderState['managedMemoryEnabledSetting'];
   sendShortcut: ProviderState['sendShortcut'];
   autoOpenFileEnabled: ProviderState['autoOpenFileEnabled'];
   usagePercentage: ProviderState['usagePercentage'];
@@ -104,6 +105,7 @@ export interface ChatScreenProps {
   onReasoningChange: ProviderState['handleReasoningChange'];
   onToggleThinking: ProviderState['handleToggleThinking'];
   onStreamingEnabledChange: ProviderState['handleStreamingEnabledChange'];
+  onManagedMemoryEnabledChange: ProviderState['handleManagedMemoryEnabledChange'];
   onAutoOpenFileEnabledChange: ProviderState['handleAutoOpenFileEnabledChange'];
 
   // Message queue
@@ -136,9 +138,11 @@ export const ChatScreen = ({
   sdkStatusLoading, sdkStatusError, onRetrySdkStatus, currentSdkInstalled,
   alwaysThinkingEnabled,
   reasoningEffort, streamingEnabledSetting, sendShortcut, autoOpenFileEnabled,
+  managedMemoryEnabledSetting,
   usagePercentage, usageUsedTokens, usageMaxTokens,
   onModeSelect, onModelSelect, onAgentSelect, onReasoningChange, onToggleThinking,
   onStreamingEnabledChange,
+  onManagedMemoryEnabledChange,
   onAutoOpenFileEnabledChange,
   messageQueue, onRemoveFromQueue, onReorderQueue,
 }: ChatScreenProps) => {
@@ -323,6 +327,8 @@ export const ChatScreen = ({
           onToggleThinking={onToggleThinking}
           streamingEnabled={streamingEnabledSetting}
           onStreamingEnabledChange={onStreamingEnabledChange}
+          managedMemoryEnabled={managedMemoryEnabledSetting}
+          onManagedMemoryEnabledChange={onManagedMemoryEnabledChange}
           sendShortcut={sendShortcut}
           selectedAgent={selectedAgent}
           onAgentSelect={onAgentSelect}

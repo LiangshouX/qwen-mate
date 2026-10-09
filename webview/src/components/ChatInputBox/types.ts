@@ -543,6 +543,10 @@ export interface ChatInputBoxProps {
   streamingEnabled?: boolean;
   /** Toggle streaming */
   onStreamingEnabledChange?: (enabled: boolean) => void;
+  /** Whether managed auto-memory is enabled (off = end-of-turn stays responsive) */
+  managedMemoryEnabled?: boolean;
+  /** Toggle managed auto-memory */
+  onManagedMemoryEnabledChange?: (enabled: boolean) => void;
 
   /** Send shortcut setting: 'enter' = Enter sends | 'cmdEnter' = Cmd/Ctrl+Enter sends */
   sendShortcut?: SendShortcut;
@@ -630,6 +634,10 @@ export interface ButtonAreaProps {
   streamingEnabled?: boolean;
   /** Toggle streaming */
   onStreamingEnabledChange?: (enabled: boolean) => void;
+  /** Whether managed auto-memory is enabled (off = end-of-turn stays responsive) */
+  managedMemoryEnabled?: boolean;
+  /** Toggle managed auto-memory */
+  onManagedMemoryEnabledChange?: (enabled: boolean) => void;
   /** Currently selected agent */
   selectedAgent?: SelectedAgent | null;
   /** Agent selection callback */

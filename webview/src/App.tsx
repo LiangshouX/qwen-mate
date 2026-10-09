@@ -142,6 +142,7 @@ const App = () => {
           alwaysThinkingEnabled={model.alwaysThinkingEnabled}
           reasoningEffort={model.reasoningEffort}
           streamingEnabledSetting={model.streamingEnabledSetting}
+          managedMemoryEnabledSetting={model.managedMemoryEnabledSetting}
           sendShortcut={model.sendShortcut}
           autoOpenFileEnabled={model.autoOpenFileEnabled}
           usagePercentage={model.usagePercentage}
@@ -153,6 +154,7 @@ const App = () => {
           onReasoningChange={model.handleReasoningChange}
           onToggleThinking={model.handleToggleThinking}
           onStreamingEnabledChange={model.handleStreamingEnabledChange}
+          onManagedMemoryEnabledChange={model.handleManagedMemoryEnabledChange}
           onAutoOpenFileEnabledChange={model.handleAutoOpenFileEnabledChange}
           messageQueue={messageQueue}
           onRemoveFromQueue={dequeueMessage}

@@ -207,7 +207,7 @@
         "label": "Managed Auto-Memory",
         "enabled": "Enabled",
         "disabled": "Disabled",
-        "hint": "Keep disabled (default) to fix the long wait after the model stops output: the CLI runs background memory tasks after each turn and blocks turn completion. Enabling restores the Qwen CLI default memory extraction & dreaming inside the GUI only; the standalone Qwen CLI is unaffected.",
+        "hint": "Off (default): waiting ends as soon as the model stops output. On: the turn additionally waits for background memory tasks — often tens of seconds to minutes.",
         "hintOverridden": "Qwen CLI config (user/project/enterprise) pins the memory keys — that config wins; this switch only sets the default."
       },
       "autoOpenFile": {

@@ -49,6 +49,7 @@ export interface UseWindowCallbacksOptions {
   setReasoningEffort: React.Dispatch<React.SetStateAction<ReasoningEffort>>;
   setAlwaysThinkingEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setStreamingEnabledSetting: React.Dispatch<React.SetStateAction<boolean>>;
+  setManagedMemoryEnabledSetting: React.Dispatch<React.SetStateAction<boolean>>;
   setSendShortcut: React.Dispatch<React.SetStateAction<'enter' | 'cmdEnter'>>;
   setAutoOpenFileEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setPermissionDialogTimeoutSeconds: React.Dispatch<React.SetStateAction<number>>;

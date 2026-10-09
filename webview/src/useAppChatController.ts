@@ -51,6 +51,7 @@ export interface ChatControllerModelSlice {
   setReasoningEffort: UseWindowCallbacksOptions['setReasoningEffort'];
   setAlwaysThinkingEnabled: UseWindowCallbacksOptions['setAlwaysThinkingEnabled'];
   setStreamingEnabledSetting: UseWindowCallbacksOptions['setStreamingEnabledSetting'];
+  setManagedMemoryEnabledSetting: UseWindowCallbacksOptions['setManagedMemoryEnabledSetting'];
   setSendShortcut: UseWindowCallbacksOptions['setSendShortcut'];
   setAutoOpenFileEnabled: UseWindowCallbacksOptions['setAutoOpenFileEnabled'];
   setSdkStatus: UseWindowCallbacksOptions['setSdkStatus'];
@@ -138,6 +139,7 @@ export const useAppChatController = ({
     setQwenPermissionMode,
     setSelectedQwenModel,
     setReasoningEffort, setAlwaysThinkingEnabled, setStreamingEnabledSetting,
+    setManagedMemoryEnabledSetting,
     setSendShortcut, setAutoOpenFileEnabled,
     setSdkStatus, setSdkStatusLoaded, setSdkStatusError, setSelectedAgent,
     setUsagePercentage, setUsageUsedTokens, setUsageMaxTokens,
@@ -203,6 +205,7 @@ export const useAppChatController = ({
     setPermissionMode, setCurrentProvider, setQwenPermissionMode,
     setSelectedQwenModel,
     setReasoningEffort, setAlwaysThinkingEnabled, setStreamingEnabledSetting,
+    setManagedMemoryEnabledSetting,
     setSendShortcut, setAutoOpenFileEnabled,
     setSdkStatus, setSdkStatusLoaded, setSdkStatusError,
     setContextInfo, setSelectedAgent,

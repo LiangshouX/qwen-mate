@@ -207,7 +207,7 @@
         "label": "Memoria automática gestionada (Managed Memory)",
         "enabled": "Activada",
         "disabled": "Desactivada",
-        "hint": "Mantener desactivado (por defecto) corrige la larga espera de la GUI tras dejar de generar el modelo: las tareas de memoria en segundo plano bloquean el final de turno. Activado restaura los valores predeterminados de Qwen CLI solo dentro de la GUI; el CLI Qwen independiente no se ve afectado.",
+        "hint": "Desactivado (por defecto): la espera termina en cuanto el modelo deja de generar. Activado: hay que esperar a las tareas de memoria en segundo plano, a menudo decenas de segundos o minutos.",
         "hintOverridden": "La configuración de Qwen CLI (usuario/proyecto/empresa) fija las claves memory y tiene prioridad; este interruptor solo establece el valor predeterminado."
       },
       "autoOpenFile": {
