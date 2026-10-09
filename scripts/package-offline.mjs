@@ -72,8 +72,13 @@ function findPluginZip() {
   if (!existsSync(distDir)) {
     throw new Error('build/distributions not found — run `gradlew buildPlugin` first');
   }
-  const zip = readdirSync(distDir).find((f) => /^(qwen-mate|qwenmate|qwen-code-gui)-.*\.zip$/.test(f));
-  if (!zip) throw new Error('qwen-mate-*.zip not found in build/distributions');
+  const matches = readdirSync(distDir).filter((f) => /^(qwen-mate|qwenmate|qwen-code-gui)-.*\.zip$/.test(f));
+  if (matches.length === 0) throw new Error('qwen-mate-*.zip not found in build/distributions');
+  // Several versions can coexist here (NTFS readdir is alphabetical, so a stale
+  // beta1 used to shadow today's build) — always wrap the most recent zip.
+  const zip = matches
+    .map((f) => ({ f, mtime: statSync(join(distDir, f)).mtimeMs }))
+    .sort((a, b) => b.mtime - a.mtime)[0].f;
   return { path: join(distDir, zip), name: zip };
 }
 
