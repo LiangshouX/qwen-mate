@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "前往 GitHub 點 Star",
     "goInstallSdk": "前往安裝",
     "commandNotImplemented": "`{{command}}` 功能尚未實現。",
+    "commandUnavailable": "命令 {{command}} 在目前模式不可用，輸入 / 查看可用命令",
     "effortSet": "思考強度已切換為 {{tier}}",
     "effortInvalid": "無效的強度等級「{{tier}}」，可選：{{tiers}}",
     "clearCommandDescription": "清除對話歷史並新建會話",

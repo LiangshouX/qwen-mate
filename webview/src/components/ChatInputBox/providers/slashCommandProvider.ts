@@ -332,6 +332,21 @@ function applyRuntimeCalibration(commands: CommandItem[]): CommandItem[] {
   return [...kept, ...extras];
 }
 
+/**
+ * Whether a typed slash command may be forwarded to the CLI. GUI-handled
+ * commands never leave the webview (intercepted earlier in handleSubmit), and
+ * once the first turn delivers the runtime list that list is authoritative:
+ * forwarding an unlisted command burns a full turn respawn only to render
+ * "not supported in this mode". Before any turn the runtime list is unknown,
+ * so everything is allowed (same behaviour as the palette).
+ */
+export function isCommandSendable(label: string): boolean {
+  const base = label.trim().split(/\s+/)[0];
+  if (GUI_HANDLED_COMMANDS.has(base)) return true;
+  if (runtimeCommandNames === null) return true;
+  return runtimeCommandNames.has(base);
+}
+
 function filterCommands(commands: CommandItem[], query: string): CommandItem[] {
   const visibleCommands = applyRuntimeCalibration(commands).filter(cmd => !isHiddenCommand(cmd.label));
   const localCommands = getLocalNewSessionCommands();

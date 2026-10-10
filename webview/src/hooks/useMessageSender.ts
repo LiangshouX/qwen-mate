@@ -4,6 +4,7 @@ import { sendBridgeEvent } from '../utils/bridge';
 import type { QwenMateContentBlock, QwenMateMessage } from '../types';
 import type { Attachment, ChatInputBoxHandle, PermissionMode, ReasoningEffort, SelectedAgent } from '../components/ChatInputBox/types';
 import { REASONING_LEVELS } from '../components/ChatInputBox/types';
+import { isCommandSendable } from '../components/ChatInputBox/providers/slashCommandProvider';
 import { expandQuoteTokens } from '../components/ChatInputBox/utils/quoteRegistry';
 import type { ViewMode } from './useModelProviderState';
 
@@ -295,6 +296,36 @@ export function useMessageSender({
   }, [t, setMessages]);
 
   /**
+   * Guard for slash commands the running CLI does not register for this mode
+   * (/rename and friends are interactive-only; the headless CLI rejects them
+   * with "not supported in this mode"). Everything GUI-handled was intercepted
+   * above, so at this point a leading "/" is headed for the CLI — check it
+   * against the runtime list instead of paying a turn respawn for a known
+   * rejection. Unknown runtime list (before the first turn) forwards as before.
+   */
+  const checkRuntimeUnavailableCommand = useCallback((text: string): boolean => {
+    if (!text.startsWith('/')) return false;
+    const command = text.split(WHITESPACE_REGEX)[0];
+    if (isCommandSendable(command)) return false;
+
+    const userMessage: QwenMateMessage = {
+      type: 'user',
+      content: text,
+      timestamp: new Date().toISOString(),
+    };
+    const assistantMessage: QwenMateMessage = {
+      type: 'assistant',
+      content: t('chat.commandUnavailable', {
+        command,
+        defaultValue: `${command} is not available in this mode. Type / to see the available commands.`,
+      }),
+      timestamp: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, userMessage, assistantMessage]);
+    return true;
+  }, [t, setMessages]);
+
+  /**
    * Build content blocks for the user message
    */
   const buildUserContentBlocks = useCallback((
@@ -519,9 +550,12 @@ export function useMessageSender({
     // Check for unimplemented commands
     if (checkUnimplementedCommand(text)) return;
 
+    // Block commands this CLI mode rejects (interactive-only ones like /rename)
+    if (checkRuntimeUnavailableCommand(text)) return;
+
     // Execute message
     executeMessage(content, attachments);
-  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkSettingsPageCommand, checkEffortCommand, checkUnimplementedCommand, executeMessage]);
+  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkSettingsPageCommand, checkEffortCommand, checkUnimplementedCommand, checkRuntimeUnavailableCommand, executeMessage]);
 
   /**
    * Interrupt the current session

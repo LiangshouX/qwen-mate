@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "GitHub でリポジトリを開いてスター",
     "goInstallSdk": "インストールへ",
     "commandNotImplemented": "`{{command}}` 機能はまだ実装されていません。",
+    "commandUnavailable": "コマンド {{command}} は現在のモードでは使用できません。/ を入力すると利用可能なコマンドを確認できます。",
     "effortSet": "思考強度を {{tier}} に設定しました",
     "effortInvalid": "無効な思考強度「{{tier}}」。使用可能: {{tiers}}",
     "clearCommandDescription": "会話履歴をクリアして新しいセッションを開始",

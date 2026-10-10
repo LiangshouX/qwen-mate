@@ -327,6 +327,15 @@
 
 /* ---------- Heatmap ---------- */
 
+/* Bordered panel: the grid used to sit bare on the section background and its
+   last column touched the pane edge, reading as a chopped-off block. */
+.heatCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 14px 16px 16px;
+}
+
 .heatmap {
   --usage-heat-cell: 13px;
   overflow-x: auto;
@@ -351,27 +360,33 @@
   border-radius: 3px;
 }
 
-.heatmapMonths {
+/* Month row + weekday column + cells share one grid (column 1 = weekday
+   labels, columns 2..N+1 = week columns) so month labels land exactly above
+   their column instead of drifting with content-sized tracks. */
+.heatmapTable {
   display: grid;
-  font-size: 11.5px;
-  color: var(--text-tertiary);
-  margin-bottom: 5px;
+  row-gap: 5px;
+  column-gap: 3px;
   min-width: 480px;
-
-  > span {
-    white-space: nowrap;
-  }
 }
 
-.heatmapBody {
-  display: flex;
-  gap: 8px;
-  min-width: 480px;
+.heatMonth {
+  grid-row: 1;
+  align-self: end;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
 }
 
 .heatmapWeekdays {
+  grid-column: 1;
+  grid-row: 2;
   display: grid;
   grid-template-rows: repeat(7, var(--usage-heat-cell));
+  /* Match the cells' row gap: without it labels drifted ~12px below their
+     row by Friday (label rows packed at 13px, cells at 16px pitch). */
+  row-gap: 3px;
+  padding-right: 5px;
   font-size: 10.5px;
   color: var(--text-muted);
   text-align: right;
@@ -379,9 +394,10 @@
 }
 
 .heatmapCells {
+  grid-column: 2 / -1;
+  grid-row: 2;
   display: grid;
   gap: 3px;
-  flex: 1;
 }
 
 .heatCell {
@@ -400,10 +416,10 @@
   box-shadow: 0 0 0 1.5px var(--usage-accent);
 }
 
-/* Hover tooltip on a heat cell — portaled to <body> (fixed positioning) so
-   the heatmap's horizontal overflow can't clip it. Single line:
-   "2026-10-03 · Tokens: 921.0M · Cache: 98%". */
-.heatTooltip {
+/* Hover tooltip — portaled to <body> (fixed positioning) so a chart's
+   horizontal overflow can't clip it. Shared by heat cells and bar slots.
+   Heat cell line: "2026-10-03 · Tokens: 921.0M · Cache: 98%". */
+.hoverTip {
   position: fixed;
   transform: translate(-50%, calc(-100% - 10px));
   background: var(--bg-elevated);
@@ -423,7 +439,7 @@
   }
 }
 
-.heatTooltipBelow {
+.hoverTipBelow {
   transform: translate(-50%, 10px);
 }
 
@@ -582,6 +598,12 @@
   width: 100%;
   background: var(--usage-bar);
   border-radius: 4px 4px 0 0;
+  transition: filter 0.12s ease;
+}
+
+/* Column under the pointer: brightens while its tooltip is up. */
+.barHover {
+  filter: brightness(1.35);
 }
 
 /* ---------- Model share ---------- */

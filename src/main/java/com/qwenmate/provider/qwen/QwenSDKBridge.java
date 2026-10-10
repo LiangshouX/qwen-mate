@@ -310,10 +310,15 @@ public class QwenSDKBridge extends BaseSDKBridge {
                 JsonObject obj = gson.fromJson(line, JsonObject.class);
                 if (obj != null && obj.has("success") && !obj.get("success").getAsBoolean()) {
                     String err = obj.has("error") ? obj.get("error").getAsString() : line;
+                    // The envelope repeats whatever [SEND_ERROR] already reported. Only
+                    // surface it when that marker was missed, else the chat renders one
+                    // error bubble per source ([SEND_ERROR] / envelope / executor tail).
+                    if (!hadSendError.get()) {
+                        callback.onError(err);
+                    }
                     hadSendError.set(true);
                     result.success = false;
                     result.error = err;
-                    callback.onError(err);
                 } else if (obj != null && obj.has("sessionId") && !obj.get("sessionId").isJsonNull()) {
                     String sid = obj.get("sessionId").getAsString();
                     if (sid != null && !sid.isEmpty()) {

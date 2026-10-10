@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "Open the repository on GitHub and star it",
     "goInstallSdk": "Go to Install",
     "commandNotImplemented": "`{{command}}` feature is not yet implemented.",
+    "commandUnavailable": "The command {{command}} is not available in this mode. Type / to see the available commands.",
     "effortSet": "Reasoning effort set to {{tier}}",
     "effortInvalid": "Unknown effort tier \"{{tier}}\". Available: {{tiers}}",
     "clearCommandDescription": "Clear conversation history and start a new session",
@@ -545,6 +546,7 @@
         "tokensDesc": "Daily token total",
         "sessionsTitle": "Sessions · {{range}}",
         "sessionsDesc": "Daily active sessions",
+        "sessionsLabel": "Active sessions",
         "latest": "tokens consumed ",
         "peak": "Peak {{value}}",
         "empty": "No data in this range"

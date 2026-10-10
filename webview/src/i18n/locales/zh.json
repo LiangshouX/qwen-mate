@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "前往 GitHub 点 Star",
     "goInstallSdk": "前往安装",
     "commandNotImplemented": "`{{command}}` 功能暂未实现。",
+    "commandUnavailable": "命令 {{command}} 在当前模式不可用，输入 / 查看可用命令",
     "effortSet": "思考强度已切换为 {{tier}}",
     "effortInvalid": "无效的强度等级「{{tier}}」，可选：{{tiers}}",
     "clearCommandDescription": "清除对话历史并新建会话",
@@ -545,6 +546,7 @@
         "tokensDesc": "每日 token 总量",
         "sessionsTitle": "{{range}} 会话",
         "sessionsDesc": "每日活跃会话数",
+        "sessionsLabel": "活跃会话",
         "latest": "tokens 消耗 ",
         "peak": "峰值 {{value}}",
         "empty": "该时间段内无数据"

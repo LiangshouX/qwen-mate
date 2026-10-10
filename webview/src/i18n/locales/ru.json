@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "Открыть репозиторий на GitHub и поставить звезду",
     "goInstallSdk": "Перейти к установке",
     "commandNotImplemented": "Функция `{{command}}` ещё не реализована.",
+    "commandUnavailable": "Команда {{command}} недоступна в этом режиме. Введите /, чтобы увидеть доступные команды.",
     "effortSet": "Уровень рассуждения установлен: {{tier}}",
     "effortInvalid": "Недопустимый уровень рассуждения «{{tier}}». Доступно: {{tiers}}",
     "clearCommandDescription": "Очистить историю и начать новый чат",

@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "GitHub पर रिपॉजिटरी खोलें और स्टार करें",
     "goInstallSdk": "इंस्टॉल करने जाएं",
     "commandNotImplemented": "`{{command}}` सुविधा अभी तक लागू नहीं की गई है।",
+    "commandUnavailable": "कमांड {{command}} इस मोड में उपलब्ध नहीं है। उपलब्ध कमांड देखने के लिए / टाइप करें।",
     "effortSet": "तर्क स्तर {{tier}} पर सेट किया गया",
     "effortInvalid": "अमान्य तर्क स्तर \"{{tier}}\"। उपलब्ध: {{tiers}}",
     "clearCommandDescription": "बातचीत इतिहास साफ़ करें और नया सत्र शुरू करें",

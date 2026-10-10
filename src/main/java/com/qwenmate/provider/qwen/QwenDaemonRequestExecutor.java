@@ -259,7 +259,11 @@ class QwenDaemonRequestExecutor {
                         callback.onError(result.error);
                     }
                 } else {
-                    callback.onError(result.error != null ? result.error : "Qwen send error");
+                    // hadSendError is only set by processOutputLine after it has already
+                    // invoked callback.onError, so re-notifying here would append a second
+                    // error bubble for the same failure. Keep the recorded error for the
+                    // returned SDKResult; the UI was torn down by that first onError.
+                    log.debug("[QwenDaemonExecutor] send error already reported: " + result.error);
                 }
 
                 return result;

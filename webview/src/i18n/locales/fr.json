@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "Ouvrir le dépôt sur GitHub et mettre une étoile",
     "goInstallSdk": "Aller installer",
     "commandNotImplemented": "La fonctionnalité `{{command}}` n'est pas encore implémentée.",
+    "commandUnavailable": "La commande {{command}} n'est pas disponible dans ce mode. Tapez / pour voir les commandes disponibles.",
     "effortSet": "Niveau de raisonnement défini sur {{tier}}",
     "effortInvalid": "Niveau de raisonnement invalide « {{tier}} ». Disponibles : {{tiers}}",
     "clearCommandDescription": "Effacer l'historique et démarrer une nouvelle session",

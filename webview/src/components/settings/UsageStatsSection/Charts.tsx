@@ -5,6 +5,7 @@ import type { UsageDailyPoint, UsageHeatmap, UsageModelStat } from '../../../typ
 import {
   buildHeatmapGrid,
   buildLinePoints,
+  formatCount,
   formatDayLabel,
   formatTokens,
   maxValue,
@@ -15,8 +16,19 @@ import styles from './style.module.less';
 
 const RANK_COLORS = ['#4f8ff7', '#2ec4b6', '#f5a524'];
 
-/** Tooltip half-width used to keep a near-edge cell's tooltip on screen. */
-const HEAT_TIP_HALF_WIDTH = 90;
+/** Tooltip half-width used to keep a near-edge tooltip inside its card. */
+const HEAT_TIP_HALF_WIDTH = 130;
+
+/** Clamps a tooltip's anchor X so the bubble stays inside `host` (viewport fallback). */
+function clampTipX(x: number, host: HTMLElement | null | undefined): number {
+  const half = HEAT_TIP_HALF_WIDTH;
+  const rect = host?.getBoundingClientRect();
+  const minX = rect ? rect.left + half : half;
+  const maxX = rect
+    ? Math.max(minX, rect.right - half)
+    : Math.max(minX, (typeof window !== 'undefined' ? window.innerWidth : 1024) - half);
+  return Math.min(Math.max(x, minX), maxX);
+}
 
 function rankColor(index: number): string {
   return RANK_COLORS[index] || '#8a8f98';
@@ -51,14 +63,9 @@ export function UsageHeatmap({ heatmap }: { heatmap: UsageHeatmap }) {
 
   const showHover = (e: ReactMouseEvent<HTMLDivElement>, cell: HeatmapCell) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const maxLeft = Math.max(
-      HEAT_TIP_HALF_WIDTH,
-      (typeof window !== 'undefined' ? window.innerWidth : 1024) - HEAT_TIP_HALF_WIDTH,
-    );
     setHover({
       cell,
-      x: Math.min(Math.max(x, HEAT_TIP_HALF_WIDTH), maxLeft),
+      x: clampTipX(rect.left + rect.width / 2, rootRef.current?.parentElement),
       y: rect.top,
       // Flip below when the cell sits too close to the viewport top.
       below: rect.top < 90,
@@ -66,60 +73,66 @@ export function UsageHeatmap({ heatmap }: { heatmap: UsageHeatmap }) {
   };
 
   return (
-    <div className={styles.heatmap} ref={rootRef}>
-      <div className={styles.heatmapLegend}>
-        <span className={styles.legendLabel}>{t('settings.usageStats.heatmap.less')}</span>
-        {[1, 2, 3, 4].map((level) => (
-          <span
-            key={level}
-            className={`${styles.legendSwatch} ${styles[`heat${level}` as const]}`}
-          />
-        ))}
-        <span className={styles.legendLabel}>{t('settings.usageStats.heatmap.more')}</span>
-      </div>
-
-      <div className={styles.heatmapMonths}>
-        {grid.monthLabels.map(({ col, label }) => (
-          <span key={col} style={{ gridColumn: col + 1 }}>
-            {label}
-          </span>
-        ))}
-      </div>
-
-      <div className={styles.heatmapBody}>
-        <div className={styles.heatmapWeekdays}>
-          <span>{t('settings.usageStats.heatmap.weekdayMon')}</span>
-          <span aria-hidden="true" />
-          <span>{t('settings.usageStats.heatmap.weekdayWed')}</span>
-          <span aria-hidden="true" />
-          <span>{t('settings.usageStats.heatmap.weekdayFri')}</span>
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-        </div>
-        <div
-          className={styles.heatmapCells}
-          style={{
-            gridTemplateRows: 'repeat(7, var(--usage-heat-cell))',
-            gridAutoFlow: 'column',
-            gridAutoColumns: '1fr',
-          }}
-        >
-          {grid.cells.map((cell) => (
-            <div
-              key={cell.date}
-              data-testid="usage-heat-cell"
-              data-date={cell.date}
-              className={[
-                styles.heatCell,
-                styles[`heat${cell.level}` as const],
-                cell.date === heatmap.today ? styles.heatToday : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              onMouseEnter={(e) => showHover(e, cell)}
-              onMouseLeave={() => setHover(null)}
+    <div className={styles.heatCard}>
+      <div className={styles.heatmap} ref={rootRef}>
+        <div className={styles.heatmapLegend}>
+          <span className={styles.legendLabel}>{t('settings.usageStats.heatmap.less')}</span>
+          {[1, 2, 3, 4].map((level) => (
+            <span
+              key={level}
+              className={`${styles.legendSwatch} ${styles[`heat${level}` as const]}`}
             />
           ))}
+          <span className={styles.legendLabel}>{t('settings.usageStats.heatmap.more')}</span>
+        </div>
+
+        {/* One grid drives both the month row and the cells, so month labels
+            sit exactly above their week column (the old sibling rows drifted:
+            months were sized by content while cells stretched with 1fr). */}
+        <div
+          className={styles.heatmapTable}
+          style={{ gridTemplateColumns: `auto repeat(${grid.columns}, 1fr)` }}
+        >
+          {grid.monthLabels.map(({ col, label }) => (
+            <span key={col} className={styles.heatMonth} style={{ gridColumn: col + 2 }}>
+              {label}
+            </span>
+          ))}
+
+          <div className={styles.heatmapWeekdays}>
+            <span>{t('settings.usageStats.heatmap.weekdayMon')}</span>
+            <span aria-hidden="true" />
+            <span>{t('settings.usageStats.heatmap.weekdayWed')}</span>
+            <span aria-hidden="true" />
+            <span>{t('settings.usageStats.heatmap.weekdayFri')}</span>
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </div>
+          <div
+            className={styles.heatmapCells}
+            style={{
+              gridTemplateColumns: `repeat(${grid.columns}, 1fr)`,
+              gridTemplateRows: 'repeat(7, var(--usage-heat-cell))',
+              gridAutoFlow: 'column',
+            }}
+          >
+            {grid.cells.map((cell) => (
+              <div
+                key={cell.date}
+                data-testid="usage-heat-cell"
+                data-date={cell.date}
+                className={[
+                  styles.heatCell,
+                  styles[`heat${cell.level}` as const],
+                  cell.date === heatmap.today ? styles.heatToday : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                onMouseEnter={cell.future ? undefined : (e) => showHover(e, cell)}
+                onMouseLeave={cell.future ? undefined : () => setHover(null)}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -128,9 +141,7 @@ export function UsageHeatmap({ heatmap }: { heatmap: UsageHeatmap }) {
         createPortal(
           <div
             data-testid="usage-heat-tooltip"
-            className={`${styles.heatTooltip} ${
-              hover.below ? styles.heatTooltipBelow : ''
-            }`}
+            className={`${styles.hoverTip} ${hover.below ? styles.hoverTipBelow : ''}`}
             style={{ position: 'fixed', left: `${hover.x}px`, top: `${hover.y}px` }}
           >
             {hover.cell.date} · Tokens: <strong>{formatTokens(hover.cell.tokens)}</strong>
@@ -264,12 +275,36 @@ export function TokenLineChart({ daily, rangeLabel }: RangeChartProps) {
   );
 }
 
+interface BarHover {
+  point: UsageDailyPoint;
+  x: number;
+  y: number;
+  below: boolean;
+}
+
 /** Daily active sessions: one bar per day in the window. */
 export function SessionsBarChart({ daily, rangeLabel }: RangeChartProps) {
   const { t, i18n } = useTranslation();
   const values = daily.map((d) => d.sessions);
   const peak = maxValue(values);
   const empty = peak <= 0;
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [hover, setHover] = useState<BarHover | null>(null);
+  useEffect(() => setHover(null), [daily]);
+
+  const showBarHover = (e: ReactMouseEvent<HTMLDivElement>, point: UsageDailyPoint) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    // Anchor on the bar's top edge, not the full-height slot, so the tip hugs
+    // the column it describes (slot height is the whole 160px plot area).
+    const barPct = Math.max(4, (point.sessions / peak) * 100);
+    const y = rect.bottom - (barPct / 100) * rect.height;
+    setHover({
+      point,
+      x: clampTipX(rect.left + rect.width / 2, chartRef.current),
+      y,
+      below: y < 90,
+    });
+  };
 
   return (
     <div className={styles.chartBlock}>
@@ -282,12 +317,24 @@ export function SessionsBarChart({ daily, rangeLabel }: RangeChartProps) {
         <div className={styles.chartEmpty}>{t('settings.usageStats.charts.empty')}</div>
       ) : (
         <>
-          <div className={styles.barChart}>
+          <div
+            className={styles.barChart}
+            ref={chartRef}
+            onMouseLeave={() => setHover(null)}
+          >
             {daily.map((point) => (
-              <div key={point.date} className={styles.barSlot} title={`${point.date}: ${point.sessions}`}>
+              <div
+                key={point.date}
+                className={styles.barSlot}
+                data-testid="usage-bar-slot"
+                data-date={point.date}
+                onMouseEnter={(e) => showBarHover(e, point)}
+              >
                 {point.sessions > 0 && (
                   <div
-                    className={styles.bar}
+                    className={`${styles.bar} ${
+                      hover?.point.date === point.date ? styles.barHover : ''
+                    }`}
                     style={{ height: `${Math.max(4, (point.sessions / peak) * 100)}%` }}
                   />
                 )}
@@ -300,6 +347,20 @@ export function SessionsBarChart({ daily, rangeLabel }: RangeChartProps) {
               {formatDayLabel(daily[daily.length - 1].date, i18n.language)}
             </span>
           </div>
+          {hover &&
+            typeof document !== 'undefined' &&
+            createPortal(
+              <div
+                data-testid="usage-bar-tooltip"
+                className={`${styles.hoverTip} ${hover.below ? styles.hoverTipBelow : ''}`}
+                style={{ position: 'fixed', left: `${hover.x}px`, top: `${hover.y}px` }}
+              >
+                {formatDayLabel(hover.point.date, i18n.language)} ·{' '}
+                {t('settings.usageStats.charts.sessionsLabel')}{' '}
+                <strong>{formatCount(hover.point.sessions)}</strong>
+              </div>,
+              document.body,
+            )}
         </>
       )}
     </div>

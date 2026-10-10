@@ -207,4 +207,25 @@ describe('UsageStatsSection', () => {
     fireEvent.mouseOut(cell!, { relatedTarget: document.body });
     expect(document.querySelector('[data-testid="usage-heat-tooltip"]')).toBeNull();
   });
+
+  it('shows date and session count in a tooltip when hovering a bar', () => {
+    render(<UsageStatsSection />);
+    pushSnapshot(payload());
+    fireEvent.click(screen.getByText('settings.usageStats.range.d7'));
+
+    const slots = document.querySelectorAll('[data-testid="usage-bar-slot"]');
+    expect(slots.length).toBe(2);
+
+    // React derives mouseenter from mouseover.
+    fireEvent.mouseOver(slots[1]);
+
+    const tip = document.querySelector('[data-testid="usage-bar-tooltip"]');
+    expect(tip).toBeTruthy();
+    expect(tip!.textContent).toContain('10月9日');
+    expect(tip!.textContent).toContain('settings.usageStats.charts.sessionsLabel');
+    expect(tip!.textContent).toContain('7');
+
+    fireEvent.mouseOut(slots[1], { relatedTarget: document.body });
+    expect(document.querySelector('[data-testid="usage-bar-tooltip"]')).toBeNull();
+  });
 });

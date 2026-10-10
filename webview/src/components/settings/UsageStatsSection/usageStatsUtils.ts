@@ -98,6 +98,8 @@ export interface HeatmapCell {
   level: HeatmapLevel;
   col: number;
   row: number;
+  /** Beyond today: an empty placeholder so the current week keeps 7 rows. */
+  future?: boolean;
 }
 
 export interface HeatmapGrid {
@@ -109,7 +111,8 @@ export interface HeatmapGrid {
 
 /**
  * Builds the 7×N heatmap grid: rows are Mon…Sun, columns are weeks starting
- * at the Monday given by the payload; cells after "today" are omitted, and
+ * at the Monday given by the payload; days past "today" are kept as empty
+ * `future` placeholders (so the current week doesn't look chopped off), and
  * intensity is bucketed into 4 swatches against the window max.
  */
 export function buildHeatmapGrid(
@@ -121,18 +124,23 @@ export function buildHeatmapGrid(
   const spanDays = Math.floor((today.getTime() - start.getTime()) / DAY_MS);
   const columns = Math.max(1, Math.floor(spanDays / 7) + 1);
   const max = Math.max(1, heatmap.maxDayTokens || 0);
+  // Pad to the end of today's week: a Thursday "today" would otherwise leave
+  // Fri–Sun of the last column blank, reading as a broken grid edge.
+  const end = Math.max(spanDays, 0);
+  const lastDay = end + (6 - (end % 7));
 
   const cells: HeatmapCell[] = [];
-  for (let i = 0; i <= spanDays; i++) {
+  for (let i = 0; i <= lastDay; i++) {
+    const future = i > spanDays;
     const d = new Date(start.getTime() + i * DAY_MS);
     const date = toIso(d);
-    const tokens = heatmap.days[date] || 0;
+    const tokens = future ? 0 : heatmap.days[date] || 0;
     let level: HeatmapLevel = 0;
     if (tokens > 0) {
       const ratio = tokens / max;
       level = ratio < 0.25 ? 1 : ratio < 0.5 ? 2 : ratio < 0.75 ? 3 : 4;
     }
-    const cache = heatmap.cachePct?.[date];
+    const cache = future ? undefined : heatmap.cachePct?.[date];
     cells.push({
       date,
       tokens,
@@ -140,6 +148,7 @@ export function buildHeatmapGrid(
       level,
       col: Math.floor(i / 7),
       row: i % 7,
+      future: future || undefined,
     });
   }
 

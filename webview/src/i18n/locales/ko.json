@@ -83,6 +83,7 @@
     "openSourceBannerStarAria": "GitHub에서 저장소를 열고 Star",
     "goInstallSdk": "설치하러 가기",
     "commandNotImplemented": "`{{command}}` 기능은 아직 구현되지 않았습니다.",
+    "commandUnavailable": "명령 {{command}}(은)는 현재 모드에서 사용할 수 없습니다. /를 입력하면 사용 가능한 명령을 확인할 수 있습니다.",
     "effortSet": "사고 깊이가 {{tier}}(으)로 설정되었습니다",
     "effortInvalid": "잘못된 사고 깊이 \"{{tier}}\". 사용 가능: {{tiers}}",
     "clearCommandDescription": "대화 기록을 지우고 새 세션을 시작합니다",

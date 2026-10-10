@@ -98,10 +98,18 @@ describe('buildHeatmapGrid', () => {
     expect(bare.cells.every((c) => c.cachePct === null)).toBe(true);
   });
 
-  it('omits cells after today and labels each month once', () => {
+  it('pads the current week with future cells and labels each month once', () => {
     const grid = buildHeatmapGrid(heatmap, 'zh');
-    const last = grid.cells[grid.cells.length - 1];
-    expect(last.date).toBe('2026-10-09');
+    // Sep 28 → Oct 9 lands mid-week (today = Fri): Sat/Sun stay as empty
+    // placeholders so every column keeps 7 rows instead of a ragged edge.
+    expect(grid.cells).toHaveLength(grid.columns * 7);
+    const past = grid.cells.filter((c) => !c.future);
+    expect(past[past.length - 1].date).toBe('2026-10-09');
+    const tail = grid.cells[grid.cells.length - 1];
+    expect(tail.future).toBe(true);
+    expect(tail.date).toBe('2026-10-11');
+    expect(tail.tokens).toBe(0);
+    expect(tail.cachePct).toBeNull();
     // Both week-midpoints (Oct 1 / Oct 8) fall in October → a single label.
     expect(grid.monthLabels.map((l) => l.label)).toEqual(['10月']);
   });

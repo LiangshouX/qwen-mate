@@ -149,8 +149,12 @@ public class QwenMessageHandler implements MessageCallback {
             state.setBusy(false);
             state.setLoading(false);
 
-            Message errorMessage = new Message(Message.Type.ERROR, error);
-            state.addMessage(errorMessage);
+            // One failure can reach onError more than once ([SEND_ERROR], the Node
+            // success envelope, the executor tail all report the same text). Teardown
+            // must run every time, but only the first report becomes a bubble.
+            if (!isDuplicateTrailingError(error)) {
+                state.addMessage(new Message(Message.Type.ERROR, error));
+            }
 
             // Always end stream so tool cards / loading state finalize
             callbackHandler.notifyStreamEnd();
@@ -158,6 +162,22 @@ public class QwenMessageHandler implements MessageCallback {
             resetStreamingAccumulator();
             callbackHandler.notifyStateChange(state.isBusy(), state.isLoading(), state.getError());
         }
+    }
+
+    /**
+     * True when the last message is an ERROR carrying the same text — the duplicate
+     * reports of one failure. Distinct errors (or an error after other messages) still render.
+     */
+    private boolean isDuplicateTrailingError(String error) {
+        if (error == null) {
+            return false;
+        }
+        List<Message> messages = state.getMessagesReference();
+        if (messages.isEmpty()) {
+            return false;
+        }
+        Message last = messages.get(messages.size() - 1);
+        return last.type == Message.Type.ERROR && error.equals(last.content);
     }
 
     @Override
