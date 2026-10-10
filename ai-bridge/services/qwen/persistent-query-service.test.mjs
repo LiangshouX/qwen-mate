@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { consumeQueryStream, requestPermissionFromJava, requestAskUserAnswers, buildCanUseTool, shouldRetryWithoutResume } from './persistent-query-service.js';
+import { consumeQueryStream, requestPermissionFromJava, requestAskUserAnswers, buildCanUseTool, shouldRetryWithoutResume, buildUserPrompt } from './persistent-query-service.js';
 
 /** Run consumeQueryStream while capturing every stdout line it emits. */
 async function captureMarkers(messageFactory) {
@@ -155,6 +155,34 @@ test('matches a signal-terminated transport too', () => {
     shouldRetryWithoutResume(new Error('CLI process terminated by signal SIGSEGV'), { resume: 'sess-1', sawAnyMessage: false }),
     true,
   );
+});
+
+// ─── Attachment prompt shape (bare content blocks are dropped by the CLI) ───
+
+test('buildUserPrompt keeps a plain string prompt without attachments', () => {
+  assert.equal(buildUserPrompt('hello', [], 'sess-1'), 'hello');
+  assert.equal(buildUserPrompt('hello', undefined, 'sess-1'), 'hello');
+});
+
+test('buildUserPrompt wraps attachments in a single type:user message', () => {
+  const prompt = buildUserPrompt('看图', [
+    { mediaType: 'image/png', data: 'AAAA' },
+    { mediaType: 'application/pdf', data: 'BBBB' },
+  ], 'sess-42');
+
+  assert.ok(Array.isArray(prompt), 'attachment prompts must be an array the SDK forwards verbatim');
+  assert.equal(prompt.length, 1);
+  const wire = JSON.parse(JSON.stringify(prompt[0]));
+  assert.equal(wire.type, 'user', 'the CLI stream-json reader only accepts type:user messages');
+  assert.equal(wire.session_id, 'sess-42');
+  assert.equal(wire.parent_tool_use_id, null);
+  assert.equal(wire.message.role, 'user');
+  // Only image/* attachments become blocks; other attachments stay dropped
+  // (pre-existing behavior) so the text part is always present.
+  assert.deepEqual(wire.message.content, [
+    { type: 'text', text: '看图' },
+    { type: 'image', data: 'AAAA', mimeType: 'image/png' },
+  ]);
 });
 
 // ─── File-IPC approval flow (Node writes request, polls response) ───

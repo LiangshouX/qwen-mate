@@ -644,6 +644,39 @@ async function* trackFirstMessage(result, state) {
   }
 }
 
+/**
+ * Build the SDK prompt. Exported for tests.
+ *
+ * With attachments the prompt MUST be an SDKUserMessage array — the SDK writes
+ * array prompts to the CLI verbatim, and the CLI's stream-json reader only
+ * accepts `type:'user'` messages. Passing bare content blocks
+ * (`[{type:'text'},{type:'image'}]`) made the CLI drop every line: the turn
+ * never started, no init/result was ever emitted, and the GUI hung showing
+ * nothing after sending an image.
+ *
+ * @param {string} message
+ * @param {Array<{mediaType?: string, data?: string}>} [attachments]
+ * @param {string} [sessionId]
+ * @returns {string | Array<object>}
+ */
+export function buildUserPrompt(message, attachments, sessionId) {
+  if (!attachments || attachments.length === 0) {
+    return message;
+  }
+  const blocks = [{ type: 'text', text: message }];
+  for (const att of attachments) {
+    if (att.mediaType?.startsWith('image/')) {
+      blocks.push({ type: 'image', data: att.data, mimeType: att.mediaType });
+    }
+  }
+  return [{
+    type: 'user',
+    session_id: sessionId || 'qwen-session',
+    parent_tool_use_id: null,
+    message: { role: 'user', content: blocks },
+  }];
+}
+
 export async function sendMessagePersistent(params = {}) {
   const {
     message,
@@ -693,19 +726,10 @@ export async function sendMessagePersistent(params = {}) {
     const memoryEnv = managedMemoryQueryEnv();
     if (memoryEnv) options.env = memoryEnv;
 
-    // Attachments → content blocks
-    let prompt;
-    if (attachments && attachments.length > 0) {
-      const blocks = [{ type: 'text', text: message }];
-      for (const att of attachments) {
-        if (att.mediaType?.startsWith('image/')) {
-          blocks.push({ type: 'image', data: att.data, mimeType: att.mediaType });
-        }
-      }
-      prompt = blocks;
-    } else {
-      prompt = message;
-    }
+    // Attachments → SDKUserMessage prompt (see buildUserPrompt); plain text
+    // stays a string prompt so the SDK keeps its single-turn lifecycle.
+    const prompt = buildUserPrompt(message, attachments, requestSessionId);
+    const isMultiTurnPrompt = typeof prompt !== 'string';
 
     // Permission callback
     const canUseTool = buildCanUseTool(params);
@@ -722,14 +746,15 @@ export async function sendMessagePersistent(params = {}) {
     activeTurns.set(runtimeKey, { abortController });
     activeTurnRuntime = runtimeKey;
 
+    let activeQuery = null;
     const runAttempt = async () => {
       const streamState = { sawAnyMessage: false };
       try {
-        const result = queryFn({ prompt, options });
+        activeQuery = queryFn({ prompt, options });
         // query() returns once the CLI child process is spawned and the Query
         // is constructed — everything after this waits on the CLI, not on us.
         emitTiming('query_created');
-        const outcome = await consumeQueryStream(trackFirstMessage(result, streamState), requestSessionId);
+        const outcome = await consumeQueryStream(trackFirstMessage(activeQuery, streamState), requestSessionId);
         return { outcome };
       } catch (error) {
         return { error, streamState };
@@ -755,6 +780,19 @@ export async function sendMessagePersistent(params = {}) {
       activeTurns.set(runtimeKey, { abortController: retryAbortController });
       attempt = await runAttempt();
     }
+
+    // Array prompts are not single-turn for the SDK, so nobody closes stdin
+    // when the result arrives (single-turn string prompts get endInput from
+    // the SDK itself). Without this the CLI child stays alive waiting for the
+    // next message and leaks one process per attachment turn. The result has
+    // already been consumed here, so EOF lets the CLI settle recording and
+    // exit exactly like the single-turn path.
+    if (isMultiTurnPrompt && activeQuery) {
+      try {
+        activeQuery.endInput?.();
+      } catch { /* transport already gone */ }
+    }
+
     if (attempt.error) {
       throw attempt.error;
     }
