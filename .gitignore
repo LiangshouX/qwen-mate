@@ -85,3 +85,6 @@ logs/*.log
 
 # Playwright MCP local test artifacts
 .playwright-mcp/
+
+# CodeGraph index data (per-machine, never committed)
+.codegraph/
