@@ -46,24 +46,6 @@ jobs:
         working-directory: webview
         run: npm ci
 
-      # sdk-packages/ (offline SDK tgz + extracted qwen-sdk) is entirely
-      # gitignored, so a CI checkout has no sdk-packages/ and buildPlugin
-      # would silently ship a zip WITHOUT the offline SDK packages.
-      # Restore it from a self-hosted archive: zip sdk-packages/ contents
-      # (install-offline.bat at the zip root) and publish it somewhere
-      # reachable, then set the repo variable SDK_PACKAGES_URL.
-      - name: Restore sdk-packages (not in git)
-        env:
-          SDK_PACKAGES_URL: ${{ vars.SDK_PACKAGES_URL }}
-        run: |
-          if [ -n "$SDK_PACKAGES_URL" ]; then
-            curl -fsSL "$SDK_PACKAGES_URL" -o /tmp/sdk-packages.zip
-            unzip -q /tmp/sdk-packages.zip -d sdk-packages
-            ls sdk-packages/
-          else
-            echo "::warning::sdk-packages/ not restored (set repo variable SDK_PACKAGES_URL); the zip will lack offline SDK packages"
-          fi
-
       - name: Build plugin
         run: ./gradlew buildPlugin
 

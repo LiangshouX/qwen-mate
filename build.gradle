@@ -683,16 +683,6 @@ tasks.named('buildPlugin') {
                     into pluginDir
                 }
 
-                // Copy offline SDK packages if present
-                def sdkPackagesDir = file('sdk-packages')
-                if (sdkPackagesDir.exists()) {
-                    copy {
-                        from sdkPackagesDir
-                        into new File(pluginDir, 'sdk-packages')
-                    }
-                    println "Added sdk-packages/ to plugin package"
-                }
-
                 // Delete searchableOptions jar if present
                 fileTree(new File(pluginDir, 'lib')).matching {
                     include '**/*searchableOptions*.jar'
