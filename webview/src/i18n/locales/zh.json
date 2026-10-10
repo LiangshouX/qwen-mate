@@ -479,6 +479,85 @@
     },
     "usage": "使用统计",
     "usageDesc": "查看您的 Token 消耗、费用统计和使用趋势分析",
+    "usageStats": {
+      "title": "用量统计",
+      "desc": "统计 Qwen Code CLI 写入的本地用量数据：token 消耗、会话、请求、工具与代码改动",
+      "range": {
+        "today": "今日",
+        "d7": "7天",
+        "d30": "30天"
+      },
+      "hero": {
+        "today": "今日",
+        "d7": "近 7 天",
+        "d30": "近 30 天"
+      },
+      "refresh": "刷新",
+      "updatedAt": "更新于 {{time}}",
+      "status": {
+        "ok": "正常",
+        "noData": "无数据",
+        "loading": "加载中",
+        "error": "加载失败"
+      },
+      "versionUnknown": "未检测到",
+      "tokensLabel": "tokens 消耗",
+      "cards": {
+        "sessions": "会话",
+        "requests": "请求",
+        "toolCalls": "工具",
+        "changes": "改动"
+      },
+      "split": {
+        "title": "TOKEN 拆分",
+        "input": "输入 TOKENS",
+        "inputSub": "请求 + 缓存读取",
+        "output": "输出 TOKENS",
+        "outputSub": "响应 + 推理",
+        "cache": "缓存读取",
+        "cacheSub": "缓存读取占比"
+      },
+      "heatmap": {
+        "title": "TOKEN 热力图",
+        "desc": "最近 12 个月 · 每日 token 汇总",
+        "less": "少",
+        "more": "多",
+        "weekdayMon": "一",
+        "weekdayWed": "三",
+        "weekdayFri": "五"
+      },
+      "models": {
+        "title": "{{range}} 模型份额",
+        "shareDesc": "token 份额 · 绿色表示缓存读取",
+        "tokensUnit": "{{value}} tokens · 缓存 {{cache}}%"
+      },
+      "skills": {
+        "title": "{{range}} 技能调用",
+        "desc": "技能名 / 调用次数",
+        "name": "技能名",
+        "count": "次数",
+        "empty": "该时间段内无技能调用"
+      },
+      "charts": {
+        "tokensTitle": "{{range}} TOKENS",
+        "tokensDesc": "每日 token 总量",
+        "sessionsTitle": "{{range}} 会话",
+        "sessionsDesc": "每日活跃会话数",
+        "latest": "tokens 消耗 ",
+        "peak": "峰值 {{value}}",
+        "empty": "该时间段内无数据"
+      },
+      "notice": {
+        "source": "数据来源：{{path}}",
+        "version": "需要 Qwen Code ≥ {{min}} · 当前 {{version}}",
+        "unsupported": "未检测到用量数据：{{path}} 不存在或为空。用量统计需要 Qwen Code ≥ {{min}}，当前 CLI 版本：{{version}}。请升级 Qwen Code 后重新打开本页。",
+        "liveNote": "含 {{count}} 个进行中会话（实时重建）"
+      },
+      "error": {
+        "title": "加载用量数据失败",
+        "retry": "重试"
+      }
+    },
     "mcp": "MCP 服务器",
     "mcpDesc": "配置和管理 Model Context Protocol 服务器",
     "permissions": "权限配置",

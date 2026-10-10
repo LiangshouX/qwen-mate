@@ -1,0 +1,704 @@
+.section {
+  max-width: 960px;
+  padding-bottom: 32px;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.headerTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.statusBadge {
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.status_ok {
+  color: var(--color-success);
+  background: rgba(76, 175, 80, 0.14);
+  border-color: rgba(76, 175, 80, 0.4);
+}
+
+.status_noData {
+  color: var(--text-warning);
+  background: rgba(255, 152, 0, 0.14);
+  border-color: rgba(255, 152, 0, 0.4);
+}
+
+.status_loading {
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  border-color: var(--border-secondary);
+}
+
+.status_error {
+  color: var(--color-error);
+  background: rgba(244, 67, 54, 0.14);
+  border-color: rgba(244, 67, 54, 0.4);
+}
+
+.updatedAt,
+.liveNote {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.refreshBtn,
+.retryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-secondary);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--bg-hover);
+    border-color: var(--border-hover);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.sectionDesc {
+  color: var(--text-tertiary);
+  margin: 8px 0 16px 0;
+  font-size: 13px;
+}
+
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  border: 1px solid transparent;
+  word-break: break-all;
+
+  .codicon {
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+}
+
+.noticeInfo {
+  background: var(--color-notice-info-bg);
+  border-color: var(--color-notice-info-border);
+  color: var(--color-notice-info-text);
+}
+
+.noticeWarning {
+  background: var(--color-notice-warning-bg);
+  border-color: var(--color-notice-warning-border);
+  color: var(--color-notice-warning-text);
+}
+
+.noticeVersion {
+  /* 两条信息上下排布：版本行独占一行 */
+  flex-basis: 100%;
+  margin-left: 0;
+  opacity: 0.85;
+}
+
+.errorCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  background: rgba(244, 67, 54, 0.08);
+  color: var(--color-error);
+  font-size: 13px;
+  margin-bottom: 16px;
+
+  .retryBtn {
+    margin-left: auto;
+  }
+}
+
+.rangeRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: 4px 0 12px;
+}
+
+.rangeBtn {
+  font-size: 13px;
+  padding: 5px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-secondary);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--bg-hover);
+  }
+}
+
+.rangeActive {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff;
+
+  &:hover {
+    background: var(--accent-primary-hover);
+  }
+}
+
+.heroCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 18px 24px 20px;
+  margin-bottom: 14px;
+}
+
+.heroTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heroLabel {
+  color: var(--usage-accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.heroRefresh {
+  font-size: 12.5px;
+  padding: 5px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-secondary);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--bg-hover);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.heroValue {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  margin-top: 6px;
+}
+
+.heroSub {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.statCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.statValue {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.statLabel {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+.blockTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 24px 0 2px;
+}
+
+.blockDesc {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.splitCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.splitHead {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.splitMark {
+  width: 3px;
+  height: 13px;
+  border-radius: 2px;
+  background: var(--usage-accent);
+  flex-shrink: 0;
+}
+
+.splitMarkGreen {
+  background: var(--usage-cache);
+}
+
+.splitValue {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 8px 0 2px;
+}
+
+.splitSub {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* ---------- Heatmap ---------- */
+
+.heatmap {
+  --usage-heat-cell: 13px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.heatmapLegend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.legendLabel {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.legendSwatch {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+}
+
+.heatmapMonths {
+  display: grid;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 5px;
+  min-width: 480px;
+
+  > span {
+    white-space: nowrap;
+  }
+}
+
+.heatmapBody {
+  display: flex;
+  gap: 8px;
+  min-width: 480px;
+}
+
+.heatmapWeekdays {
+  display: grid;
+  grid-template-rows: repeat(7, var(--usage-heat-cell));
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-align: right;
+  align-items: center;
+}
+
+.heatmapCells {
+  display: grid;
+  gap: 3px;
+  flex: 1;
+}
+
+.heatCell {
+  width: 100%;
+  height: var(--usage-heat-cell);
+  border-radius: 3px;
+  background: var(--usage-heat-0);
+}
+
+.heat1 { background: var(--usage-heat-1); }
+.heat2 { background: var(--usage-heat-2); }
+.heat3 { background: var(--usage-heat-3); }
+.heat4 { background: var(--usage-heat-4); }
+
+.heatToday {
+  box-shadow: 0 0 0 1.5px var(--usage-accent);
+}
+
+/* ---------- Charts ---------- */
+
+.chartBlock {
+  margin-top: 26px;
+}
+
+.chartTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.chartDesc {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 2px 0 10px;
+}
+
+.chartEmpty {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  padding: 24px 0;
+  text-align: center;
+}
+
+.lineChart {
+  position: relative;
+  height: 160px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.lineSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.lineEndDot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--usage-line);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px var(--usage-line-ring);
+}
+
+.lineHoverGuide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed var(--text-muted);
+  pointer-events: none;
+}
+
+.lineHoverDot {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--usage-line);
+  box-shadow: 0 0 0 3px var(--usage-line-ring);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.lineTooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tooltipDate {
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.tooltipValue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+}
+
+.chartLegendRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+}
+
+.chartLegend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+}
+
+.legendDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--usage-line);
+}
+
+.chartPeak {
+  color: var(--text-tertiary);
+}
+
+.chartAxisRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.barChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 160px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.barSlot {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar {
+  width: 100%;
+  background: var(--usage-bar);
+  border-radius: 4px 4px 0 0;
+}
+
+/* ---------- Model share ---------- */
+
+.modelList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.modelHeadline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.rankBadge {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  color: #fff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modelMeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.modelName {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modelSub {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.modelShare {
+  margin-left: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.shareTrack {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+}
+
+.shareFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--usage-accent);
+}
+
+.shareCache {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--usage-cache);
+}
+
+.shareDot {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ---------- Skills ---------- */
+
+.skillTable {
+  border-top: 1px solid var(--border-primary);
+}
+
+.skillHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.skillRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.skillName {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.skillCount {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 760px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .splitGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroValue {
+    font-size: 34px;
+  }
+
+  .noticeVersion {
+    margin-left: 0;
+  }
+}

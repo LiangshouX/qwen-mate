@@ -28,6 +28,7 @@ import com.qwenmate.handler.SettingsHandler;
 import com.qwenmate.handler.SkillHandler;
 import com.qwenmate.handler.TabHandler;
 import com.qwenmate.handler.UsagePushService;
+import com.qwenmate.handler.UsageStatsHandler;
 import com.qwenmate.handler.WindowEventHandler;
 import com.qwenmate.handler.file.FileExportHandler;
 import com.qwenmate.handler.file.FileHandler;
@@ -299,6 +300,7 @@ public class ChatWindowDelegate {
         messageDispatcher.registerHandler(new CliStatusHandler(handlerContext));
         messageDispatcher.registerHandler(new ClipboardHandler(handlerContext));
         messageDispatcher.registerHandler(new NodeProcessHandler(handlerContext));
+        messageDispatcher.registerHandler(new UsageStatsHandler(handlerContext));
 
         messageDispatcher.registerHandler(new WindowEventHandler(handlerContext, new WindowEventHandler.Callback() {
             @Override public void onHeartbeat(String content) { host.getWebviewWatchdog().handleHeartbeat(content); }

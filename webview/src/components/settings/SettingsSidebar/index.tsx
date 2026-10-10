@@ -13,6 +13,7 @@ const sidebarItems: SidebarItem[] = [
   { key: 'basic', icon: 'codicon-settings-gear', labelKey: 'settings.basic.title' },
   { key: 'providers', icon: 'codicon-vm-connect', labelKey: 'settings.providers' },
   { key: 'dependencies', icon: 'codicon-extensions', labelKey: 'settings.dependencies' },
+  { key: 'usage', icon: 'codicon-pulse', labelKey: 'settings.usageStats.title' },
   { key: 'mcp', icon: 'codicon-server', labelKey: 'settings.mcp' },
   { key: 'promptEnhancer', icon: 'codicon-sparkle', labelKey: 'settings.promptEnhancer.title' },
   { key: 'commit', icon: 'codicon-git-commit', labelKey: 'settings.commit.title' },

@@ -3,7 +3,7 @@ import type { ProviderManageTab } from './ProviderTabSection';
 import BasicTab from './BasicTab';
 import ProviderTabSection from './ProviderTabSection';
 import DependencySection from './DependencySection';
-import UsageSection from './UsageSection';
+import UsageStatsSection from './UsageStatsSection';
 import PlaceholderSection from './PlaceholderSection';
 import AgentSection from './AgentSection';
 import PromptSection from './PromptSection';
@@ -46,7 +46,7 @@ export const DependenciesPanel = ({ addToast }: SettingsTabPanelProps) => (
   <DependencySection addToast={addToast} isActive />
 );
 
-export const UsagePanel = () => <UsageSection />;
+export const UsagePanel = () => <UsageStatsSection />;
 
 export const McpPanel = ({ currentProvider }: SettingsTabPanelProps) => (
   <PlaceholderSection type="mcp" currentProvider={currentProvider} />

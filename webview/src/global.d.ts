@@ -191,6 +191,12 @@ interface Window {
    */
   onUsageUpdate?: (json: string) => void;
 
+  /**
+   * Settings → 用量统计 snapshot pushed by UsageStatsHandler
+   * (windows + heatmap in one payload; { error } on failure).
+   */
+  onUsageStats?: (json: string) => void;
+
   /** Buffers the latest usage update received before React callbacks mount. */
   __pendingUsageUpdate?: string;
 

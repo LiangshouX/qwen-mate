@@ -6,6 +6,7 @@ import {
   BasicPanel,
   ProvidersPanel,
   DependenciesPanel,
+  UsagePanel,
   McpPanel,
   PromptEnhancerPanel,
   CommitPanel,
@@ -20,13 +21,15 @@ import type {
 } from './hooks';
 import styles from './style.module.less';
 
-// The usage/permissions/agents/prompts pages are hidden (menu entries removed
-// with them) and await a redo; their panels stay exported from SettingsTabPanels
-// as reference implementations.
+// The permissions/agents/prompts pages are hidden (menu entries removed with
+// them) and await a redo; their panels stay exported from SettingsTabPanels
+// as reference implementations. The usage page was redone as 用量统计 and is
+// wired again.
 const TAB_PANELS: Partial<Record<SettingsTab, ComponentType<SettingsTabPanelProps>>> = {
   basic: BasicPanel,
   providers: ProvidersPanel,
   dependencies: DependenciesPanel,
+  usage: UsagePanel,
   mcp: McpPanel,
   promptEnhancer: PromptEnhancerPanel,
   commit: CommitPanel,

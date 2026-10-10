@@ -479,6 +479,85 @@
     },
     "usage": "Usage Statistics",
     "usageDesc": "View your Token consumption, cost statistics and usage trend analysis",
+    "usageStats": {
+      "title": "Usage Stats",
+      "desc": "Aggregates the local usage data written by the Qwen Code CLI: token consumption, sessions, requests, tools and code changes",
+      "range": {
+        "today": "Today",
+        "d7": "7 days",
+        "d30": "30 days"
+      },
+      "hero": {
+        "today": "Today",
+        "d7": "Last 7 days",
+        "d30": "Last 30 days"
+      },
+      "refresh": "Refresh",
+      "updatedAt": "Updated at {{time}}",
+      "status": {
+        "ok": "Healthy",
+        "noData": "No data",
+        "loading": "Loading",
+        "error": "Failed"
+      },
+      "versionUnknown": "not detected",
+      "tokensLabel": "tokens consumed",
+      "cards": {
+        "sessions": "Sessions",
+        "requests": "Requests",
+        "toolCalls": "Tools",
+        "changes": "Changes"
+      },
+      "split": {
+        "title": "TOKEN BREAKDOWN",
+        "input": "INPUT TOKENS",
+        "inputSub": "requests + cache reads",
+        "output": "OUTPUT TOKENS",
+        "outputSub": "response + reasoning",
+        "cache": "CACHE READS",
+        "cacheSub": "cache read ratio"
+      },
+      "heatmap": {
+        "title": "TOKEN HEATMAP",
+        "desc": "Last 12 months · daily token totals",
+        "less": "Less",
+        "more": "More",
+        "weekdayMon": "M",
+        "weekdayWed": "W",
+        "weekdayFri": "F"
+      },
+      "models": {
+        "title": "Model share · {{range}}",
+        "shareDesc": "Token share · green marks cache reads",
+        "tokensUnit": "{{value}} tokens · cache {{cache}}%"
+      },
+      "skills": {
+        "title": "Skill calls · {{range}}",
+        "desc": "Skill / call count",
+        "name": "Skill",
+        "count": "Calls",
+        "empty": "No skill calls in this range"
+      },
+      "charts": {
+        "tokensTitle": "TOKENS · {{range}}",
+        "tokensDesc": "Daily token total",
+        "sessionsTitle": "Sessions · {{range}}",
+        "sessionsDesc": "Daily active sessions",
+        "latest": "tokens consumed ",
+        "peak": "Peak {{value}}",
+        "empty": "No data in this range"
+      },
+      "notice": {
+        "source": "Source: {{path}}",
+        "version": "Requires Qwen Code ≥ {{min}} · current {{version}}",
+        "unsupported": "No usage data found: {{path}} is missing or empty. Usage statistics require Qwen Code ≥ {{min}}; detected CLI version: {{version}}. Upgrade Qwen Code and reopen this page.",
+        "liveNote": "{{count}} live session(s) rebuilt in real time"
+      },
+      "error": {
+        "title": "Failed to load usage data",
+        "retry": "Retry"
+      }
+    },
     "mcp": "MCP Servers",
     "mcpDesc": "Configure and manage Model Context Protocol servers",
     "permissions": "Permissions",
