@@ -194,7 +194,7 @@ public class UsageStatsAggregatorTest {
     @Test
     public void heatmapStartsOnMondayAndSpansTwelveMonths() {
         JsonObject old = record("old", at(LocalDate.of(2026, 8, 3), 9), "m", model(1, 100, 0, 0, 0, 100));
-        JsonObject recent = record("new", at(LocalDate.of(2026, 10, 9), 9), "m", model(1, 50, 0, 0, 0, 50));
+        JsonObject recent = record("new", at(LocalDate.of(2026, 10, 9), 9), "m", model(1, 50, 0, 45, 0, 50));
 
         JsonObject heatmap = payload(Arrays.asList(old, recent)).getAsJsonObject("heatmap");
 
@@ -209,6 +209,11 @@ public class UsageStatsAggregatorTest {
         assertEquals(100, days.get("2026-08-03").getAsLong());
         assertEquals(50, days.get("2026-10-09").getAsLong());
         assertEquals(100, heatmap.get("maxDayTokens").getAsLong());
+
+        // Daily cache ratio = day cached / day input, for the hover tooltip.
+        JsonObject cachePct = heatmap.getAsJsonObject("cachePct");
+        assertEquals(0.0, cachePct.get("2026-08-03").getAsDouble(), 0.05);
+        assertEquals(90.0, cachePct.get("2026-10-09").getAsDouble(), 0.05);
     }
 
     @Test

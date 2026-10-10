@@ -400,6 +400,33 @@
   box-shadow: 0 0 0 1.5px var(--usage-accent);
 }
 
+/* Hover tooltip on a heat cell — portaled to <body> (fixed positioning) so
+   the heatmap's horizontal overflow can't clip it. Single line:
+   "2026-10-03 · Tokens: 921.0M · Cache: 98%". */
+.heatTooltip {
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 10px));
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  z-index: 9999;
+  color: var(--text-secondary);
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+}
+
+.heatTooltipBelow {
+  transform: translate(-50%, 10px);
+}
+
 /* ---------- Charts ---------- */
 
 .chartBlock {

@@ -23,6 +23,15 @@ describe('formatTokens', () => {
     expect(formatTokens(-5)).toBe('0');
     expect(formatTokens(Number.NaN)).toBe('0');
   });
+
+  it('drops to K below one million so a small day does not read 0.0M', () => {
+    expect(formatTokens(2_000)).toBe('2.0K');
+    expect(formatTokens(12_340)).toBe('12.3K');
+    expect(formatTokens(700_000)).toBe('700.0K');
+    // Rounding 999,999 up to "1000.0K" would be silly — carry into millions.
+    expect(formatTokens(999_999)).toBe('1.0M');
+    expect(formatTokens(500)).toBe('500');
+  });
 });
 
 describe('formatCount', () => {
@@ -49,6 +58,10 @@ describe('buildHeatmapGrid', () => {
       '2026-10-09': 137_500_000,
       '2026-10-05': 10_000_000,
     },
+    cachePct: {
+      '2026-10-03': 98,
+      '2026-10-09': 93,
+    },
     maxDayTokens: 921_000_000,
   };
 
@@ -69,6 +82,20 @@ describe('buildHeatmapGrid', () => {
     expect(byDate['2026-10-09'].level).toBe(1); // ~15% of max
     expect(byDate['2026-10-05'].level).toBe(1);
     expect(byDate['2026-10-01'].level).toBe(0); // no data
+  });
+
+  it('carries the day cache ratio and leaves unknown days null', () => {
+    const grid = buildHeatmapGrid(heatmap, 'zh');
+    const byDate = Object.fromEntries(grid.cells.map((c) => [c.date, c]));
+    expect(byDate['2026-10-03'].cachePct).toBe(98);
+    expect(byDate['2026-10-05'].cachePct).toBeNull();
+    expect(byDate['2026-10-01'].cachePct).toBeNull();
+    // Older payloads have no cachePct map at all.
+    const bare = buildHeatmapGrid(
+      { ...heatmap, cachePct: undefined },
+      'zh',
+    );
+    expect(bare.cells.every((c) => c.cachePct === null)).toBe(true);
   });
 
   it('omits cells after today and labels each month once', () => {

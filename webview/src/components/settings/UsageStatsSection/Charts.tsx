@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import type { UsageDailyPoint, UsageHeatmap, UsageModelStat } from '../../../types/usage';
 import {
@@ -8,13 +9,24 @@ import {
   formatTokens,
   maxValue,
   nearestPointIndex,
+  type HeatmapCell,
 } from './usageStatsUtils';
 import styles from './style.module.less';
 
 const RANK_COLORS = ['#4f8ff7', '#2ec4b6', '#f5a524'];
 
+/** Tooltip half-width used to keep a near-edge cell's tooltip on screen. */
+const HEAT_TIP_HALF_WIDTH = 90;
+
 function rankColor(index: number): string {
   return RANK_COLORS[index] || '#8a8f98';
+}
+
+interface HeatHover {
+  cell: HeatmapCell;
+  x: number;
+  y: number;
+  below: boolean;
 }
 
 /** 12-month daily-token heatmap (columns = weeks, rows = Mon…Sun). */
@@ -24,9 +36,37 @@ export function UsageHeatmap({ heatmap }: { heatmap: UsageHeatmap }) {
     () => buildHeatmapGrid(heatmap, i18n.language),
     [heatmap, i18n.language],
   );
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [hover, setHover] = useState<HeatHover | null>(null);
+
+  // The grid scrolls horizontally on narrow panes; drop the tooltip rather
+  // than let it drift away from its cell.
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const clear = () => setHover(null);
+    el.addEventListener('scroll', clear);
+    return () => el.removeEventListener('scroll', clear);
+  }, []);
+
+  const showHover = (e: ReactMouseEvent<HTMLDivElement>, cell: HeatmapCell) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const maxLeft = Math.max(
+      HEAT_TIP_HALF_WIDTH,
+      (typeof window !== 'undefined' ? window.innerWidth : 1024) - HEAT_TIP_HALF_WIDTH,
+    );
+    setHover({
+      cell,
+      x: Math.min(Math.max(x, HEAT_TIP_HALF_WIDTH), maxLeft),
+      y: rect.top,
+      // Flip below when the cell sits too close to the viewport top.
+      below: rect.top < 90,
+    });
+  };
 
   return (
-    <div className={styles.heatmap}>
+    <div className={styles.heatmap} ref={rootRef}>
       <div className={styles.heatmapLegend}>
         <span className={styles.legendLabel}>{t('settings.usageStats.heatmap.less')}</span>
         {[1, 2, 3, 4].map((level) => (
@@ -67,6 +107,8 @@ export function UsageHeatmap({ heatmap }: { heatmap: UsageHeatmap }) {
           {grid.cells.map((cell) => (
             <div
               key={cell.date}
+              data-testid="usage-heat-cell"
+              data-date={cell.date}
               className={[
                 styles.heatCell,
                 styles[`heat${cell.level}` as const],
@@ -74,11 +116,33 @@ export function UsageHeatmap({ heatmap }: { heatmap: UsageHeatmap }) {
               ]
                 .filter(Boolean)
                 .join(' ')}
-              title={`${cell.date} · ${formatTokens(cell.tokens)}`}
+              onMouseEnter={(e) => showHover(e, cell)}
+              onMouseLeave={() => setHover(null)}
             />
           ))}
         </div>
       </div>
+
+      {hover &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            data-testid="usage-heat-tooltip"
+            className={`${styles.heatTooltip} ${
+              hover.below ? styles.heatTooltipBelow : ''
+            }`}
+            style={{ position: 'fixed', left: `${hover.x}px`, top: `${hover.y}px` }}
+          >
+            {hover.cell.date} · Tokens: <strong>{formatTokens(hover.cell.tokens)}</strong>
+            {hover.cell.cachePct !== null && (
+              <>
+                {' · Cache: '}
+                <strong>{Math.round(hover.cell.cachePct)}%</strong>
+              </>
+            )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

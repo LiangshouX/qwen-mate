@@ -15,11 +15,22 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
  * Token formatting matching Qwen Code Desktop: one decimal in millions
- * ("137.5M", "1.7M"), plain zero for nothing.
+ * ("137.5M", "1.7M"), dropping to K below 1M so a quiet day reads
+ * "2.0K" instead of "0.0M", plain zero for nothing.
  */
 export function formatTokens(value: number): string {
   if (!Number.isFinite(value) || value <= 0) {
     return '0';
+  }
+  if (value < 1_000_000) {
+    if (value < 1_000) {
+      return `${Math.round(value)}`;
+    }
+    const k = (value / 1_000).toFixed(1);
+    // 999,999 rounds to "1000.0K" — hand it back to the millions branch.
+    if (Number(k) < 1_000) {
+      return `${k}K`;
+    }
   }
   return `${(value / 1_000_000).toFixed(1)}M`;
 }
@@ -82,6 +93,8 @@ export type HeatmapLevel = 0 | 1 | 2 | 3 | 4;
 export interface HeatmapCell {
   date: string;
   tokens: number;
+  /** Day's cache ratio (cached / input, 0-100); null when input is unknown. */
+  cachePct: number | null;
   level: HeatmapLevel;
   col: number;
   row: number;
@@ -119,7 +132,15 @@ export function buildHeatmapGrid(
       const ratio = tokens / max;
       level = ratio < 0.25 ? 1 : ratio < 0.5 ? 2 : ratio < 0.75 ? 3 : 4;
     }
-    cells.push({ date, tokens, level, col: Math.floor(i / 7), row: i % 7 });
+    const cache = heatmap.cachePct?.[date];
+    cells.push({
+      date,
+      tokens,
+      cachePct: typeof cache === 'number' && Number.isFinite(cache) ? cache : null,
+      level,
+      col: Math.floor(i / 7),
+      row: i % 7,
+    });
   }
 
   const monthLabels: { col: number; label: string }[] = [];

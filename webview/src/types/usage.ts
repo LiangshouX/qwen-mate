@@ -56,6 +56,8 @@ export interface UsageHeatmap {
   today: string;
   /** Sparse date → daily tokens. */
   days: Record<string, number>;
+  /** Sparse date → daily cache ratio, cached / input, 0-100. */
+  cachePct?: Record<string, number>;
   maxDayTokens: number;
 }
 

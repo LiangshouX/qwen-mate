@@ -65,6 +65,7 @@ function payload(): UsagePayload {
       start: '2026-09-28',
       today: '2026-10-09',
       days: { '2026-10-09': 137_500_000 },
+      cachePct: { '2026-10-09': 93 },
       maxDayTokens: 137_500_000,
     },
   };
@@ -185,5 +186,25 @@ describe('UsageStatsSection', () => {
 
     fireEvent.mouseOut(chart!, { relatedTarget: document.body });
     expect(document.querySelector('[data-testid="usage-line-tooltip"]')).toBeNull();
+  });
+
+  it('shows date and value in a tooltip when hovering a heat cell', () => {
+    const { container } = render(<UsageStatsSection />);
+    pushSnapshot(payload());
+
+    const cell = container.querySelector('[data-date="2026-10-09"]');
+    expect(cell).toBeTruthy();
+
+    // React derives mouseenter from mouseover.
+    fireEvent.mouseOver(cell!);
+
+    const tip = document.querySelector('[data-testid="usage-heat-tooltip"]');
+    expect(tip).toBeTruthy();
+    expect(tip!.textContent).toContain('2026-10-09');
+    expect(tip!.textContent).toContain('Tokens: 137.5M');
+    expect(tip!.textContent).toContain('Cache: 93%');
+
+    fireEvent.mouseOut(cell!, { relatedTarget: document.body });
+    expect(document.querySelector('[data-testid="usage-heat-tooltip"]')).toBeNull();
   });
 });

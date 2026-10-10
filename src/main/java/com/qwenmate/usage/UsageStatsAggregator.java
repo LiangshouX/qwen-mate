@@ -277,8 +277,9 @@ public final class UsageStatsAggregator {
     /**
      * 12-month heatmap: {@code start} is the Monday of the week containing the
      * first day of the month 11 months ago (so month labels line up like the
-     * Desktop heatmap), {@code today} marks the last real cell, and {@code days}
-     * is a sparse date → tokens map.
+     * Desktop heatmap), {@code today} marks the last real cell, {@code days}
+     * is a sparse date → tokens map, and {@code cachePct} is a sparse
+     * date → daily cache ratio (cached / input, 0-100) for the hover tooltip.
      */
     static JsonObject heatmapStats(List<JsonObject> records, long nowMs, ZoneId zone) {
         LocalDate today = Instant.ofEpochMilli(nowMs).atZone(zone).toLocalDate();
@@ -286,13 +287,15 @@ public final class UsageStatsAggregator {
         LocalDate start = firstDay.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         long startMs = start.atStartOfDay(zone).toInstant().toEpochMilli();
 
-        Map<String, Long> days = new LinkedHashMap<>();
+        Map<String, long[]> days = new LinkedHashMap<>();   // date -> [tokens, input, cached]
         for (JsonObject record : records) {
             long ts = longField(record, "timestamp");
             if (ts < startMs || ts > nowMs) {
                 continue;
             }
             long tokens = 0;
+            long input = 0;
+            long cached = 0;
             JsonObject modelsJson = record.getAsJsonObject("models");
             if (modelsJson != null) {
                 for (Map.Entry<String, com.google.gson.JsonElement> entry : modelsJson.entrySet()) {
@@ -303,22 +306,34 @@ public final class UsageStatsAggregator {
                     tokens += m.has("totalTokens")
                             ? longField(m, "totalTokens")
                             : longField(m, "inputTokens") + longField(m, "outputTokens");
+                    input += longField(m, "inputTokens");
+                    cached += longField(m, "cachedTokens");
                 }
             }
             String day = Instant.ofEpochMilli(ts).atZone(zone).toLocalDate().format(ISO_DATE);
-            days.merge(day, tokens, Long::sum);
+            long[] bucket = days.computeIfAbsent(day, k -> new long[3]);
+            bucket[0] += tokens;
+            bucket[1] += input;
+            bucket[2] += cached;
         }
 
         JsonObject heatmap = new JsonObject();
         heatmap.addProperty("start", start.format(ISO_DATE));
         heatmap.addProperty("today", today.format(ISO_DATE));
         JsonObject daysJson = new JsonObject();
+        JsonObject cacheJson = new JsonObject();
         long max = 0;
-        for (Map.Entry<String, Long> entry : days.entrySet()) {
-            daysJson.addProperty(entry.getKey(), entry.getValue());
-            max = Math.max(max, entry.getValue());
+        for (Map.Entry<String, long[]> entry : days.entrySet()) {
+            long[] value = entry.getValue();
+            daysJson.addProperty(entry.getKey(), value[0]);
+            max = Math.max(max, value[0]);
+            // Days with no input tokens have no meaningful ratio — omit them.
+            if (value[1] > 0) {
+                cacheJson.addProperty(entry.getKey(), round1(value[2] * 100.0 / value[1]));
+            }
         }
         heatmap.add("days", daysJson);
+        heatmap.add("cachePct", cacheJson);
         heatmap.addProperty("maxDayTokens", max);
         return heatmap;
     }
