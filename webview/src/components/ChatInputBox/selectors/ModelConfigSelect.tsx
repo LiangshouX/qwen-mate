@@ -103,6 +103,20 @@ export const ModelConfigSelect = ({
     setIsOpen(false);
   }, [resetSubmenu]);
 
+  // Bare `/effort` opens this popover with the effort submenu expanded — the
+  // GUI equivalent of the CLI's interactive picker. Same window-callback
+  // convention the Java bridge uses; registered only while mounted.
+  useEffect(() => {
+    window.openEffortSelector = () => {
+      setIsOpen(true);
+      mainRecalculate();
+      openSubmenu('effort');
+    };
+    return () => {
+      delete window.openEffortSelector;
+    };
+  }, [mainRecalculate, openSubmenu]);
+
   const handleToggle = useCallback((event: React.MouseEvent) => {
     event.stopPropagation();
     const nextOpen = !isOpen;

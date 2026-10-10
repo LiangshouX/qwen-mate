@@ -83,6 +83,8 @@
     "openSourceBannerStarAria": "前往 GitHub 点 Star",
     "goInstallSdk": "前往安装",
     "commandNotImplemented": "`{{command}}` 功能暂未实现。",
+    "effortSet": "思考强度已切换为 {{tier}}",
+    "effortInvalid": "无效的强度等级「{{tier}}」，可选：{{tiers}}",
     "clearCommandDescription": "清除对话历史并新建会话",
     "unknownFile": "未知文件",
     "streamingConnected": "AI 已成功连接，正在理解问题",

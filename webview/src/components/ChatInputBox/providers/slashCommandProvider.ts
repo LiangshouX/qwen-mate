@@ -25,10 +25,11 @@ const NEW_SESSION_COMMAND_ALIASES = new Set(['/clear', '/new', '/reset']);
 /**
  * Commands the plugin executes itself instead of forwarding to the CLI
  * (see useMessageSender handleSubmit: resume→history, plan→plan mode,
- * context→dialog, mcp→MCP settings tab, skills→Skills settings tab).
+ * context→dialog, mcp→MCP settings tab, skills→Skills settings tab,
+ * effort→reasoning selector).
  * Kept in the palette even when the CLI runtime list does not contain them.
  */
-const GUI_HANDLED_COMMANDS = new Set(['/clear', '/resume', '/continue', '/plan', '/context', '/mcp', '/skills']);
+const GUI_HANDLED_COMMANDS = new Set(['/clear', '/resume', '/continue', '/plan', '/context', '/mcp', '/skills', '/effort']);
 
 function getLocalNewSessionCommands(): CommandItem[] {
   return [{

@@ -3,6 +3,7 @@ import type { TFunction } from 'i18next';
 import { sendBridgeEvent } from '../utils/bridge';
 import type { QwenMateContentBlock, QwenMateMessage } from '../types';
 import type { Attachment, ChatInputBoxHandle, PermissionMode, ReasoningEffort, SelectedAgent } from '../components/ChatInputBox/types';
+import { REASONING_LEVELS } from '../components/ChatInputBox/types';
 import { expandQuoteTokens } from '../components/ChatInputBox/utils/quoteRegistry';
 import type { ViewMode } from './useModelProviderState';
 
@@ -20,6 +21,12 @@ export const CONTEXT_COMMANDS = new Set(['/context']);
  */
 export const MCP_COMMANDS = new Set(['/mcp']);
 export const SKILLS_COMMANDS = new Set(['/skills']);
+/**
+ * Reasoning-effort command. The CLI answers a bare /effort with its interactive
+ * picker; headless it only prints text, so the GUI intercepts both shapes and
+ * drives the same selector state the input-box menu uses.
+ */
+export const EFFORT_COMMANDS = new Set(['/effort']);
 
 // Hoisted regex to avoid creating new RegExp on every call
 const WHITESPACE_REGEX = /\s+/;
@@ -55,6 +62,8 @@ export interface UseMessageSenderOptions {
   setCurrentView: React.Dispatch<React.SetStateAction<ViewMode>>;
   forceCreateNewSession: () => void;
   handleModeSelect?: (mode: PermissionMode) => void;
+  /** Applies a reasoning tier from /effort — same state the selector menu writes. */
+  setReasoningEffort?: (effort: ReasoningEffort) => void;
   openContextUsageDialog: (requestId?: string | null, loading?: boolean) => void;
   closeContextUsageDialog: (requestId?: string | null) => boolean;
 }
@@ -86,6 +95,7 @@ export function useMessageSender({
   setCurrentView,
   forceCreateNewSession,
   handleModeSelect,
+  setReasoningEffort,
   openContextUsageDialog,
   closeContextUsageDialog,
 }: UseMessageSenderOptions) {
@@ -194,6 +204,69 @@ export function useMessageSender({
 
     return false;
   }, [setSettingsInitialTab, setCurrentView]);
+
+  /**
+   * Check for the reasoning-effort command (/effort).
+   * - Bare `/effort` opens the reasoning selector (the CLI's interactive
+   *   picker equivalent — headless the CLI only prints text).
+   * - `/effort <tier>` applies the tier to the same state the selector menu
+   *   writes, so the input-box display follows immediately and every later
+   *   send carries it (ai-bridge forwards it as the SDK `effort` option; the
+   *   CLI clamps tiers the active model does not support). Never forwarded:
+   *   the CLI runs in a fresh process per turn, so a change made there would
+   *   be lost on the next turn anyway.
+   */
+  const checkEffortCommand = useCallback((text: string): boolean => {
+    if (!text.startsWith('/')) return false;
+    const parts = text.split(WHITESPACE_REGEX);
+    const command = parts[0].toLowerCase();
+    if (!EFFORT_COMMANDS.has(command)) return false;
+
+    const userMessage: QwenMateMessage = {
+      type: 'user',
+      content: text,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Bare /effort → open the selector instead of printing the CLI's text reply.
+    const tierArg = (parts[1] || '').toLowerCase();
+    if (!tierArg) {
+      setMessages((prev) => [...prev, userMessage]);
+      // Registered by ModelConfigSelect (same window-callback convention the
+      // Java bridge uses): opens the model popover with the effort submenu
+      // expanded — the GUI equivalent of the CLI's interactive /effort picker.
+      window.openEffortSelector?.();
+      return true;
+    }
+
+    const validTiers = REASONING_LEVELS.map((level) => level.id);
+    if (!validTiers.includes(tierArg as ReasoningEffort)) {
+      const assistantMessage: QwenMateMessage = {
+        type: 'assistant',
+        content: t('chat.effortInvalid', {
+          tier: tierArg,
+          tiers: validTiers.join(' / '),
+          defaultValue: `Unknown effort tier "${tierArg}". Available: ${validTiers.join(', ')}`,
+        }),
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, userMessage, assistantMessage]);
+      return true;
+    }
+
+    const tier = tierArg as ReasoningEffort;
+    setReasoningEffort?.(tier);
+    const assistantMessage: QwenMateMessage = {
+      type: 'assistant',
+      content: t('chat.effortSet', {
+        tier,
+        defaultValue: `Reasoning effort set to ${tier}`,
+      }),
+      timestamp: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, userMessage, assistantMessage]);
+    return true;
+  }, [setReasoningEffort, setMessages, t]);
 
   /**
    * Check for unimplemented slash commands
@@ -440,12 +513,15 @@ export function useMessageSender({
     // Check settings-page commands (/mcp, /skills)
     if (checkSettingsPageCommand(text)) return;
 
+    // Check reasoning-effort command (/effort)
+    if (checkEffortCommand(text)) return;
+
     // Check for unimplemented commands
     if (checkUnimplementedCommand(text)) return;
 
     // Execute message
     executeMessage(content, attachments);
-  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkSettingsPageCommand, checkUnimplementedCommand, executeMessage]);
+  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkSettingsPageCommand, checkEffortCommand, checkUnimplementedCommand, executeMessage]);
 
   /**
    * Interrupt the current session

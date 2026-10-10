@@ -57,6 +57,15 @@ function normalizePermissionMode(mode) {
   return VALID_PERMISSION_MODES.includes(aliased) ? aliased : 'default';
 }
 
+// Qwen Code reasoning-effort tiers (mirrors the CLI REASONING_EFFORT_TIERS and
+// the SDK query() zod enum). Anything else is dropped instead of forwarded —
+// the SDK rejects unknown effort values outright. Exported for tests.
+const VALID_REASONING_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
+
+export function normalizeReasoningEffort(effort) {
+  return VALID_REASONING_EFFORTS.includes(effort) ? effort : undefined;
+}
+
 function buildUserMessage(text, sessionId) {
   return {
     type: 'user',
@@ -686,6 +695,7 @@ export async function sendMessagePersistent(params = {}) {
     model,
     streaming = true,
     attachments,
+    reasoningEffort,
   } = params;
 
   const runtimeKey = makeRuntimeKey(params);
@@ -716,6 +726,10 @@ export async function sendMessagePersistent(params = {}) {
     };
 
     if (model) options.model = model;
+    // Reasoning effort from the GUI selector / /effort command. The CLI clamps
+    // the tier to what the active model supports.
+    const effort = normalizeReasoningEffort(reasoningEffort);
+    if (effort) options.effort = effort;
     if (requestSessionId) options.resume = requestSessionId;
     // Stretch the SDK/CLI canUseTool timeout over the whole approval dialog
     // window; the 60s default cancels the command while the dialog is open.

@@ -459,6 +459,8 @@ interface Window {
    * Update slash commands list (from SDK)
    */
   updateSlashCommands?: (json: string) => void;
+  /** Registered by ModelConfigSelect: opens the model popover with the effort submenu expanded (/effort). */
+  openEffortSelector?: () => void;
 
   /**
    * Runtime slash-command names the running CLI registered for this mode.

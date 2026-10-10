@@ -6,9 +6,9 @@ import {
 } from './types';
 
 /**
- * The reasoning selector is available for every supported provider; the
- * provider-agnostic effort ladder stops at 'xhigh' (the 'max' tier is not
- * offered by the headless runtimes).
+ * The reasoning selector is available for every supported provider and offers
+ * the full Qwen Code tier ladder (low/medium/high/xhigh/max); the CLI clamps
+ * a tier the active model does not support.
  */
 export function isReasoningVisible(_currentProvider?: string, _selectedModel?: string): boolean {
   return true;
@@ -18,7 +18,9 @@ export function getAvailableReasoningLevels(
   _currentProvider?: string,
   _selectedModel?: string,
 ): ReasoningInfo[] {
-  return REASONING_LEVELS.filter((level) => level.id !== 'max');
+  // Full Qwen Code ladder (low/medium/high/xhigh/max) — the CLI clamps the
+  // tier to what the active model supports, so the selector stays model-agnostic.
+  return REASONING_LEVELS;
 }
 
 export function resolveCurrentReasoningLevel(
@@ -26,7 +28,7 @@ export function resolveCurrentReasoningLevel(
   availableLevels: ReasoningInfo[],
 ): ReasoningInfo | undefined {
   return availableLevels.find((level) => level.id === value)
-    || availableLevels[availableLevels.length - 2]
+    || availableLevels.find((level) => level.id === 'high')
     || availableLevels[0];
 }
 

@@ -83,6 +83,8 @@
     "openSourceBannerStarAria": "GitHub でリポジトリを開いてスター",
     "goInstallSdk": "インストールへ",
     "commandNotImplemented": "`{{command}}` 機能はまだ実装されていません。",
+    "effortSet": "思考強度を {{tier}} に設定しました",
+    "effortInvalid": "無効な思考強度「{{tier}}」。使用可能: {{tiers}}",
     "clearCommandDescription": "会話履歴をクリアして新しいセッションを開始",
     "unknownFile": "Unknown file",
     "streamingConnected": "{{provider}}に接続しました、質問を理解しています",

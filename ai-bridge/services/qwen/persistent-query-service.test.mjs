@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { consumeQueryStream, requestPermissionFromJava, requestAskUserAnswers, buildCanUseTool, shouldRetryWithoutResume, buildUserPrompt } from './persistent-query-service.js';
+import { consumeQueryStream, requestPermissionFromJava, requestAskUserAnswers, buildCanUseTool, shouldRetryWithoutResume, buildUserPrompt, normalizeReasoningEffort } from './persistent-query-service.js';
 
 /** Run consumeQueryStream while capturing every stdout line it emits. */
 async function captureMarkers(messageFactory) {
@@ -377,4 +377,19 @@ test('aborting the turn denies the pending ask and removes its files', async (t)
   assert.equal(decision.behavior, 'deny');
   assert.equal(decision.message, 'Request cancelled');
   assert.deepEqual(readdirSync(dir), [], 'an aborted ask must leave no ghost dialog behind');
+});
+
+// ─── Reasoning effort tiers (must match the CLI/SDK enum exactly) ───
+
+test('normalizeReasoningEffort accepts every Qwen Code tier verbatim', () => {
+  for (const tier of ['low', 'medium', 'high', 'xhigh', 'max']) {
+    assert.equal(normalizeReasoningEffort(tier), tier);
+  }
+});
+
+test('normalizeReasoningEffort drops values the SDK zod enum would reject', () => {
+  for (const bad of ['none', 'HIGH', ' xhigh', '', undefined, null, 42]) {
+    assert.equal(normalizeReasoningEffort(bad), undefined,
+      `value ${JSON.stringify(bad)} must not reach options.effort`);
+  }
 });

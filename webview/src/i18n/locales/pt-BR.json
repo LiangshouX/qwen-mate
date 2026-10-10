@@ -83,6 +83,8 @@
     "openSourceBannerStarAria": "Abrir o repositório no GitHub e dar uma estrela",
     "goInstallSdk": "Ir para Instalação",
     "commandNotImplemented": "O recurso `{{command}}` ainda não foi implementado.",
+    "effortSet": "Nível de raciocínio definido como {{tier}}",
+    "effortInvalid": "Nível de raciocínio inválido \"{{tier}}\". Disponíveis: {{tiers}}",
     "clearCommandDescription": "Limpar histórico de conversa e iniciar uma nova sessão",
     "unknownFile": "Arquivo desconhecido",
     "streamingConnected": "{{provider}} conectado, entendendo sua pergunta",

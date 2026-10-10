@@ -20,6 +20,7 @@ import {
   CONTEXT_COMMANDS,
   MCP_COMMANDS,
   SKILLS_COMMANDS,
+  EFFORT_COMMANDS,
 } from './hooks/useMessageSender';
 import type { Attachment, ChatInputBoxHandle, PermissionMode } from './components/ChatInputBox/types';
 import type { ChatScreenProps } from './components/ChatScreen';
@@ -263,6 +264,7 @@ export const useAppChatController = ({
     setSettingsInitialTab, setCurrentView,
     forceCreateNewSession,
     handleModeSelect,
+    setReasoningEffort,
     openContextUsageDialog,
     closeContextUsageDialog,
   });
@@ -320,6 +322,12 @@ export const useAppChatController = ({
       if (SKILLS_COMMANDS.has(command)) {
         setSettingsInitialTab('skills');
         setCurrentView('settings');
+        return;
+      }
+      // /effort - apply the tier / open the reasoning selector locally, even
+      // while loading (same path /context uses for its local handling)
+      if (EFFORT_COMMANDS.has(command)) {
+        hookHandleSubmit(content, attachments);
         return;
       }
     }

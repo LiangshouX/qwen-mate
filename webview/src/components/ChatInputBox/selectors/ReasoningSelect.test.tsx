@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import type { ReasoningEffort } from '../types';
 import { ReasoningSelect } from './ReasoningSelect';
 
 vi.mock('react-i18next', () => ({
@@ -23,7 +24,7 @@ describe('ReasoningSelect', () => {
 
     fireEvent.click(screen.getByRole('button'));
     const dropdown = screen.getByTestId('reasoning-selector-dropdown');
-    for (const label of ['Low', 'Medium', 'High', 'XHigh']) {
+    for (const label of ['Low', 'Medium', 'High', 'XHigh', 'Max']) {
       expect(within(dropdown).getByText(label)).toBeTruthy();
     }
 
@@ -31,7 +32,7 @@ describe('ReasoningSelect', () => {
     expect(onChange).toHaveBeenCalledWith('low');
   });
 
-  it('stops the effort ladder at xhigh — Max is not offered', () => {
+  it('offers the full Qwen Code ladder, including Max', () => {
     render(
       <ReasoningSelect
         value="xhigh"
@@ -45,15 +46,15 @@ describe('ReasoningSelect', () => {
     const dropdown = screen.getByTestId('reasoning-selector-dropdown');
 
     expect(within(dropdown).getByText('XHigh')).toBeTruthy();
-    expect(within(dropdown).queryByText('Max')).toBeNull();
+    expect(within(dropdown).getByText('Max')).toBeTruthy();
   });
 
-  it('resets an unavailable effort to the highest offered tier', () => {
+  it('resets an effort outside the ladder to the default tier', () => {
     const onChange = vi.fn();
 
     render(
       <ReasoningSelect
-        value="max"
+        value={'ultra' as ReasoningEffort}
         onChange={onChange}
         currentProvider="qwen"
         selectedModel="qwen3-coder-plus"
