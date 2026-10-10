@@ -614,6 +614,36 @@ export function requestAskUserAnswers(toolName, input, { signal, cwd } = {}) {
 
 // ─── Persistent service API (daemon contract) ───
 
+/**
+ * Whether a failed turn should be retried without `--resume`.
+ *
+ * The CLI skips session recording for slash-command turns
+ * (SLASH_COMMANDS_SKIP_RECORDING), so a session whose early turns were slash
+ * commands has no file on disk. Every later turn passes --resume <id>; with no
+ * saved session the CLI dies during startup ("No saved session found with ID
+ * ..., exit 1") before answering the initialize handshake, the SDK surfaces
+ * that as "CLI process exited with code 1", and every subsequent turn of that
+ * session fails the same way. Retrying once WITHOUT resume is safe only when
+ * the failed attempt died before initialize — no message arrived, so it
+ * executed nothing (a mid-turn crash must NOT be retried: tools may have run).
+ *
+ * Exported for tests.
+ */
+export function shouldRetryWithoutResume(error, { resume, sawAnyMessage }) {
+  if (!resume || sawAnyMessage) return false;
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes('CLI process exited with code')
+    || message.includes('CLI process terminated by signal');
+}
+
+/** Wrap an SDK message stream to record whether any message arrived. */
+async function* trackFirstMessage(result, state) {
+  for await (const message of result) {
+    state.sawAnyMessage = true;
+    yield message;
+  }
+}
+
 export async function sendMessagePersistent(params = {}) {
   const {
     message,
@@ -692,11 +722,43 @@ export async function sendMessagePersistent(params = {}) {
     activeTurns.set(runtimeKey, { abortController });
     activeTurnRuntime = runtimeKey;
 
-    const result = queryFn({ prompt, options });
-    // query() returns once the CLI child process is spawned and the Query is
-    // constructed — everything after this waits on the CLI, not on us.
-    emitTiming('query_created');
-    const outcome = await consumeQueryStream(result, requestSessionId);
+    const runAttempt = async () => {
+      const streamState = { sawAnyMessage: false };
+      try {
+        const result = queryFn({ prompt, options });
+        // query() returns once the CLI child process is spawned and the Query
+        // is constructed — everything after this waits on the CLI, not on us.
+        emitTiming('query_created');
+        const outcome = await consumeQueryStream(trackFirstMessage(result, streamState), requestSessionId);
+        return { outcome };
+      } catch (error) {
+        return { error, streamState };
+      }
+    };
+
+    let attempt = await runAttempt();
+    if (attempt.error
+        && shouldRetryWithoutResume(attempt.error, {
+          resume: options.resume,
+          sawAnyMessage: attempt.streamState.sawAnyMessage,
+        })) {
+      // Startup-stage resume failure (most often: session file never written
+      // because the session's early turns were slash commands). [TIMING] is
+      // forwarded by QwenSDKBridge as an INFO log for diagnosis.
+      emitTiming('resume_retry', {
+        sessionId: requestSessionId,
+        reason: attempt.error instanceof Error ? attempt.error.message : String(attempt.error),
+      });
+      delete options.resume;
+      const retryAbortController = new AbortController();
+      options.abortController = retryAbortController;
+      activeTurns.set(runtimeKey, { abortController: retryAbortController });
+      attempt = await runAttempt();
+    }
+    if (attempt.error) {
+      throw attempt.error;
+    }
+    const outcome = attempt.outcome;
 
     activeTurns.delete(runtimeKey);
     activeTurnRuntime = null;

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { consumeQueryStream, requestPermissionFromJava, requestAskUserAnswers, buildCanUseTool } from './persistent-query-service.js';
+import { consumeQueryStream, requestPermissionFromJava, requestAskUserAnswers, buildCanUseTool, shouldRetryWithoutResume } from './persistent-query-service.js';
 
 /** Run consumeQueryStream while capturing every stdout line it emits. */
 async function captureMarkers(messageFactory) {
@@ -120,6 +120,41 @@ test('omits the marker when the CLI reports no slash commands', async () => {
   ]));
 
   assert.ok(!lines.some((line) => line.startsWith('[SLASH_COMMANDS]')));
+});
+
+// ─── Resume-crash recovery (slash-command turns never write a session file) ───
+
+test('retries without resume when the CLI dies before initialize', () => {
+  const error = new Error('CLI process exited with code 1');
+  assert.equal(shouldRetryWithoutResume(error, { resume: 'sess-1', sawAnyMessage: false }), true);
+});
+
+test('does not retry a fresh turn (nothing to resume)', () => {
+  const error = new Error('CLI process exited with code 1');
+  assert.equal(shouldRetryWithoutResume(error, { resume: undefined, sawAnyMessage: false }), false);
+});
+
+test('does not retry after any message arrived (mid-turn crash may have side effects)', () => {
+  const error = new Error('CLI process exited with code 1');
+  assert.equal(shouldRetryWithoutResume(error, { resume: 'sess-1', sawAnyMessage: true }), false);
+});
+
+test('does not retry unrelated errors', () => {
+  assert.equal(
+    shouldRetryWithoutResume(new Error('Query aborted by user'), { resume: 'sess-1', sawAnyMessage: false }),
+    false,
+  );
+  assert.equal(
+    shouldRetryWithoutResume(new Error('Control request timeout: initialize'), { resume: 'sess-1', sawAnyMessage: false }),
+    false,
+  );
+});
+
+test('matches a signal-terminated transport too', () => {
+  assert.equal(
+    shouldRetryWithoutResume(new Error('CLI process terminated by signal SIGSEGV'), { resume: 'sess-1', sawAnyMessage: false }),
+    true,
+  );
 });
 
 // ─── File-IPC approval flow (Node writes request, polls response) ───

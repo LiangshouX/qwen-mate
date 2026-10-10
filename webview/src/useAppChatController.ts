@@ -18,6 +18,8 @@ import {
   RESUME_COMMANDS,
   PLAN_COMMANDS,
   CONTEXT_COMMANDS,
+  MCP_COMMANDS,
+  SKILLS_COMMANDS,
 } from './hooks/useMessageSender';
 import type { Attachment, ChatInputBoxHandle, PermissionMode } from './components/ChatInputBox/types';
 import type { ChatScreenProps } from './components/ChatScreen';
@@ -308,6 +310,18 @@ export const useAppChatController = ({
         hookHandleSubmit(content, attachments);
         return;
       }
+      // /mcp - open MCP settings page (CLI rejects this command in this mode)
+      if (MCP_COMMANDS.has(command)) {
+        setSettingsInitialTab('mcp');
+        setCurrentView('settings');
+        return;
+      }
+      // /skills - open Skills settings page (CLI exits with code 1 on this command)
+      if (SKILLS_COMMANDS.has(command)) {
+        setSettingsInitialTab('skills');
+        setCurrentView('settings');
+        return;
+      }
     }
     // If loading, add to queue
     if (loading) {
@@ -315,7 +329,7 @@ export const useAppChatController = ({
       return;
     }
     hookHandleSubmit(content, attachments);
-  }, [loading, enqueueMessage, hookHandleSubmit, forceCreateNewSession, currentProvider, handleModeSelect, setCurrentView, addToast, t]);
+  }, [loading, enqueueMessage, hookHandleSubmit, forceCreateNewSession, currentProvider, handleModeSelect, setCurrentView, setSettingsInitialTab, addToast, t]);
 
   // ── Chat-view computations (stage 5 of TASK-P1-01) ──
   const {

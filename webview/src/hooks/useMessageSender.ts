@@ -13,6 +13,13 @@ export const NEW_SESSION_COMMANDS = new Set(['/new', '/clear', '/reset']);
 export const RESUME_COMMANDS = new Set(['/resume', '/continue']);
 export const PLAN_COMMANDS = new Set(['/plan']);
 export const CONTEXT_COMMANDS = new Set(['/context']);
+/**
+ * Locally handled commands, one per settings tab. The CLI rejects both with
+ * "not supported in this mode" / exit code 1, so they must never reach
+ * send_message — each opens its own settings page instead.
+ */
+export const MCP_COMMANDS = new Set(['/mcp']);
+export const SKILLS_COMMANDS = new Set(['/skills']);
 
 // Hoisted regex to avoid creating new RegExp on every call
 const WHITESPACE_REGEX = /\s+/;
@@ -161,6 +168,32 @@ export function useMessageSender({
     }
     return false;
   }, [currentProvider, selectedModel, addToast, t, openContextUsageDialog, closeContextUsageDialog]);
+
+  /**
+   * Check for settings-page commands (/mcp, /skills).
+   * Handled locally and independently: /mcp opens the MCP servers tab,
+   * /skills opens the Skills tab. The CLI rejects both in this mode, so they
+   * must never be forwarded. Only the exact first token matches — /mcp-status
+   * or other future commands are unaffected. Extra arguments are ignored.
+   */
+  const checkSettingsPageCommand = useCallback((text: string): boolean => {
+    if (!text.startsWith('/')) return false;
+    const command = text.split(WHITESPACE_REGEX)[0].toLowerCase();
+
+    if (MCP_COMMANDS.has(command)) {
+      setSettingsInitialTab('mcp');
+      setCurrentView('settings');
+      return true;
+    }
+
+    if (SKILLS_COMMANDS.has(command)) {
+      setSettingsInitialTab('skills');
+      setCurrentView('settings');
+      return true;
+    }
+
+    return false;
+  }, [setSettingsInitialTab, setCurrentView]);
 
   /**
    * Check for unimplemented slash commands
@@ -404,12 +437,15 @@ export function useMessageSender({
     // Check context usage command (/context)
     if (checkContextCommand(text)) return;
 
+    // Check settings-page commands (/mcp, /skills)
+    if (checkSettingsPageCommand(text)) return;
+
     // Check for unimplemented commands
     if (checkUnimplementedCommand(text)) return;
 
     // Execute message
     executeMessage(content, attachments);
-  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkUnimplementedCommand, executeMessage]);
+  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkSettingsPageCommand, checkUnimplementedCommand, executeMessage]);
 
   /**
    * Interrupt the current session

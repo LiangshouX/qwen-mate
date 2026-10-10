@@ -74,4 +74,24 @@ describe('slashCommandProvider', () => {
     expect(labels).not.toContain('/custom-skill');
     expect(labels).toContain('/brand-new');   // runtime command missing from the table
   });
+
+  it('keeps GUI-handled /mcp and /skills when the runtime list omits them', async () => {
+    // The CLI rejects both in this mode ("not supported in this mode" /
+    // exit code 1), so they never appear in the runtime list — the GUI
+    // intercepts them and opens the matching settings tab instead.
+    const resultPromise = slashCommandProvider('', new AbortController().signal);
+
+    window.updateSlashCommands?.(JSON.stringify([
+      { name: '/mcp', description: 'List configured MCP servers and tools' },
+      { name: '/skills', description: 'Open the Skills panel' },
+      { name: '/theme', description: 'Change the visual theme' },
+    ]));
+    window.updateRuntimeSlashCommands?.(JSON.stringify(['compress']));
+
+    const labels = (await resultPromise).map(cmd => cmd.label);
+
+    expect(labels).toContain('/mcp');
+    expect(labels).toContain('/skills');
+    expect(labels).not.toContain('/theme');
+  });
 });
