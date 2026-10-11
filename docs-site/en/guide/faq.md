@@ -1,0 +1,82 @@
+# FAQ & Troubleshooting
+
+## Installation and startup
+
+### The QwenMate tool window is missing from the sidebar?
+
+Open it via `View → Tool Windows → QwenMate`. If it still does not appear, make sure the plugin is enabled in `Settings → Plugins`, then restart the IDE.
+
+### It says the qwen CLI was not found / CLI detection failed?
+
+The plugin only detects the local `qwen` command; it does not install the CLI for you.
+
+1. Run `qwen --version` in a terminal to confirm the command works
+2. If the terminal does not have it either, install the Qwen Code CLI first
+3. The IDE must be launched from a login shell to inherit PATH; restart the IDE after installing and detect again
+
+### Authentication failed or says not logged in?
+
+Authentication is managed by the Qwen Code CLI. Run `qwen` in a terminal, complete the login flow, then retry in the plugin. The plugin intentionally has no authentication editing entry point.
+
+### Where do I change the model?
+
+The Providers page is a read-only view of `~/.qwen/settings.json`. To switch models, edit that file or switch in the Qwen Code CLI; the plugin picks up the latest configuration.
+
+## SDK dependency issues
+
+### SDK installation incomplete, missing native binary?
+
+This is a known issue with the Taobao npm mirror: the mirror has not fully synced the platform-specific files. It is not a plugin bug. Two options:
+
+- Option 1: temporarily switch to the official npm registry, reinstall from the `SDK Dependencies` page, then switch back
+- Option 2: roll the SDK back to v0.2.112 or earlier on the `SDK Dependencies` page, then restart the IDE
+
+The issue disappears on its own once the Taobao mirror finishes syncing.
+
+### Startup fails with spawn EBUSY?
+
+Usually caused by an incompatible Node.js version or an incomplete SDK install:
+
+1. Check your Node.js version; Node 20 or 22 is recommended, many reports involve Node 24
+2. Switch to the official npm registry (the Taobao mirror may lack the latest version) and reinstall the latest SDK from `SDK Dependencies`
+
+### "Session resume failed" when restoring a history session?
+
+The session thread resume request was rejected by the server, typically because the session has expired or the server does not support the operation. Start a new session or restore a different one.
+
+## Usage questions
+
+### Scrolling in the chat panel is laggy on macOS?
+
+On macOS (especially Retina displays), disable GPU acceleration: open `Help → Edit Custom VM Options`, add:
+
+```
+-Dide.browser.jcef.gpu.disable=true
+```
+
+and restart the IDE.
+
+### The AI asks for approval on every file edit. Can I turn it off?
+
+Approval is a safety mechanism for sensitive operations; file edits always require confirmation. If you do not want to confirm each time, choose to remember the decision for the session in the approval dialog, and similar actions stop prompting.
+
+### A shortcut conflicts with another plugin?
+
+Search for `QwenMate` in `Settings → Keymap` and rebind the action.
+
+### How do I install in a fully offline intranet?
+
+1. Download the plugin ZIP on a machine with internet access and install it via `Install Plugin from Disk…`
+2. Use the Qwen SDK offline package: run `install-offline.bat` / `install-offline.sh` in a terminal to install into `~/.qwenmate/dependencies/qwen-sdk/`
+3. Configure authentication according to your intranet's Qwen service setup
+
+### Where is plugin data stored?
+
+- `~/.qwenmate/`: plugin data and the SDK dependency
+- `~/.qwen/`: Qwen Code CLI configuration and sessions
+
+When cleaning up for troubleshooting, exit the IDE first and delete the relevant directory; back up session records before deleting.
+
+## Report a problem
+
+For anything not covered here, open an issue on [GitHub Issues](https://github.com/LiangshouX/qwen-mate/issues) and include the error message, IDE version, and reproduction steps.

@@ -2,9 +2,9 @@
 
 # QwenMate
 
-**Qwen Code 可视化 GUI —— JetBrains IDE 插件（内部轻量版）**
+**Qwen Code 可视化 GUI —— JetBrains IDE 插件**
 
-Based on [CC GUI](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) (MIT), trimmed to Qwen-only.
+Specifically adapted for Qwen Code, built on [CC GUI](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) (MIT).
 
 </div>
 
