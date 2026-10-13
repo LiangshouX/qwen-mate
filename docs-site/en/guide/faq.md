@@ -22,6 +22,16 @@ Authentication is managed by the Qwen Code CLI. Run `qwen` in a terminal, comple
 
 The Providers page is a read-only view of `~/.qwen/settings.json`. To switch models, edit that file or switch in the Qwen Code CLI; the plugin picks up the latest configuration.
 
+### The chat panel opens completely blank (white screen)?
+
+A blank panel means the web view failed to render; the plugin process itself is still running. Work through these steps in order:
+
+1. Click the refresh icon in the tool window title bar (or "Restart Interface" in the `⋮` menu) to rebuild the interface, no IDE restart needed. The title bar is native IDE chrome and stays clickable while the panel is blank
+2. Startup automatically retries twice; if both attempts fail, an "Interface failed to start" panel appears after about 30 seconds, and its button rebuilds the interface the same way
+3. If none of that works, restart the IDE. If the blank screen comes back after a restart, it is likely an environment issue; collect the logs below and report it
+
+When reporting, include the `idea.log` lines (menu `Help → Reveal in Explorer` for the log directory) containing `WebviewWatchdog` or `fallback bridge injection`. In the injection log, `url=<empty>` means the page never loaded at all, while a populated `url=` means it loaded but did not render; these have different causes. Attaching `jcef_chromium_*.log` from the same directory also helps.
+
 ## SDK dependency issues
 
 ### SDK installation incomplete, missing native binary?
