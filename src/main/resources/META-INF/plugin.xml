@@ -165,6 +165,11 @@
                 class="com.qwenmate.action.dev.OpenDevToolsAction"
                 icon="AllIcons.Xml.Browsers.Chromium"/>
 
+        <!-- Rebuild the webview (title bar / gear menu entry; recovers from a blank page) -->
+        <action id="QwenMate.RestartWebviewAction"
+                class="com.qwenmate.action.RestartWebviewAction"
+                icon="AllIcons.Actions.Refresh"/>
+
         <!-- Action to send file path from the file tree to the input box -->
         <action id="QwenMate.SendFilePathToInputAction"
                 class="com.qwenmate.action.editor.SendFilePathToInputAction"

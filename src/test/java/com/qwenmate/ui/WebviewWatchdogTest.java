@@ -159,6 +159,62 @@ public class WebviewWatchdogTest {
         assertFalse(watchdog.tryAcquireRecoveryPermit(false));
     }
 
+    /** Verifies that a user-initiated restart restores the startup retry budget. */
+    @Test
+    public void manualRestartRestoresStartupRecoveryBudget() {
+        WebviewWatchdog watchdog = exhaustedWatchdog();
+
+        watchdog.resetForManualRestart();
+
+        assertTrue(watchdog.tryAcquireRecoveryPermit(false));
+        assertTrue(watchdog.tryAcquireRecoveryPermit(false));
+        assertFalse(watchdog.tryAcquireRecoveryPermit(false));
+    }
+
+    /** Verifies that startup budget exhaustion surfaces the manual-restart callback once per budget. */
+    @Test
+    public void exhaustedStartupRecoveryNotifiesCallbackOncePerBudget() {
+        AtomicLong now = new AtomicLong(1_000L);
+        AtomicInteger reloads = new AtomicInteger();
+        AtomicInteger recreates = new AtomicInteger();
+        AtomicInteger exhaustedNotifications = new AtomicInteger();
+        ShowingPanel panel = new ShowingPanel(true);
+        WebviewWatchdog watchdog = createWatchdog(
+                panel, now, reloads, recreates, Runnable::run,
+                exhaustedNotifications::incrementAndGet);
+
+        now.addAndGet(16_000L);
+        watchdog.checkHealth();
+        assertEquals(1, reloads.get());
+        assertEquals(0, exhaustedNotifications.get());
+
+        now.addAndGet(16_000L);
+        watchdog.checkHealth();
+        assertEquals(1, recreates.get());
+        assertEquals(0, exhaustedNotifications.get());
+
+        now.addAndGet(16_000L);
+        watchdog.checkHealth();
+        assertEquals(1, exhaustedNotifications.get());
+
+        now.addAndGet(16_000L);
+        watchdog.checkHealth();
+        assertEquals(1, exhaustedNotifications.get());
+
+        watchdog.resetForManualRestart();
+        now.addAndGet(16_000L);
+        watchdog.checkHealth();
+        assertEquals(2, reloads.get());
+
+        now.addAndGet(16_000L);
+        watchdog.checkHealth();
+        assertEquals(2, recreates.get());
+
+        now.addAndGet(16_000L);
+        watchdog.checkHealth();
+        assertEquals(2, exhaustedNotifications.get());
+    }
+
     /** Verifies that ready runtime pages are not constrained by the startup retry budget. */
     @Test
     public void runtimeRecoveryIsNotCappedByStartupBudget() {
@@ -185,7 +241,8 @@ public class WebviewWatchdogTest {
                 () -> { },
                 () -> false,
                 () -> false,
-                () -> false
+                () -> false,
+                () -> { }
         );
     }
 
@@ -196,6 +253,17 @@ public class WebviewWatchdogTest {
             AtomicInteger recreates,
             Consumer<Runnable> recoveryExecutor
     ) {
+        return createWatchdog(panel, now, reloads, recreates, recoveryExecutor, () -> { });
+    }
+
+    private static WebviewWatchdog createWatchdog(
+            JPanel panel,
+            AtomicLong now,
+            AtomicInteger reloads,
+            AtomicInteger recreates,
+            Consumer<Runnable> recoveryExecutor,
+            Runnable onStartupRecoveryExhausted
+    ) {
         return new WebviewWatchdog(
                 panel,
                 () -> true,
@@ -205,7 +273,8 @@ public class WebviewWatchdogTest {
                 () -> false,
                 () -> false,
                 now::get,
-                recoveryExecutor
+                recoveryExecutor,
+                onStartupRecoveryExhausted
         );
     }
 

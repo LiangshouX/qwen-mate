@@ -84,6 +84,8 @@ public class WebviewWatchdog {
     private final ReadyCheck readyCheck;
     private final LongSupplier currentTimeMillis;
     private final Consumer<Runnable> recoveryExecutor;
+    private final Runnable onStartupRecoveryExhausted;
+    private final AtomicBoolean startupRecoveryExhaustedNotified = new AtomicBoolean();
 
     public WebviewWatchdog(
             JPanel mainPanel,
@@ -92,7 +94,8 @@ public class WebviewWatchdog {
             Runnable onRecreateWebview,
             DisposedCheck disposedCheck,
             StreamActiveCheck streamActiveCheck,
-            ReadyCheck readyCheck
+            ReadyCheck readyCheck,
+            Runnable onStartupRecoveryExhausted
     ) {
         this(
                 mainPanel,
@@ -103,7 +106,8 @@ public class WebviewWatchdog {
                 streamActiveCheck,
                 readyCheck,
                 System::currentTimeMillis,
-                runnable -> ApplicationManager.getApplication().invokeLater(runnable)
+                runnable -> ApplicationManager.getApplication().invokeLater(runnable),
+                onStartupRecoveryExhausted
         );
     }
 
@@ -116,7 +120,8 @@ public class WebviewWatchdog {
             StreamActiveCheck streamActiveCheck,
             ReadyCheck readyCheck,
             LongSupplier currentTimeMillis,
-            Consumer<Runnable> recoveryExecutor
+            Consumer<Runnable> recoveryExecutor,
+            Runnable onStartupRecoveryExhausted
     ) {
         this.mainPanel = mainPanel;
         this.browserAvailableCheck = browserAvailableCheck;
@@ -127,6 +132,7 @@ public class WebviewWatchdog {
         this.readyCheck = readyCheck;
         this.currentTimeMillis = currentTimeMillis;
         this.recoveryExecutor = recoveryExecutor;
+        this.onStartupRecoveryExhausted = onStartupRecoveryExhausted;
         long now = currentTimeMillis.getAsLong();
         this.lastHeartbeatAtMs = now;
         this.lastRafAtMs = now;
@@ -216,6 +222,18 @@ public class WebviewWatchdog {
         resetRecoveryState();
     }
 
+    /**
+     * Re-arm startup monitoring after a user-initiated restart: fresh heartbeat
+     * window plus a restored startup retry budget. Browser mounting already
+     * resets timestamps and (re)starts the scheduler, but a budget exhausted by
+     * earlier automatic recoveries stays exhausted — without this reset a manual
+     * restart would fall straight back into an unmonitored white page.
+     */
+    public void resetForManualRestart() {
+        resetRecoveryState();
+        resetTimestamps();
+    }
+
     void checkHealth() {
         if (disposedCheck.isDisposed()) { return; }
         boolean frontendReady = readyCheck.isFrontendReady();
@@ -271,6 +289,7 @@ public class WebviewWatchdog {
         stallCount = 0;
         lastRecoveryAtMs = 0L;
         startupRecoveryAttempts.set(0);
+        startupRecoveryExhaustedNotified.set(false);
     }
 
     static long heartbeatTimeoutMs(boolean frontendReady, boolean streaming) {
@@ -335,7 +354,18 @@ public class WebviewWatchdog {
             stallCount = 0;
             return;
         }
-        if (!tryAcquireRecoveryPermit(frontendReady)) { return; }
+        if (!tryAcquireRecoveryPermit(frontendReady)) {
+            // Permit denial only happens while frontend is not ready and the
+            // bounded startup budget is spent. Surface it once instead of
+            // failing silently — a white page with no UI leaves the user
+            // with no way to recover.
+            if (startupRecoveryExhaustedNotified.compareAndSet(false, true)) {
+                LOG.warn("[WebviewWatchdog] Startup recovery budget exhausted; "
+                        + "switching to the manual-restart panel");
+                onStartupRecoveryExhausted.run();
+            }
+            return;
+        }
 
         stallCount += 1;
         String reason = "frontendReady=" + frontendReady

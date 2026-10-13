@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -272,13 +273,27 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
             });
         }
 
+        AnAction restartWebviewAction =
+                ActionManager.getInstance()
+                        .getAction("QwenMate.RestartWebviewAction");
+
+        // Keep the manual restart entry in the title bar unconditionally: the
+        // title bar is plain Swing, so it stays clickable while the webview
+        // itself renders nothing.
+        List<AnAction> titleActions = new ArrayList<>();
+        if (restartWebviewAction != null) {
+            titleActions.add(restartWebviewAction);
+        }
         if (PlatformUtils.isPluginDevMode()) {
             AnAction devToolsAction =
                     ActionManager.getInstance()
                             .getAction("QwenMate.OpenDevToolsAction");
             if (devToolsAction != null) {
-                toolWindow.setTitleActions(List.of(devToolsAction));
+                titleActions.add(devToolsAction);
             }
+        }
+        if (!titleActions.isEmpty()) {
+            toolWindow.setTitleActions(titleActions);
         }
 
         AnAction renameTabAction =
@@ -296,6 +311,10 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
 
         DefaultActionGroup gearActions =
                 new DefaultActionGroup();
+        if (restartWebviewAction != null) {
+            gearActions.add(restartWebviewAction);
+            gearActions.addSeparator();
+        }
         if (renameTabAction != null) {
             gearActions.add(renameTabAction);
         }

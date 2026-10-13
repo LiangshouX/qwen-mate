@@ -272,7 +272,8 @@ public class QwenMateChatWindow {
                 () -> webviewInitializer.recreateWebview("watchdog_recreate"),
                 () -> disposed,
                 () -> streamCoalescer.isStreamActive(),
-                () -> frontendReady
+                () -> frontendReady,
+                () -> webviewInitializer.showStartupRecoveryExhaustedPanel()
         );
 
         this.session = new QwenMateSession(project, qwenSDKBridge);
@@ -563,6 +564,17 @@ public class QwenMateChatWindow {
         // JCEF child. Waiting one EDT turn is essential for empty tabs because they
         // have no later DOM update that would incidentally repaint the native surface.
         ApplicationManager.getApplication().invokeLater(repaint);
+    }
+
+    /**
+     * User-initiated recovery for a blank or unresponsive webview. Delegates to
+     * the shared manual-restart path (watchdog budget reset + full rebuild).
+     */
+    public void restartWebview() {
+        if (disposed) {
+            return;
+        }
+        webviewInitializer.restartWebview("manual_restart");
     }
 
     /** Selects publication, cached presentation, or the legacy windowed activation path. */

@@ -108,7 +108,8 @@ public class ChatWindowDelegateTest {
                 () -> { },
                 () -> false,
                 () -> false,
-                () -> true
+                () -> true,
+                () -> { }
         );
         SessionLifecycleManager lifecycleManager = new SessionLifecycleManager(null) {
             @Override

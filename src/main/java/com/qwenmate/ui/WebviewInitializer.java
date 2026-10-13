@@ -865,7 +865,18 @@ public class WebviewInitializer {
 
             injectFrontendConfiguration(cefBrowser, currentBridges, pageGeneration);
             if (attempt == 1) {
-                LOG.info("[JCEF] Executed first fallback bridge injection for remote-mode startup");
+                LOG.info("[JCEF] Executed first fallback bridge injection for remote-mode startup"
+                        + " (url=" + describePageUrl(url)
+                        + ", loading=" + cefBrowser.isLoading() + ")");
+            } else if (attempt == BRIDGE_INJECTION_FAST_RETRY_ATTEMPTS + 1) {
+                // First slow-phase retry (~6s in): an empty URL here means the
+                // HTML never loaded at all. A loaded-but-crashed page and a
+                // never-loaded page look identical from "frontend never became
+                // ready" alone; the URL transition separates them.
+                LOG.info("[JCEF] Fallback bridge injection entering slow retries"
+                        + " (attempt=" + attempt
+                        + ", url=" + describePageUrl(url)
+                        + ", loading=" + cefBrowser.isLoading() + ")");
             }
             return true;
         } catch (Exception e) {
@@ -875,6 +886,10 @@ public class WebviewInitializer {
             LOG.warn("Fallback bridge injection is unavailable: " + e.getMessage(), e);
             return false;
         }
+    }
+
+    static String describePageUrl(String url) {
+        return url == null || url.isEmpty() ? "<empty>" : url;
     }
 
     static String buildShiftEscInjection(String hidePanelInvocation) {
@@ -1250,6 +1265,34 @@ public class WebviewInitializer {
             "⚠️",
             QwenMateBundle.message("toolwindow.jcefRestartRequired"),
             QwenMateBundle.message("toolwindow.jcefRestartRequiredSolution")
+        );
+        replaceMainContent(panel);
+    }
+
+    /**
+     * User-initiated recovery path: re-arm the watchdog's startup budget, then
+     * rebuild the browser through full environment preparation. Shared by the
+     * title bar restart action and the startup-recovery-exhausted panel.
+     */
+    public void restartWebview(String reason) {
+        LOG.info("[ManualRestart] Rebuilding webview (" + reason + ")");
+        host.getWebviewWatchdog().resetForManualRestart();
+        recreateWebview(reason);
+    }
+
+    /**
+     * Shown when the bounded startup recovery budget is spent and the frontend
+     * never became ready. Without this the watchdog fails silently and the tab
+     * stays blank with no user-reachable recovery path. Replaces the browser
+     * component; the restart button tears the browser down and rebuilds it.
+     */
+    public void showStartupRecoveryExhaustedPanel() {
+        JPanel panel = ErrorPanelBuilder.buildCenteredPanel(
+            "⚠️",
+            QwenMateBundle.message("toolwindow.startupRecoveryExhausted.title"),
+            QwenMateBundle.message("toolwindow.startupRecoveryExhausted.solution"),
+            QwenMateBundle.message("action.restartWebview.text"),
+            () -> restartWebview("manual_restart")
         );
         replaceMainContent(panel);
     }
