@@ -419,4 +419,55 @@ describe('useKeyboardHandler', () => {
     expect(e.preventDefault).toHaveBeenCalled();
     expect(submittedOnEnterRef.current).toBe(false);
   });
+
+  it('submits on Ctrl+Q (explicit queue, CLI parity)', () => {
+    const options = keyboardOptions();
+    const { result } = renderHook(() => useKeyboardHandler(options));
+
+    const e = reactKeyEvent({ key: 'q', ctrlKey: true });
+    result.current.onKeyDown(e);
+
+    expect(e.preventDefault).toHaveBeenCalledOnce();
+    expect(e.stopPropagation).toHaveBeenCalledOnce();
+    expect(options.handleSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('submits on Ctrl+Q even while a completion dropdown is open', () => {
+    const completionKeyDown = vi.fn(() => true);
+    const options = keyboardOptions({
+      fileCompletion: { isOpen: true, handleKeyDown: completionKeyDown },
+    });
+    const { result } = renderHook(() => useKeyboardHandler(options));
+
+    result.current.onKeyDown(reactKeyEvent({ key: 'q', ctrlKey: true }));
+
+    expect(completionKeyDown).not.toHaveBeenCalled();
+    expect(options.handleSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([
+    { desc: 'Cmd+Q', key: 'q', metaKey: true, ctrlKey: false, shiftKey: false },
+    { desc: 'Ctrl+Shift+Q', key: 'Q', metaKey: false, ctrlKey: true, shiftKey: true },
+    { desc: 'bare q', key: 'q', metaKey: false, ctrlKey: false, shiftKey: false },
+  ])('ignores $desc', ({ key, metaKey, ctrlKey, shiftKey }) => {
+    const options = keyboardOptions();
+    const { result } = renderHook(() => useKeyboardHandler(options));
+
+    const e = reactKeyEvent({ key, metaKey, ctrlKey, shiftKey });
+    result.current.onKeyDown(e);
+
+    expect(options.handleSubmit).not.toHaveBeenCalled();
+    expect(e.preventDefault).not.toHaveBeenCalled();
+  });
+
+  it('does not submit Ctrl+Q while composing', () => {
+    const options = keyboardOptions({ isComposingRef: { current: true } });
+    const { result } = renderHook(() => useKeyboardHandler(options));
+
+    const e = reactKeyEvent({ key: 'q', ctrlKey: true, isComposing: true });
+    result.current.onKeyDown(e);
+
+    expect(options.handleSubmit).not.toHaveBeenCalled();
+    expect(e.preventDefault).not.toHaveBeenCalled();
+  });
 });

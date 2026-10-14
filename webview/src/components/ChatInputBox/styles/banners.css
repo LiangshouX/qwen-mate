@@ -327,6 +327,86 @@
   font-size: 12px;
 }
 
+/* Queue header: count + auto-send hint + restore-all action.
+   Sticky so the hint stays visible while long queues scroll. */
+.message-queue-header {
+  position: sticky;
+  top: -8px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  background: var(--context-bar-bg);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.message-queue-title {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.message-queue-hint {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-queue-restore-all {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.message-queue-restore-all:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.message-queue-restore-all .codicon {
+  font-size: 12px;
+}
+
+/* Per-row edit: pop the queued message back into the input box */
+.message-queue-edit {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.message-queue-edit:hover {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.message-queue-edit .codicon {
+  font-size: 12px;
+}
+
 /* Light theme adaptation */
 [data-theme="light"] .message-queue {
   background: #f5f5f5;

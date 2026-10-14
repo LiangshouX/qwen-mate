@@ -44,6 +44,15 @@
     "loadingDropdown": "Chargement...",
     "modelsLoadFailed": "Échec du chargement des modèles. Cliquez pour réessayer",
     "stopGeneration": "Arrêter la génération",
+    "messageQueue": {
+      "title": "En file : {{count}}",
+      "autoSendHint": "Envoyé automatiquement quand la tâche actuelle se termine",
+      "restoreAll": "Tout remettre dans la zone de saisie",
+      "edit": "Remettre dans la zone de saisie pour modifier",
+      "remove": "Retirer de la file",
+      "reorderHint": "Glissez pour réordonner, ou utilisez les flèches",
+      "reorderAria": "Réordonner le message {{position}}"
+    },
     "generatingResponse": "Génération de la réponse",
     "elapsedTime": "Écoulé {{time}}",
     "minutesAndSeconds": "{{minutes}}m {{seconds}}s",

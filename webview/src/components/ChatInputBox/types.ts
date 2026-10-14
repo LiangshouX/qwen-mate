@@ -469,6 +469,13 @@ export interface ChatInputBoxHandle {
   hasContent: () => boolean;
   /** Get file tags from input (for Codex context injection) */
   getFileTags: () => FileTagInfo[];
+  /**
+   * Restore a queued draft (text + attachments) into the input box for editing.
+   * Text merges with any existing draft (blank-line separated) so neither the
+   * typed draft nor the restored queue content is ever dropped; restored
+   * attachments are merged by id into the internal attachment list.
+   */
+  restoreDraft: (value: string, attachments?: Attachment[]) => void;
 }
 
 // ============================================================
@@ -588,6 +595,10 @@ export interface ChatInputBoxProps {
   onRemoveFromQueue?: (id: string) => void;
   /** Reorder message queue callback (orderedIds[0] executes first) */
   onReorderQueue?: (orderedIds: string[]) => void;
+  /** Move one queued message back into the input box for editing */
+  onEditFromQueue?: (id: string) => void;
+  /** Move every queued message back into the input box */
+  onRestoreQueue?: () => void;
 
   /** Whether auto open file is enabled */
   autoOpenFileEnabled?: boolean;

@@ -44,6 +44,15 @@
     "loadingDropdown": "読み込み中...",
     "modelsLoadFailed": "モデルの読み込みに失敗しました。クリックして再試行",
     "stopGeneration": "生成を停止",
+    "messageQueue": {
+      "title": "{{count}} 件をキュー中",
+      "autoSendHint": "現在のタスクが終了すると自動的に送信されます",
+      "restoreAll": "すべて入力欄に戻す",
+      "edit": "編集のため入力欄に戻す",
+      "remove": "キューから削除",
+      "reorderHint": "ドラッグで並べ替え、またはフォーカスして矢印キーで操作",
+      "reorderAria": "メッセージ {{position}} の順序を変更"
+    },
     "generatingResponse": "応答を生成中",
     "elapsedTime": "経過時間 {{time}}",
     "minutesAndSeconds": "{{minutes}}分 {{seconds}}秒",

@@ -44,6 +44,15 @@
     "loadingDropdown": "Loading...",
     "modelsLoadFailed": "Failed to load models. Click to retry",
     "stopGeneration": "Stop generation",
+    "messageQueue": {
+      "title": "Queued: {{count}}",
+      "autoSendHint": "Sends automatically when the current task finishes",
+      "restoreAll": "Move all back to input",
+      "edit": "Move to input for editing",
+      "remove": "Remove from queue",
+      "reorderHint": "Drag to reorder, or focus and use arrow keys",
+      "reorderAria": "Reorder message {{position}}"
+    },
     "generatingResponse": "Generating response",
     "elapsedTime": "Elapsed {{time}}",
     "minutesAndSeconds": "{{minutes}}m {{seconds}}s",

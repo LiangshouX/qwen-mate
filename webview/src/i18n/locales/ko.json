@@ -44,6 +44,15 @@
     "loadingDropdown": "로딩 중...",
     "modelsLoadFailed": "모델을 불러오지 못했습니다. 클릭하여 다시 시도",
     "stopGeneration": "생성 중지",
+    "messageQueue": {
+      "title": "{{count}}개 대기 중",
+      "autoSendHint": "현재 작업이 끝나면 자동으로 전송됩니다",
+      "restoreAll": "모두 입력창으로 돌아오기",
+      "edit": "편집을 위해 입력창으로 돌아오기",
+      "remove": "대기열에서 제거",
+      "reorderHint": "드래그하여 정렬하거나 포커스 후 화살표키 사용",
+      "reorderAria": "메시지 {{position}} 순서 변경"
+    },
     "generatingResponse": "응답 생성 중",
     "elapsedTime": "경과 시간 {{time}}",
     "minutesAndSeconds": "{{minutes}}분 {{seconds}}초",

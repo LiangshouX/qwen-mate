@@ -44,6 +44,15 @@
     "loadingDropdown": "Carregando...",
     "modelsLoadFailed": "Falha ao carregar modelos. Clique para tentar novamente",
     "stopGeneration": "Parar geração",
+    "messageQueue": {
+      "title": "Na fila: {{count}}",
+      "autoSendHint": "Enviado automaticamente quando a tarefa atual terminar",
+      "restoreAll": "Mover tudo de volta para o campo",
+      "edit": "Mover para o campo para editar",
+      "remove": "Remover da fila",
+      "reorderHint": "Arraste para reordenar ou use as setas",
+      "reorderAria": "Reordenar mensagem {{position}}"
+    },
     "generatingResponse": "Gerando resposta",
     "elapsedTime": "Decorrido {{time}}",
     "minutesAndSeconds": "{{minutes}}m {{seconds}}s",

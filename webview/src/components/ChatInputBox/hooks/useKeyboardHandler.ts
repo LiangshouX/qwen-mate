@@ -99,6 +99,23 @@ export function useKeyboardHandler({
         ((e.key === 'e' || e.key === 'E') && e.ctrlKey && !e.metaKey);
       if (isCursorMovementKey) return;
 
+      // Ctrl+Q: explicit queue/submit (CLI parity for muscle memory). Routes
+      // through the normal submit path, which enqueues the message while a
+      // task is running and sends immediately when idle. Held before the
+      // completion dropdowns so an open menu never swallows the shortcut.
+      if (
+        e.ctrlKey &&
+        !e.metaKey &&
+        !e.altKey &&
+        !e.shiftKey &&
+        (e.key === 'q' || e.key === 'Q')
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleSubmit();
+        return;
+      }
+
       // Menus are consulted in this order; the first open one that handles
       // the key owns it. Enter picked an item, so later Enter events of this
       // press (repeat, beforeinput) must not send.

@@ -75,6 +75,8 @@ export const ChatInputBox = memo(forwardRef<ChatInputBoxHandle, ChatInputBoxProp
       messageQueue,
       onRemoveFromQueue,
       onReorderQueue,
+      onEditFromQueue,
+      onRestoreQueue,
       autoOpenFileEnabled,
       onAutoOpenFileEnabledChange,
     }: ChatInputBoxProps,
@@ -198,6 +200,8 @@ export const ChatInputBox = memo(forwardRef<ChatInputBoxHandle, ChatInputBoxProp
           messageQueue={messageQueue}
           onRemoveFromQueue={onRemoveFromQueue}
           onReorderQueue={onReorderQueue}
+          onEditFromQueue={onEditFromQueue}
+          onRestoreQueue={onRestoreQueue}
           showOpenSourceBanner={showOpenSourceBanner}
           onDismissOpenSourceBanner={handleDismissOpenSourceBanner}
           autoOpenFileEnabled={autoOpenFileEnabled}

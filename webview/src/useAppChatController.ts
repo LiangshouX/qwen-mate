@@ -278,6 +278,28 @@ export const useAppChatController = ({
     reorder: reorderMessageQueue,
   } = useMessageQueue({ isLoading: loading, onExecute: executeMessage });
 
+  // ── Queue edit / restore: pop queued messages back into the input box ──
+  // Restore goes through the input's imperative handle so text merges with the
+  // in-progress draft and attachments merge by id — queued work is never dropped
+  // (mirrors the CLI's ↑/ESC "pop queue back to input" semantics).
+  const handleEditQueuedMessage = useCallback((id: string) => {
+    const item = messageQueue.find(m => m.id === id);
+    if (!item) return;
+    dequeueMessage(id);
+    chatInputRef.current?.restoreDraft(item.content, item.attachments);
+  }, [messageQueue, dequeueMessage, chatInputRef]);
+
+  const handleRestoreQueuedMessages = useCallback(() => {
+    if (messageQueue.length === 0) return;
+    const text = messageQueue.map(m => m.content).join('\n\n');
+    const attachments = messageQueue.reduce<Attachment[]>(
+      (acc, m) => (m.attachments ? acc.concat(m.attachments) : acc),
+      [],
+    );
+    clearQueue();
+    chatInputRef.current?.restoreDraft(text, attachments);
+  }, [messageQueue, clearQueue, chatInputRef]);
+
   // Point the session-transition indirection at the real clearQueue.
   useEffect(() => {
     clearMessageQueueRef.current = clearQueue;
@@ -380,6 +402,7 @@ export const useAppChatController = ({
     // Message actions
     handleUndoFile, onDiscardAll, handleKeepAll,
     handleSubmit, interruptSession, messageQueue, dequeueMessage, reorderMessageQueue,
+    handleEditQueuedMessage, handleRestoreQueuedMessages,
     handleNavigateToProviderSettings, wrappedHandleProviderSelect,
     // Session management
     createNewSession, loadHistorySession, deleteHistorySession, deleteHistorySessions,

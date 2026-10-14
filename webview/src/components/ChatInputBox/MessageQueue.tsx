@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
+import type { TFunction } from 'i18next';
 import type { QueuedMessage } from '../../hooks/useMessageQueue';
 import { createEdgeInsertResolver, useDragSort } from '../settings/hooks/useDragSort';
 import { useDragAutoScroll } from './hooks/useDragAutoScroll.js';
@@ -11,16 +12,23 @@ export interface MessageQueueProps {
   onRemove: (id: string) => void;
   /** Reorder callback (orderedIds[0] executes first); drag is disabled when absent */
   onReorder?: (orderedIds: string[]) => void;
+  /** Move one queued message back into the input box for editing */
+  onEdit?: (id: string) => void;
+  /** Move every queued message back into the input box */
+  onRestoreAll?: () => void;
+  t: TFunction;
 }
 
 /**
  * MessageQueue - Displays queued messages above input box
- * Shows numbered list with drag handle, message preview and close button.
+ * Header row shows the queue count, when queued messages will be sent, and a
+ * "move all back" action; each row carries a drag handle, message preview,
+ * edit (pop back into the input) and remove buttons.
  * Items render in reverse order so the next message to execute (queue[0]) is at the bottom.
  * Drag is initiated only from the gripper handle (pointer-based), so text in the
  * row stays selectable and other controls are unaffected.
  */
-export function MessageQueue({ queue, onRemove, onReorder }: MessageQueueProps) {
+export function MessageQueue({ queue, onRemove, onReorder, onEdit, onRestoreAll, t }: MessageQueueProps) {
   /**
    * Sort callback fired when a drag completes.
    * useDragSort emits orderedIds in real queue order (not display order), so
@@ -76,6 +84,33 @@ export function MessageQueue({ queue, onRemove, onReorder }: MessageQueueProps) 
 
   return (
     <div className="message-queue" ref={containerRef}>
+      <div className="message-queue-header">
+        <span className="message-queue-title">
+          {t('chat.messageQueue.title', {
+            count: queue.length,
+            defaultValue: 'Queued: {{count}}',
+          })}
+        </span>
+        <span className="message-queue-hint">
+          {t('chat.messageQueue.autoSendHint', {
+            defaultValue: 'Sends automatically when the current task finishes',
+          })}
+        </span>
+        {onRestoreAll && (
+          <button
+            className="message-queue-restore-all"
+            onClick={onRestoreAll}
+            aria-label={t('chat.messageQueue.restoreAll', {
+              defaultValue: 'Move all back to input',
+            })}
+            title={t('chat.messageQueue.restoreAll', {
+              defaultValue: 'Move all back to input',
+            })}
+          >
+            <span className="codicon codicon-arrow-up" />
+          </button>
+        )}
+      </div>
       {/* Render in reverse order so newest is at bottom (closest to input) */}
       {[...queue].reverse().map((item, reversedIndex) => {
         // Calculate actual queue position (1-based, from bottom)
@@ -98,8 +133,13 @@ export function MessageQueue({ queue, onRemove, onReorder }: MessageQueueProps) 
                 data-drag-sort-handle
                 role="button"
                 tabIndex={0}
-                aria-label={`Reorder message ${queuePosition}`}
-                title="Drag to reorder, or focus and use arrow keys"
+                aria-label={t('chat.messageQueue.reorderAria', {
+                  position: queuePosition,
+                  defaultValue: 'Reorder message {{position}}',
+                })}
+                title={t('chat.messageQueue.reorderHint', {
+                  defaultValue: 'Drag to reorder, or focus and use arrow keys',
+                })}
                 onKeyDown={(e) => handleReorderKeyDown(e, item.id)}
                 onPointerDown={(e) => handlePointerDown(e, item.id, e.currentTarget.closest<HTMLElement>('[data-drag-sort-id]'))}
               >
@@ -110,10 +150,29 @@ export function MessageQueue({ queue, onRemove, onReorder }: MessageQueueProps) 
             <span className="message-queue-content" title={item.content}>
               {item.content}
             </span>
+            {onEdit && (
+              <button
+                className="message-queue-edit"
+                onClick={() => onEdit(item.id)}
+                aria-label={t('chat.messageQueue.edit', {
+                  defaultValue: 'Move to input for editing',
+                })}
+                title={t('chat.messageQueue.edit', {
+                  defaultValue: 'Move to input for editing',
+                })}
+              >
+                <span className="codicon codicon-edit" />
+              </button>
+            )}
             <button
               className="message-queue-remove"
               onClick={() => onRemove(item.id)}
-              title="Remove from queue"
+              aria-label={t('chat.messageQueue.remove', {
+                defaultValue: 'Remove from queue',
+              })}
+              title={t('chat.messageQueue.remove', {
+                defaultValue: 'Remove from queue',
+              })}
             >
               <span className="codicon codicon-close" />
             </button>

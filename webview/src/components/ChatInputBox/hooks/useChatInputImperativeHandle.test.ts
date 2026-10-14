@@ -56,6 +56,7 @@ describe('useChatInputImperativeHandle', () => {
         clearInput: pipeline.clearInput,
         hasContent: false,
         extractFileTags: pipeline.extractFileTags,
+        handleInput: vi.fn(),
       });
       return pipeline;
     });
@@ -86,6 +87,7 @@ describe('useChatInputImperativeHandle', () => {
     const focusInput = vi.fn();
     const clearInput = vi.fn();
     const cancelPendingInput = vi.fn();
+    const handleInput = vi.fn();
 
     const selection = {
       removeAllRanges: vi.fn(),
@@ -106,6 +108,7 @@ describe('useChatInputImperativeHandle', () => {
         clearInput,
         hasContent: false,
         extractFileTags: () => [],
+        handleInput,
       })
     );
 
@@ -125,6 +128,91 @@ describe('useChatInputImperativeHandle', () => {
     expect(focusInput).toHaveBeenCalled();
     refObj.current!.clear();
     expect(clearInput).toHaveBeenCalled();
+  });
+
+  it('restoreDraft replaces an empty draft and syncs the pipeline', () => {
+    const editable = createEditable();
+    const refObj: { current: ChatInputBoxHandle | null } = { current: null };
+    const invalidateCache = vi.fn();
+    const setHasContent = vi.fn();
+    const adjustHeight = vi.fn();
+    const focusInput = vi.fn();
+    const cancelPendingInput = vi.fn();
+    const handleInput = vi.fn();
+    const restoreAttachments = vi.fn();
+    const attachment = { id: 'a1', fileName: 'a.png', mediaType: 'image/png', data: 'x' };
+
+    renderHook(() =>
+      useChatInputImperativeHandle({
+        ref: refObj,
+        editableRef: { current: editable },
+        getTextContent: () => editable.innerText,
+        invalidateCache,
+        cancelPendingInput,
+        setHasContent,
+        adjustHeight,
+        focusInput,
+        clearInput: vi.fn(),
+        hasContent: false,
+        extractFileTags: () => [],
+        handleInput,
+        restoreAttachments,
+      })
+    );
+
+    refObj.current!.restoreDraft('queued text', [attachment]);
+
+    expect(editable.innerText).toBe('queued text');
+    expect(cancelPendingInput).toHaveBeenCalledOnce();
+    expect(setHasContent).toHaveBeenCalledWith(true);
+    expect(adjustHeight).toHaveBeenCalled();
+    expect(restoreAttachments).toHaveBeenCalledExactlyOnceWith([attachment]);
+    expect(handleInput).toHaveBeenCalledOnce();
+    expect(focusInput).toHaveBeenCalledOnce();
+  });
+
+  it('restoreDraft appends to an existing draft instead of dropping it', () => {
+    const editable = createEditable();
+    // Force the textContent-backed innerText shim: jsdom's native innerText
+    // drops \n on set, which would hide the blank-line separator we assert on.
+    Object.defineProperty(editable, 'innerText', {
+      get() {
+        return this.textContent ?? '';
+      },
+      set(value: string) {
+        this.textContent = value;
+      },
+      configurable: true,
+    });
+    const refObj: { current: ChatInputBoxHandle | null } = { current: null };
+    const handleInput = vi.fn();
+    const restoreAttachments = vi.fn();
+
+    renderHook(() =>
+      useChatInputImperativeHandle({
+        ref: refObj,
+        editableRef: { current: editable },
+        getTextContent: () => editable.innerText,
+        invalidateCache: vi.fn(),
+        cancelPendingInput: vi.fn(),
+        setHasContent: vi.fn(),
+        adjustHeight: vi.fn(),
+        focusInput: vi.fn(),
+        clearInput: vi.fn(),
+        hasContent: false,
+        extractFileTags: () => [],
+        handleInput,
+        restoreAttachments,
+      })
+    );
+
+    editable.innerText = 'typed draft';
+    refObj.current!.restoreDraft('queued text');
+
+    expect(editable.innerText).toBe('typed draft\n\nqueued text');
+    // No attachments → no merge call.
+    expect(restoreAttachments).not.toHaveBeenCalled();
+    expect(handleInput).toHaveBeenCalledOnce();
   });
 });
 

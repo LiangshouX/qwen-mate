@@ -44,6 +44,15 @@
     "loadingDropdown": "載入中...",
     "modelsLoadFailed": "模型列表載入失敗，點擊重試",
     "stopGeneration": "停止生成",
+    "messageQueue": {
+      "title": "已排隊 {{count}} 條",
+      "autoSendHint": "當前任務結束後自動發送",
+      "restoreAll": "全部放回輸入框",
+      "edit": "放回輸入框編輯",
+      "remove": "移出佇列",
+      "reorderHint": "拖曳排序，或聚焦後用方向鍵",
+      "reorderAria": "調整第 {{position}} 條訊息順序"
+    },
     "generatingResponse": "正在生成響應",
     "elapsedTime": "已用 {{time}}",
     "minutesAndSeconds": "{{minutes}} 分 {{seconds}} 秒",

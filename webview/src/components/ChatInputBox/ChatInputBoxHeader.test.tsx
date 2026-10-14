@@ -40,3 +40,41 @@ describe('ChatInputBoxHeader SDK status', () => {
     expect(onRetrySdkStatus).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('ChatInputBoxHeader message queue', () => {
+  const queuedItem = { id: 'q1', content: 'queued text', queuedAt: 1 };
+
+  it('shows queue count/hint and wires edit, restore-all and remove', () => {
+    const onEdit = vi.fn();
+    const onRestoreAll = vi.fn();
+    const onRemove = vi.fn();
+    render(
+      <ChatInputBoxHeader
+        {...createProps()}
+        messageQueue={[queuedItem]}
+        onRemoveFromQueue={onRemove}
+        onEditFromQueue={onEdit}
+        onRestoreQueue={onRestoreAll}
+      />,
+    );
+
+    expect(screen.getByText('chat.messageQueue.title')).toBeTruthy();
+    expect(screen.getByText('chat.messageQueue.autoSendHint')).toBeTruthy();
+    expect(screen.getByText('queued text')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: 'chat.messageQueue.edit' }));
+    expect(onEdit).toHaveBeenCalledWith('q1');
+
+    fireEvent.click(screen.getByRole('button', { name: 'chat.messageQueue.restoreAll' }));
+    expect(onRestoreAll).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'chat.messageQueue.remove' }));
+    expect(onRemove).toHaveBeenCalledWith('q1');
+  });
+
+  it('hides the queue block when the queue is empty', () => {
+    render(<ChatInputBoxHeader {...createProps()} messageQueue={[]} />);
+
+    expect(screen.queryByText('chat.messageQueue.title')).toBeNull();
+  });
+});

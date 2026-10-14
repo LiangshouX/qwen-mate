@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useEffectEvent, useRef, useState } from 'react';
 import type { TFunction } from 'i18next';
 import type {
+  Attachment,
   ChatInputBoxHandle,
   ChatInputBoxProps,
   PermissionMode,
@@ -117,6 +118,17 @@ export function useChatInputController({
     isControlled: externalAttachments !== undefined,
     clearInternalAttachments,
   });
+
+  // Restoring a queued draft merges attachments by id; in controlled mode the
+  // parent owns the list, so the merge is a no-op (text still restores).
+  const restoreAttachments = useCallback((incoming: Attachment[]) => {
+    if (externalAttachments !== undefined || incoming.length === 0) return;
+    setInternalAttachments(prev => {
+      const seen = new Set(prev.map(a => a.id));
+      const additions = incoming.filter(a => !seen.has(a.id));
+      return additions.length > 0 ? [...prev, ...additions] : prev;
+    });
+  }, [externalAttachments, setInternalAttachments]);
 
   // Input element refs and state
   const containerRef = useRef<HTMLDivElement>(null);
@@ -242,6 +254,7 @@ export function useChatInputController({
     ctxMenu,
     onClearContext,
     onAutoOpenFileEnabledChange,
+    restoreAttachments,
   });
 
   const { onKeyDown: handleKeyDown, onKeyUp: handleKeyUp } = useKeyboardHandler({

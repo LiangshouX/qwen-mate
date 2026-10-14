@@ -67,6 +67,7 @@ const App = () => {
     chatInputRef, messagesContainerRef, messagesEndRef, inputAreaRef, isAutoScrollingRef,
     handleUndoFile, onDiscardAll, handleKeepAll,
     handleSubmit, interruptSession, messageQueue, dequeueMessage, reorderMessageQueue,
+    handleEditQueuedMessage, handleRestoreQueuedMessages,
     handleNavigateToProviderSettings, wrappedHandleProviderSelect,
     createNewSession, loadHistorySession, deleteHistorySession, deleteHistorySessions,
     exportHistorySession, toggleFavoriteSession, updateHistoryTitle,
@@ -159,6 +160,8 @@ const App = () => {
           messageQueue={messageQueue}
           onRemoveFromQueue={dequeueMessage}
           onReorderQueue={reorderMessageQueue}
+          onEditFromQueue={handleEditQueuedMessage}
+          onRestoreQueue={handleRestoreQueuedMessages}
           onLoadSession={loadHistorySession}
           onDeleteSession={deleteHistorySession}
           onDeleteSessions={deleteHistorySessions}

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import type { ForwardedRef, RefObject } from 'react';
 import { cutSelection } from '../../../hooks/useContextMenu.js';
-import type { ChatInputBoxHandle, FileTagInfo } from '../types.js';
+import type { Attachment, ChatInputBoxHandle, FileTagInfo } from '../types.js';
 import { useChatInputImperativeHandle } from './useChatInputImperativeHandle.js';
 
 interface InlineCompletionController {
@@ -30,6 +30,7 @@ interface UseChatInputSelectionControllerOptions {
   ctxMenu: ContextMenuSelectionState;
   onClearContext?: () => void;
   onAutoOpenFileEnabledChange?: (enabled: boolean) => void;
+  restoreAttachments?: (attachments: Attachment[]) => void;
 }
 
 export function useChatInputSelectionController({
@@ -48,6 +49,7 @@ export function useChatInputSelectionController({
   ctxMenu,
   onClearContext,
   onAutoOpenFileEnabledChange,
+  restoreAttachments,
 }: UseChatInputSelectionControllerOptions) {
   const focusInput = useCallback(() => {
     // Don't steal focus while the user holds a selection elsewhere (e.g.
@@ -104,6 +106,8 @@ export function useChatInputSelectionController({
     clearInput,
     hasContent,
     extractFileTags,
+    handleInput,
+    restoreAttachments,
   });
 
   return {

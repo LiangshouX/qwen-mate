@@ -44,6 +44,15 @@
     "loadingDropdown": "लोड हो रहा है...",
     "modelsLoadFailed": "मॉडल लोड करने में विफल। पुनः प्रयास के लिए क्लिक करें",
     "stopGeneration": "जनरेशन रोकें",
+    "messageQueue": {
+      "title": "कतार में: {{count}}",
+      "autoSendHint": "वर्तमान कार्य समाप्त होने पर स्वतः भेजा जाएगा",
+      "restoreAll": "सभी को इनपुट में वापस भेजें",
+      "edit": "संपादन के लिए इनपुट में वापस भेजें",
+      "remove": "कतार से हटाएँ",
+      "reorderHint": "क्रम बदलने के लिए खींचें, या तीर बटन का उपयोग करें",
+      "reorderAria": "संदेश {{position}} का क्रम बदलें"
+    },
     "generatingResponse": "प्रतिक्रिया उत्पन्न हो रही है",
     "elapsedTime": "बीता {{time}}",
     "minutesAndSeconds": "{{minutes}} मि {{seconds}} से",

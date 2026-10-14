@@ -44,6 +44,15 @@
     "loadingDropdown": "Загрузка...",
     "modelsLoadFailed": "Не удалось загрузить модели. Нажмите, чтобы повторить",
     "stopGeneration": "Остановить генерацию",
+    "messageQueue": {
+      "title": "В очереди: {{count}}",
+      "autoSendHint": "Отправится автоматически после завершения текущей задачи",
+      "restoreAll": "Вернуть всё в поле ввода",
+      "edit": "Вернуть в поле ввода для редактирования",
+      "remove": "Удалить из очереди",
+      "reorderHint": "Перетащите для изменения порядка или используйте стрелки",
+      "reorderAria": "Изменить порядок сообщения {{position}}"
+    },
     "generatingResponse": "Генерирую ответ",
     "elapsedTime": "Прошло {{time}}",
     "minutesAndSeconds": "{{minutes}}м {{seconds}}с",

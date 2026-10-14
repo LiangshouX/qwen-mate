@@ -44,6 +44,15 @@
     "loadingDropdown": "加载中...",
     "modelsLoadFailed": "模型列表加载失败，点击重试",
     "stopGeneration": "停止生成",
+    "messageQueue": {
+      "title": "已排队 {{count}} 条",
+      "autoSendHint": "当前任务结束后自动发送",
+      "restoreAll": "全部放回输入框",
+      "edit": "放回输入框编辑",
+      "remove": "移出队列",
+      "reorderHint": "拖拽排序，或聚焦后用方向键",
+      "reorderAria": "调整第 {{position}} 条消息顺序"
+    },
     "generatingResponse": "正在生成响应",
     "elapsedTime": "已用 {{time}}",
     "minutesAndSeconds": "{{minutes}} 分 {{seconds}} 秒",
