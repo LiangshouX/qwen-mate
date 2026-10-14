@@ -14,6 +14,7 @@ import {
   preserveLatestMessagesOnShrink,
   preserveMessageIdentity,
   preserveStreamingAssistantContent,
+  stripAttachmentRefPrefix,
   stripUuidFromRaw,
 } from '../messageSync';
 
@@ -309,6 +310,17 @@ describe('appendOptimisticMessageIfMissing', () => {
     expect(result[0]).toBe(backendMsg);
   });
 
+  it('drops the optimistic bubble when the backend copy carries the @path attachment prefix', () => {
+    const ts = new Date().toISOString();
+    const optimistic = makeUserMsg('\u8BC6\u56FE\u6D4B\u8BD5', { isOptimistic: true, timestamp: ts });
+    const backendMsg = makeUserMsg('@C:\\tmp\\qwen-mate-attachments\\att-1.png\n\n\u8BC6\u56FE\u6D4B\u8BD5', { timestamp: ts });
+    const prev = [optimistic];
+    const next = [backendMsg];
+
+    const result = appendOptimisticMessageIfMissing(prev, next);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toBe(backendMsg);
+  });
   it('matches the latest backend user message by content even when confirmation is delayed', () => {
     const oldTs = new Date(Date.now() - OPTIMISTIC_MESSAGE_TIME_WINDOW - 1000).toISOString();
     const newTs = new Date().toISOString();
@@ -1454,5 +1466,24 @@ describe('mergeRawBlocksForFinalization', () => {
     const merged = mergeRawBlocksForFinalization(previous, backend);
 
     expect(typesOf(merged)).toEqual(['thinking', 'thinking']);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// stripAttachmentRefPrefix
+// ---------------------------------------------------------------------------
+
+describe('stripAttachmentRefPrefix', () => {
+  it('strips the leading @path reference block', () => {
+    expect(stripAttachmentRefPrefix('@C:\\tmp\\a.png\n\n\u8BC6\u56FE\u6D4B\u8BD5')).toBe('\u8BC6\u56FE\u6D4B\u8BD5');
+  });
+
+  it('strips multiple space-joined refs on one line', () => {
+    expect(stripAttachmentRefPrefix('@C:\\a.png @C:\\b.jpg\n\ntext')).toBe('text');
+  });
+
+  it('leaves plain messages untouched', () => {
+    expect(stripAttachmentRefPrefix('hello @world')).toBe('hello @world');
+    expect(stripAttachmentRefPrefix('line1\n\nline2')).toBe('line1\n\nline2');
   });
 });

@@ -475,7 +475,15 @@ export function useMessageSender({
       content: text || '',
       timestamp: new Date().toISOString(),
       isOptimistic: true,
-      raw: { message: { content: userContentBlocks } },
+      // Image attachments are persisted to temp files and referenced by @path
+      // (ai-bridge attachment-files.js), so the bubble renders the path text
+      // only — matching how the message comes back from history instead of
+      // flashing an inline preview that later disappears on reload.
+      raw: {
+        message: {
+          content: userContentBlocks.filter((block) => block.type !== 'image'),
+        },
+      },
     };
     setMessages((prev) => [...prev, userMessage]);
 

@@ -62,6 +62,35 @@ export function usePasteAndDrop({
   flushInput,
 }: UsePasteAndDropOptions): UsePasteAndDropReturn {
   /**
+   * Insert a clipboard file path as an @ file reference at the cursor.
+   * Shared by the native paste fallback (getClipboardFilePath) and the
+   * Java-side java-paste-file-path event (IDEA action path, used when the
+   * clipboard holds a copied file but neither text nor a bitmap preview).
+   */
+  const insertFilePathReference = useCallback(
+    (fullPath: string) => {
+      const registeredPath = registerAbsoluteFileReference(
+        pathMappingRef.current,
+        fullPath,
+      );
+      // A real clipboard file is structured input from Java, so it
+      // can safely become a file reference without text guessing.
+      insertTextAtCursor(
+        registeredPath ? `@${registeredPath} ` : fullPath,
+        editableRef.current,
+      );
+      // Bypass IME guard (isComposingRef may be stale after recent compositionEnd)
+      handleInput();
+      // Immediately sync parent state without waiting for debounce
+      flushInput();
+      if (registeredPath) {
+        requestAnimationFrame(() => renderFileTags());
+      }
+    },
+    [editableRef, pathMappingRef, handleInput, flushInput, renderFileTags],
+  );
+
+  /**
    * Handle paste event - detect images and plain text
    */
   const handlePaste = useCallback(
@@ -142,23 +171,7 @@ export function usePasteAndDrop({
               .getClipboardFilePath()
               .then((fullPath: string) => {
                 if (fullPath && fullPath.trim()) {
-                  const registeredPath = registerAbsoluteFileReference(
-                    pathMappingRef.current,
-                    fullPath,
-                  );
-                  // A real clipboard file is structured input from Java, so it
-                  // can safely become a file reference without text guessing.
-                  insertTextAtCursor(
-                    registeredPath ? `@${registeredPath} ` : fullPath,
-                    editableRef.current,
-                  );
-                  // Bypass IME guard (isComposingRef may be stale after recent compositionEnd)
-                  handleInput();
-                  // Immediately sync parent state without waiting for debounce
-                  flushInput();
-                  if (registeredPath) {
-                    requestAnimationFrame(() => renderFileTags());
-                  }
+                  insertFilePathReference(fullPath);
                 }
               })
               .catch(() => {
@@ -225,6 +238,7 @@ export function usePasteAndDrop({
       setInternalAttachments,
       handleInput,
       flushInput,
+      insertFilePathReference,
     ]
   );
 
@@ -381,6 +395,19 @@ export function usePasteAndDrop({
     window.addEventListener('java-paste-image', onJavaPasteImage);
     return () => window.removeEventListener('java-paste-image', onJavaPasteImage);
   }, [setInternalAttachments]);
+
+  // Listen for file path paste events dispatched from Java side (when the
+  // clipboard holds copied files but neither text nor a bitmap preview, the
+  // IDEA paste action cannot insert anything by itself)
+  useEffect(() => {
+    const onJavaPasteFilePath = (e: Event) => {
+      const { path } = (e as CustomEvent).detail;
+      if (!path || !String(path).trim()) return;
+      insertFilePathReference(String(path));
+    };
+    window.addEventListener('java-paste-file-path', onJavaPasteFilePath);
+    return () => window.removeEventListener('java-paste-file-path', onJavaPasteFilePath);
+  }, [insertFilePathReference]);
 
   return {
     handlePaste,

@@ -144,4 +144,38 @@ describe('usePasteAndDrop file references', () => {
     expect(pathMappingRef.current.get('view file.xml'))
       .toBe('C:\\Program Files\\demo\\view file.xml');
   });
+
+  it('inserts a file reference from the Java-side paste event', async () => {
+    const editable = createEditable();
+    placeCaretAtEnd(editable);
+    const { pathMappingRef, renderFileTags } = setupPasteHook(editable);
+
+    await act(async () => {
+      window.dispatchEvent(new CustomEvent('java-paste-file-path', {
+        detail: { path: 'C:\\Program Files\\demo\\shot.png' },
+      }));
+      // renderFileTags runs inside requestAnimationFrame
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(editable.textContent).toBe('@C:\\Program Files\\demo\\shot.png ');
+    expect(pathMappingRef.current.get('shot.png'))
+      .toBe('C:\\Program Files\\demo\\shot.png');
+    expect(renderFileTags).toHaveBeenCalled();
+  });
+
+  it('ignores the Java-side paste event when the path is empty', () => {
+    const editable = createEditable();
+    placeCaretAtEnd(editable);
+    const { result } = setupPasteHook(editable);
+
+    act(() => {
+      window.dispatchEvent(new CustomEvent('java-paste-file-path', {
+        detail: { path: '   ' },
+      }));
+    });
+
+    expect(editable.textContent).toBe('');
+    expect(result.current).toBeDefined();
+  });
 });

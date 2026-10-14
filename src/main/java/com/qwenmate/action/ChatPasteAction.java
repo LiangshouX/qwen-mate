@@ -13,7 +13,9 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Base64;
+import java.util.List;
 
 /**
  * IDEA Action for Ctrl+V in the QwenMate chat tool window.
@@ -50,6 +52,22 @@ public class ChatPasteAction extends ChatToolWindowAction {
                                 "})()"
                             );
                         }
+                    }
+                }
+                // No text and no bitmap: copied files (e.g. image files from
+                // Explorer) often carry only file paths. Hand the path to the
+                // webview so it becomes an @ file reference, mirroring the
+                // native paste fallback (getClipboardFilePath).
+                if (clipboard.isDataFlavorAvailable(DataFlavor.javaFileListFlavor)) {
+                    @SuppressWarnings("unchecked")
+                    List<File> files = (List<File>) clipboard.getData(DataFlavor.javaFileListFlavor);
+                    if (files != null && !files.isEmpty()) {
+                        String jsonPath = GSON.toJson(files.get(0).getAbsolutePath());
+                        chatWindow.executeJavaScriptCode(
+                                "(function(){" +
+                                "  window.dispatchEvent(new CustomEvent('java-paste-file-path',{detail:{path:" + jsonPath + "}}));" +
+                                "})()"
+                        );
                     }
                 }
                 return;

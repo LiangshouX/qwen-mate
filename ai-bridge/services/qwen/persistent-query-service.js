@@ -30,6 +30,7 @@ import {
   writePermissionRequest,
 } from './permission-file-ipc.js';
 import { managedMemoryQueryEnv } from './managed-memory-env.js';
+import { persistAttachments, prependAttachmentRefs } from './attachment-files.js';
 
 // ─── Runtime registry (mirrors the upstream SDK pattern) ───
 
@@ -653,39 +654,6 @@ async function* trackFirstMessage(result, state) {
   }
 }
 
-/**
- * Build the SDK prompt. Exported for tests.
- *
- * With attachments the prompt MUST be an SDKUserMessage array — the SDK writes
- * array prompts to the CLI verbatim, and the CLI's stream-json reader only
- * accepts `type:'user'` messages. Passing bare content blocks
- * (`[{type:'text'},{type:'image'}]`) made the CLI drop every line: the turn
- * never started, no init/result was ever emitted, and the GUI hung showing
- * nothing after sending an image.
- *
- * @param {string} message
- * @param {Array<{mediaType?: string, data?: string}>} [attachments]
- * @param {string} [sessionId]
- * @returns {string | Array<object>}
- */
-export function buildUserPrompt(message, attachments, sessionId) {
-  if (!attachments || attachments.length === 0) {
-    return message;
-  }
-  const blocks = [{ type: 'text', text: message }];
-  for (const att of attachments) {
-    if (att.mediaType?.startsWith('image/')) {
-      blocks.push({ type: 'image', data: att.data, mimeType: att.mediaType });
-    }
-  }
-  return [{
-    type: 'user',
-    session_id: sessionId || 'qwen-session',
-    parent_tool_use_id: null,
-    message: { role: 'user', content: blocks },
-  }];
-}
-
 export async function sendMessagePersistent(params = {}) {
   const {
     message,
@@ -740,10 +708,17 @@ export async function sendMessagePersistent(params = {}) {
     const memoryEnv = managedMemoryQueryEnv();
     if (memoryEnv) options.env = memoryEnv;
 
-    // Attachments → SDKUserMessage prompt (see buildUserPrompt); plain text
-    // stays a string prompt so the SDK keeps its single-turn lifecycle.
-    const prompt = buildUserPrompt(message, attachments, requestSessionId);
-    const isMultiTurnPrompt = typeof prompt !== 'string';
+    // Attachments are persisted to the CLI-visible temp dir and referenced
+    // by @path, mirroring the CLI composer. The prompt must stay a plain
+    // string: the SDK ContentBlock union has no image variant, and the CLI's
+    // non-interactive input reader stringifies every non-text block into
+    // message text (nonInteractiveHelpers.ts), which floods the context with
+    // base64 and never reaches the model as an image. The model reads the
+    // persisted file with read_file instead (inlineData parts it can see).
+    // A string prompt also keeps the SDK's single-turn lifecycle (it closes
+    // stdin itself; array prompts would leak one CLI process per turn).
+    const attachmentRefs = persistAttachments(attachments);
+    const prompt = prependAttachmentRefs(message, attachmentRefs);
 
     // Permission callback
     const canUseTool = buildCanUseTool(params);
@@ -793,18 +768,6 @@ export async function sendMessagePersistent(params = {}) {
       options.abortController = retryAbortController;
       activeTurns.set(runtimeKey, { abortController: retryAbortController });
       attempt = await runAttempt();
-    }
-
-    // Array prompts are not single-turn for the SDK, so nobody closes stdin
-    // when the result arrives (single-turn string prompts get endInput from
-    // the SDK itself). Without this the CLI child stays alive waiting for the
-    // next message and leaks one process per attachment turn. The result has
-    // already been consumed here, so EOF lets the CLI settle recording and
-    // exit exactly like the single-turn path.
-    if (isMultiTurnPrompt && activeQuery) {
-      try {
-        activeQuery.endInput?.();
-      } catch { /* transport already gone */ }
     }
 
     if (attempt.error) {

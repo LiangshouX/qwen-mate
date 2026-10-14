@@ -12,6 +12,21 @@ import type { QwenMateMessage, QwenMateRawMessage } from '../../types';
 /** Time window (ms) for matching optimistic messages with backend messages. */
 export const OPTIMISTIC_MESSAGE_TIME_WINDOW = 5000;
 
+/**
+ * Strip the leading "@path" reference block that attachment persistence
+ * prepends on the backend (ai-bridge writes "@<tmp file> ...\n\n<user text>"),
+ * so the backend copy of a sent-with-attachments message still matches its
+ * optimistic bubble. Comparison stays symmetric: both sides are stripped
+ * before fallback equality, so plain messages are unaffected.
+ */
+export const stripAttachmentRefPrefix = (text: string): string => {
+  const match = text.match(/^@\S[^\n]*\n\n([\s\S]*)$/);
+  return match && match[1] ? match[1] : text;
+};
+
+const isSameUserText = (a: string, b: string): boolean =>
+  a === b || stripAttachmentRefPrefix(a) === stripAttachmentRefPrefix(b);
+
 export const getStreamEndHandlingMode = (
   _provider: string,
   isStreaming: boolean,
@@ -92,7 +107,7 @@ export const appendOptimisticMessageIfMissing = (
 
   const matchFn = (m: QwenMateMessage) => {
     if (m.type !== 'user') return false;
-    if (getUserMessageComparableContent(m) !== optimisticText) return false;
+    if (!isSameUserText(getUserMessageComparableContent(m), optimisticText)) return false;
     const candidateTime = getMessageTimestampMs(m) ?? Number.NaN;
     if (!Number.isFinite(candidateTime) || !Number.isFinite(optimisticTime)) return false;
     return Math.abs(candidateTime - optimisticTime) < OPTIMISTIC_MESSAGE_TIME_WINDOW;
@@ -103,7 +118,7 @@ export const appendOptimisticMessageIfMissing = (
     for (let i = nextList.length - 1; i >= 0; i -= 1) {
       const candidate = nextList[i];
       if (candidate?.type !== 'user') continue;
-      if (getUserMessageComparableContent(candidate) !== optimisticText) continue;
+      if (!isSameUserText(getUserMessageComparableContent(candidate), optimisticText)) continue;
       const candidateTime = getMessageTimestampMs(candidate) ?? Number.NaN;
       // Allow match when candidate is within time window (even if older than optimistic).
       // This handles cases where Java's timestamp (number format) may differ from
@@ -140,7 +155,7 @@ export const appendOptimisticMessageIfMissing = (
     // the "my message disappears but the agent answers it" bug.
     if (optimisticText) {
       const backendCopyExists = nextList.some(
-        (m) => m.type === 'user' && getUserMessageComparableContent(m) === optimisticText,
+        (m) => m.type === 'user' && isSameUserText(getUserMessageComparableContent(m), optimisticText),
       );
       if (backendCopyExists) {
         return nextList;
