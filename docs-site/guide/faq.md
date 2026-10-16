@@ -11,7 +11,7 @@
 插件只读检测本机 `qwen` 命令，不会自动安装 CLI。
 
 1. 在终端运行 `qwen --version`，确认命令可用
-2. 如果终端里也没有，先安装 Qwen Code 命令行
+2. 如果终端里也没有，先安装 Qwen Code 命令行，安装方式见 [Qwen Code 官方文档](https://qwenlm.github.io/qwen-code-docs/zh/users/overview)
 3. IDE 是从登录 shell 启动才能继承 PATH，装好后重启 IDE 再检测
 
 ### 认证失败或提示未登录？

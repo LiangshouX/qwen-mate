@@ -48,7 +48,7 @@ Authentication is managed by the Qwen Code CLI; the plugin provides no editing e
 ## Verify the installation
 
 1. Open the QwenMate tool window from the right sidebar icon; if the icon is missing, use `View → Tool Windows → QwenMate`
-2. Open settings and check that CLI detection and the SDK dependency status are healthy
+2. Open settings and check both `Providers → CLI Tools` (CLI detection) and `SDK Dependencies` (SDK status)
 3. Send a message in the input box; a streaming reply means everything works
 
 ## Upgrade and uninstall

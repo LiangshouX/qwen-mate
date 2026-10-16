@@ -8,7 +8,7 @@ Click the QwenMate icon in the right sidebar of the IDE to open the tool window.
 
 Before sending your first message:
 
-1. **CLI detection**: the plugin read-only detects the local `qwen` command and points you to settings if it is missing
+1. **CLI detection**: the plugin read-only detects the local `qwen` command at `Settings → Providers → CLI Tools`; if it is missing, install it in a terminal as prompted
 2. **SDK dependency**: check `Settings → SDK Dependencies`; if it is not installed, follow the [Installation](./installation) guide
 3. **Authentication**: run `qwen` in a terminal to log in; the plugin shares the CLI's credentials
 
@@ -17,6 +17,7 @@ Before sending your first message:
 - Type your request in the input box, press `Enter` to send, `Shift+Enter` for a new line
 - Replies stream in with the thinking process displayed as it happens
 - You can stop generation at any time
+- Messages sent while the AI is generating do not interrupt the current task; they queue up and are sent one after another when it finishes, and any queued message can be put back into the input box for editing or all of them restored at once (`Ctrl+Q` is the explicit queue shortcut, matching the CLI)
 
 ## Build context
 
@@ -29,6 +30,7 @@ Before sending your first message:
 
 - **Prompt enhancer**: when enabled, your input is rewritten into a fuller instruction before sending
 - **Reasoning effort**: five effort levels are available from the conversation UI, or switch with the `/effort` command in the input box
+- **Managed memory**: a toggle in the input box settings popover, off by default; when on, a turn also waits for the background memory task, which can add tens of seconds to minutes
 
 ## Send content from the IDE
 
@@ -66,6 +68,7 @@ In the Git commit panel, generate a commit message with one click, edit it if ne
 | Quick fix | `Ctrl+Shift+Q` | `Cmd+Shift+Q` |
 | Send message | `Enter` | `Enter` |
 | New line in input | `Shift+Enter` | `Shift+Enter` |
+| Queue send (CLI parity) | `Ctrl+Q` | `Ctrl+Q` |
 | Copy / cut / paste in panel | `Ctrl+C` / `Ctrl+X` / `Ctrl+V` | `Cmd+C` / `Cmd+X` / `Cmd+V` |
 
 On conflicts, search for `QwenMate` in `Settings → Keymap` and rebind.

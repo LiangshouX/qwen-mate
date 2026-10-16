@@ -11,7 +11,7 @@ Open it via `View → Tool Windows → QwenMate`. If it still does not appear, m
 The plugin only detects the local `qwen` command; it does not install the CLI for you.
 
 1. Run `qwen --version` in a terminal to confirm the command works
-2. If the terminal does not have it either, install the Qwen Code CLI first
+2. If the terminal does not have it either, install the Qwen Code CLI first; the [Qwen Code official documentation](https://qwenlm.github.io/qwen-code-docs/en/users/overview) covers installation
 3. The IDE must be launched from a login shell to inherit PATH; restart the IDE after installing and detect again
 
 ### Authentication failed or says not logged in?

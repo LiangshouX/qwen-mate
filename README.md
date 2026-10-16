@@ -6,6 +6,8 @@
 
 Specifically adapted for Qwen Code, built on [CC GUI](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) (MIT).
 
+**Documentation:** [QwenMate user guide](https://liangshoux.github.io/qwen-mate/) · [Qwen Code official documentation](https://qwenlm.github.io/qwen-code-docs/en/users/overview)
+
 </div>
 
 ---
@@ -25,6 +27,10 @@ QwenMate currently supports Qwen Code as its only engine, driving it through the
 - @file references, # agent invocation, ! prompt insertion
 - Image attachments for visual requirement description
 - Prompt enhancer that rewrites your input before sending
+- Five reasoning-effort tiers (low / medium / high / xhigh / max), switchable in the input box or with `/effort`
+- Slash commands aligned with the Qwen Code command set; commands unavailable in the current mode are rejected locally instead of failing after a full turn
+- Message queue: sending while the AI is working queues the message instead of interrupting it; queued messages are sent when the current task finishes, and each one can be put back in the input box for editing or restored all at once (`Ctrl+Q` is the explicit queue shortcut, matching the CLI)
+- Managed memory toggle in the input box settings popover (off by default)
 
 ### IDE Integration
 - Editor context actions to send selected code (`Ctrl+Alt+K` / `Cmd+Alt+K`), quick fix (`Ctrl+Shift+Q`)
@@ -34,6 +40,7 @@ QwenMate currently supports Qwen Code as its only engine, driving it through the
 
 ### Developer Experience
 - Code DIFF comparison and file navigation
+- Usage statistics: local token consumption with today / 7-day / 30-day windows, model share, daily trends, and a 12-month heatmap
 - MCP servers: built-in marketplace, add/edit/remove, connection status and tool lists
 - Skills: browse and manage Qwen Code skills
 - Dark/Light theme with IDE font synchronization
@@ -48,9 +55,9 @@ QwenMate currently supports Qwen Code as its only engine, driving it through the
 - CLI detection: read-only detection of the locally installed qwen CLI
 - SDK dependency management: install, update, or roll back the Qwen Code SDK, offline packages supported
 
-## Installation (offline / internal)
+## Installation
 
-1. Install the plugin ZIP via `Settings → Plugins → ⚙ → Install Plugin from Disk…`
+1. Install the plugin from JetBrains Marketplace: `Settings → Plugins → Marketplace`, search `QwenMate`. On offline / internal networks, install the ZIP from GitHub Releases via `Settings → Plugins → ⚙ → Install Plugin from Disk…`
 2. Install the Qwen SDK package to `~/.qwenmate/dependencies/qwen-sdk/` with the bundled offline installer (`install-offline.bat` / `install-offline.sh`), or through `Settings → SDK 依赖管理` when network is available.
 
 ## Performance Tips

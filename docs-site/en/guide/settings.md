@@ -4,31 +4,35 @@ Open settings from the gear icon in the QwenMate panel header. The sidebar conta
 
 ## Basic Configuration
 
-Appearance and behavior.
+Appearance, behavior, and runtime environment.
 
 - **Theme**: dark / light, following the IDE or set independently
 - **Colors**: user message background and chat bar color, with preset swatches, a custom hex value, and a one-click reset
 - **UI font / code font**: follow the IDE editor font by default, or point to a custom font file
 - **DIFF theme**: four options, follow panel theme, follow editor, light, soft dark
 - **Language**: manual selection or follow the IDE; defaults to Chinese until you set it once
-- **Behavior toggles**: switches for conversation behavior such as streaming output
+- **Behavior toggles**: switches for conversation behavior such as streaming output, including managed memory (off by default; when on, a turn also waits for the background memory task, which can add tens of seconds to minutes)
 - **Notifications**: sound notification (custom sound supported), AskUserQuestion prompts, and more
+- **Environment**: Node.js executable path and working directory; the plugin auto-detects Node.js when the path is empty
 
 ## Providers
 
-A read-only view of the model catalog and current model from `~/.qwen/settings.json`. Authentication is likewise managed by the Qwen Code CLI; the plugin has no editing entry point.
+Two tabs:
 
-To change the model or authentication, edit `~/.qwen/settings.json` or use the Qwen Code CLI. The plugin reads the same configuration.
+- **Qwen config**: a read-only list of the models in `~/.qwen/settings.json`, marking the current model and its context window
+- **CLI tools**: read-only detection of the local `qwen` command (installed or not, plus version), with an entry point to the install guide
+
+Authentication is likewise managed by the Qwen Code CLI; the plugin has no editing entry point. To change the model or authentication, edit `~/.qwen/settings.json` or use the Qwen Code CLI. The plugin reads the same configuration.
 
 ## SDK Dependencies
 
-Install, upgrade, roll back, and reinstall the Qwen Code SDK on this page, offline packages included. The page also shows the read-only detection status of the local `qwen` CLI.
+Install, upgrade, roll back, and reinstall the Qwen Code SDK on this page, offline packages included.
 
 Guidance for incomplete installs and version rollbacks surfaces here as well.
 
 ## Usage Stats
 
-Model usage statistics with token consumption broken down by session and model.
+Local usage data written by the Qwen Code CLI: token consumption, sessions, requests, tool calls, and lines of code changed. Three time windows (today / 7 days / 30 days) with a token split, model share, skill ranking, a daily trend, and a 12-month heatmap; refresh on demand. If your Qwen Code version is too old to record usage data, the page shows a version notice.
 
 ## MCP Servers
 

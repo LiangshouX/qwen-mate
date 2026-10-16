@@ -15,7 +15,7 @@ hero:
 
 features:
   - title: Intelligent Conversation
-    details: Streaming output with thinking display, @file references, # agent invocation, ! prompt insertion, image attachments, and a prompt enhancer.
+    details: Streaming output with thinking display, @file references, # agent invocation, ! prompt insertion, image attachments, a prompt enhancer, five effort levels, and a message queue while the AI is working.
   - title: Deep IDE Integration
     details: Send selected code and quick fixes from the editor context menu, send file tree and console content, monitor run and debug output, generate Git commit messages in the commit panel.
   - title: Code Review

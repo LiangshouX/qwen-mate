@@ -6,6 +6,8 @@
 
 针对 Qwen Code 的专门、定向适配，基于 [CC GUI](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui)（MIT）开发。
 
+**文档：** [QwenMate 使用文档](https://liangshoux.github.io/qwen-mate/) · [Qwen Code 官方文档](https://qwenlm.github.io/qwen-code-docs/zh/users/overview)
+
 </div>
 
 ---
@@ -25,6 +27,10 @@ QwenMate 目前仅支持 Qwen Code 这一个引擎，通过其官方 TypeScript 
 - @ 文件引用、# 唤起智能体、! 插入提示词
 - 发送图片，可视化描述需求
 - 提示词增强：发送前自动改写输入
+- 5 档思考强度（low / medium / high / xhigh / max），输入框菜单或 `/effort` 命令切换
+- 斜杠命令对齐 Qwen Code 全量命令表，当前模式不可用的命令本地直接提示，不再等一整轮才报错
+- 消息排队：AI 工作期间发送的消息自动排队，不打断当前任务，当前任务结束后依次发送；排队消息可单条放回输入框编辑，也可一键全部放回（`Ctrl+Q` 为对齐 CLI 的显式排队快捷键）
+- 托管记忆开关（输入框配置弹层，默认关闭）
 
 ### IDE 集成
 - 编辑器右键发送选中代码（`Ctrl+Alt+K` / `Cmd+Alt+K`）、快速修复（`Ctrl+Shift+Q`）
@@ -34,6 +40,7 @@ QwenMate 目前仅支持 Qwen Code 这一个引擎，通过其官方 TypeScript 
 
 ### 开发体验
 - 代码 DIFF 对比与文件导航
+- 用量统计：本机 token 消耗，支持今日 / 7 天 / 30 天窗口，含模型份额、每日趋势与 12 个月热力图
 - MCP 服务器：内置市场浏览、增删改配置、连接状态与工具列表
 - Skills：浏览与管理 Qwen Code 技能
 - 深色/浅色主题，IDE 字体同步
@@ -48,9 +55,9 @@ QwenMate 目前仅支持 Qwen Code 这一个引擎，通过其官方 TypeScript 
 - CLI 检测：只读检测本机 qwen 命令行的安装状态
 - SDK 依赖管理：在线安装、更新、回退 Qwen Code SDK，支持离线安装包
 
-## 离线安装（内网环境）
+## 安装
 
-1. `设置 → 插件 → ⚙ → 从磁盘安装插件…` 选择插件 ZIP 安装
+1. 通过 JetBrains Marketplace 安装：`设置 → 插件 → Marketplace` 搜索 `QwenMate`；内网/离线环境从 GitHub Releases 下载插件 ZIP，用 `设置 → 插件 → ⚙ → 从磁盘安装插件…` 安装
 2. 将 Qwen SDK 离线包解压安装到 `~/.qwenmate/dependencies/qwen-sdk/`（用随包的 `install-offline.bat` / `install-offline.sh`），或在有网环境通过 `设置 → SDK 依赖管理` 在线安装
 
 ## 性能提示
