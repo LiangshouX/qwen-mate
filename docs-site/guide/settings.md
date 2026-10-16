@@ -19,10 +19,20 @@
 
 两个标签页：
 
-- **Qwen 配置**：只读展示 `~/.qwen/settings.json` 中的模型列表，标注当前模型与上下文窗口大小
+- **模型供应商**：可视化配置 `~/.qwen/settings.json` 中的模型供应商与模型
 - **CLI 工具**：只读检测本机 `qwen` 命令行的安装状态与版本，附安装说明入口
 
-认证由 Qwen Code CLI 管理，插件不提供修改入口。需要更换模型或认证方式时，修改 `~/.qwen/settings.json`，或在 Qwen Code CLI 中操作，插件会读取同一份配置。
+### 模型供应商
+
+页面按分组列出 CLI 预置供应商（Alibaba ModelStudio、第三方服务商、自定义接入）、自定义 Provider 桶与独立模型，可以：
+
+- **连接 / 配置 / 删除**：连接预置供应商，配置协议（OpenAI / Anthropic / Gemini 兼容）、Wire API、端点、API Key、模型（可搜索的预置列表或自定义 ID）与高级项（思考、上下文窗口、max_tokens、模态）；删除前二次确认
+- **增删改模型**：模型条目覆盖 ModelConfig 全字段（标识、路由与凭据、生成配置、extra_body、自定义请求头），预置桶与独立模型都可逐个编辑
+- **API Key 安全**：输入框为密码型、已存密钥永不回显，页面上以状态徽标显示「已配置 / 引用环境变量 / 来自 Shell 环境 / 未设置」，另提供两步确认的「清除密钥」
+
+改动由本机 Node 服务写回**用户级** `~/.qwen/settings.json`，采用与 CLI 相同的 JSONC 格式保持引擎，注释、缩进、换行与 BOM 都不会丢失，写入前校验、失败保留恢复副本。项目级 `settings.json` 若定义了 `modelProviders`，页面顶部会给出覆盖告警，本页只改用户级文件。
+
+登录态仍由 Qwen Code CLI 管理；API Key 则可以在上面的「模型供应商」页直接配置。
 
 ## SDK 依赖
 
@@ -65,7 +75,7 @@ Qwen Code SDK 的安装、升级、回退、重装都在这个页面完成，支
 
 | 位置 | 内容 | 谁来改 |
 | --- | --- | --- |
-| `~/.qwen/settings.json` | 模型、认证、MCP、Skills 等 CLI 配置 | Qwen Code CLI 或直接编辑文件，插件只读 |
+| `~/.qwen/settings.json` | 模型、认证、MCP、Skills 等 CLI 配置 | Qwen Code CLI、插件（供应商管理页 / MCP 页）或直接编辑文件 |
 | `~/.qwen/` | CLI 会话数据 | CLI 与插件共享 |
 | `~/.qwenmate/` | 插件自身数据与 SDK 依赖 | 插件管理 |
 
@@ -74,4 +84,4 @@ Qwen Code SDK 的安装、升级、回退、重装都在这个页面完成，支
 ## 注意事项
 
 - 插件与 CLI 的配置、会话完全共享，在终端里配好的内容插件里直接可用
-- 认证只能通过 Qwen Code CLI 管理，这是刻意的只读设计，避免两处配置打架
+- 供应商与模型的改动由插件写回用户级 `settings.json`，格式与 CLI 一致；登录态仍由 Qwen Code CLI 管理

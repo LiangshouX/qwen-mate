@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-QwenMate 最新正式版为 1.0.0（2026-10-13 发布），当前开发版本为 1.1.0-beta1，发布渠道为 GitHub Releases 与 JetBrains Marketplace，两个渠道分发同一份构建产物。
+QwenMate 最新正式版为 1.1.0（2026-10-17 发布），发布渠道为 GitHub Releases 与 JetBrains Marketplace，两个渠道分发同一份构建产物。
 
 已具备的核心能力：
 
@@ -10,7 +10,7 @@ QwenMate 最新正式版为 1.0.0（2026-10-13 发布），当前开发版本为
 - IDE 集成：编辑器右键动作与快捷键、文件树和控制台内容发送、运行输出监听、Commit AI、审批与 Diff
 - 生态：MCP 服务器管理、Skills 管理、会话历史与模板
 - 用量：设置页用量统计，本机 token 消耗、模型份额、每日趋势与 12 个月热力图，支持今日 / 7 天 / 30 天切换与全量 / 按项目 / 按会话三个维度
-- 配置：与 Qwen Code CLI 共享 `~/.qwen/settings.json`，插件侧配置为只读视图
+- 配置：与 Qwen Code CLI 共享 `~/.qwen/settings.json`，供应商与模型可在插件内可视化增删改（写回用户级文件，格式与 CLI 一致）
 
 版本细节与历史见仓库中的 [CHANGELOG（中文）](https://github.com/LiangshouX/qwen-mate/blob/main/CHANGELOG.zh-CN.md)与 [CHANGELOG（English）](https://github.com/LiangshouX/qwen-mate/blob/main/CHANGELOG.md)。
 

@@ -34,7 +34,7 @@
             <li>外观与国际化：深色/浅色主题、IDE 字体同步、10 种界面语言 / Light/dark themes, IDE font sync, 10 UI languages</li>
             <li>SDK 依赖管理：在线安装、更新、回退 Qwen Code SDK，支持离线安装包 / Install, update, or roll back the Qwen Code SDK; offline packages supported</li>
             <li>CLI 检测：只读检测本机 qwen 命令行的安装状态 / Read-only detection of your local qwen CLI</li>
-            <li>Qwen 配置（只读）：读取 <code>~/.qwen/settings.json</code> 展示模型目录与当前模型；认证（API Key / Base URL / 环境变量）由 Qwen Code CLI 管理，插件不提供修改入口 / Read-only view of the CLI's model catalog; authentication stays with the Qwen Code CLI and cannot be edited in the plugin</li>
+            <li>供应商可视化配置：连接、编辑、删除 CLI 预置供应商与模型（协议、Wire API、Base URL、API Key、模型与高级项），API Key 状态徽标与只写不读的安全处理，改动写回 <code>~/.qwen/settings.json</code> 并保持注释与格式 / Visual configuration of the CLI-preset providers and models (protocol, Wire API, base URL, API key, models, advanced options) with API-key status badges; writes go back to ~/.qwen/settings.json with comments and formatting preserved</li>
         </ul>
 
         <h3>网络请求 / Network</h3>
@@ -47,10 +47,10 @@
 
         <h3>文件访问与凭证 / File access &amp; credentials</h3>
         <ul>
-            <li>读取 <code>~/.qwen/settings.json</code>：模型目录用于模型选择器，mcpServers 定义用于 MCP 设置页 / Reads ~/.qwen/settings.json for the model catalog and MCP server definitions</li>
-            <li>MCP 设置页会把服务器增删改写回该文件，只改动 mcpServers 与启用状态相关字段，其余内容原样保留 / The MCP page writes server changes back to that file, touching only the mcpServers block and enable/disable state</li>
+            <li>读取 <code>~/.qwen/settings.json</code>：模型目录用于模型选择器，「供应商管理」页用于展示与编辑供应商，mcpServers 定义用于 MCP 设置页 / Reads ~/.qwen/settings.json for the model catalog and MCP server definitions, and for the Providers page</li>
+            <li>「供应商管理」与 MCP 设置页会把改动写回该文件：供应商页只改动 modelProviders 与相关 env 键，MCP 页只改动 mcpServers 与启用状态，其余内容（含注释与格式）原样保留 / The Providers and MCP pages write changes back to that file — only modelProviders plus related env keys, or the mcpServers block and enable/disable state — leaving the rest (comments and formatting included) untouched</li>
             <li>读取 <code>~/.qwen/projects/</code> 下的会话记录用于历史面板；项目文件按你的指令读取以构建上下文与 Diff / Session transcripts under ~/.qwen/projects/ power the history panel; project files are read on demand for context and diffs</li>
-            <li>插件不扫描磁盘寻找密钥，也不提供 API Key 录入界面；凭证来自你为 Qwen Code 配置的 CLI 设置与环境变量，仅在本机注入 Qwen Code 进程 / The plugin never scans your disk for keys and offers no API key input; credentials come from your Qwen Code CLI configuration and environment variables and are injected only into the local Qwen Code process</li>
+            <li>API Key 仅在「供应商管理」页按需录入（密码型输入框，已存密钥永不回显、不落日志），由本机 Node 服务写入 <code>~/.qwen/settings.json</code>；插件不扫描磁盘寻找密钥，登录态仍由 Qwen Code CLI 管理 / API keys are entered only on the Providers page (a password field; saved keys are never echoed or logged) and written to ~/.qwen/settings.json by a local Node service; the plugin never scans your disk for keys, and login state stays with the Qwen Code CLI</li>
             <li>插件自身数据（配置、SDK 依赖）存放在 <code>~/.qwenmate/</code> / Plugin data lives under ~/.qwenmate/</li>
         </ul>
 

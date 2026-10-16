@@ -1,5 +1,37 @@
 # Changelog
 
+##### 1.1.0 (2026-10-17)
+
+Second stable release. The headline addition is a fully visual provider and model configuration for the Qwen Code CLI; the message-queue and usage-dimension work from 1.1.0-beta1 ships in the same release.
+
+Added:
+
+- Providers page upgraded from a read-only view to full visual configuration: connect, reconnect, and remove the 13 CLI-preset providers (Alibaba ModelStudio, third-party services, and Custom), and configure protocol (OpenAI / Anthropic / Gemini compatible), Wire API, endpoint, API key, model IDs (searchable preset list or custom), and advanced options (thinking, context window, max_tokens, modalities)
+- Model entries can be added, edited, and removed across the full ModelConfig field set (identity, route and credentials, generation config, extra_body, custom headers); custom provider buckets and standalone models are listed and editable at model level
+- API key status badges (configured / env variable reference / from shell environment / not set) with an explicit two-step "clear key" action; saved keys are never echoed back and the input is a password field
+- Provider groups can be collapsed, model configuration syncs automatically, and a MiMo Token Plan preset is included
+- Configuration is written to the user-level `~/.qwen/settings.json` through a port of the CLI's own algorithm, preserving comments, indentation, line endings, and BOM; writes are validated and published atomically with a recovery copy kept on failure, and deletions cascade like the CLI (active selection cleared, auxiliary models and fallbacks cleaned up, keys still referenced elsewhere kept)
+- Message queue UX: queued messages can be put back into the input box one by one or all at once (existing drafts and image attachments are kept); the queue header shows the queued count and "sends when the current task finishes"; new Ctrl+Q queue shortcut (parity with the Qwen Code CLI)
+- Usage statistics dimensions: switch between All / By project / By session, with time windows and charts following the dimension (the session dimension shows the selected session for the whole page, and the trend line only for sessions spanning multiple days)
+- New "Documentation" entry in the tool window title bar that opens the help site; the open-source banner button is "View on GitHub" again
+
+Fixed:
+
+- Pasting an image file with Ctrl+V in the chat window did nothing (image files now render as thumbnail attachments, see Improvements below)
+- Pasting a screenshot turned the message into a long JSON blob that filled the context window: images are now saved to a temp file and referenced via @path, and the CLI reads the image into the message on send (same mechanism as the Qwen Code CLI); bubbles show the @image path instead of rendering the image, and the first message no longer duplicates after sending an image
+- Pasting an image did not show the thumbnail immediately and could freeze or hang the UI: image reading and preview generation moved off the UI thread, and only a small preview is transferred
+- Sending an image file made the model recognize the same image twice and duplicate its content
+- The first image message in a new session rendered two bubbles
+- The first bubble after sending an image lacked the @image path reference and only appeared after clicking "Load earlier messages" (which then looked duplicated): the @image path now shows at send time
+- The context usage percentage stopped updating while a task was running: usage is now pushed per turn with a CLI snapshot fallback, so it refreshes live
+- The context percentage read too high under a warm cache: the metric now uses a single input value and no longer double-counts cache reads
+
+Improvements:
+
+- Unified the two image channels (screenshot paste vs. Explorer file copy): copied image files now render as thumbnails in the input box (same as screenshots, carrying the original file name and path) instead of inserting an @file reference; bubbles consistently show @path + text and no longer render inline images or the CLI-expanded "Content from referenced files" wrapper
+- @path references to images outside the workspace (e.g. an external image path pasted into chat) are copied to temp files and inlined before sending, so the model sees the image directly without an extra file-read round trip
+- Provider writes refuse to touch a broken or read-only settings.json, reject reserved keys, and keep the rest of the file byte-for-byte intact; API keys are passed to the local Node service over stdin and never logged
+
 ##### 1.1.0-beta1 (2026-10-16)
 
 Added:

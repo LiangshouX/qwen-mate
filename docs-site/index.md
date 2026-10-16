@@ -25,5 +25,5 @@ features:
   - title: 会话管理
     details: 历史会话恢复、搜索、导出与收藏，AI 自动生成会话标题，多标签并行工作。
   - title: 与 CLI 共享配置
-    details: 读取 ~/.qwen/settings.json，终端里配好的模型、认证、MCP、Skills 在插件里直接可用。
+    details: 读写 ~/.qwen/settings.json，供应商、模型、认证、MCP、Skills 与终端配置双向一致，供应商与模型可在插件内可视化增删改。
 ---

@@ -16,11 +16,11 @@ The plugin only detects the local `qwen` command; it does not install the CLI fo
 
 ### Authentication failed or says not logged in?
 
-Authentication is managed by the Qwen Code CLI. Run `qwen` in a terminal, complete the login flow, then retry in the plugin. The plugin intentionally has no authentication editing entry point.
+Login state is managed by the Qwen Code CLI. Run `qwen` in a terminal, complete the login flow, then retry in the plugin. API keys can be configured at `Settings → Providers → Model Providers`; signing in and out still goes through the CLI.
 
 ### Where do I change the model?
 
-The Providers page is a read-only view of `~/.qwen/settings.json`. To switch models, edit that file or switch in the Qwen Code CLI; the plugin picks up the latest configuration.
+Do it at `Settings → Providers → Model Providers`: connect a provider, add or remove models, and configure API keys right there, with changes written back to the user-level `~/.qwen/settings.json` (CLI-identical formatting). You can also edit that file or switch in the Qwen Code CLI; the plugin reads the same configuration.
 
 ### The chat panel opens completely blank (white screen)?
 

@@ -51,8 +51,8 @@ QwenMate currently supports Qwen Code as its only engine, driving it through the
 - History session records, restore, search and export
 - Session favorites and AI-generated titles
 
-### Configuration & Dependencies (read-only)
-- Qwen config: reads `~/.qwen/settings.json` to show the model catalog and current model; authentication is managed by the Qwen Code CLI and cannot be edited in the plugin
+### Configuration & Dependencies
+- Providers: a visual configuration page for the Qwen Code model catalog — connect, edit, and remove the CLI-preset providers and their models (protocol, Wire API, base URL, API key, models, advanced options); changes are written back to `~/.qwen/settings.json` with CLI-identical formatting, and saved API keys are never displayed
 - CLI detection: read-only detection of the locally installed qwen CLI
 - SDK dependency management: install, update, or roll back the Qwen Code SDK, offline packages supported
 

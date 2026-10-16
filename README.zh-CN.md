@@ -51,8 +51,8 @@ QwenMate 目前仅支持 Qwen Code 这一个引擎，通过其官方 TypeScript 
 - 历史会话记录、恢复、搜索与导出
 - 会话收藏与 AI 自动生成标题
 
-### 配置与依赖（只读）
-- Qwen 配置：读取 `~/.qwen/settings.json` 展示模型目录与当前模型，认证由 Qwen Code CLI 管理，插件不提供修改入口
+### 配置与依赖
+- 供应商管理：模型供应商与模型的可视化配置页——连接、编辑、删除 CLI 预置供应商及其模型（协议、Wire API、Base URL、API Key、模型与高级项），改动写回 `~/.qwen/settings.json`，格式与 CLI 完全一致，已存 API Key 永不回显
 - CLI 检测：只读检测本机 qwen 命令行的安装状态
 - SDK 依赖管理：在线安装、更新、回退 Qwen Code SDK，支持离线安装包
 

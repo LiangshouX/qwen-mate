@@ -2,7 +2,7 @@
 
 ## Current state
 
-The latest stable release of QwenMate is 1.0.0 (released 2026-10-13); the current development version is 1.1.0-beta1. It ships through GitHub Releases and the JetBrains Marketplace; both channels distribute the same build artifact.
+The latest stable release of QwenMate is 1.1.0 (released 2026-10-17). It ships through GitHub Releases and the JetBrains Marketplace; both channels distribute the same build artifact.
 
 Core capabilities today:
 
@@ -10,7 +10,7 @@ Core capabilities today:
 - IDE integration: editor context actions and shortcuts, file tree and console content sending, run output monitoring, Commit AI, approvals and diffs
 - Ecosystem: MCP server management, Skills management, session history and templates
 - Usage: a settings page with local token consumption, model share, daily trend, and a 12-month heatmap, switchable across today / 7 days / 30 days and All / By project / By session
-- Configuration: shares `~/.qwen/settings.json` with the Qwen Code CLI; plugin-side configuration is a read-only view
+- Configuration: shares `~/.qwen/settings.json` with the Qwen Code CLI, and providers and models are visually editable in the plugin (written back to the user-level file with CLI-identical formatting)
 
 See [CHANGELOG](https://github.com/LiangshouX/qwen-mate/blob/main/CHANGELOG.md) in the repository for version history.
 

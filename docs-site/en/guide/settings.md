@@ -19,10 +19,20 @@ Appearance, behavior, and runtime environment.
 
 Two tabs:
 
-- **Qwen config**: a read-only list of the models in `~/.qwen/settings.json`, marking the current model and its context window
-- **CLI tools**: read-only detection of the local `qwen` command (installed or not, plus version), with an entry point to the install guide
+- **Model Providers**: visual configuration of the model providers and models in `~/.qwen/settings.json`
+- **CLI Tools**: read-only detection of the local `qwen` command (installed or not, plus version), with an entry point to the install guide
 
-Authentication is likewise managed by the Qwen Code CLI; the plugin has no editing entry point. To change the model or authentication, edit `~/.qwen/settings.json` or use the Qwen Code CLI. The plugin reads the same configuration.
+### Model Providers
+
+The page groups the CLI-preset providers (Alibaba ModelStudio, third-party services, Custom), custom provider buckets, and standalone models, and lets you:
+
+- **Connect / configure / remove**: connect a preset provider and configure its protocol (OpenAI / Anthropic / Gemini compatible), Wire API, endpoint, API key, models (a searchable preset list or custom IDs), and advanced options (thinking, context window, max_tokens, modalities); deletions ask for confirmation
+- **Add, edit, and remove models**: model entries cover the full ModelConfig field set (identity, route and credentials, generation config, extra_body, custom headers), and both preset buckets and standalone models are editable one by one
+- **API key safety**: the input is a password field and saved keys are never echoed back; status badges show "configured / env variable reference / from shell environment / not set", with a two-step "clear key" action
+
+Changes are written back to the **user-level** `~/.qwen/settings.json` by a local Node service, using the same JSONC-preserving engine as the CLI, so comments, indentation, line endings, and BOM survive untouched, with a pre-write validation and a recovery copy kept on failure. If a project-level `settings.json` defines `modelProviders`, a warning at the top of the page notes the override; this page only edits the user-level file.
+
+Login state stays with the Qwen Code CLI, while API keys can be configured right here on the Model Providers tab.
 
 ## SDK Dependencies
 
@@ -65,7 +75,7 @@ Browse and manage Qwen Code skills, sharing the same skill directory as the CLI.
 
 | Location | Contents | Who edits it |
 | --- | --- | --- |
-| `~/.qwen/settings.json` | Model, authentication, MCP, Skills, and other CLI configuration | Qwen Code CLI or direct file edit; the plugin is read-only |
+| `~/.qwen/settings.json` | Model, authentication, MCP, Skills, and other CLI configuration | Qwen Code CLI, the plugin (Providers / MCP pages), or a direct file edit |
 | `~/.qwen/` | CLI session data | Shared between CLI and plugin |
 | `~/.qwenmate/` | Plugin data and SDK dependency | Managed by the plugin |
 
@@ -74,4 +84,4 @@ Conversation parameters such as reasoning effort are adjusted in the conversatio
 ## Notes
 
 - Plugin and CLI configuration and sessions are fully shared, so anything you set up in the terminal works in the plugin
-- Authentication can only be managed through the Qwen Code CLI. The read-only behavior is intentional, to keep two configuration sources from fighting each other
+- Provider and model changes are written back to the user-level `settings.json` with CLI-identical formatting; login state stays with the Qwen Code CLI

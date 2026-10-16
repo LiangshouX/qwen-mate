@@ -25,5 +25,5 @@ features:
   - title: Session Management
     details: Restore, search, export, and favorite history sessions, with AI-generated session titles and parallel tabs.
   - title: Shares CLI Configuration
-    details: Reads ~/.qwen/settings.json, so models, authentication, MCP servers, and skills you configured in the terminal work here as-is.
+    details: Reads and writes ~/.qwen/settings.json, so providers, models, MCP servers, and skills stay in sync with the terminal — providers and models are editable in the plugin.
 ---
