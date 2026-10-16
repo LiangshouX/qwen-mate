@@ -1,5 +1,6 @@
 package com.qwenmate.usage;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -9,7 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -49,6 +54,9 @@ public final class UsageDataStore {
     /** path -> parsed live record (record == null means "no telemetry events"). */
     private static final Map<String, CachedLive> LIVE_CACHE = new ConcurrentHashMap<>();
 
+    /** path -> per-day token series for one session (session-dimension chart). */
+    private static final Map<String, CachedDaily> DAILY_CACHE = new ConcurrentHashMap<>();
+
     private static final class CachedLive {
         final long mtimeMs;
         final long size;
@@ -58,6 +66,18 @@ public final class UsageDataStore {
             this.mtimeMs = mtimeMs;
             this.size = size;
             this.record = record;
+        }
+    }
+
+    private static final class CachedDaily {
+        final long mtimeMs;
+        final long size;
+        final JsonArray daily;
+
+        CachedDaily(long mtimeMs, long size, JsonArray daily) {
+            this.mtimeMs = mtimeMs;
+            this.size = size;
+            this.daily = daily;
         }
     }
 
@@ -218,6 +238,127 @@ public final class UsageDataStore {
         JsonObject record = parseTranscript(chat, sessionId);
         LIVE_CACHE.put(key, new CachedLive(mtime, size, record));
         return record;
+    }
+
+    /**
+     * Rebuilds the per-day token series for ONE session from its transcript
+     * under {@code ~/.qwen/projects/<proj>/chats/<sessionId>.jsonl} — the
+     * session-dimension line chart's data source (a usage record buckets a
+     * whole session onto its end date, which cannot show a multi-day
+     * session's shape). Returns a zero-filled {@code [{date, tokens, sessions}]}
+     * array spanning the session's first to last telemetry day, or an empty
+     * array when the transcript is missing or has no telemetry. Cached per
+     * file signature (mtime + size).
+     */
+    public static JsonArray sessionDaily(Path qwenDir, String sessionId) {
+        if (sessionId == null || sessionId.isBlank()) {
+            return new JsonArray();
+        }
+        Path chat = findTranscript(qwenDir, sessionId);
+        if (chat == null) {
+            return new JsonArray();
+        }
+        try {
+            BasicFileAttributes attrs = Files.readAttributes(chat, BasicFileAttributes.class);
+            String key = chat.toAbsolutePath().toString();
+            long mtime = attrs.lastModifiedTime().toMillis();
+            long size = attrs.size();
+            CachedDaily cached = DAILY_CACHE.get(key);
+            if (cached != null && cached.mtimeMs == mtime && cached.size == size) {
+                return cached.daily;
+            }
+            JsonArray daily = parseTranscriptDaily(chat);
+            DAILY_CACHE.put(key, new CachedDaily(mtime, size, daily));
+            return daily;
+        } catch (IOException e) {
+            return new JsonArray();
+        }
+    }
+
+    /** Locates {@code <sessionId>.jsonl} under any project's chats directory. */
+    private static Path findTranscript(Path qwenDir, String sessionId) {
+        Path projectsDir = qwenDir.resolve("projects");
+        if (!Files.isDirectory(projectsDir)) {
+            return null;
+        }
+        try (DirectoryStream<Path> projects = Files.newDirectoryStream(projectsDir)) {
+            for (Path projectDir : projects) {
+                if (!Files.isDirectory(projectDir)) {
+                    continue;
+                }
+                Path chat = projectDir.resolve("chats").resolve(sessionId + ".jsonl");
+                if (Files.isRegularFile(chat)) {
+                    return chat;
+                }
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * Buckets one transcript's {@code api_response} telemetry events by the
+     * local date of each event's own timestamp (the record-level rebuild uses
+     * only the first/last line, which collapses a multi-day session onto one
+     * day). Zero-fills the span so the chart keeps a continuous x axis.
+     */
+    static JsonArray parseTranscriptDaily(Path chat) throws IOException {
+        DateTimeFormatter isoDate = DateTimeFormatter.ISO_LOCAL_DATE;
+        ZoneId zone = ZoneId.systemDefault();
+        Map<String, Long> byDay = new LinkedHashMap<>();
+
+        try (BufferedReader reader = Files.newBufferedReader(chat, StandardCharsets.UTF_8)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.contains("ui_telemetry")) {
+                    continue;
+                }
+                JsonObject record = parseLoose(line);
+                if (record == null) {
+                    continue;
+                }
+                JsonObject payload = record.getAsJsonObject("systemPayload");
+                if (payload == null || !payload.has("uiEvent") || !payload.get("uiEvent").isJsonObject()) {
+                    continue;
+                }
+                JsonObject event = payload.getAsJsonObject("uiEvent");
+                if (!"qwen-code.api_response".equals(optString(event, "event.name"))) {
+                    continue;
+                }
+                long ts = parseTimestamp(optString(record, "timestamp"));
+                if (ts < 0) {
+                    continue;
+                }
+                long tokens = longOpt(event, "total_token_count");
+                String day = Instant.ofEpochMilli(ts).atZone(zone).toLocalDate().format(isoDate);
+                byDay.merge(day, tokens, Long::sum);
+            }
+        }
+
+        JsonArray daily = new JsonArray();
+        if (byDay.isEmpty()) {
+            return daily;
+        }
+        LocalDate first = LocalDate.parse(byDay.keySet().iterator().next(), isoDate);
+        LocalDate last = first;
+        for (String key : byDay.keySet()) {
+            LocalDate date = LocalDate.parse(key, isoDate);
+            if (date.isAfter(last)) {
+                last = date;
+            }
+        }
+        LocalDate cursor = first;
+        while (!cursor.isAfter(last)) {
+            String key = cursor.format(isoDate);
+            JsonObject day = new JsonObject();
+            day.addProperty("date", key);
+            day.addProperty("tokens", byDay.getOrDefault(key, 0L));
+            day.addProperty("sessions", byDay.containsKey(key) ? 1 : 0);
+            daily.add(day);
+            cursor = cursor.plusDays(1);
+        }
+        return daily;
     }
 
     /**

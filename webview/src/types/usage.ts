@@ -61,6 +61,38 @@ export interface UsageHeatmap {
   maxDayTokens: number;
 }
 
+/** One row of the "按 Project" dimension (a full window-stats per project). */
+export interface UsageProjectGroup extends UsageWindowStats {
+  /** Raw cwd path; the display name (dir name, parent disambiguation) is derived on the frontend. */
+  project: string;
+}
+
+/**
+ * One row of the "按会话" dimension (slim — no daily series; multi-day
+ * sessions fetch their per-day tokens lazily via get_usage_stats sessionDaily).
+ */
+export interface UsageSessionGroup extends Omit<UsageWindowStats, 'daily'> {
+  sessionId: string;
+  /** Raw cwd path of the session's project. */
+  project: string;
+  /** History-panel title (custom > derived), when one could be resolved. */
+  title?: string;
+  startTimeMs: number;
+  timestampMs: number;
+}
+
+export interface UsageDimensions {
+  projects: Record<UsageRangeKey, UsageProjectGroup[]>;
+  sessions: Record<UsageRangeKey, UsageSessionGroup[]>;
+}
+
+/** Response of the lazy per-session daily rebuild (session-dimension line chart). */
+export interface UsageSessionDaily {
+  sessionId: string;
+  daily: UsageDailyPoint[];
+  error?: string;
+}
+
 export interface UsagePayload {
   generatedAtMs: number;
   supported: boolean;
@@ -74,6 +106,12 @@ export interface UsagePayload {
   earliestRecordMs: number;
   latestRecordMs: number;
   windows: Record<UsageRangeKey, UsageWindowStats>;
+  /** Per-project / per-session breakdowns per window (absent on older payloads). */
+  dimensions?: UsageDimensions;
+  /** User home dir; its project group is displayed as a full path, not a basename. */
+  userHome?: string;
+  /** The IDE's effective working directory — default project of the session dimension's filter. */
+  currentProject?: string;
   heatmap: UsageHeatmap;
   /** Set by the Java side on failures instead of the fields above. */
   error?: string;

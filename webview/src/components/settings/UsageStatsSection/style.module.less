@@ -153,8 +153,16 @@
 .rangeRow {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 6px;
   margin: 4px 0 12px;
+}
+
+/* Dimension switcher sits left of the range buttons in the same row. */
+.dimGroup {
+  display: flex;
+  gap: 6px;
+  margin-right: auto;
 }
 
 .rangeBtn {
@@ -182,6 +190,30 @@
   }
 }
 
+/* ---------- Dimension selectors (project picker + session picker) ---------- */
+
+.sessionRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.sessionSelect {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-secondary);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--bg-hover);
+  }
+}
+
 .heroCard {
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
@@ -194,15 +226,28 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
 }
 
 .heroLabel {
   color: var(--usage-accent);
   font-size: 13px;
   font-weight: 600;
+  /* Session/project titles can be a whole first prompt — clamp to two lines
+     with an ellipsis (full text stays on the hover title) so long names
+     cannot push the value card around. */
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
 }
 
 .heroRefresh {
+  flex-shrink: 0;
   font-size: 12.5px;
   padding: 5px 14px;
   border-radius: 6px;

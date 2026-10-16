@@ -1,13 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import type { UsageHeatmap } from '../../../types/usage';
+import type { UsageHeatmap, UsageSessionGroup } from '../../../types/usage';
 import {
   buildHeatmapGrid,
   buildLinePoints,
+  duplicateBaseNames,
   formatCount,
   formatDayLabel,
   formatTokens,
   maxValue,
   nearestPointIndex,
+  pathBasename,
+  projectDisplayName,
+  samePath,
+  sessionDisplayName,
+  sessionSpansMultipleDays,
 } from './usageStatsUtils';
 
 describe('formatTokens', () => {
@@ -158,5 +164,145 @@ describe('nearestPointIndex', () => {
     expect(nearestPointIndex(50, 0, 0, 8)).toBe(-1);
     expect(nearestPointIndex(50, 0, 100, 0)).toBe(-1);
     expect(nearestPointIndex(Number.NaN, 0, 100, 8)).toBe(-1);
+  });
+});
+
+describe('pathBasename', () => {
+  it('takes the last segment of Windows and POSIX paths', () => {
+    expect(pathBasename('D:\\Code\\Java\\jetbrains-qc-gui\\qwen-mate')).toBe('qwen-mate');
+    expect(pathBasename('/home/dev/project')).toBe('project');
+    expect(pathBasename('C:\\Users\\31770')).toBe('31770');
+  });
+
+  it('returns the input for empty paths', () => {
+    expect(pathBasename('')).toBe('');
+  });
+});
+
+describe('duplicateBaseNames', () => {
+  it('collects case-insensitive directory-name collisions', () => {
+    const dups = duplicateBaseNames([
+      'D:\\a\\ai-bridge',
+      'D:\\b\\ai-bridge',
+      'D:\\c\\unique',
+    ]);
+    expect(dups.has('ai-bridge')).toBe(true);
+    expect(dups.has('unique')).toBe(false);
+  });
+});
+
+describe('projectDisplayName', () => {
+  it('shows the directory name for unique projects', () => {
+    expect(projectDisplayName('D:\\Code\\Java\\qwen-mate', new Set())).toBe('qwen-mate');
+  });
+
+  it('escalates to the last two segments when directory names collide', () => {
+    const dups = new Set(['ai-bridge']);
+    expect(projectDisplayName('D:\\x\\qwen-mate\\ai-bridge', dups)).toBe('qwen-mate/ai-bridge');
+    expect(projectDisplayName('D:\\y\\other\\ai-bridge', dups)).toBe('other/ai-bridge');
+  });
+
+  it('keeps the full path for the home dir and drive roots', () => {
+    expect(projectDisplayName('C:\\Users\\31770', new Set(), 'C:\\Users\\31770'))
+      .toBe('C:\\Users\\31770');
+    expect(projectDisplayName('D:\\', new Set())).toBe('D:\\');
+  });
+});
+
+describe('sessionDisplayName', () => {
+  const base: UsageSessionGroup = {
+    sessionId: 'c30309ab-22c7-4efc-bda0-358b8bfd7187',
+    project: 'D:\\Code\\qwen-mate',
+    startMs: 0,
+    endMs: 0,
+    // Local-time construction: the fallback label renders a LOCAL date-time.
+    startTimeMs: new Date(2026, 9, 15, 9, 30).getTime(),
+    timestampMs: new Date(2026, 9, 15, 11, 0).getTime(),
+    sessions: 1,
+    requests: 5,
+    toolCalls: 3,
+    changes: 10,
+    linesAdded: 8,
+    linesRemoved: 2,
+    inputTokens: 1000,
+    outputTokens: 200,
+    cachedTokens: 800,
+    thoughtsTokens: 10,
+    totalTokens: 1200,
+    cachePct: 80,
+    models: [],
+    skills: [],
+  };
+
+  it('prefers the resolved history-panel title', () => {
+    expect(sessionDisplayName({ ...base, title: '修 Bug 会话' })).toBe('修 Bug 会话');
+  });
+
+  it('falls back to a local date-time, never a truncated session id', () => {
+    const label = sessionDisplayName(base);
+    expect(label).toBe('2026-10-15 09:30');
+    expect(label).not.toContain('c30309ab');
+  });
+
+  it('uses the session end when the start is unknown', () => {
+    expect(sessionDisplayName({ ...base, startTimeMs: 0 })).toBe('2026-10-15 11:00');
+  });
+});
+
+describe('samePath', () => {
+  it('matches case-insensitively and ignores trailing separators', () => {
+    expect(samePath('D:\\Code\\Qwen', 'd:\\code\\qwen')).toBe(true);
+    expect(samePath('D:\\Code\\Qwen\\', 'D:\\Code\\Qwen')).toBe(true);
+    expect(samePath('/home/dev', '/home/dev/')).toBe(true);
+  });
+
+  it('rejects different paths and empty input', () => {
+    expect(samePath('D:\\a', 'D:\\b')).toBe(false);
+    expect(samePath(undefined, 'D:\\a')).toBe(false);
+    expect(samePath('D:\\a', undefined)).toBe(false);
+    expect(samePath('', '')).toBe(false);
+  });
+});
+
+describe('sessionSpansMultipleDays', () => {
+  const session = (startTimeMs: number, timestampMs: number): UsageSessionGroup => ({
+    sessionId: 's1',
+    project: 'D:\\p',
+    startMs: 0,
+    endMs: 0,
+    startTimeMs,
+    timestampMs,
+    sessions: 1,
+    requests: 1,
+    toolCalls: 0,
+    changes: 0,
+    linesAdded: 0,
+    linesRemoved: 0,
+    inputTokens: 1,
+    outputTokens: 1,
+    cachedTokens: 0,
+    thoughtsTokens: 0,
+    totalTokens: 2,
+    cachePct: 0,
+    models: [],
+    skills: [],
+  });
+
+  it('is false for a session contained in one local day', () => {
+    // Local-time construction: the gate compares LOCAL dates, so UTC-based
+    // fixtures would flip meaning depending on the runner's timezone.
+    const sameDay = session(
+      new Date(2026, 9, 15, 9).getTime(),
+      new Date(2026, 9, 15, 18).getTime(),
+    );
+    expect(sessionSpansMultipleDays(sameDay)).toBe(false);
+  });
+
+  it('is true when start and end fall on different local days', () => {
+    const crossDay = session(
+      new Date(2026, 9, 15, 20).getTime(),
+      new Date(2026, 9, 16, 4).getTime(),
+    );
+    expect(sessionSpansMultipleDays(crossDay)).toBe(true);
   });
 });

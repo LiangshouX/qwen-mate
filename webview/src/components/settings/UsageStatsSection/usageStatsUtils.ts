@@ -1,4 +1,8 @@
-import type { UsageHeatmap, UsageRangeKey } from '../../../types/usage';
+import type {
+  UsageHeatmap,
+  UsageRangeKey,
+  UsageSessionGroup,
+} from '../../../types/usage';
 
 export interface RangeDef {
   key: UsageRangeKey;
@@ -11,7 +15,135 @@ export const RANGES: RangeDef[] = [
   { key: 'd30', labelKey: 'settings.usageStats.range.d30' },
 ];
 
+export type UsageDimensionKey = 'all' | 'project' | 'session';
+
+export interface DimensionDef {
+  key: UsageDimensionKey;
+  labelKey: string;
+}
+
+export const DIMENSIONS: DimensionDef[] = [
+  { key: 'all', labelKey: 'settings.usageStats.dimension.all' },
+  { key: 'project', labelKey: 'settings.usageStats.dimension.project' },
+  { key: 'session', labelKey: 'settings.usageStats.dimension.session' },
+];
+
 const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** Last path segment of a cwd path (handles both separators). */
+export function pathBasename(path: string): string {
+  if (!path) {
+    return '';
+  }
+  const segments = path.split(/[\\/]/).filter(Boolean);
+  return segments.length > 0 ? segments[segments.length - 1] : path;
+}
+
+/** Last two path segments, e.g. "qwen-mate/ai-bridge" — disambiguates duplicate dir names. */
+export function pathTail(path: string): string {
+  const segments = path.split(/[\\/]/).filter(Boolean);
+  if (segments.length >= 2) {
+    return segments.slice(-2).join('/');
+  }
+  return segments.length === 1 ? segments[0] : path;
+}
+
+/**
+ * Display name for a project group: the directory name, escalated to the
+ * last two path segments when several groups share a directory name, and
+ * falling back to the full path when the "directory" is a drive root or
+ * otherwise has no meaningful name (e.g. "C:\\Users\\31770" keeps its
+ * basename only when it looks like a project — the caller passes
+ * {@code duplicateNames} and {@code homePath} to decide).
+ */
+export function projectDisplayName(
+  path: string,
+  duplicateNames: Set<string>,
+  homePath?: string,
+): string {
+  if (!path) {
+    return '';
+  }
+  const normalizedHome = homePath ? homePath.replace(/[\\/]+$/, '') : undefined;
+  if (normalizedHome && path.replace(/[\\/]+$/, '').toLowerCase() === normalizedHome.toLowerCase()) {
+    return path;
+  }
+  const base = pathBasename(path);
+  // Drive roots ("D:\\") and bare separators have no usable dir name.
+  if (!base || /^[a-zA-Z]:$/.test(base)) {
+    return path;
+  }
+  if (duplicateNames.has(base.toLowerCase())) {
+    return pathTail(path);
+  }
+  return base;
+}
+
+/** Collects directory names that appear in more than one project group (case-insensitive). */
+export function duplicateBaseNames(paths: string[]): Set<string> {
+  const counts = new Map<string, number>();
+  for (const path of paths) {
+    const base = pathBasename(path).toLowerCase();
+    if (base) {
+      counts.set(base, (counts.get(base) ?? 0) + 1);
+    }
+  }
+  const duplicates = new Set<string>();
+  for (const [base, count] of counts) {
+    if (count > 1) {
+      duplicates.add(base);
+    }
+  }
+  return duplicates;
+}
+
+/** Local yyyy-MM-dd for an epoch-ms timestamp. */
+export function localDateIso(ms: number): string {
+  const d = new Date(ms);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/** Local yyyy-MM-dd HH:mm — labels sessions whose transcript has no title. */
+export function localDateTimeIso(ms: number): string {
+  const d = new Date(ms);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${localDateIso(ms)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/**
+ * Path equality ignoring case and trailing separators (Windows cwds like
+ * `D:\x` vs `d:\x\` must match the same project group).
+ */
+export function samePath(a?: string | null, b?: string | null): boolean {
+  if (!a || !b) {
+    return false;
+  }
+  const normalize = (p: string) => p.replace(/[\\/]+$/, '').toLowerCase();
+  return normalize(a) === normalize(b);
+}
+
+/**
+ * Display name for a session row: the history-panel title when one was
+ * resolved (the same name /resume shows); sessions whose transcript is gone
+ * fall back to a local date-time — never a truncated session id, which only
+ * ever confused readers.
+ */
+export function sessionDisplayName(session: UsageSessionGroup): string {
+  if (session.title) {
+    return session.title;
+  }
+  return localDateTimeIso(session.startTimeMs || session.timestampMs);
+}
+
+/**
+ * Whether a session's activity spans more than one local day — the gate for
+ * showing the session-dimension line chart (a one-day chart is a single
+ * useless point).
+ */
+export function sessionSpansMultipleDays(session: UsageSessionGroup): boolean {
+  return localDateIso(session.startTimeMs) !== localDateIso(session.timestampMs);
+}
 
 /**
  * Token formatting matching Qwen Code Desktop: one decimal in millions

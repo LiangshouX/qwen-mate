@@ -193,9 +193,15 @@ interface Window {
 
   /**
    * Settings → 用量统计 snapshot pushed by UsageStatsHandler
-   * (windows + heatmap in one payload; { error } on failure).
+   * (windows + dimensions + heatmap in one payload; { error } on failure).
    */
   onUsageStats?: (json: string) => void;
+
+  /**
+   * Lazily rebuilt per-day token series for ONE session (session-dimension
+   * line chart). Payload: { sessionId, daily: [{date, tokens, sessions}], error? }.
+   */
+  onUsageSessionDaily?: (json: string) => void;
 
   /** Buffers the latest usage update received before React callbacks mount. */
   __pendingUsageUpdate?: string;

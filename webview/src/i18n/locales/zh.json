@@ -499,6 +499,17 @@
         "d7": "7天",
         "d30": "30天"
       },
+      "dimension": {
+        "all": "全量",
+        "project": "按项目",
+        "session": "按会话"
+      },
+      "sessions": {
+        "selectLabel": "选择会话"
+      },
+      "projects": {
+        "selectLabel": "选择项目"
+      },
       "hero": {
         "today": "今日",
         "d7": "近 7 天",

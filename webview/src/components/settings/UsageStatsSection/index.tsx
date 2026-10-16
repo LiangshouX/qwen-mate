@@ -1,6 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { UsagePayload, UsageRangeKey } from '../../../types/usage';
+import type {
+  UsageDailyPoint,
+  UsagePayload,
+  UsageRangeKey,
+  UsageSessionDaily,
+  UsageSessionGroup,
+  UsageWindowStats,
+} from '../../../types/usage';
 import {
   ModelShareList,
   SessionsBarChart,
@@ -8,10 +15,17 @@ import {
   UsageHeatmap,
 } from './Charts';
 import {
+  DIMENSIONS,
   RANGES,
+  duplicateBaseNames,
   formatClock,
   formatCount,
   formatTokens,
+  projectDisplayName,
+  samePath,
+  sessionDisplayName,
+  sessionSpansMultipleDays,
+  type UsageDimensionKey,
 } from './usageStatsUtils';
 import styles from './style.module.less';
 
@@ -24,6 +38,11 @@ const UsageStatsSection = () => {
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
   const [range, setRange] = useState<UsageRangeKey>('today');
+  const [dimension, setDimension] = useState<UsageDimensionKey>('all');
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  /** sessionId → lazily rebuilt per-day series (session-dimension line chart). */
+  const [sessionDaily, setSessionDaily] = useState<Record<string, UsageDailyPoint[]>>({});
   const timeoutRef = useRef<number | null>(null);
   const payloadRef = useRef<UsagePayload | null>(null);
 
@@ -55,6 +74,7 @@ const UsageStatsSection = () => {
 
   useEffect(() => {
     const previous = window.onUsageStats;
+    const previousDaily = window.onUsageSessionDaily;
     window.onUsageStats = (json: string) => {
       clearRequestTimeout();
       try {
@@ -71,17 +91,115 @@ const UsageStatsSection = () => {
       }
       setLoading(false);
     };
+    window.onUsageSessionDaily = (json: string) => {
+      try {
+        const parsed = JSON.parse(json) as UsageSessionDaily;
+        if (parsed.sessionId) {
+          setSessionDaily((prev) => ({ ...prev, [parsed.sessionId]: parsed.daily ?? [] }));
+        }
+      } catch {
+        // A malformed daily payload only costs the chart, never the page.
+      }
+    };
     request(false);
     return () => {
       window.onUsageStats = previous;
+      window.onUsageSessionDaily = previousDaily;
       clearRequestTimeout();
     };
   }, [request, clearRequestTimeout]);
 
+  const projectGroups = payload?.dimensions?.projects?.[range] ?? [];
+  const sessionGroups = payload?.dimensions?.sessions?.[range] ?? [];
+  const currentProject = payload?.currentProject;
+
+  // Options = window projects (+ the IDE's current project when the window
+  // has no sessions for it, so the documented default stays selectable).
+  const projectOptions = useMemo(() => {
+    const paths = projectGroups.map((group) => group.project);
+    if (currentProject && !paths.some((path) => samePath(path, currentProject))) {
+      paths.push(currentProject);
+    }
+    return paths;
+  }, [projectGroups, currentProject]);
+  const duplicateNames = useMemo(
+    () => duplicateBaseNames(projectOptions),
+    [projectOptions],
+  );
+
+  // One shared pick for both dimensions: an explicit By Project choice carries
+  // into By Session; with none, the IDE's current project wins, then the
+  // top-ranked window project. A selection missing from the current window
+  // (range switch) is skipped rather than shown empty.
+  const effectiveProjectPath =
+    projectOptions.find((path) => samePath(path, selectedProject)) ??
+    projectOptions.find((path) => samePath(path, currentProject)) ??
+    projectOptions[0] ??
+    '';
+
+  // null when the pick has no data in this window (e.g. the idle current
+  // project) — the stats area then renders the empty state.
+  const activeProject =
+    projectGroups.find((group) => samePath(group.project, effectiveProjectPath)) ?? null;
+
+  const projectSessions = sessionGroups.filter((group) =>
+    samePath(group.project, effectiveProjectPath),
+  );
+  const activeSession =
+    projectSessions.find((group) => group.sessionId === selectedSessionId) ??
+    projectSessions[0] ??
+    null;
+
+  // The session line chart needs per-day data a usage record cannot carry
+  // (it buckets a whole session onto its end date) — fetch it from the
+  // transcript on demand, once per session. The today range hides charts in
+  // every dimension, so it never needs the series.
+  useEffect(() => {
+    if (dimension !== 'session' || range === 'today' || !activeSession) {
+      return;
+    }
+    if (!sessionSpansMultipleDays(activeSession)) {
+      return;
+    }
+    if (sessionDaily[activeSession.sessionId]) {
+      return;
+    }
+    window.sendToJava?.(
+      `get_usage_stats:${JSON.stringify({ sessionDaily: activeSession.sessionId })}`,
+    );
+  }, [dimension, range, activeSession, sessionDaily]);
+
+  const stats: UsageWindowStats | UsageSessionGroup | undefined =
+    dimension === 'project'
+      ? activeProject ?? undefined
+      : dimension === 'session'
+        ? activeSession ?? undefined
+        : payload?.windows?.[range];
+
   const rangeDef = RANGES.find((r) => r.key === range) ?? RANGES[0];
   const rangeLabel = t(rangeDef.labelKey);
-  const heroLabel = t(`settings.usageStats.hero.${range}`);
-  const stats = payload?.windows?.[range];
+  const heroLabel =
+    dimension === 'project' && activeProject
+      ? projectDisplayName(activeProject.project, duplicateNames, payload?.userHome)
+      : dimension === 'session' && activeSession
+        ? sessionDisplayName(activeSession)
+        : t(`settings.usageStats.hero.${range}`);
+
+  // Chart visibility per the agreed rules: the today range hides both charts
+  // in every dimension; the session dimension additionally always hides the
+  // sessions bar chart and shows the line chart only for multi-day sessions.
+  const showBarChart = range !== 'today' && dimension !== 'session';
+  const showLineChart =
+    range !== 'today' &&
+    (dimension === 'session'
+      ? !!activeSession && sessionSpansMultipleDays(activeSession)
+      : true);
+  const lineDaily: UsageDailyPoint[] =
+    dimension === 'session'
+      ? (activeSession ? sessionDaily[activeSession.sessionId] ?? [] : [])
+      : stats && 'daily' in stats
+        ? stats.daily
+        : [];
 
   const status = !payload
     ? loading
@@ -92,6 +210,30 @@ const UsageStatsSection = () => {
       : 'noData';
 
   const statusLabel = t(`settings.usageStats.status.${status}`);
+
+  // Shared project picker for both dimensions: window projects (ranked by
+  // tokens, totals shown in the label) plus the IDE's current project when
+  // the window holds no sessions for it. The raw path rides on the option as
+  // a title for disambiguation.
+  const projectSelect =
+    payload && projectOptions.length > 0 ? (
+      <select
+        className={styles.sessionSelect}
+        aria-label={t('settings.usageStats.projects.selectLabel')}
+        value={effectiveProjectPath}
+        onChange={(event) => setSelectedProject(event.target.value)}
+      >
+        {projectOptions.map((path) => {
+          const group = projectGroups.find((candidate) => samePath(candidate.project, path));
+          const name = projectDisplayName(path, duplicateNames, payload.userHome);
+          return (
+            <option key={path} value={path} title={path}>
+              {group ? `${name} · ${formatTokens(group.totalTokens)}` : name}
+            </option>
+          );
+        })}
+      </select>
+    ) : null;
 
   return (
     <div className={styles.section}>
@@ -166,24 +308,66 @@ const UsageStatsSection = () => {
         </div>
       )}
 
-      {payload && stats && (
-        <>
-          <div className={styles.rangeRow}>
-            {RANGES.map((item) => (
+      {/* Controls live at the payload level: an empty window in a dimension
+          must not take the dimension switcher away. */}
+      {payload && (
+        <div className={styles.rangeRow}>
+          <div className={styles.dimGroup}>
+            {DIMENSIONS.map((item) => (
               <button
                 key={item.key}
                 type="button"
-                className={`${styles.rangeBtn} ${range === item.key ? styles.rangeActive : ''}`}
-                onClick={() => setRange(item.key)}
+                className={`${styles.rangeBtn} ${dimension === item.key ? styles.rangeActive : ''}`}
+                onClick={() => setDimension(item.key)}
               >
                 {t(item.labelKey)}
               </button>
             ))}
           </div>
+          {RANGES.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={`${styles.rangeBtn} ${range === item.key ? styles.rangeActive : ''}`}
+              onClick={() => setRange(item.key)}
+            >
+              {t(item.labelKey)}
+            </button>
+          ))}
+        </div>
+      )}
 
+      {payload && dimension === 'project' && projectSelect && (
+        <div className={styles.sessionRow}>{projectSelect}</div>
+      )}
+
+      {payload && dimension === 'session' && projectSelect && (
+        <div className={styles.sessionRow}>
+          {projectSelect}
+          {projectSessions.length > 0 && (
+            <select
+              className={styles.sessionSelect}
+              aria-label={t('settings.usageStats.sessions.selectLabel')}
+              value={activeSession?.sessionId ?? ''}
+              onChange={(event) => setSelectedSessionId(event.target.value)}
+            >
+              {projectSessions.map((group) => (
+                <option key={group.sessionId} value={group.sessionId}>
+                  {sessionDisplayName(group)}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+      )}
+
+      {payload && stats && (
+        <>
           <div className={styles.heroCard}>
             <div className={styles.heroTop}>
-              <span className={styles.heroLabel}>{heroLabel}</span>
+              <span className={styles.heroLabel} title={heroLabel}>
+                {heroLabel}
+              </span>
               <button
                 type="button"
                 className={styles.heroRefresh}
@@ -276,11 +460,11 @@ const UsageStatsSection = () => {
             </div>
           )}
 
-          {range !== 'today' && (
-            <>
-              <TokenLineChart daily={stats.daily} rangeLabel={rangeLabel} />
-              <SessionsBarChart daily={stats.daily} rangeLabel={rangeLabel} />
-            </>
+          {showLineChart && lineDaily.length > 0 && (
+            <TokenLineChart daily={lineDaily} rangeLabel={rangeLabel} />
+          )}
+          {showBarChart && 'daily' in stats && (
+            <SessionsBarChart daily={stats.daily} rangeLabel={rangeLabel} />
           )}
         </>
       )}

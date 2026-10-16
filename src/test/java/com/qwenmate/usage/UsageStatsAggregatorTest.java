@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -297,6 +298,50 @@ public class UsageStatsAggregatorTest {
     }
 
     @Test
+    public void transcriptDailyBucketsTokensPerLocalDayAndZeroFills() throws IOException {
+        Path chat = Files.createTempFile("usage-daily", ".jsonl");
+        try {
+            // Two api_response events on the same day plus one two days later.
+            // UTC noon keeps the local date stable across real-world timezones.
+            Files.write(chat, Arrays.asList(
+                    telemetryLine("2026-10-08T12:00:00.000Z", 100),
+                    telemetryLine("2026-10-08T13:00:00.000Z", 50),
+                    telemetryLine("2026-10-10T12:00:00.000Z", 25)),
+                    StandardCharsets.UTF_8);
+
+            JsonArray daily = UsageDataStore.parseTranscriptDaily(chat);
+
+            assertEquals(3, daily.size());
+            assertEquals("2026-10-08", daily.get(0).getAsJsonObject().get("date").getAsString());
+            assertEquals(150, daily.get(0).getAsJsonObject().get("tokens").getAsLong());
+            // The gap day is zero-filled so the chart keeps a continuous axis.
+            assertEquals("2026-10-09", daily.get(1).getAsJsonObject().get("date").getAsString());
+            assertEquals(0, daily.get(1).getAsJsonObject().get("tokens").getAsLong());
+            assertEquals(25, daily.get(2).getAsJsonObject().get("tokens").getAsLong());
+        } finally {
+            Files.deleteIfExists(chat);
+        }
+    }
+
+    @Test
+    public void transcriptDailyWithoutTelemetryYieldsEmptySeries() throws IOException {
+        Path chat = Files.createTempFile("usage-daily-empty", ".jsonl");
+        try {
+            Files.write(chat, List.of("{\"timestamp\":\"2026-10-09T02:00:00.000Z\",\"type\":\"user\"}"),
+                    StandardCharsets.UTF_8);
+            assertEquals(0, UsageDataStore.parseTranscriptDaily(chat).size());
+        } finally {
+            Files.deleteIfExists(chat);
+        }
+    }
+
+    private static String telemetryLine(String isoTimestamp, long totalTokens) {
+        return "{\"timestamp\":\"" + isoTimestamp + "\",\"type\":\"system\",\"subtype\":\"ui_telemetry\","
+                + "\"systemPayload\":{\"uiEvent\":{\"event.name\":\"qwen-code.api_response\","
+                + "\"model\":\"m\",\"total_token_count\":" + totalTokens + "}}}";
+    }
+
+    @Test
     public void supportedPayloadCarriesCliVersionMetadata() {
         JsonObject p = payload(List.of(record("s", NOW, "m", model(1, 1, 0, 0, 0, 1))));
         assertTrue(p.get("supported").getAsBoolean());
@@ -304,5 +349,82 @@ public class UsageStatsAggregatorTest {
         assertEquals("0.18.0", p.get("minSupportedVersion").getAsString());
         assertEquals(NOW, p.get("latestRecordMs").getAsLong());
         assertEquals("/tmp/usage_record.jsonl", p.get("dataFile").getAsString());
+    }
+
+    @Test
+    public void dimensionsGroupProjectsByPathAndRankByTokens() {
+        JsonObject big = record("s1", at(LocalDate.of(2026, 10, 9), 8), "m",
+                model(5, 5000, 500, 4000, 0, 5500));
+        big.addProperty("project", "D:\\Code\\big");
+        JsonObject small = record("s2", at(LocalDate.of(2026, 10, 9), 9), "m",
+                model(1, 100, 10, 80, 0, 110));
+        small.addProperty("project", "D:\\Code\\small");
+
+        JsonObject p = payload(Arrays.asList(big, small));
+        JsonArray todayProjects = p.getAsJsonObject("dimensions")
+                .getAsJsonObject("projects").getAsJsonArray("today");
+
+        assertEquals(2, todayProjects.size());
+        // Ranked by totalTokens desc — the bigger project leads.
+        assertEquals("D:\\Code\\big", todayProjects.get(0).getAsJsonObject().get("project").getAsString());
+        assertEquals(5500, todayProjects.get(0).getAsJsonObject().get("totalTokens").getAsLong());
+        assertEquals("D:\\Code\\small", todayProjects.get(1).getAsJsonObject().get("project").getAsString());
+        // Project groups keep their daily series (the detail view charts it).
+        assertTrue(todayProjects.get(0).getAsJsonObject().getAsJsonArray("daily").size() >= 1);
+    }
+
+    @Test
+    public void dimensionsListSessionsNewestFirstWithResolvedTitles() {
+        JsonObject older = record("s-old", at(LocalDate.of(2026, 10, 8), 9), "m",
+                model(1, 10, 0, 0, 0, 10));
+        older.addProperty("project", "D:\\Code\\a");
+        JsonObject newer = record("s-new", at(LocalDate.of(2026, 10, 9), 10), "m",
+                model(2, 20, 0, 0, 0, 20));
+        newer.addProperty("project", "D:\\Code\\b");
+
+        UsageSnapshot snapshot = new UsageSnapshot(
+                Arrays.asList(older, newer), true, "/tmp/usage_record.jsonl", 2, 0);
+        JsonObject p = UsageStatsAggregator.buildPayload(
+                snapshot, NOW, "0.25.0", "0.18.0", Map.of("s-old", "修 Bug 会话"));
+
+        // The Oct 8 record is outside the today window; d7 holds both.
+        JsonArray todaySessions = p.getAsJsonObject("dimensions")
+                .getAsJsonObject("sessions").getAsJsonArray("today");
+        assertEquals(1, todaySessions.size());
+        JsonObject first = todaySessions.get(0).getAsJsonObject();
+        assertEquals("s-new", first.get("sessionId").getAsString());
+        assertEquals("D:\\Code\\b", first.get("project").getAsString());
+        assertEquals(at(LocalDate.of(2026, 10, 9), 10), first.get("timestampMs").getAsLong());
+        // Resolved title is attached; unresolved sessions omit the field.
+        assertFalse(first.has("title"));
+
+        JsonArray d7Sessions = p.getAsJsonObject("dimensions")
+                .getAsJsonObject("sessions").getAsJsonArray("d7");
+        assertEquals(2, d7Sessions.size());
+        // Newest first across the whole window.
+        assertEquals("s-new", d7Sessions.get(0).getAsJsonObject().get("sessionId").getAsString());
+        JsonObject second = d7Sessions.get(1).getAsJsonObject();
+        assertEquals("s-old", second.get("sessionId").getAsString());
+        assertEquals("修 Bug 会话", second.get("title").getAsString());
+        // Session rows are slim: no zero-filled daily series.
+        assertFalse(first.has("daily") && first.getAsJsonArray("daily").size() > 1);
+    }
+
+    @Test
+    public void dimensionsExcludeSessionsOutsideTheWindow() {
+        JsonObject old = record("s-old", at(LocalDate.of(2026, 8, 1), 9), "m",
+                model(1, 10, 0, 0, 0, 10));
+        JsonObject today = record("s-now", at(LocalDate.of(2026, 10, 9), 9), "m",
+                model(1, 10, 0, 0, 0, 10));
+
+        JsonObject p = payload(Arrays.asList(old, today));
+
+        JsonArray todaySessions = p.getAsJsonObject("dimensions")
+                .getAsJsonObject("sessions").getAsJsonArray("today");
+        assertEquals(1, todaySessions.size());
+        assertEquals("s-now", todaySessions.get(0).getAsJsonObject().get("sessionId").getAsString());
+        JsonArray todayProjects = p.getAsJsonObject("dimensions")
+                .getAsJsonObject("projects").getAsJsonArray("today");
+        assertEquals(1, todayProjects.size());
     }
 }

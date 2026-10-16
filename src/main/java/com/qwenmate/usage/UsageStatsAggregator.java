@@ -82,6 +82,27 @@ public final class UsageStatsAggregator {
             String cliVersion,
             String minSupportedVersion
     ) {
+        return buildPayload(snapshot, nowMs, cliVersion, minSupportedVersion, Map.of());
+    }
+
+    /**
+     * Dimension-aware variant: additionally groups each window by project
+     * (full stats per group, including the daily series the charts need) and
+     * by session (slim stats; the per-day series for a selected session is
+     * rebuilt from its transcript on demand). Session groups carry a
+     * {@code title} when {@code sessionTitles} provides one — the same title
+     * chain the history panel renders; sessions without one fall back to a
+     * truncated id on the frontend.
+     *
+     * @param sessionTitles sessionId → display title (see SessionTitleIndex)
+     */
+    public static JsonObject buildPayload(
+            UsageSnapshot snapshot,
+            long nowMs,
+            String cliVersion,
+            String minSupportedVersion,
+            Map<String, String> sessionTitles
+    ) {
         ZoneId zone = ZoneId.systemDefault();
         List<JsonObject> records = snapshot.records;
 
@@ -118,11 +139,35 @@ public final class UsageStatsAggregator {
         payload.add("windows", windows);
 
         payload.add("heatmap", heatmapStats(records, nowMs, zone));
+
+        JsonObject dimensions = new JsonObject();
+        JsonObject projects = new JsonObject();
+        projects.add(WINDOW_TODAY, projectGroups(records, todayStartMs, nowMs, zone));
+        projects.add(WINDOW_7D, projectGroups(records, nowMs - 7 * DAY_MS, nowMs, zone));
+        projects.add(WINDOW_30D, projectGroups(records, nowMs - 30 * DAY_MS, nowMs, zone));
+        dimensions.add("projects", projects);
+        JsonObject sessions = new JsonObject();
+        sessions.add(WINDOW_TODAY, sessionGroups(records, todayStartMs, nowMs, zone, sessionTitles));
+        sessions.add(WINDOW_7D, sessionGroups(records, nowMs - 7 * DAY_MS, nowMs, zone, sessionTitles));
+        sessions.add(WINDOW_30D, sessionGroups(records, nowMs - 30 * DAY_MS, nowMs, zone, sessionTitles));
+        dimensions.add("sessions", sessions);
+        payload.add("dimensions", dimensions);
         return payload;
     }
 
     /** Window aggregate: headline counters, token split, models, skills, daily buckets. */
     static JsonObject windowStats(List<JsonObject> records, long startMs, long endMs, ZoneId zone) {
+        return windowStats(records, startMs, endMs, zone, true);
+    }
+
+    /**
+     * Window aggregate with an optional daily series. Group rows pass
+     * {@code withDaily=false}: a session's own tokens all land on one bucket
+     * anyway, and dropping the zero-filled series keeps a 30-day window's
+     * session list from bloating the payload.
+     */
+    static JsonObject windowStats(List<JsonObject> records, long startMs, long endMs,
+                                  ZoneId zone, boolean withDaily) {
         long sessions = 0;
         long requests = 0;
         long toolCalls = 0;
@@ -258,17 +303,19 @@ public final class UsageStatsAggregator {
 
         // Zero-filled daily buckets so charts keep a continuous x axis.
         JsonArray dailyArray = new JsonArray();
-        LocalDate cursor = Instant.ofEpochMilli(startMs).atZone(zone).toLocalDate();
-        LocalDate last = Instant.ofEpochMilli(endMs).atZone(zone).toLocalDate();
-        while (!cursor.isAfter(last)) {
-            String key = cursor.format(ISO_DATE);
-            long[] bucket = daily.getOrDefault(key, new long[2]);
-            JsonObject day = new JsonObject();
-            day.addProperty("date", key);
-            day.addProperty("tokens", bucket[0]);
-            day.addProperty("sessions", bucket[1]);
-            dailyArray.add(day);
-            cursor = cursor.plusDays(1);
+        if (withDaily) {
+            LocalDate cursor = Instant.ofEpochMilli(startMs).atZone(zone).toLocalDate();
+            LocalDate last = Instant.ofEpochMilli(endMs).atZone(zone).toLocalDate();
+            while (!cursor.isAfter(last)) {
+                String key = cursor.format(ISO_DATE);
+                long[] bucket = daily.getOrDefault(key, new long[2]);
+                JsonObject day = new JsonObject();
+                day.addProperty("date", key);
+                day.addProperty("tokens", bucket[0]);
+                day.addProperty("sessions", bucket[1]);
+                dailyArray.add(day);
+                cursor = cursor.plusDays(1);
+            }
         }
         stats.add("daily", dailyArray);
         return stats;
@@ -336,6 +383,79 @@ public final class UsageStatsAggregator {
         heatmap.add("cachePct", cacheJson);
         heatmap.addProperty("maxDayTokens", max);
         return heatmap;
+    }
+
+    /**
+     * Per-project groups of one window, ranked by token share — the same
+     * shape qwen-code's {@code aggregateUsage()} exposes as {@code projects}.
+     * Each group is a full window-stats object (daily series included, the
+     * project detail view charts it) plus the raw {@code project} path; the
+     * frontend derives the display name from it.
+     */
+    static JsonArray projectGroups(List<JsonObject> records, long startMs, long endMs, ZoneId zone) {
+        Map<String, List<JsonObject>> byProject = new LinkedHashMap<>();
+        for (JsonObject record : records) {
+            long ts = longField(record, "timestamp");
+            if (ts < startMs || ts > endMs) {
+                continue;
+            }
+            String project = record.has("project") && record.get("project").isJsonPrimitive()
+                    ? record.get("project").getAsString()
+                    : "";
+            byProject.computeIfAbsent(project, k -> new ArrayList<>()).add(record);
+        }
+
+        List<JsonObject> groups = new ArrayList<>();
+        for (Map.Entry<String, List<JsonObject>> entry : byProject.entrySet()) {
+            JsonObject stats = windowStats(entry.getValue(), startMs, endMs, zone);
+            stats.addProperty("project", entry.getKey());
+            groups.add(stats);
+        }
+        groups.sort((a, b) -> Long.compare(b.get("totalTokens").getAsLong(), a.get("totalTokens").getAsLong()));
+        JsonArray array = new JsonArray();
+        for (JsonObject group : groups) {
+            array.add(group);
+        }
+        return array;
+    }
+
+    /**
+     * Per-session rows of one window, most recent first. Rows are slim — the
+     * zero-filled daily series is dropped (a session record buckets onto a
+     * single day anyway) and the per-day line chart is fetched on demand from
+     * the transcript when the user selects a session that spans days.
+     * {@code title} is only present when the history-panel title chain
+     * resolved one; the frontend falls back to a truncated session id.
+     */
+    static JsonArray sessionGroups(List<JsonObject> records, long startMs, long endMs,
+                                   ZoneId zone, Map<String, String> sessionTitles) {
+        List<JsonObject> rows = new ArrayList<>();
+        for (JsonObject record : records) {
+            long ts = longField(record, "timestamp");
+            if (ts < startMs || ts > endMs) {
+                continue;
+            }
+            JsonObject row = windowStats(List.of(record), ts, ts, zone, false);
+            String sessionId = record.has("sessionId") ? record.get("sessionId").getAsString() : "";
+            row.addProperty("sessionId", sessionId);
+            row.addProperty("startTimeMs", longField(record, "startTime"));
+            row.addProperty("timestampMs", ts);
+            String project = record.has("project") && record.get("project").isJsonPrimitive()
+                    ? record.get("project").getAsString()
+                    : "";
+            row.addProperty("project", project);
+            String title = sessionTitles.get(sessionId);
+            if (title != null && !title.isBlank()) {
+                row.addProperty("title", title);
+            }
+            rows.add(row);
+        }
+        rows.sort((a, b) -> Long.compare(b.get("timestampMs").getAsLong(), a.get("timestampMs").getAsLong()));
+        JsonArray array = new JsonArray();
+        for (JsonObject row : rows) {
+            array.add(row);
+        }
+        return array;
     }
 
     private static long startOfDayMs(long nowMs, ZoneId zone) {

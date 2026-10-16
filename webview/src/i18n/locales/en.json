@@ -499,6 +499,17 @@
         "d7": "7 days",
         "d30": "30 days"
       },
+      "dimension": {
+        "all": "All",
+        "project": "By project",
+        "session": "By session"
+      },
+      "sessions": {
+        "selectLabel": "Select session"
+      },
+      "projects": {
+        "selectLabel": "Select project"
+      },
       "hero": {
         "today": "Today",
         "d7": "Last 7 days",
