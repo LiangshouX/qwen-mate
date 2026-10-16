@@ -9,7 +9,7 @@ Core capabilities today:
 - Conversation: streaming output, thinking display, context references (@ / # / !), image attachments, prompt enhancer, five reasoning effort levels, slash commands aligned with Qwen Code, and a message queue (`Ctrl+Q`, same as the CLI)
 - IDE integration: editor context actions and shortcuts, file tree and console content sending, run output monitoring, Commit AI, approvals and diffs
 - Ecosystem: MCP server management, Skills management, session history and templates
-- Usage: a settings page with local token consumption, model share, daily trend, and a 12-month heatmap, switchable across today / 7 days / 30 days
+- Usage: a settings page with local token consumption, model share, daily trend, and a 12-month heatmap, switchable across today / 7 days / 30 days and All / By project / By session
 - Configuration: shares `~/.qwen/settings.json` with the Qwen Code CLI; plugin-side configuration is a read-only view
 
 See [CHANGELOG](https://github.com/LiangshouX/qwen-mate/blob/main/CHANGELOG.md) in the repository for version history.

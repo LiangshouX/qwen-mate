@@ -31,6 +31,7 @@ QwenMate currently supports Qwen Code as its only engine, driving it through the
 - Slash commands aligned with the Qwen Code command set; commands unavailable in the current mode are rejected locally instead of failing after a full turn
 - Message queue: sending while the AI is working queues the message instead of interrupting it; queued messages are sent when the current task finishes, and each one can be put back in the input box for editing or restored all at once (`Ctrl+Q` is the explicit queue shortcut, matching the CLI)
 - Managed memory toggle in the input box settings popover (off by default)
+- Context usage indicator: the input area header shows current context occupancy, updating live while a task runs
 
 ### IDE Integration
 - Editor context actions to send selected code (`Ctrl+Alt+K` / `Cmd+Alt+K`), quick fix (`Ctrl+Shift+Q`)
@@ -40,7 +41,7 @@ QwenMate currently supports Qwen Code as its only engine, driving it through the
 
 ### Developer Experience
 - Code DIFF comparison and file navigation
-- Usage statistics: local token consumption with today / 7-day / 30-day windows, model share, daily trends, and a 12-month heatmap
+- Usage statistics: local token consumption with today / 7-day / 30-day windows and all / by-project / by-session dimensions, model share, daily trends, and a 12-month heatmap
 - MCP servers: built-in marketplace, add/edit/remove, connection status and tool lists
 - Skills: browse and manage Qwen Code skills
 - Dark/Light theme with IDE font synchronization

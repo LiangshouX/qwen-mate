@@ -32,7 +32,7 @@ Guidance for incomplete installs and version rollbacks surfaces here as well.
 
 ## Usage Stats
 
-Local usage data written by the Qwen Code CLI: token consumption, sessions, requests, tool calls, and lines of code changed. Three time windows (today / 7 days / 30 days) with a token split, model share, skill ranking, a daily trend, and a 12-month heatmap; refresh on demand. If your Qwen Code version is too old to record usage data, the page shows a version notice.
+Local usage data written by the Qwen Code CLI: token consumption, sessions, requests, tool calls, and lines of code changed. The dimension switches between All / By project / By session (session view shows the selected session for the whole page, and the trend line only for sessions spanning multiple days), across three time windows (today / 7 days / 30 days), with a token split, model share, skill ranking, a daily trend, and a 12-month heatmap; refresh on demand. If your Qwen Code version is too old to record usage data, the page shows a version notice.
 
 ## MCP Servers
 

@@ -2,7 +2,7 @@
 
 ## Open QwenMate
 
-Click the QwenMate icon in the right sidebar of the IDE to open the tool window. The gear icon in the panel header leads to all settings.
+Click the QwenMate icon in the right sidebar of the IDE to open the tool window. The gear icon in the panel header leads to all settings; the title bar also has a refresh icon (rebuilds the interface after a blank page) and a "Documentation" icon that opens the help site.
 
 ## First-use checklist
 
@@ -18,6 +18,7 @@ Before sending your first message:
 - Replies stream in with the thinking process displayed as it happens
 - You can stop generation at any time
 - Messages sent while the AI is generating do not interrupt the current task; they queue up and are sent one after another when it finishes, and any queued message can be put back into the input box for editing or all of them restored at once (`Ctrl+Q` is the explicit queue shortcut, matching the CLI)
+- The input area header shows the context usage percentage, updating live while a task runs
 
 ## Build context
 
