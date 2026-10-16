@@ -32,6 +32,8 @@ public class QwenMessageHandler implements MessageCallback {
 
     private final SessionState state;
     private final CallbackHandler callbackHandler;
+    /** Optional: lets end-of-turn usage fall back to the CLI's context snapshot. */
+    private final QwenSDKBridge qwenSDKBridge;
     private final Gson gson = new Gson();
     /** Same merger as Claude: preserves mid-turn tool_use when final text snapshots arrive. */
     private final MessageMerger messageMerger = new MessageMerger();
@@ -61,9 +63,16 @@ public class QwenMessageHandler implements MessageCallback {
         return (System.currentTimeMillis() - turnStartMillis) + "ms";
     }
 
+    /** Without a bridge there is no end-of-turn context fallback; tests use this. */
     public QwenMessageHandler(SessionState state, CallbackHandler callbackHandler) {
+        this(state, callbackHandler, null);
+    }
+
+    public QwenMessageHandler(SessionState state, CallbackHandler callbackHandler,
+                              QwenSDKBridge qwenSDKBridge) {
         this.state = state;
         this.callbackHandler = callbackHandler;
+        this.qwenSDKBridge = qwenSDKBridge;
     }
 
     @Override
@@ -317,6 +326,9 @@ public class QwenMessageHandler implements MessageCallback {
                 if (currentAssistantMessage.raw == null) {
                     currentAssistantMessage.raw = new JsonObject();
                 }
+                // The result envelope's usage is session-cumulative
+                // (computeUsageFromMetrics across every round), not this turn's
+                // context occupancy — record it for cost only, never for the ring.
                 currentAssistantMessage.raw.add("turnUsage", resultJson.get("usage").deepCopy());
                 Double turnCostUsd = UsageCostCalculator.calculateTurnCostUsd(
                         "qwen", resultJson.get("usage").getAsJsonObject(), state.getModel());
@@ -532,15 +544,8 @@ public class QwenMessageHandler implements MessageCallback {
             message.add("usage", storedUsage);
             currentAssistantMessage.raw.add("message", message);
 
-            int used = QwenSDKBridge.extractUsedTokens(storedUsage);
-            if (used > 0) {
-                int maxTokens = TokenUsageUtils.extractMaxTokens(storedUsage,
-                        ModelProviderHandler.getModelContextLimit(state.getModel()));
-                LOG.info("Qwen [USAGE] context ring: used=" + used + " max=" + maxTokens
-                        + " model=" + state.getModel());
-                callbackHandler.notifyUsageUpdate(used, maxTokens);
-            } else {
-                LOG.warn("Qwen [USAGE] received but extractUsedTokens=0 payload=" + content);
+            if (!pushContextUsage(storedUsage)) {
+                LOG.warn("Qwen [USAGE] received but no usable token count, payload=" + content);
             }
             callbackHandler.notifyMessageUpdate(state.getMessages());
         } catch (Exception e) {
@@ -683,21 +688,97 @@ public class QwenMessageHandler implements MessageCallback {
         Message target = assistantMessageForCurrentStream != null
                 ? assistantMessageForCurrentStream
                 : currentAssistantMessage;
-        if (target == null) {
+        // No assistant bubble at all is exactly when the fallback matters: a round
+        // that produced nothing usable must still not leave the ring behind.
+        JsonObject usage = target == null ? null : extractUsageFromAssistantRaw(target.raw);
+        if (pushContextUsage(usage)) {
             return;
         }
-        JsonObject usage = extractUsageFromAssistantRaw(target.raw);
+        pushContextUsageFromCliSnapshot();
+    }
+
+    /**
+     * Forward one usage payload to the context ring. The count uses the
+     * context-window reading (input + cache, no output) so this path, history
+     * reload and the coalescer's {@code buildUsageUpdateJson} report one
+     * percentage for the same data.
+     *
+     * @return true when a non-zero usage reached the webview
+     */
+    private boolean pushContextUsage(JsonObject usage) {
         if (usage == null) {
-            return;
+            return false;
         }
-        int used = QwenSDKBridge.extractUsedTokens(usage);
+        int used = TokenUsageUtils.extractContextTokens(usage, state.getProvider());
         if (used <= 0) {
-            return;
+            // Some gateways only report total_tokens; keep the ring alive with it.
+            used = QwenSDKBridge.extractUsedTokens(usage);
+        }
+        if (used <= 0) {
+            return false;
         }
         int maxTokens = TokenUsageUtils.extractMaxTokens(usage,
-                ModelProviderHandler.getModelContextLimit(state.getModel()));
-        LOG.info("Qwen stream_end context ring push: used=" + used + " max=" + maxTokens);
+                ModelProviderHandler.getModelContextLimit(state.getProvider(), state.getModel()));
         callbackHandler.notifyUsageUpdate(used, maxTokens);
+        LOG.info("Qwen context ring push: used=" + used + " max=" + maxTokens
+                + " model=" + state.getModel());
+        return true;
+    }
+
+    /**
+     * End-of-turn fallback for sessions whose rounds carried no {@code [USAGE]}:
+     * ask the CLI for its own context snapshot instead of leaving the ring on its
+     * previous value. A normal turn never reaches this — per-round usage has
+     * already pushed by then.
+     */
+    private void pushContextUsageFromCliSnapshot() {
+        if (qwenSDKBridge == null) {
+            return;
+        }
+        try {
+            qwenSDKBridge.getContextUsage(state.getSessionId(), state.getCwd(), state.getModel())
+                    .thenAccept(snapshot -> {
+                        if (snapshot == null
+                                || (snapshot.has("success") && !snapshot.get("success").getAsBoolean())) {
+                            return;
+                        }
+                        int used = firstPositive(snapshot, "totalTokens", "usedTokens", "total_tokens");
+                        int maxTokens = firstPositive(snapshot, "maxTokens", "contextWindowSize", "limit");
+                        if (used > 0 && maxTokens > 0) {
+                            callbackHandler.notifyUsageUpdate(used, maxTokens);
+                            LOG.info("Qwen context ring fallback: used=" + used + " max=" + maxTokens);
+                        }
+                    })
+                    .exceptionally(ex -> {
+                        // Logger.error throws AssertionError under the unit-test
+                        // framework, so a failed fallback must stay at debug.
+                        LOG.debug("Qwen context ring fallback failed: " + ex.getMessage());
+                        return null;
+                    });
+        } catch (Exception e) {
+            LOG.debug("Qwen context ring fallback skipped: " + e.getMessage());
+        }
+    }
+
+    /** First positive int among the named keys, or 0. */
+    private static int firstPositive(JsonObject obj, String... keys) {
+        if (obj == null) {
+            return 0;
+        }
+        for (String key : keys) {
+            if (!obj.has(key) || obj.get(key).isJsonNull()) {
+                continue;
+            }
+            try {
+                int value = obj.get(key).getAsInt();
+                if (value > 0) {
+                    return value;
+                }
+            } catch (RuntimeException ignored) {
+                // Malformed provider metadata is skipped, as elsewhere.
+            }
+        }
+        return 0;
     }
 
     /**

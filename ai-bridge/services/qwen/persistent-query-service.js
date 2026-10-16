@@ -265,9 +265,19 @@ export async function consumeQueryStream(result, sessionId) {
         emitContentDelta(content);
       }
 
-      // Track usage from assistant messages
-      if (message.usage) {
-        lastUsage = message.usage;
+      // Track usage from assistant messages. The SDK carries the per-round
+      // usage on `message.message.usage` (SDKAssistantMessage); the top-level
+      // field exists only on the result message, so this check never matched
+      // and the context ring stayed frozen until a history reload. Emitting the
+      // round's usage is what drives the live ring in the webview.
+      const roundUsage = message.message?.usage ?? message.usage;
+      if (roundUsage) {
+        lastUsage = roundUsage;
+        // Sub-agent rounds measure their own context window, not the main
+        // session's, so they must not move the main ring.
+        if (!message.parent_tool_use_id) {
+          emitUsage(roundUsage);
+        }
       }
     }
 

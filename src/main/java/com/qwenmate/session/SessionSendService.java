@@ -174,7 +174,8 @@ public class SessionSendService {
             callbackFacade.notifyStateChange(false, false, "Qwen bridge not available");
             return CompletableFuture.completedFuture(null);
         }
-        QwenMessageHandler handler = new QwenMessageHandler(state, callbackFacade.getCallbackHandler());
+        QwenMessageHandler handler =
+                new QwenMessageHandler(state, callbackFacade.getCallbackHandler(), qwenSDKBridge);
         Boolean streaming = readStreamingEnabled();
         final String runtimeSessionEpoch = state.getRuntimeSessionEpoch();
         final String currentModel = state.getModel();
