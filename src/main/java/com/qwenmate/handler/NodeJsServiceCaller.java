@@ -201,4 +201,94 @@ public class NodeJsServiceCaller {
             }
         }
     }
+
+    /**
+     * Run one provider-config operation in the settings-writer Node service
+     * (services/settings-writer-service.cjs). The payload travels over stdin
+     * so API keys never land in argv or the process environment — only the
+     * (secret-free) settings file paths go through env vars.
+     *
+     * @return the service's JSON result line ({ok, op, snapshot} / {ok:false, code, message})
+     */
+    public String callProviderConfigService(String settingsPath, String projectSettingsPath, String payloadJson) throws Exception {
+        String bridgePath = context.getQwenSDKBridge().getSdkTestDir().getAbsolutePath();
+        String nodePath = context.getQwenSDKBridge().getNodeExecutable();
+        String servicePath = resolveServicePath(nodePath, bridgePath, "settings-writer-service.cjs");
+        if (NodeDetector.isWslPath(nodePath)) {
+            settingsPath = NodeDetector.convertToWslPath(settingsPath);
+            if (projectSettingsPath != null && !projectSettingsPath.isEmpty()) {
+                projectSettingsPath = NodeDetector.convertToWslPath(projectSettingsPath);
+            }
+        }
+        String nodeScript =
+            "let d = '';" +
+            "process.stdin.setEncoding('utf8');" +
+            "process.stdin.on('data', c => d += c);" +
+            "process.stdin.on('end', () => {" +
+            "  let r;" +
+            "  try {" +
+            "    const s = require(process.argv[1]);" +
+            "    r = s.runProviderConfigOp(process.env.QWM_SETTINGS_PATH || '', process.env.QWM_PROJECT_SETTINGS_PATH || '', d);" +
+            "  } catch (e) {" +
+            "    r = { ok: false, code: 'internal_error', message: String((e && e.message) || e) };" +
+            "  }" +
+            "  process.stdout.write('\\n' + JSON.stringify(r));" +
+            "});";
+
+        ProcessBuilder pb = buildNodeProcessBuilder(nodePath, nodeScript, servicePath);
+        pb.redirectErrorStream(true);
+        pb.environment().put("QWM_SETTINGS_PATH", settingsPath == null ? "" : settingsPath);
+        pb.environment().put("QWM_PROJECT_SETTINGS_PATH", projectSettingsPath == null ? "" : projectSettingsPath);
+        return executeNodeScriptWithStdin(pb, payloadJson == null ? "" : payloadJson);
+    }
+
+    /**
+     * Same as {@link #executeNodeScript} but feeds a UTF-8 payload to the
+     * child's stdin before draining stdout. The child consumes stdin
+     * continuously, so large payloads cannot deadlock against its output.
+     */
+    private String executeNodeScriptWithStdin(ProcessBuilder pb, String stdinPayload) throws Exception {
+        ProcessManager processManager = context.getQwenSDKBridge().getProcessManager();
+        String channelId = ProcessManager.newChannelId("node-service-stdin");
+        Process process = null;
+        try {
+            process = pb.start();
+            processManager.registerProcess(channelId, process);
+
+            try (java.io.OutputStream stdin = process.getOutputStream()) {
+                stdin.write(stdinPayload.getBytes(StandardCharsets.UTF_8));
+                stdin.flush();
+            }
+
+            StringBuilder output = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
+                }
+            }
+
+            boolean finished = process.waitFor(PROCESS_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            if (!finished) {
+                PlatformUtils.terminateProcess(process);
+                throw new Exception("Node.js provider-config service timed out after " + PROCESS_TIMEOUT_SECONDS + " seconds");
+            }
+
+            int exitCode = process.exitValue();
+            if (exitCode != 0) {
+                throw new Exception("Node.js provider-config service exited with code " + exitCode + ": " + output);
+            }
+
+            String[] lines = output.toString().split("\n");
+            return lines.length > 0 ? lines[lines.length - 1] : "{}";
+        } finally {
+            if (process != null) {
+                if (process.isAlive()) {
+                    PlatformUtils.terminateProcess(process);
+                }
+                processManager.unregisterProcess(channelId, process);
+            }
+        }
+    }
 }

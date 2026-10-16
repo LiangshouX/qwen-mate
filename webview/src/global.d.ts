@@ -1053,6 +1053,20 @@ interface Window {
   qwenConfigResult?: (json: string) => void;
 
   /**
+   * Redacted provider-config snapshot pushed after `get_provider_config`
+   * (and after every mutating op via providerConfigResult's snapshot).
+   * API key values never appear here — only per-key status.
+   * Payload: ProviderConfigResult (see types/providerConfig.ts).
+   */
+  updateProviderConfig?: (json: string) => void;
+
+  /**
+   * Result of a `provider_config_op` call.
+   * Payload: { ok, op?, snapshot?, requestId?, code?, message? }.
+   */
+  providerConfigResult?: (json: string) => void;
+
+  /**
    * Backend notification callback (variadic for backward compatibility).
    * Modern callers pass (type, title, message); legacy callers pass a single
    * JSON string or object with shape { type, title, message }.

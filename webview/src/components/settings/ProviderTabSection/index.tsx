@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import QwenConfigSection from '../QwenConfigSection';
+import ProviderManageSection from '../ProviderManageSection';
 import CliSection from '../CliSection';
-import { useQwenModelOptions } from '../../../hooks/providers/useQwenModelOptions';
 import styles from './style.module.less';
 
 export type ProviderManageTab = 'qwen' | 'cli';
@@ -25,9 +24,6 @@ const ProviderTabSection = ({
     if (initialSubTab) return initialSubTab;
     return 'qwen';
   });
-
-  // Read-only catalog of models configured in ~/.qwen/settings.json.
-  const qwenModelOptions = useQwenModelOptions();
 
   return (
     <div className={styles.providerTabSection}>
@@ -60,10 +56,7 @@ const ProviderTabSection = ({
       {/* Mount only the active sub-tab. */}
       {activeTab === 'qwen' && (
         <div id="panel-qwen-config" role="tabpanel">
-          <QwenConfigSection
-            addToast={addToast}
-            qwenModelOptions={qwenModelOptions}
-          />
+          <ProviderManageSection addToast={addToast} />
         </div>
       )}
 

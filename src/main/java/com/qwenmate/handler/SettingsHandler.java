@@ -33,6 +33,7 @@ public class SettingsHandler extends BaseMessageHandler {
     private ThemeConfigService.RegisteredCallback themeCallbackHandle;
     private final TokenTrackerHandler tokenTrackerHandler;
     private final QwenConfigHandler qwenConfigHandler;
+    private final ProviderConfigHandler providerConfigHandler;
 
     private static final String[] SUPPORTED_TYPES = {
         "get_mode",
@@ -46,6 +47,9 @@ public class SettingsHandler extends BaseMessageHandler {
         "get_qwen_config",
         "set_qwen_config",
         "get_qwen_model_options",
+        // Visual provider/model configuration (Settings → 供应商管理)
+        "get_provider_config",
+        "provider_config_op",
         // TokenTracker local usage dashboard (vendored tokentracker-cli server)
         "tt_detect_cli",
         "tt_install_cli",
@@ -121,6 +125,7 @@ public class SettingsHandler extends BaseMessageHandler {
         this.projectConfigHandler = new ProjectConfigHandler(context);
         this.tokenTrackerHandler = new TokenTrackerHandler(context);
         this.qwenConfigHandler = new QwenConfigHandler(context);
+        this.providerConfigHandler = new ProviderConfigHandler(context);
         // Register theme change listener to automatically notify frontend when IDE theme changes
         registerThemeChangeListener();
     }
@@ -191,6 +196,13 @@ public class SettingsHandler extends BaseMessageHandler {
                 return true;
             case "get_qwen_model_options":
                 qwenConfigHandler.handleGetQwenModelOptions();
+                return true;
+            // Visual provider/model configuration
+            case "get_provider_config":
+                providerConfigHandler.handleGetProviderConfig();
+                return true;
+            case "provider_config_op":
+                providerConfigHandler.handleProviderConfigOp(content);
                 return true;
             // TokenTracker local usage dashboard
             case "tt_detect_cli":
