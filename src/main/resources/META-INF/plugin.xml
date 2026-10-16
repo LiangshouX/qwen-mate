@@ -170,6 +170,11 @@
                 class="com.qwenmate.action.RestartWebviewAction"
                 icon="AllIcons.Actions.Refresh"/>
 
+        <!-- Open the docs site (title bar / gear menu entry, next to the restart action) -->
+        <action id="QwenMate.OpenDocumentationAction"
+                class="com.qwenmate.action.OpenDocumentationAction"
+                icon="AllIcons.General.ReaderMode"/>
+
         <!-- Action to send file path from the file tree to the input box -->
         <action id="QwenMate.SendFilePathToInputAction"
                 class="com.qwenmate.action.editor.SendFilePathToInputAction"

@@ -276,6 +276,9 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
         AnAction restartWebviewAction =
                 ActionManager.getInstance()
                         .getAction("QwenMate.RestartWebviewAction");
+        AnAction openDocumentationAction =
+                ActionManager.getInstance()
+                        .getAction("QwenMate.OpenDocumentationAction");
 
         // Keep the manual restart entry in the title bar unconditionally: the
         // title bar is plain Swing, so it stays clickable while the webview
@@ -283,6 +286,9 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
         List<AnAction> titleActions = new ArrayList<>();
         if (restartWebviewAction != null) {
             titleActions.add(restartWebviewAction);
+        }
+        if (openDocumentationAction != null) {
+            titleActions.add(openDocumentationAction);
         }
         if (PlatformUtils.isPluginDevMode()) {
             AnAction devToolsAction =
@@ -313,6 +319,11 @@ public class QwenMateToolWindow implements ToolWindowFactory, DumbAware {
                 new DefaultActionGroup();
         if (restartWebviewAction != null) {
             gearActions.add(restartWebviewAction);
+        }
+        if (openDocumentationAction != null) {
+            gearActions.add(openDocumentationAction);
+        }
+        if (restartWebviewAction != null || openDocumentationAction != null) {
             gearActions.addSeparator();
         }
         if (renameTabAction != null) {

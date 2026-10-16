@@ -1,8 +1,10 @@
 import { isJavaFqcnCandidate, normalizeFileNavigationTarget, parseFileLinkTarget } from './linkify';
 
 const BRIDGE_UNAVAILABLE_WARNED = new Set<string>();
-/** Help docs site (GitHub Pages), used by the open-source banner. */
+/** Help docs site (GitHub Pages), opened from the tool window title bar. */
 export const DOCS_SITE_URL = 'https://liangshoux.github.io/qwen-mate/';
+/** GitHub repository, linked from the open-source banner. */
+export const GITHUB_REPO_URL = 'https://github.com/LiangshouX/qwen-mate';
 
 const SAFE_BROWSER_PROTOCOLS = /^(https?|mailto):/i;
 

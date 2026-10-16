@@ -60,6 +60,14 @@ public class PluginActionRegistrationTest {
     }
 
     @Test
+    public void documentationActionIsRegisteredWithReaderModeIcon() throws Exception {
+        ActionRegistration openDocsAction = getActionRegistration("QwenMate.OpenDocumentationAction");
+
+        Assert.assertEquals("com.qwenmate.action.OpenDocumentationAction", openDocsAction.actionClass);
+        Assert.assertEquals("AllIcons.General.ReaderMode", openDocsAction.icon);
+    }
+
+    @Test
     public void pluginDeclaresJcefAndUsesStableTemplateActionIcon() throws Exception {
         Document document = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
