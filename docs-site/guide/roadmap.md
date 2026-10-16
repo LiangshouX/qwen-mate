@@ -12,7 +12,7 @@ QwenMate 最新正式版为 1.0.0（2026-10-13 发布），当前开发版本为
 - 用量：设置页用量统计，本机 token 消耗、模型份额、每日趋势与 12 个月热力图，支持今日 / 7 天 / 30 天切换与全量 / 按项目 / 按会话三个维度
 - 配置：与 Qwen Code CLI 共享 `~/.qwen/settings.json`，插件侧配置为只读视图
 
-版本细节与历史见仓库中的 [CHANGELOG](https://github.com/LiangshouX/qwen-mate/blob/main/CHANGELOG.md)。
+版本细节与历史见仓库中的 [CHANGELOG（中文）](https://github.com/LiangshouX/qwen-mate/blob/main/CHANGELOG.zh-CN.md)与 [CHANGELOG（English）](https://github.com/LiangshouX/qwen-mate/blob/main/CHANGELOG.md)。
 
 ## 架构概览
 

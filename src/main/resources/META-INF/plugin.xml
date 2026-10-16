@@ -19,7 +19,11 @@
         <h3>核心功能 / Features</h3>
         <ul>
             <li>智能对话：流式输出与思考过程展示；@ 引用文件、# 唤起智能体、! 插入提示词；图片附件 / Streaming chat with thinking display, @file references, agent and prompt shortcuts, image attachments</li>
+            <li>思考强度与消息排队：5 档思考强度（输入框菜单或 /effort 命令）、AI 工作期间消息自动排队（Ctrl+Q，可放回输入框编辑）、托管记忆开关 / Five reasoning-effort tiers (input menu or /effort), message queue while the AI works (Ctrl+Q, put back to edit), managed memory toggle</li>
+            <li>斜杠命令对齐 Qwen Code 命令表，当前模式不可用的命令本地直接提示 / Slash commands aligned with the Qwen Code command set; unavailable ones are rejected locally</li>
             <li>代码 Diff：可视化对比改动，并跳转到编辑器中定位 / Visual diff with editor navigation</li>
+            <li>用量统计：本机 token 消耗，今日 / 7 天 / 30 天窗口与全量 / 按项目 / 按会话维度，含模型份额、每日趋势与热力图 / Usage statistics: local token consumption across time windows and all / by-project / by-session dimensions, with model share, daily trends and a heatmap</li>
+            <li>上下文用量占比：输入区实时显示当前上下文占用，任务进行中同步更新 / Context usage indicator in the input area, updating live while a task runs</li>
             <li>会话管理：历史记录、恢复、收藏、搜索、导出，AI 自动生成会话标题 / Session history, restore, favorites, search, export, AI-generated titles</li>
             <li>IDE 集成：编辑器右键发送选中代码（<kbd>Ctrl+Alt+K</kbd> / <kbd>Cmd+Alt+K</kbd>）、快速修复（<kbd>Ctrl+Shift+Q</kbd>）、文件树与控制台发送、运行/调试输出监听 / Editor popup actions, quick fix, run/debug output monitoring</li>
             <li>Commit AI：在 Git 提交面板一键生成提交信息 / AI-generated Git commit messages</li>
