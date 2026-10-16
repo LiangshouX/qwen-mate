@@ -16,17 +16,33 @@ import static org.junit.Assert.assertTrue;
 public class TokenUsageUtilsTest {
 
     /**
-     * Verifies context usage includes all input-side cache categories but excludes output.
+     * Verifies context usage is the prompt input alone and excludes output:
+     * Qwen Code counts cache creation/read inside input_tokens, so adding the
+     * cache fields would double-count a warm cache (the 284k-vs-143k regression).
      */
     @Test
-    public void contextTokensExcludeOutputTokens() {
+    public void contextTokensAreTheInclusivePromptInput() {
         JsonObject usage = new JsonObject();
         usage.addProperty("input_tokens", 180000);
         usage.addProperty("cache_creation_input_tokens", 12000);
         usage.addProperty("cache_read_input_tokens", 160000);
         usage.addProperty("output_tokens", 2400);
 
-        assertEquals(352000, TokenUsageUtils.extractContextTokens(usage, "qwen"));
+        assertEquals(180000, TokenUsageUtils.extractContextTokens(usage, "qwen"));
+    }
+
+    /**
+     * Verifies a payload carrying only cache fields still reports occupancy
+     * instead of leaving the ring frozen at an unusable zero.
+     */
+    @Test
+    public void contextTokensFallBackToCacheFieldsWhenInputMissing() {
+        JsonObject usage = new JsonObject();
+        usage.addProperty("cache_creation_input_tokens", 12000);
+        usage.addProperty("cache_read_input_tokens", 160000);
+        usage.addProperty("output_tokens", 2400);
+
+        assertEquals(172000, TokenUsageUtils.extractContextTokens(usage, "qwen"));
     }
 
     /**

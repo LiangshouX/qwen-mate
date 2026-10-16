@@ -15,18 +15,20 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Locks the live context-ring pipeline: a per-round {@code [USAGE]} must reach the
- * webview with the context-window reading (input + cache, no output), end of turn
- * must re-push that snapshot, and a round without usage must fall back to the CLI's
- * own context snapshot instead of leaving the ring frozen.
+ * webview with the context-window reading (prompt input — Qwen Code counts cache
+ * inside input, never output), end of turn must re-push that snapshot, and a round
+ * without usage must fall back to the CLI's own context snapshot instead of leaving
+ * the ring frozen.
  */
 public class QwenMessageHandlerUsageTest {
 
-    /** input 1000 + cache_read 200; output/thought are deliberately NOT context. */
+    /** input 1000 is the full prompt (cache_read 200 counted inside it); output/thought are NOT context. */
     private static final String USAGE_JSON =
             "{\"input_tokens\":1000,\"output_tokens\":500,\"thought_tokens\":50,"
                     + "\"cached_read_tokens\":200,\"total_tokens\":1750}";
 
-    private static final int EXPECTED_CONTEXT_TOKENS = 1200;
+    /** Qwen Code input is cache-inclusive: context = 1000, never 1000 + 200. */
+    private static final int EXPECTED_CONTEXT_TOKENS = 1000;
 
     /** Suffix [500k] drives the static window; the odd name keeps user config out of it. */
     private static final String TEST_MODEL = "usage-test-model[500k]";
@@ -58,7 +60,7 @@ public class QwenMessageHandlerUsageTest {
 
         assertEquals("one ring push per [USAGE] event", 1, callback.usageUpdates.size());
         UsagePush push = callback.usageUpdates.get(0);
-        assertEquals("context window counts input + cache only",
+        assertEquals("context window counts the prompt input alone",
                 EXPECTED_CONTEXT_TOKENS, push.usedTokens);
         assertEquals(EXPECTED_MAX_TOKENS, push.maxTokens);
     }

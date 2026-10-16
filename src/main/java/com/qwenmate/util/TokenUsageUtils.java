@@ -24,15 +24,27 @@ public final class TokenUsageUtils {
         return inputTokens + cacheCreationTokens + cacheReadTokens + outputTokens;
     }
 
+    /**
+     * Context-window occupancy of a usage snapshot (never output or session totals).
+     *
+     * <p>Qwen Code reports {@code input_tokens} as the full prompt count with cache
+     * creation and cache read already inside it (createUsage: input_tokens =
+     * promptTokenCount), so occupancy is the input value alone — adding the cache
+     * fields again double-counts a warm cache (a session showed 284k instead of
+     * 143k this way). Cache fields only carry the reading on their own when a
+     * payload has no input value at all.
+     */
     public static int extractContextTokens(JsonObject usage, String provider) {
         if (usage == null) {
             return 0;
         }
         int input = firstInt(usage, "input_tokens");
-        int cacheCreation = firstInt(usage, "cache_creation_input_tokens", "cached_write_tokens");
-        int cacheRead = firstInt(usage, "cache_read_input_tokens", "cached_read_tokens",
-                "cached_input_tokens", "cached_tokens");
-        return input + cacheCreation + cacheRead;
+        if (input > 0) {
+            return input;
+        }
+        return firstInt(usage, "cache_creation_input_tokens", "cached_write_tokens")
+                + firstInt(usage, "cache_read_input_tokens", "cached_read_tokens",
+                        "cached_input_tokens", "cached_tokens");
     }
 
     /**

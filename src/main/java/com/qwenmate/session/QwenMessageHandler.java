@@ -699,9 +699,9 @@ public class QwenMessageHandler implements MessageCallback {
 
     /**
      * Forward one usage payload to the context ring. The count uses the
-     * context-window reading (input + cache, no output) so this path, history
-     * reload and the coalescer's {@code buildUsageUpdateJson} report one
-     * percentage for the same data.
+     * context-window reading (prompt input — Qwen Code counts cache inside
+     * input, never output) so this path, history reload and the coalescer's
+     * {@code buildUsageUpdateJson} report one percentage for the same data.
      *
      * @return true when a non-zero usage reached the webview
      */
