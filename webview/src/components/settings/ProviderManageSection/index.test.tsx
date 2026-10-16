@@ -14,6 +14,7 @@ const translations: Record<string, string> = {
   'settings.pm.groupCustom': 'Custom Provider',
   'settings.pm.groupCustomBuckets': 'Custom Provider Buckets',
   'settings.pm.groupUnassigned': 'Standalone Models',
+  'settings.pm.envKeyGroupHint': 'envKey grouping hint',
   'settings.pm.unassignedDesc': 'not claimed by presets',
   'settings.pm.customBucketDesc': 'custom bucket',
   'settings.pm.notConfigured': 'Not configured',
@@ -109,6 +110,29 @@ const DEEPSEEK_CATALOG = {
   steps: ['apiKey', 'models'] as ProviderStep[],
 };
 
+const CODING_PLAN_CATALOG = {
+  id: 'coding-plan',
+  label: 'Coding Plan',
+  description: 'For individual developers',
+  uiGroup: 'alibaba' as const,
+  protocol: 'openai',
+  protocolOptions: null,
+  baseUrl: 'https://coding.dashscope.aliyuncs.com/v1',
+  envKey: 'BAILIAN_CODING_PLAN_API_KEY',
+  envKeyGenerated: false,
+  modelNamePrefix: '',
+  models: [{ id: 'qwen3-coder-plus', contextWindowSize: 1000000 }],
+  modelsEditable: true,
+  supportsModelDiscovery: true,
+  showAdvancedConfig: false,
+  apiKeyPlaceholder: 'sk-sp-...',
+  hasKeyValidator: true,
+  documentationUrl: null,
+  customHeaders: null,
+  uiLabels: null,
+  steps: ['apiKey', 'models'] as ProviderStep[],
+};
+
 const CUSTOM_CATALOG = {
   id: 'custom-openai-compatible',
   label: 'Custom Provider',
@@ -137,7 +161,7 @@ function buildSnapshot(overrides: Partial<ProviderConfigSnapshot> = {}): Provide
     settingsPath: 'C:/Users/dev/.qwen/settings.json',
     settingsExists: true,
     parseError: null,
-    catalog: [DEEPSEEK_CATALOG, CUSTOM_CATALOG],
+    catalog: [CODING_PLAN_CATALOG, DEEPSEEK_CATALOG, CUSTOM_CATALOG],
     buckets: {
       openai: [
         {
@@ -152,6 +176,19 @@ function buildSnapshot(overrides: Partial<ProviderConfigSnapshot> = {}): Provide
     },
     providerProtocol: { mygw: 'openai' },
     providers: [
+      {
+        kind: 'preset',
+        id: 'coding-plan',
+        uiGroup: 'alibaba',
+        configured: false,
+        owned: [],
+        endpoint: '',
+        envKeyName: 'BAILIAN_CODING_PLAN_API_KEY',
+        keyStatus: 'unset',
+        modelCount: 0,
+        hasMetadata: false,
+        metadataVersion: null,
+      },
       {
         kind: 'preset',
         id: 'deepseek',
@@ -237,13 +274,17 @@ describe('ProviderManageSection', () => {
     expect(screen.getByText('DeepSeek API Key')).toBeTruthy();
     expect(screen.getByText('API key configured')).toBeTruthy();
     expect(screen.getByText('https://api.deepseek.com')).toBeTruthy();
-    // Group header and card title share this label — both must render.
-    expect(screen.getAllByText('Custom Provider').length).toBeGreaterThanOrEqual(2);
+    // Group header and card title share this label; unconfigured groups are
+    // collapsed by default so only the header shows until toggled.
+    expect(screen.getAllByText('Custom Provider').length).toBeGreaterThanOrEqual(1);
+    expect(screen.queryByTestId('provider-card-custom-openai-compatible')).toBeNull();
 
     // Custom bucket + standalone models sections.
     expect(screen.getByText('Custom Provider Buckets')).toBeTruthy();
     expect(screen.getByText('mypgw')).toBeTruthy();
     expect(screen.getByText(/Standalone Models/)).toBeTruthy();
+    // The envKey grouping hint renders under the (open) standalone group.
+    expect(screen.getAllByText('envKey grouping hint').length).toBeGreaterThan(0);
 
     // The redacted snapshot never carries key values — nothing to render but the chip.
     expect(screen.queryByText(/sk-/)).toBeNull();
@@ -329,10 +370,18 @@ describe('ProviderManageSection', () => {
       );
     });
 
+    // Successful writes trigger the model-options refresh (chat selector sync
+    // without a plugin restart).
+    expect(window.sendToJava).toHaveBeenCalledWith('get_qwen_model_options:');
+
     await waitFor(() => {
       expect(addToast).toHaveBeenCalledWith('DeepSeek API Key deleted', 'success');
     });
-    expect(screen.getByText('Not configured')).toBeTruthy();
+    // The group lost its active configuration → its default flips to collapsed.
+    expect(screen.queryByTestId('provider-card-deepseek')).toBeNull();
+    expect(
+      screen.getByTestId('group-thirdParty').querySelector('button')?.getAttribute('aria-expanded'),
+    ).toBe('false');
   });
 
   it('surfaces failed ops as error toasts with the backend message', async () => {
@@ -390,5 +439,31 @@ describe('ProviderManageSection', () => {
     expect(screen.getByText('Route & credentials')).toBeTruthy();
     expect(screen.getByText('Purpose flags')).toBeTruthy();
     expect(screen.getByText('Generation config')).toBeTruthy();
+  });
+
+  it('folds groups by configuration and toggles on header click', async () => {
+    render(<ProviderManageSection addToast={vi.fn()} />);
+    pushSnapshot(buildSnapshot());
+
+    const expanded = (id: string) =>
+      screen.getByTestId(`group-${id}`).querySelector('button')?.getAttribute('aria-expanded');
+
+    // Groups with active configuration default to expanded; the rest collapse.
+    expect(expanded('alibaba')).toBe('false');
+    expect(screen.queryByTestId('provider-card-coding-plan')).toBeNull();
+    expect(expanded('thirdParty')).toBe('true');
+    expect(expanded('custom')).toBe('false');
+    expect(expanded('customBuckets')).toBe('true');
+    expect(expanded('unassigned')).toBe('true');
+
+    // Clicking a collapsed header expands it…
+    fireEvent.click(screen.getByTestId('group-alibaba').querySelector('button')!);
+    expect(expanded('alibaba')).toBe('true');
+    expect(screen.getByTestId('provider-card-coding-plan')).toBeTruthy();
+
+    // …and clicking an open header collapses it.
+    fireEvent.click(screen.getByTestId('group-thirdParty').querySelector('button')!);
+    expect(expanded('thirdParty')).toBe('false');
+    expect(screen.queryByTestId('provider-card-deepseek')).toBeNull();
   });
 });

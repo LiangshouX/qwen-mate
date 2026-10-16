@@ -369,6 +369,7 @@
       "qwen": "模型供應商"
     },
     "pm": {
+      "envKeyGroupHint": "分組依環境變數名判定：以 QWEN_CUSTOM_API_KEY_ 開頭的條目歸入「自定義接入」；修改環境變數名可能使條目移至「獨立模型」。",
       "pageDesc": "以視覺化方式設定模型供應商與模型（寫入 ~/.qwen/settings.json，格式與 CLI 完全一致）；API Key 只寫不讀，介面永不顯示已儲存的金鑰。",
       "reload": "重新讀取",
       "loading": "正在讀取供應商設定…",

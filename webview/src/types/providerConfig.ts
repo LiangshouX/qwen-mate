@@ -20,6 +20,10 @@ export interface CatalogBaseUrlOption {
   id: string;
   label: string;
   url: string;
+  /** When present the option only applies to this protocol (MiMo Token Plan). */
+  protocol?: string;
+  /** Endpoint options may carry their own key (plan tier personal/team). */
+  envKey?: string;
   documentationUrl?: string;
   apiKeyUrl?: string;
 }
@@ -29,6 +33,8 @@ export interface CatalogModelSpec {
   id: string;
   description?: string;
   contextWindowSize?: number;
+  /** Spec-table 最大输出长度 → ModelConfig samplingParams.max_tokens. */
+  maxTokens?: number;
   enableThinking?: boolean;
   thinkingMandatory?: boolean;
   modalities?: { image?: boolean; video?: boolean; audio?: boolean; pdf?: boolean };
@@ -46,6 +52,8 @@ export interface ProviderCatalogEntry {
   baseUrl: string | CatalogBaseUrlOption[] | null;
   envKey: string | null;
   envKeyGenerated: boolean;
+  /** Distinct env keys carried by this provider's endpoint options. */
+  optionEnvKeys?: string[];
   modelNamePrefix: string | null;
   models: CatalogModelSpec[] | null;
   modelsEditable: boolean;
@@ -111,6 +119,8 @@ export interface PresetProviderState {
   owned: { bucketId: string; id: string; baseUrl: string }[];
   endpoint: string;
   envKeyName: string | null;
+  /** All keys this provider can write (multi-tier providers carry several). */
+  envKeyNames?: string[];
   keyStatus: KeyStatus;
   modelCount: number;
   hasMetadata: boolean;
@@ -164,7 +174,11 @@ export type SavePresetProviderInput = {
   op: 'saveProvider';
   mode: 'preset';
   presetId: string;
+  /** Defaults to the provider's base protocol; set for protocol-option presets. */
+  protocol?: string;
   baseUrl?: string;
+  /** Preferred endpoint discriminator when options share one URL (tier keys). */
+  endpointId?: string;
   apiKey?: string;
   clearKey?: boolean;
   modelIds: string[];

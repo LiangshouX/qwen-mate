@@ -77,6 +77,12 @@ function isImageGenerationCapable(model) {
 // ---------------------------------------------------------------------------
 
 function resolveEnvKey(config, inputs) {
+  // Endpoint options may carry their own key (e.g. MiMo Token Plan's
+  // personal/team tiers share a host but use different env keys); the
+  // selected option wins over the provider-level default.
+  if (typeof inputs.envKey === 'string' && inputs.envKey.length > 0) {
+    return inputs.envKey;
+  }
   const protocol = inputs.protocol ?? config.protocol;
   const key =
     typeof config.envKey === 'function' ? config.envKey(protocol, inputs.baseUrl) : config.envKey;
@@ -131,6 +137,13 @@ function buildGenerationConfig(spec, protocol) {
   }
   if (spec.modalities && Object.values(spec.modalities).some(Boolean)) {
     parts.modalities = spec.modalities;
+    hasAny = true;
+  }
+  if (spec.maxTokens) {
+    // GUI template extension (spec-table "最大输出长度", e.g. MiMo Token Plan):
+    // emit the standard ModelConfig samplingParams.max_tokens field. The CLI's
+    // own templates never carry this key; the output remains plain ModelConfig.
+    parts.samplingParams = { max_tokens: spec.maxTokens };
     hasAny = true;
   }
   return hasAny ? parts : undefined;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import frameStyles from '../ImportExportDialog/style.module.less';
@@ -73,6 +73,10 @@ export default function ProviderManageSection({ addToast }: ProviderManageSectio
   const [dialog, setDialog] = useState<DialogState>(null);
   const [pendingDelete, setPendingDelete] = useState<PendingDelete>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  // Per-group fold state: only records explicit user toggles; groups without a
+  // toggle fall back to their default — expanded when the group already has
+  // active configuration (configured preset / non-empty list), collapsed otherwise.
+  const [groupOpen, setGroupOpen] = useState<Record<string, boolean>>({});
   const [busyKey, setBusyKey] = useState<string | null>(null);
 
   const catalogById = useMemo(
@@ -94,6 +98,46 @@ export default function ProviderManageSection({ addToast }: ProviderManageSectio
 
   const toggleExpanded = (key: string) =>
     setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  /** Effective open state: explicit user toggle wins, else the default. */
+  const isGroupOpen = (key: string, defaultOpen: boolean): boolean =>
+    groupOpen[key] ?? defaultOpen;
+
+  const toggleGroup = (key: string, defaultOpen: boolean) =>
+    setGroupOpen((prev) => ({ ...prev, [key]: !(prev[key] ?? defaultOpen) }));
+
+  /**
+   * Collapsible group section. The header is the toggle (chevron +
+   * aria-expanded); the body renders only while open so collapsed groups
+   * cost nothing.
+   */
+  const renderGroup = (
+    groupKey: string,
+    title: ReactNode,
+    defaultOpen: boolean,
+    body: ReactNode,
+    extra?: ReactNode,
+  ) => {
+    const open = isGroupOpen(groupKey, defaultOpen);
+    return (
+      <section className={styles.group} data-testid={`group-${groupKey}`}>
+        <button
+          type="button"
+          className={styles.groupHeader}
+          aria-expanded={open}
+          onClick={() => toggleGroup(groupKey, defaultOpen)}
+        >
+          <span className={styles.groupChevron}>
+            <span className="codicon codicon-chevron-down" />
+          </span>
+          <span className={styles.groupTitle}>{title}</span>
+          {extra}
+          <span className={styles.groupHairline} />
+        </button>
+        {open && body}
+      </section>
+    );
+  };
 
   const handleOp = async (
     payload: ProviderConfigOp,
@@ -253,14 +297,17 @@ export default function ProviderManageSection({ addToast }: ProviderManageSectio
     const entry = catalogById.get(state.id);
     if (!entry) return null;
     const groupKey = `preset:${state.id}`;
-    const keyLabel =
-      state.keyStatus === 'set'
+    const keyLabelFor = (status: KeyStatus): string =>
+      status === 'set'
         ? t('settings.pm.keySet')
-        : state.keyStatus === 'placeholder'
+        : status === 'placeholder'
           ? t('settings.pm.keyPlaceholder')
-          : state.keyStatus === 'process'
+          : status === 'process'
             ? t('settings.pm.keyProcess')
             : t('settings.pm.keyUnset');
+    // Multi-tier providers (MiMo personal/team) list one status chip per key.
+    const cardKeyNames =
+      state.envKeyNames ?? (entry.envKey ? [entry.envKey] : []);
     return (
       <div
         className={`${styles.card} ${state.configured ? styles.cardConfigured : ''}`}
@@ -280,9 +327,16 @@ export default function ProviderManageSection({ addToast }: ProviderManageSectio
                   {t('settings.pm.notConfigured')}
                 </span>
               )}
-              {entry.envKey && (
-                <KeyChip status={state.keyStatus} label={keyLabel} />
-              )}
+              {cardKeyNames.map((key) => {
+                const status = snapshot?.env[key]?.status ?? 'unset';
+                return (
+                  <KeyChip
+                    key={key}
+                    status={status}
+                    label={`${cardKeyNames.length > 1 ? `${key} · ` : ''}${keyLabelFor(status)}`}
+                  />
+                );
+              })}
               {state.endpoint && <span className={styles.cardEndpoint}>{state.endpoint}</span>}
             </div>
             <span className={styles.cardDesc}>{entry.description}</span>
@@ -455,55 +509,51 @@ export default function ProviderManageSection({ addToast }: ProviderManageSectio
 
       {snapshot && groups && (
         <>
-          {groups.alibaba.length > 0 && (
-            <section className={styles.group}>
-              <div className={styles.groupHeader}>
-                <span className={styles.groupTitle}>{t('settings.pm.groupAlibaba')}</span>
-                <span className={styles.groupHairline} />
-              </div>
-              {groups.alibaba.map(renderPresetCard)}
-            </section>
-          )}
+          {groups.alibaba.length > 0 &&
+            renderGroup(
+              'alibaba',
+              t('settings.pm.groupAlibaba'),
+              groups.alibaba.some((p) => p.configured),
+              groups.alibaba.map(renderPresetCard),
+            )}
 
-          {groups.thirdParty.length > 0 && (
-            <section className={styles.group}>
-              <div className={styles.groupHeader}>
-                <span className={styles.groupTitle}>{t('settings.pm.groupThirdParty')}</span>
-                <span className={styles.groupHairline} />
-              </div>
-              {groups.thirdParty.map(renderPresetCard)}
-            </section>
-          )}
+          {groups.thirdParty.length > 0 &&
+            renderGroup(
+              'thirdParty',
+              t('settings.pm.groupThirdParty'),
+              groups.thirdParty.some((p) => p.configured),
+              groups.thirdParty.map(renderPresetCard),
+            )}
 
-          {groups.customPreset.length > 0 && (
-            <section className={styles.group}>
-              <div className={styles.groupHeader}>
-                <span className={styles.groupTitle}>{t('settings.pm.groupCustom')}</span>
-                <span className={styles.groupHairline} />
-              </div>
-              {groups.customPreset.map(renderPresetCard)}
-            </section>
-          )}
+          {groups.customPreset.length > 0 &&
+            renderGroup(
+              'custom',
+              t('settings.pm.groupCustom'),
+              groups.customPreset.some((p) => p.configured),
+              <>
+                <p className={styles.groupNote}>{t('settings.pm.envKeyGroupHint')}</p>
+                {groups.customPreset.map(renderPresetCard)}
+              </>,
+            )}
 
-          {groups.customBuckets.length > 0 && (
-            <section className={styles.group}>
-              <div className={styles.groupHeader}>
-                <span className={styles.groupTitle}>{t('settings.pm.groupCustomBuckets')}</span>
-                <span className={styles.groupHairline} />
-              </div>
-              {groups.customBuckets.map(renderCustomBucketCard)}
-            </section>
-          )}
+          {groups.customBuckets.length > 0 &&
+            renderGroup(
+              'customBuckets',
+              t('settings.pm.groupCustomBuckets'),
+              groups.customBuckets.length > 0,
+              groups.customBuckets.map(renderCustomBucketCard),
+            )}
 
-          {unassignedCount > 0 && (
-            <section className={styles.group}>
-              <div className={styles.groupHeader}>
-                <span className={styles.groupTitle}>
-                  {t('settings.pm.groupUnassigned')} ({unassignedCount})
-                </span>
-                <span className={styles.groupHairline} />
-              </div>
-              {Object.entries(groups.unassignedEntries).map(([bucketId, entries]) => (
+          {unassignedCount > 0 &&
+            renderGroup(
+              'unassigned',
+              <>
+                {t('settings.pm.groupUnassigned')} ({unassignedCount})
+              </>,
+              unassignedCount > 0,
+              <>
+                <p className={styles.groupNote}>{t('settings.pm.envKeyGroupHint')}</p>
+                {Object.entries(groups.unassignedEntries).map(([bucketId, entries]) => (
                 <div className={`${styles.card} ${styles.cardConfigured}`} key={bucketId}>
                   <div className={styles.cardMain}>
                     <div className={styles.cardIdentity}>
@@ -546,9 +596,9 @@ export default function ProviderManageSection({ addToast }: ProviderManageSectio
                   </div>
                   {renderModelPanel(`unassigned:${bucketId}`, bucketId, entries)}
                 </div>
-              ))}
-            </section>
-          )}
+                ))}
+              </>,
+            )}
         </>
       )}
 

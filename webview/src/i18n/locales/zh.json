@@ -373,6 +373,7 @@
       "cli": "CLI 工具"
     },
     "pm": {
+      "envKeyGroupHint": "分组按环境变量名判定：以 QWEN_CUSTOM_API_KEY_ 开头的条目归入「自定义接入」；修改环境变量名可能使条目移至「独立模型」。",
       "pageDesc": "可视化配置模型供应商与模型（写入 ~/.qwen/settings.json，格式与 CLI 完全一致）；API Key 只写不读，界面永不显示已保存的密钥。",
       "reload": "重新读取",
       "loading": "正在读取供应商配置…",

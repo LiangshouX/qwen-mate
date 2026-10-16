@@ -159,6 +159,15 @@ function loadFile(filePath) {
 
 function serializeCatalog() {
   return catalog.ALL_PROVIDERS.map((provider) => {
+    const optionEnvKeys = Array.isArray(provider.baseUrl)
+      ? [
+          ...new Set(
+            provider.baseUrl
+              .map((option) => option.envKey)
+              .filter((key) => typeof key === 'string' && key),
+          ),
+        ]
+      : [];
     const baseUrl =
       typeof provider.baseUrl === 'string'
         ? provider.baseUrl
@@ -167,6 +176,8 @@ function serializeCatalog() {
               id: option.id,
               label: option.label,
               url: option.url,
+              ...(option.protocol ? { protocol: option.protocol } : {}),
+              ...(typeof option.envKey === 'string' ? { envKey: option.envKey } : {}),
               ...(option.documentationUrl ? { documentationUrl: option.documentationUrl } : {}),
               ...(option.apiKeyUrl ? { apiKeyUrl: option.apiKeyUrl } : {}),
             }))
@@ -189,6 +200,7 @@ function serializeCatalog() {
       baseUrl,
       envKey: typeof provider.envKey === 'string' ? provider.envKey : null,
       envKeyGenerated: typeof provider.envKey === 'function',
+      optionEnvKeys,
       modelNamePrefix: typeof provider.modelNamePrefix === 'string' ? provider.modelNamePrefix : null,
       models: provider.models ?? null,
       modelsEditable: provider.modelsEditable === true,
@@ -208,6 +220,11 @@ function collectEnvKeyNames(tree) {
   const names = new Set();
   for (const provider of catalog.ALL_PROVIDERS) {
     if (typeof provider.envKey === 'string') names.add(provider.envKey);
+    if (Array.isArray(provider.baseUrl)) {
+      for (const option of provider.baseUrl) {
+        if (typeof option.envKey === 'string') names.add(option.envKey);
+      }
+    }
   }
   const providers = tree?.modelProviders;
   if (isPlainObject(providers)) {
@@ -272,6 +289,18 @@ function buildSnapshot(file, projectFile, processEnv) {
         : typeof provider.envKey === 'function'
           ? provider.envKey(provider.protocol, endpoint || '')
           : null;
+    // Every key this provider can write (plan tiers / protocol options may
+    // each carry their own key — e.g. MiMo Token Plan personal vs team).
+    const allEnvKeyNames = [
+      ...new Set([
+        ...(typeof envKeyName === 'string' && envKeyName ? [envKeyName] : []),
+        ...(Array.isArray(provider.baseUrl)
+          ? provider.baseUrl
+              .map((option) => option.envKey)
+              .filter((key) => typeof key === 'string' && key)
+          : []),
+      ]),
+    ];
     return {
       kind: 'preset',
       id: provider.id,
@@ -280,6 +309,7 @@ function buildSnapshot(file, projectFile, processEnv) {
       owned,
       endpoint: owned.length > 0 || provider.baseUrl !== undefined ? endpoint : '',
       envKeyName,
+      envKeyNames: allEnvKeyNames,
       keyStatus: envKeyName
         ? envStatus(tree, envKeyName, processEnv).status
         : 'unset',
@@ -615,11 +645,15 @@ function opSaveProvider(state, payload) {
 
   if (mode === 'preset') {
     config = findPresetConfig(payload.presetId);
-    if (config.protocol !== AuthType.USE_OPENAI) {
-      fail(`Preset provider protocol not supported: ${config.protocol}`, 'unsupported_provider');
+    const allowedProtocols = config.protocolOptions ?? [config.protocol];
+    const protocol = payload.protocol ?? config.protocol;
+    if (!allowedProtocols.includes(protocol)) {
+      fail(`该供应商不支持协议：${protocol}`, 'unsupported_protocol');
     }
+
     const stripTrailingSlashes = (url) => (url ?? '').replace(/\/+$/, '');
     let selectedUrl;
+    let selectedOption;
     if (typeof config.baseUrl === 'string') {
       const wanted = String(payload.baseUrl ?? '').trim();
       if (wanted && stripTrailingSlashes(wanted) !== stripTrailingSlashes(config.baseUrl)) {
@@ -627,17 +661,44 @@ function opSaveProvider(state, payload) {
       }
       selectedUrl = config.baseUrl;
     } else if (Array.isArray(config.baseUrl)) {
-      const wanted = String(payload.baseUrl ?? '').trim();
-      const match = config.baseUrl.find((option) => option.url === wanted);
-      if (!match) {
-        fail('请选择一个受支持的端点（Base URL）。', 'invalid_base_url');
+      // Preferred: resolve by endpoint id — several options may share one URL
+      // (MiMo Token Plan personal/team) with different env keys per tier.
+      const byId = payload.endpointId
+        ? config.baseUrl.find((option) => option.id === payload.endpointId)
+        : undefined;
+      if (payload.endpointId && !byId) {
+        fail('所选端点选项不存在。', 'invalid_base_url');
       }
-      selectedUrl = match.url;
+      if (byId) {
+        if (byId.protocol && byId.protocol !== protocol) {
+          fail('端点选项与所选协议不匹配。', 'invalid_base_url');
+        }
+        selectedOption = byId;
+        selectedUrl = byId.url;
+      } else {
+        const wanted = String(payload.baseUrl ?? '').trim();
+        const matches = config.baseUrl.filter(
+          (option) =>
+            (!option.protocol || option.protocol === protocol) && option.url === wanted,
+        );
+        if (matches.length === 0) {
+          fail('请选择一个受支持的端点（Base URL）。', 'invalid_base_url');
+        }
+        if (matches.length > 1) {
+          fail('该供应商存在同 URL 的多个端点选项，请携带 endpointId 指定。', 'invalid_base_url');
+        }
+        selectedOption = matches[0];
+        selectedUrl = matches[0].url;
+      }
     } else {
       selectedUrl = String(payload.baseUrl ?? '').trim();
     }
     inputs = {
+      protocol,
       baseUrl: plan.resolveBaseUrl(config, selectedUrl || undefined),
+      ...(selectedOption && typeof selectedOption.envKey === 'string'
+        ? { envKey: selectedOption.envKey }
+        : {}),
       modelIds: normalizeModelIds(payload.modelIds),
       ...(payload.apiKey ? { apiKey: String(payload.apiKey) } : {}),
       ...(payload.advanced ? { advancedConfig: normalizeAdvanced(payload.advanced) } : {}),

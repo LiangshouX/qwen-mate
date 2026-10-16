@@ -28,6 +28,18 @@ export function __resetQwenModelOptionsCacheForTests() {
 }
 
 /**
+ * Force a re-read of ~/.qwen/settings.json model options — called after
+ * provider-config writes so newly configured models appear in the selector
+ * without a plugin restart. Drops the cache: a mounted consumer picks up the
+ * fresh push, and with no subscriber (settings view unmounts chat) the next
+ * chat mount re-requests because the cache is null.
+ */
+export function refreshQwenModelOptions(): void {
+  optionsCache = null;
+  sendBridgeEvent('get_qwen_model_options');
+}
+
+/**
  * Normalize the `updateQwenModelOptions` payload:
  * `{ configuredModel: string, models: Array<{ id, name, provider }> }` →
  * QwenModelOptions (label = name, description = provider). Invalid shapes are

@@ -373,6 +373,7 @@
       "qwen": "Provedores de modelos"
     },
     "pm": {
+      "envKeyGroupHint": "O agrupamento segue a chave de ambiente: entradas cuja variável começa com QWEN_CUSTOM_API_KEY_ pertencem ao Provedor personalizado; renomear a chave pode mover uma entrada para Modelos independentes.",
       "pageDesc": "Configure visualmente os provedores de modelos e os modelos (gravado em ~/.qwen/settings.json com formato idêntico ao CLI). As chaves API são somente gravação: chaves salvas nunca são exibidas.",
       "reload": "Recarregar",
       "loading": "Carregando a configuração dos provedores…",

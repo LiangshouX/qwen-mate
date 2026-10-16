@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { sendBridgeEvent } from '../../../utils/bridge';
+import { refreshQwenModelOptions } from '../../../hooks/providers/useQwenModelOptions';
 import type {
   ProviderConfigOp,
   ProviderConfigResult,
@@ -97,6 +98,11 @@ export function useProviderConfig(): UseProviderConfigReturn {
         setSnapshot(result.snapshot);
         setLoadError(null);
         setLoading(false);
+      }
+      if (result.ok && result.snapshot) {
+        // A settings write just changed the configured models — sync the chat
+        // model selector's catalog so new models show up without a restart.
+        refreshQwenModelOptions();
       }
       flushPending(result);
     };

@@ -373,6 +373,7 @@
       "cli": "CLI Tools"
     },
     "pm": {
+      "envKeyGroupHint": "Grouping follows the env key: entries whose environment variable starts with QWEN_CUSTOM_API_KEY_ belong to Custom Provider — renaming the key can move an entry to Standalone Models.",
       "pageDesc": "Visually configure model providers and models (written to ~/.qwen/settings.json with CLI-identical formatting). API keys are write-only — saved keys are never displayed.",
       "reload": "Reload",
       "loading": "Loading provider configuration…",

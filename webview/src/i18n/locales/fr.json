@@ -369,6 +369,7 @@
       "qwen": "Fournisseurs de modèles"
     },
     "pm": {
+      "envKeyGroupHint": "Le regroupement suit la clé d'environnement : les entrées dont la variable commence par QWEN_CUSTOM_API_KEY_ relèvent du Fournisseur personnalisé ; renommer la clé peut déplacer une entrée vers les Modèles autonomes.",
       "pageDesc": "Configurez visuellement les fournisseurs de modèles et les modèles (écrit dans ~/.qwen/settings.json avec un format identique au CLI). Les clés API sont en écriture seule : les clés enregistrées ne sont jamais affichées.",
       "reload": "Recharger",
       "loading": "Chargement de la configuration des fournisseurs…",

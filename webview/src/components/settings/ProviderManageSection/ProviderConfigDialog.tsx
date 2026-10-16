@@ -63,7 +63,12 @@ export default function ProviderConfigDialog({
 
   const initialEndpoint = (() => {
     if (presetState?.endpoint) return presetState.endpoint;
-    if (endpointOptions?.length) return endpointOptions[0].url;
+    if (endpointOptions?.length) {
+      const firstVisible =
+        endpointOptions.find((o) => !o.protocol || o.protocol === (entry.protocolOptions?.[0] ?? entry.protocol)) ??
+        endpointOptions[0];
+      return firstVisible.url;
+    }
     return fixedEndpoint;
   })();
 
@@ -72,6 +77,20 @@ export default function ProviderConfigDialog({
   );
   const [wireApi, setWireApi] = useState<'chat-completions' | 'responses'>('chat-completions');
   const [endpoint, setEndpoint] = useState(initialEndpoint);
+  // Option id discriminator — several options may share one URL (MiMo Token
+  // Plan tiers) with different env keys, so the URL alone is not enough.
+  const [endpointOptId, setEndpointOptId] = useState<string | undefined>(() => {
+    if (!endpointOptions?.length) return undefined;
+    const initialProtocol = entry.protocolOptions?.[0] ?? entry.protocol;
+    const match =
+      endpointOptions.find(
+        (o) =>
+          o.url === initialEndpoint &&
+          (!o.protocol || o.protocol === initialProtocol),
+      ) ??
+      endpointOptions.find((o) => !o.protocol || o.protocol === initialProtocol);
+    return match?.id;
+  });
   const [baseUrlInput, setBaseUrlInput] = useState(fixedEndpoint || '');
   const [apiKey, setApiKey] = useState('');
   const [clearKey, setClearKey] = useState(false);
@@ -104,12 +123,36 @@ export default function ProviderConfigDialog({
 
   useEffect(() => setMounted(true), []);
 
-  const keyStatus = statusOf(snapshot, entry.envKey);
+  // The key that matters is the one belonging to the SELECTED endpoint option
+  // (MiMo tiers share a URL but write different keys per option).
+  const selectedEndpointKey =
+    (!isCustom && endpointOptions?.find((o) => o.id === endpointOptId)?.envKey) ||
+    entry.envKey;
+  const resolvedKeyStatus: KeyStatus = isCustom ? 'unset' : statusOf(snapshot, selectedEndpointKey);
 
-  // Custom generates its envKey from (protocol, baseUrl) at install time, so
-  // its stored-key status is not knowable up front — report it as unset and
-  // let the hint text explain the generated name.
-  const resolvedKeyStatus: KeyStatus = isCustom ? 'unset' : keyStatus;
+  // Every key this provider can write (single-key presets fall back to the
+  // provider envKey); multi-tier providers show one status chip per key.
+  const allKeyNames = [
+    ...new Set(
+      [entry.envKey, ...(entry.optionEnvKeys ?? [])].filter(
+        (key): key is string => typeof key === 'string' && key.length > 0,
+      ),
+    ),
+  ];
+  const keyStatusLabel = (status: KeyStatus): string =>
+    status === 'set'
+      ? t('settings.pm.keySet')
+      : status === 'placeholder'
+        ? t('settings.pm.keyPlaceholder')
+        : status === 'process'
+          ? t('settings.pm.keyProcess')
+          : t('settings.pm.keyUnset');
+  const keyChipClass = (status: KeyStatus): string =>
+    status === 'set'
+      ? styles.chipOk!
+      : status === 'placeholder' || status === 'process'
+        ? styles.chipInfo!
+        : styles.chipMuted!;
 
   const effectiveBaseUrl = isCustom ? baseUrlInput.trim() : fixedEndpoint || endpoint;
   const hasStoredKey =
@@ -151,6 +194,11 @@ export default function ProviderConfigDialog({
     if (isCustom) {
       if (!effectiveBaseUrl) return t('settings.pm.errBaseUrlRequired');
       if (!/^https?:\/\//i.test(effectiveBaseUrl)) return t('settings.pm.errBaseUrlScheme');
+    } else if (endpointOptions?.length) {
+      const chosen = endpointOptions.find((o) => o.id === endpointOptId);
+      if (!chosen || (chosen.protocol && chosen.protocol !== protocol)) {
+        return t('settings.pm.errBaseUrlRequired');
+      }
     } else if (!fixedEndpoint && !endpoint) {
       return t('settings.pm.errBaseUrlRequired');
     }
@@ -204,6 +252,8 @@ export default function ProviderConfigDialog({
           mode: 'preset',
           presetId: entry.id,
           modelIds: [...selectedIds],
+          ...(supportsProtocolChoice ? { protocol } : {}),
+          ...(endpointOptId ? { endpointId: endpointOptId } : {}),
           ...(endpoint ? { baseUrl: endpoint } : {}),
           ...(apiKey ? { apiKey: apiKey.trim() } : {}),
           ...(clearKey && !apiKey ? { clearKey: true } : {}),
@@ -262,8 +312,18 @@ export default function ProviderConfigDialog({
                   className={styles.select}
                   value={protocol}
                   onChange={(e) => {
-                    setProtocol(e.target.value);
+                    const nextProtocol = e.target.value;
+                    setProtocol(nextProtocol);
                     setWireApi('chat-completions');
+                    // Endpoint options are protocol-tagged; re-pick the first
+                    // one that belongs to the new protocol.
+                    const first = endpointOptions?.find(
+                      (o) => !o.protocol || o.protocol === nextProtocol,
+                    );
+                    if (first) {
+                      setEndpoint(first.url);
+                      setEndpointOptId(first.id);
+                    }
                   }}
                 >
                   {(entry.protocolOptions ?? []).map((p) => (
@@ -296,8 +356,10 @@ export default function ProviderConfigDialog({
                   {entry.uiLabels?.baseUrlStepTitle ?? t('settings.pm.endpoint')}
                 </span>
                 <div className={styles.endpointList}>
-                  {endpointOptions.map((opt: CatalogBaseUrlOption) => {
-                    const active = endpoint === opt.url;
+                  {endpointOptions
+                    .filter((opt) => !opt.protocol || opt.protocol === protocol)
+                    .map((opt: CatalogBaseUrlOption) => {
+                    const active = endpointOptId === opt.id;
                     return (
                       <label
                         key={opt.id}
@@ -307,7 +369,10 @@ export default function ProviderConfigDialog({
                           type="radio"
                           name="pm-endpoint"
                           checked={active}
-                          onChange={() => setEndpoint(opt.url)}
+                          onChange={() => {
+                            setEndpoint(opt.url);
+                            setEndpointOptId(opt.id);
+                          }}
                         />
                         <span className={styles.endpointBody}>
                           <span className={styles.endpointLabel}>{opt.label}</span>
@@ -395,24 +460,18 @@ export default function ProviderConfigDialog({
               </div>
               {!isCustom && (
                 <div className={styles.keyStatusLine}>
-                  <span
-                    className={`${styles.chip} ${
-                      resolvedKeyStatus === 'set'
-                        ? styles.chipOk
-                        : resolvedKeyStatus === 'placeholder' || resolvedKeyStatus === 'process'
-                          ? styles.chipInfo
-                          : styles.chipMuted
-                    }`}
-                  >
-                    {resolvedKeyStatus === 'set'
-                      ? t('settings.pm.keySet')
-                      : resolvedKeyStatus === 'placeholder'
-                        ? t('settings.pm.keyPlaceholder')
-                        : resolvedKeyStatus === 'process'
-                          ? t('settings.pm.keyProcess')
-                          : t('settings.pm.keyUnset')}
-                  </span>
-                  {entry.envKey && <code className={styles.bannerPath}>{entry.envKey}</code>}
+                  {allKeyNames.map((key) => {
+                    const status = statusOf(snapshot, key);
+                    return (
+                      <span key={key} className={`${styles.chip} ${keyChipClass(status)}`}>
+                        {allKeyNames.length > 1 ? `${key} · ` : ''}
+                        {keyStatusLabel(status)}
+                      </span>
+                    );
+                  })}
+                  {allKeyNames.length === 1 && allKeyNames[0] && (
+                    <code className={styles.bannerPath}>{allKeyNames[0]}</code>
+                  )}
                   {hasStoredKey && (
                     <span>{t('settings.pm.keyNeverShown')}</span>
                   )}

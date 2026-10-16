@@ -45,16 +45,16 @@ const DEEPSEEK_INSTALL = {
   presetId: 'deepseek',
   baseUrl: 'https://api.deepseek.com',
   apiKey: 'sk-test-1234567890',
-  modelIds: ['deepseek-v4-pro', 'deepseek-v4-flash'],
+  modelIds: ['deepseek-v4-pro', 'deepseek-flash'],
 };
 
 describe('snapshot', () => {
-  test('handles missing file and exposes the 13-provider catalog', () => {
+  test('handles missing file and exposes the preset provider catalog', () => {
     const result = op({ op: 'snapshot' });
     assert.equal(result.ok, true);
     assert.equal(result.snapshot.settingsExists, false);
-    assert.equal(result.snapshot.catalog.length, 13);
-    assert.equal(result.snapshot.providers.length, 13);
+    assert.equal(result.snapshot.catalog.length, 14);
+    assert.equal(result.snapshot.providers.length, 14);
     const deepseek = result.snapshot.catalog.find((p) => p.id === 'deepseek');
     assert.equal(deepseek.envKey, 'DEEPSEEK_API_KEY');
     assert.deepEqual(deepseek.steps, ['apiKey', 'models']);
@@ -127,7 +127,7 @@ describe('preset provider install (parity)', () => {
     assert.equal(bucket.length, 2);
     assert.deepEqual(
       bucket.map((m) => m.id),
-      ['deepseek-v4-pro', 'deepseek-v4-flash'],
+      ['deepseek-v4-pro', 'deepseek-flash'],
     );
     assert.equal(bucket[0].name, '[DeepSeek] deepseek-v4-pro');
     assert.equal(bucket[0].envKey, 'DEEPSEEK_API_KEY');
@@ -164,7 +164,7 @@ describe('preset provider install (parity)', () => {
 
     const settings = readJson();
     const ids = settings.modelProviders.openai.map((m) => m.id);
-    assert.deepEqual(ids, ['deepseek-v4-pro', 'deepseek-v4-flash', 'gpt-x']);
+    assert.deepEqual(ids, ['deepseek-v4-pro', 'deepseek-flash', 'gpt-x']);
     // gpt-x is not offered by the plan → selection adopts the plan's first model.
     assert.equal(settings.model.name, 'deepseek-v4-pro');
     assert.equal(settings.env.OTHER_API_KEY, 'keep-me');
@@ -255,7 +255,7 @@ describe('API key handling', () => {
     const settings = readJson();
     assert.equal(settings.env.DEEPSEEK_API_KEY, undefined);
     assert.equal(settings.env.OTHER_API_KEY, 'keep-me', 'sibling env keys must never be wiped');
-    assert.deepEqual(settings.modelProviders.openai.map((m) => m.id), ['deepseek-v4-pro', 'deepseek-v4-flash'], 'owned models replaced by reinstall');
+    assert.deepEqual(settings.modelProviders.openai.map((m) => m.id), ['deepseek-v4-pro', 'deepseek-flash'], 'owned models replaced by reinstall');
   });
 
   test('setEnvKey writes ${VAR} placeholders literally and reports them as placeholder', () => {
@@ -352,6 +352,101 @@ describe('custom provider install', () => {
     result = op({ ...base, protocol: 'openai', baseUrl: 'https://user:pass@x.example.com' });
     assert.equal(result.ok, false);
     assert.equal(result.code, 'invalid_base_url');
+  });
+});
+
+describe('MiMo Token Plan provider (multi-protocol, tier keys)', () => {
+  const install = (extra) => ({
+    op: 'saveProvider',
+    mode: 'preset',
+    presetId: 'mimo-token-plan',
+    modelIds: ['mimo-v2.6-pro'],
+    apiKey: 'mimo-key-1',
+    ...extra,
+  });
+
+  test('personal + OpenAI writes the personal key into the openai bucket with spec details', () => {
+    const result = op(install({ protocol: 'openai', endpointId: 'personal-openai' }));
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const settings = readJson();
+    assert.equal(settings.env.MIMO_TP_PERSONAL_API_KEY, 'mimo-key-1');
+    assert.equal(settings.env.MIMO_TP_TEAM_API_KEY, undefined);
+    assert.equal(settings.security.auth.selectedType, 'openai');
+    const entry = settings.modelProviders.openai[0];
+    assert.equal(entry.id, 'mimo-v2.6-pro');
+    assert.equal(entry.name, '[MiMo Token Plan] mimo-v2.6-pro');
+    assert.equal(entry.baseUrl, 'https://token-plan-cn.xiaomimimo.com/v1');
+    assert.equal(entry.envKey, 'MIMO_TP_PERSONAL_API_KEY');
+    assert.deepEqual(entry.generationConfig.modalities, { image: true, video: true, audio: true });
+    assert.equal(entry.generationConfig.contextWindowSize, 1_000_000);
+    assert.deepEqual(entry.generationConfig.samplingParams, { max_tokens: 131072 });
+  });
+
+  test('team + Anthropic writes the team key into the anthropic bucket', () => {
+    const result = op(
+      install({
+        protocol: 'anthropic',
+        endpointId: 'team-anthropic',
+        modelIds: ['mimo-v2.5-tts'],
+        apiKey: 'team-key-2',
+      }),
+    );
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const settings = readJson();
+    assert.equal(settings.env.MIMO_TP_TEAM_API_KEY, 'team-key-2');
+    assert.equal(settings.env.MIMO_TP_PERSONAL_API_KEY, undefined);
+    assert.equal(settings.security.auth.selectedType, 'anthropic');
+    const bucket = settings.modelProviders.anthropic;
+    assert.equal(bucket.length, 1);
+    assert.equal(bucket[0].baseUrl, 'https://token-plan-cn.xiaomimimo.com/anthropic');
+    assert.equal(bucket[0].envKey, 'MIMO_TP_TEAM_API_KEY');
+    assert.equal(bucket[0].generationConfig.contextWindowSize, 8192);
+    assert.deepEqual(bucket[0].generationConfig.samplingParams, { max_tokens: 8192 });
+    assert.equal(settings.model.name, 'mimo-v2.5-tts');
+  });
+
+  test('protocol/endpoint mismatches and shared-URL without endpointId are refused', () => {
+    // Endpoint tagged for the other protocol.
+    let result = op(install({ protocol: 'openai', endpointId: 'team-anthropic' }));
+    assert.equal(result.ok, false);
+    assert.equal(result.code, 'invalid_base_url');
+    // Protocol outside the provider's protocolOptions.
+    result = op(install({ protocol: 'gemini', endpointId: 'personal-openai' }));
+    assert.equal(result.ok, false);
+    assert.equal(result.code, 'unsupported_protocol');
+    // personal/team share one URL → url alone cannot disambiguate the tier key.
+    result = op(install({ baseUrl: 'https://token-plan-cn.xiaomimimo.com/v1' }));
+    assert.equal(result.ok, false);
+    assert.equal(result.code, 'invalid_base_url');
+    assert.ok(!fs.existsSync(settingsPath), 'no file written on refusal');
+  });
+
+  test('snapshot exposes both tier keys as status-only entries (never values)', () => {
+    const first = op(install({ protocol: 'openai', endpointId: 'personal-openai' }));
+    assert.equal(first.ok, true, JSON.stringify(first));
+    const snap = first.snapshot;
+    const mimo = snap.catalog.find((p) => p.id === 'mimo-token-plan');
+    assert.deepEqual(mimo.optionEnvKeys, [
+      'MIMO_TP_PERSONAL_API_KEY',
+      'MIMO_TP_TEAM_API_KEY',
+    ]);
+    const state = snap.providers.find((p) => p.id === 'mimo-token-plan');
+    assert.deepEqual(state.envKeyNames, [
+      'MIMO_TP_PERSONAL_API_KEY',
+      'MIMO_TP_TEAM_API_KEY',
+    ]);
+    assert.equal(snap.env.MIMO_TP_PERSONAL_API_KEY?.status, 'set');
+    assert.equal(snap.env.MIMO_TP_TEAM_API_KEY?.status, 'unset');
+    assert.ok(!JSON.stringify(snap).includes('mimo-key-1'), 'no key values in snapshot');
+  });
+
+  test('reconnect keeps the stored tier key when none is entered', () => {
+    writeSettings(JSON.stringify({ env: { MIMO_TP_TEAM_API_KEY: 'stored-team' } }));
+    const result = op(
+      install({ protocol: 'anthropic', endpointId: 'team-anthropic', apiKey: undefined }),
+    );
+    assert.equal(result.ok, true, JSON.stringify(result));
+    assert.equal(readJson().env.MIMO_TP_TEAM_API_KEY, 'stored-team');
   });
 });
 
