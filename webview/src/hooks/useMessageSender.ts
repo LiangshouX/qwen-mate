@@ -392,6 +392,9 @@ export function useMessageSender({
             fileName: a.fileName,
             mediaType: a.mediaType,
             data: a.data,
+            // Original disk path (Explorer-copied images); lets ai-bridge
+            // reference the source file instead of only the temp copy.
+            sourcePath: a.sourcePath || null,
           })),
           agent: agentInfo,
           fileTags: fileTagsInfo,
@@ -427,10 +430,12 @@ export function useMessageSender({
    */
   const executeMessage = useCallback((content: string, attachments?: Attachment[]) => {
     // Expand inline quote chips (tokens) into their full Markdown blockquotes.
-    const text = expandQuoteTokens(content).replace(/[\u200B-\u200D\uFEFF]/g, '').trim();
+    // Keep the trimmed text verbatim first: the zero-width strip lives here.
+    const ZW_STRIP = /[\u200B-\u200D\uFEFF]/g;
+    const typedText = expandQuoteTokens(content).replace(ZW_STRIP, '').trim();
     const hasAttachments = Array.isArray(attachments) && attachments.length > 0;
 
-    if (!text && !hasAttachments) return;
+    if (!typedText && !hasAttachments) return;
 
     // Check SDK status
     if (sdkStatusLoading) {
@@ -446,6 +451,25 @@ export function useMessageSender({
       setCurrentView('settings');
       return;
     }
+
+    // Unify the bubble form across send-time, snapshots and history reloads:
+    // prepend "@sourcePath" for image attachments that carry a disk path, so
+    // the optimistic bubble, the Java send-time message and the reloaded
+    // transcript all render the same "@path + text" shape (the reload path
+    // strips the temp ref + "(same file)" annotation back to this form).
+    // A path the typed text already contains is not repeated. Placeholder
+    // summaries ("[Uploaded ...]") drop out the same way the block builder did.
+    const hasImageAttachments = Array.isArray(attachments) &&
+      attachments.some(att => att.mediaType?.startsWith('image/'));
+    const isPlaceholderText = typedText.trim().startsWith('[Uploaded ');
+    const bodyText = hasImageAttachments && isPlaceholderText ? '' : typedText;
+    const refLine = (attachments ?? [])
+      .filter(att => att.sourcePath && !bodyText.includes(`@${att.sourcePath}`))
+      .map(att => `@${att.sourcePath}`)
+      .join(' ');
+    // No sourcePath refs on any attachment: keep the typed text verbatim
+    // (including a placeholder summary), preserving the pre-ref behavior.
+    const text = refLine ? (bodyText ? `${refLine}\n\n${bodyText}` : refLine) : typedText;
 
     // Build user message content blocks
     const userContentBlocks = buildUserContentBlocks(text, attachments);

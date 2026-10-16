@@ -29,6 +29,12 @@ export interface Attachment {
   mediaType: string;
   /** Base64 encoded content */
   data: string;
+  /**
+   * Original absolute path when this attachment was created from a file on
+   * disk (e.g. an Explorer-copied image). Persisted through to ai-bridge so
+   * the send can reference the original path alongside the temp copy.
+   */
+  sourcePath?: string;
 }
 
 /**

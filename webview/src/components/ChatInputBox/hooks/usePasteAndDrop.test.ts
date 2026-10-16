@@ -178,4 +178,74 @@ describe('usePasteAndDrop file references', () => {
     expect(editable.textContent).toBe('');
     expect(result.current).toBeDefined();
   });
+
+  it('creates an attachment with file name and source path from the Java image event', () => {
+    const editable = createEditable();
+    placeCaretAtEnd(editable);
+    const setInternalAttachments = vi.fn() as unknown as React.Dispatch<React.SetStateAction<Attachment[]>>;
+    const pathMappingRef = { current: new Map<string, string>() };
+    renderHook(() => usePasteAndDrop({
+      editableRef: { current: editable },
+      pathMappingRef,
+      getTextContent: () => editable.textContent ?? '',
+      adjustHeight: vi.fn(),
+      renderFileTags: vi.fn(),
+      setHasContent: vi.fn(),
+      setInternalAttachments,
+      onInput: vi.fn(),
+      closeAllCompletions: vi.fn(),
+      handleInput: vi.fn(),
+      flushInput: vi.fn(),
+    }));
+
+    act(() => {
+      window.dispatchEvent(new CustomEvent('java-paste-image', {
+        detail: {
+          base64: 'aGk=',
+          mediaType: 'image/png',
+          fileName: 'MIUI02.png',
+          sourcePath: 'D:\\Pics\\MIUI02.png',
+        },
+      }));
+    });
+
+    expect(setInternalAttachments).toHaveBeenCalledTimes(1);
+    const updater = (setInternalAttachments as unknown as { mock: { calls: [[React.Dispatch<React.SetStateAction<Attachment[]>>]] } }).mock.calls[0][0] as (prev: Attachment[]) => Attachment[];
+    const created = updater([])[0];
+    expect(created.fileName).toBe('MIUI02.png');
+    expect(created.sourcePath).toBe('D:\\Pics\\MIUI02.png');
+    expect(created.mediaType).toBe('image/png');
+    expect(created.data).toBe('aGk=');
+  });
+
+  it('keeps the generated pasted-image name when the Java event has no file name', () => {
+    const editable = createEditable();
+    placeCaretAtEnd(editable);
+    const setInternalAttachments = vi.fn() as unknown as React.Dispatch<React.SetStateAction<Attachment[]>>;
+    const pathMappingRef = { current: new Map<string, string>() };
+    renderHook(() => usePasteAndDrop({
+      editableRef: { current: editable },
+      pathMappingRef,
+      getTextContent: () => editable.textContent ?? '',
+      adjustHeight: vi.fn(),
+      renderFileTags: vi.fn(),
+      setHasContent: vi.fn(),
+      setInternalAttachments,
+      onInput: vi.fn(),
+      closeAllCompletions: vi.fn(),
+      handleInput: vi.fn(),
+      flushInput: vi.fn(),
+    }));
+
+    act(() => {
+      window.dispatchEvent(new CustomEvent('java-paste-image', {
+        detail: { base64: 'aGk=', mediaType: 'image/png' },
+      }));
+    });
+
+    const updater = (setInternalAttachments as unknown as { mock: { calls: [[React.Dispatch<React.SetStateAction<Attachment[]>>]] } }).mock.calls[0][0] as (prev: Attachment[]) => Attachment[];
+    const created = updater([])[0];
+    expect(created.fileName).toMatch(/^pasted-image-\d+\.png$/);
+    expect(created.sourcePath).toBeUndefined();
+  });
 });

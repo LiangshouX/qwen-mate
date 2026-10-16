@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, utimesSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { persistAttachments, prependAttachmentRefs } from './attachment-files.js';
+import { persistAttachments, prependAttachmentRefs, inlineExternalImageRefs } from './attachment-files.js';
 
 function withAttachmentDir(t) {
   const dir = mkdtempSync(join(tmpdir(), 'att-files-'));
@@ -85,4 +85,79 @@ test('prependAttachmentRefs keeps the message plain when there are no refs', () 
 test('prependAttachmentRefs places refs before the typed text like the CLI composer', () => {
   const text = prependAttachmentRefs('这张图是啥？', ['@C:\\tmp\\a.png', '@C:\\tmp\\b.jpg']);
   assert.equal(text, '@C:\\tmp\\a.png @C:\\tmp\\b.jpg\n\n这张图是啥？');
+});
+
+test('persistAttachments keeps the original path as a second ref for outside-workspace source files', (t) => {
+  withAttachmentDir(t);
+  const sourceDir = mkdtempSync(join(tmpdir(), 'att-source-'));
+  t.after(() => rmSync(sourceDir, { recursive: true, force: true }));
+  const sourcePath = join(sourceDir, 'copied.png');
+  writeFileSync(sourcePath, 'orig');
+
+  const refs = persistAttachments(
+    [{ fileName: 'copied.png', mediaType: 'image/png', data: 'aGk=', sourcePath }],
+    { cwd: join(sourceDir, 'workspace-that-is-not-the-source-dir') },
+  );
+
+  assert.equal(refs.length, 2, 'temp copy ref + original source ref');
+  assert.ok(refs[0].includes('qwen-mate-attachments'), `first ref is the temp copy, got ${refs[0]}`);
+  assert.equal(
+    refs[1],
+    `@${sourcePath} (same file)`,
+    'the original ref carries the annotation so the model does not count two images',
+  );
+});
+
+test('persistAttachments references the workspace source directly without a temp copy', (t) => {
+  const attachmentDir = withAttachmentDir(t);
+  const workspaceDir = mkdtempSync(join(tmpdir(), 'att-workspace-'));
+  t.after(() => rmSync(workspaceDir, { recursive: true, force: true }));
+  const sourcePath = join(workspaceDir, 'inside.png');
+  writeFileSync(sourcePath, 'orig');
+
+  const refs = persistAttachments(
+    [{ fileName: 'inside.png', mediaType: 'image/png', data: 'aGk=', sourcePath }],
+    { cwd: workspaceDir },
+  );
+
+  assert.deepEqual(refs, [`@${sourcePath}`]);
+  assert.deepEqual(readdirSync(attachmentDir), [], 'no temp copy is written for in-workspace sources');
+});
+
+test('inlineExternalImageRefs prepends a temp copy in front of outside-workspace image refs', (t) => {
+  const attachmentDir = withAttachmentDir(t);
+  const workspaceDir = mkdtempSync(join(tmpdir(), 'att-inline-ws-'));
+  const externalDir = mkdtempSync(join(tmpdir(), 'att-inline-ext-'));
+  t.after(() => {
+    rmSync(workspaceDir, { recursive: true, force: true });
+    rmSync(externalDir, { recursive: true, force: true });
+  });
+  const externalPath = join(externalDir, 'outside.png');
+  writeFileSync(externalPath, 'x');
+  const workspacePath = join(workspaceDir, 'inside.png');
+  writeFileSync(workspacePath, 'x');
+
+  const { message } = inlineExternalImageRefs(
+    `@${externalPath} @${workspacePath} 识图`,
+    { cwd: workspaceDir },
+  );
+
+  assert.ok(message.includes('qwen-mate-attachments'), 'temp copy ref is inserted');
+  assert.ok(message.includes(`@${externalPath}`), 'original external path stays as literal text');
+  assert.ok(message.includes(`@${workspacePath}`), 'workspace refs are untouched');
+  assert.equal(readdirSync(attachmentDir).length, 1, 'exactly one temp copy written');
+});
+
+test('inlineExternalImageRefs leaves non-image and missing refs untouched', (t) => {
+  withAttachmentDir(t);
+  const externalDir = mkdtempSync(join(tmpdir(), 'att-inline-miss-'));
+  t.after(() => rmSync(externalDir, { recursive: true, force: true }));
+  const docPath = join(externalDir, 'notes.md');
+  writeFileSync(docPath, 'x');
+
+  const input = `@${docPath} @${join(externalDir, 'missing.png')} no images`;
+  const { message, copied } = inlineExternalImageRefs(input, { cwd: externalDir });
+
+  assert.equal(message, input);
+  assert.equal(copied, 0);
 });

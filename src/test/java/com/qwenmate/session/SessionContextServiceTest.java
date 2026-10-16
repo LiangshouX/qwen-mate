@@ -31,12 +31,29 @@ public class SessionContextServiceTest {
 
         assertEquals(QwenMateSession.Message.Type.USER, message.type);
         assertEquals("Please inspect this diagram", message.content);
+        // Attachments no longer add image blocks: user bubbles render the
+        // "@path + text" form only.
         JsonArray content = message.raw.getAsJsonObject("message").getAsJsonArray("content");
-        assertEquals(2, content.size());
-        assertEquals("image", content.get(0).getAsJsonObject().get("type").getAsString());
-        assertEquals("text", content.get(1).getAsJsonObject().get("type").getAsString());
+        assertEquals(1, content.size());
+        assertEquals("text", content.get(0).getAsJsonObject().get("type").getAsString());
         assertEquals("Please inspect this diagram",
-                content.get(1).getAsJsonObject().get("text").getAsString());
+                content.get(0).getAsJsonObject().get("text").getAsString());
+    }
+
+    @Test
+    public void buildUserMessageImageOnlySendFallsBackToSummary() {
+        SessionContextService service = new SessionContextService(null);
+        List<QwenMateSession.Attachment> attachments = List.of(
+                new QwenMateSession.Attachment("diagram.png", "image/png", "base64-data")
+        );
+
+        QwenMateSession.Message message = service.buildUserMessage("", attachments);
+
+        assertEquals(QwenMateSession.Message.Type.USER, message.type);
+        assertTrue(message.content.startsWith("[Uploaded Attachments: diagram.png]"));
+        JsonArray content = message.raw.getAsJsonObject("message").getAsJsonArray("content");
+        assertEquals(1, content.size());
+        assertEquals("text", content.get(0).getAsJsonObject().get("type").getAsString());
     }
 
     @Test

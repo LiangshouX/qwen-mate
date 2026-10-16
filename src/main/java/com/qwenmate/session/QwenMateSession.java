@@ -614,11 +614,18 @@ public class QwenMateSession {
         public String fileName;
         public String mediaType;
         public String data; // Base64 encoded data
+        /** Original absolute path when attached from a file on disk (nullable). */
+        public String sourcePath;
 
         public Attachment(String fileName, String mediaType, String data) {
+            this(fileName, mediaType, data, null);
+        }
+
+        public Attachment(String fileName, String mediaType, String data, String sourcePath) {
             this.fileName = fileName;
             this.mediaType = mediaType;
             this.data = data;
+            this.sourcePath = sourcePath;
         }
     }
 

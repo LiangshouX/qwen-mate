@@ -269,6 +269,12 @@ export function usePasteAndDrop({
       // Check if there are actual image file objects
       let hasImageFile = false;
       if (files && files.length > 0) {
+        // A single-file drag from Explorer carries the absolute path in
+        // text/plain; keep it as the attachment's sourcePath so the send can
+        // reference the original location (the "both" form).
+        const trimmedText = text?.trim() ?? '';
+        const dropSourcePath =
+          files.length === 1 && /^[A-Za-z]:[\\/]/.test(trimmedText) ? trimmedText : undefined;
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
 
@@ -290,6 +296,7 @@ export function usePasteAndDrop({
                 fileName: file.name || `dropped-image-${Date.now()}.${ext}`,
                 mediaType: file.type || 'image/png',
                 data: base64,
+                ...(dropSourcePath ? { sourcePath: dropSourcePath } : {}),
               };
 
               setInternalAttachments((prev) => [...prev, attachment]);
@@ -381,14 +388,17 @@ export function usePasteAndDrop({
   // Listen for image paste events dispatched from Java side (when clipboard has image but no text)
   useEffect(() => {
     const onJavaPasteImage = (e: Event) => {
-      const { base64, mediaType } = (e as CustomEvent).detail;
+      const { base64, mediaType, fileName, sourcePath } = (e as CustomEvent).detail;
       if (!base64) return;
       const ext = mediaType?.split('/')[1] || 'png';
       const attachment: Attachment = {
         id: generateId(),
-        fileName: `pasted-image-${Date.now()}.${ext}`,
+        fileName: fileName || `pasted-image-${Date.now()}.${ext}`,
         mediaType: mediaType || 'image/png',
         data: base64,
+        // Explorer-copied image files carry their original path so the send
+        // can reference it; bitmap pastes (screenshots) have no source path.
+        ...(typeof sourcePath === 'string' && sourcePath ? { sourcePath } : {}),
       };
       setInternalAttachments((prev) => [...prev, attachment]);
     };

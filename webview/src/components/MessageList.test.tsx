@@ -454,17 +454,17 @@ describe('MessageList disk history pagination', () => {
 
   afterEach(cleanup);
 
-  it('requests the latest page with a null cursor when no page info exists yet', () => {
+  it('keeps the loader hidden until a page reports earlier turns remain', () => {
     const { container } = renderListWithSession(makeMessages(2));
-    const indicator = indicatorOf(container);
-    expect(indicator?.textContent).toBe('Load earlier messages');
+    // No page info yet: a cursor-less request would fetch the turn already on
+    // screen and the prepend duplicated the first-turn bubble, so no button.
+    expect(indicatorOf(container)).toBeNull();
 
-    fireEvent.click(indicator!);
+    dispatchPageInfo({ sessionId: 'session-1', fromTurn: 2, totalTurns: 4, hasMore: false });
+    expect(indicatorOf(container)).toBeNull();
 
-    expect(window.sendToJava).toHaveBeenCalledTimes(1);
-    expect(window.sendToJava).toHaveBeenCalledWith(
-      'load_qwen_history_page:{"sessionId":"session-1","beforeTurn":null}',
-    );
+    dispatchPageInfo({ sessionId: 'session-1', fromTurn: 5, totalTurns: 8, hasMore: true });
+    expect(indicatorOf(container)?.textContent).toBe('Load earlier messages');
   });
 
   it('requests earlier pages with the visible window cursor', () => {
@@ -487,15 +487,14 @@ describe('MessageList disk history pagination', () => {
   it('ignores page info that belongs to another session', () => {
     const { container } = renderListWithSession(makeMessages(2));
     dispatchPageInfo({ sessionId: 'other', fromTurn: 5, totalTurns: 8, hasMore: true });
-    fireEvent.click(indicatorOf(container)!);
-
-    expect(window.sendToJava).toHaveBeenCalledWith(
-      'load_qwen_history_page:{"sessionId":"session-1","beforeTurn":null}',
-    );
+    // The event handler drops other-session info, so no cursor exists and the
+    // loader must not appear (let alone send a cursor-less request).
+    expect(indicatorOf(container)).toBeNull();
   });
 
   it('stays single-flight while a page request is in flight', () => {
     const { container } = renderListWithSession(makeMessages(2));
+    dispatchPageInfo({ sessionId: 'session-1', fromTurn: 5, totalTurns: 8, hasMore: true });
     const indicator = indicatorOf(container)!;
 
     fireEvent.click(indicator);
@@ -543,6 +542,7 @@ describe('MessageList disk history pagination', () => {
 
   it('recovers a failed request even when the error carries no session id', () => {
     const { container } = renderListWithSession(makeMessages(2));
+    dispatchPageInfo({ sessionId: 'session-1', fromTurn: 2, totalTurns: 8, hasMore: true });
     fireEvent.click(indicatorOf(container)!);
     dispatchPageError({ message: 'boom' });
 

@@ -238,7 +238,10 @@ public class SessionHandler extends BaseMessageHandler {
                     String data = a.has("data") && !a.get("data").isJsonNull()
                                           ? a.get("data").getAsString()
                                           : "";
-                    atts.add(new QwenMateSession.Attachment(fileName, mediaType, data));
+                    String sourcePath = a.has("sourcePath") && !a.get("sourcePath").isJsonNull()
+                                                 ? a.get("sourcePath").getAsString()
+                                                 : null;
+                    atts.add(new QwenMateSession.Attachment(fileName, mediaType, data, sourcePath));
                 }
             }
 

@@ -24,6 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Parses Qwen Code session transcripts into the Claude-template message shape that
@@ -60,6 +62,33 @@ public final class QwenTranscriptParser {
 
     private static final String USER_PROMPT_SUBMIT_CONTEXT_OPEN = "<qwen:user-prompt-submit-context>";
     private static final String USER_PROMPT_SUBMIT_CONTEXT_CLOSE = "</qwen:user-prompt-submit-context>";
+
+    /**
+     * Header the CLI's @-command expansion appends after the original prompt
+     * (atCommandProcessor "Content from referenced files" block). Everything from
+     * this marker on is transport detail — expansion wrapper text plus the
+     * inlineData image — and must not reach the bubble (requirement: history
+     * bubbles render the "@path + typed text" form, never expansion junk).
+     */
+    private static final String AT_EXPANSION_MARKER = "--- Content from referenced files ---";
+
+    /** Directory segment of attachment temp refs (ai-bridge attachment-files.js). */
+    private static final String ATTACHMENT_DIR_SEGMENT = "qwen-mate-attachments";
+
+    /** A single '@'-token in message text (mirrors the CLI's whitespace-terminated @path parse). */
+    private static final Pattern AT_TOKEN = Pattern.compile("@\\S+");
+
+    /** An attachment temp reference plus one trailing space (refs are space-joined on one line). */
+    private static final Pattern ATTACHMENT_TEMP_REF =
+            Pattern.compile("@\\S*" + ATTACHMENT_DIR_SEGMENT + "\\S* ?");
+
+    /**
+     * Disambiguation suffix ai-bridge appends after an original-path ref whose
+     * temp copy feeds the CLI expansion ("@temp @orig (same file)"). Like the
+     * expansion wrapper it is transport detail: stripped together with the temp
+     * ref so bubbles render the user's "@orig" form unchanged.
+     */
+    private static final String SAME_FILE_ANNOTATION = " (same file)";
 
     private QwenTranscriptParser() {
     }
@@ -576,7 +605,12 @@ public final class QwenTranscriptParser {
         return text.startsWith(prefix) && text.endsWith(suffix);
     }
 
-    /** Blocks shown for a user message: everything except tool results. */
+    /**
+     * Blocks shown for a user message: everything except tool results, with the
+     * CLI's @-command expansion stripped so history bubbles render the unified
+     * "@path + typed text" form instead of expansion wrapper text and inlineData
+     * images.
+     */
     private static JsonArray visibleBlocks(JsonObject record, JsonObject message) {
         JsonArray visible = new JsonArray();
         for (JsonElement block : extractBlocks(record, message)) {
@@ -584,7 +618,157 @@ public final class QwenTranscriptParser {
                 visible.add(block);
             }
         }
-        return visible;
+        JsonArray cleaned = stripAtExpansion(visible);
+        if ("user".equals(getString(record, "type"))) {
+            cleaned = dropImagesWithVisibleText(cleaned);
+            cleaned = stripRedundantTempRefs(cleaned);
+        }
+        return cleaned;
+    }
+
+    /**
+     * Cut a user prompt's blocks at the CLI's @-expansion marker
+     * ("--- Content from referenced files ---"). The marker text block and every
+     * block after it (expansion header, inlineData image, end marker) are dropped;
+     * text before the marker inside the same block is preserved. If stripping
+     * would leave nothing (dirty data without the original prompt), the input is
+     * returned unchanged so a message never silently vanishes.
+     */
+    static JsonArray stripAtExpansion(JsonArray blocks) {
+        JsonArray stripped = new JsonArray();
+        boolean cutting = false;
+        for (JsonElement block : blocks) {
+            if (cutting) {
+                continue;
+            }
+            JsonObject obj = block.getAsJsonObject();
+            if ("text".equals(getString(obj, "type"))
+                    && obj.has("text") && obj.get("text").isJsonPrimitive()) {
+                String text = obj.get("text").getAsString();
+                int markerIndex = text.indexOf(AT_EXPANSION_MARKER);
+                if (markerIndex >= 0) {
+                    String prefix = text.substring(0, markerIndex);
+                    if (!prefix.isBlank()) {
+                        JsonObject kept = obj.deepCopy();
+                        kept.addProperty("text", prefix);
+                        stripped.add(kept);
+                    }
+                    cutting = true;
+                    continue;
+                }
+            }
+            stripped.add(block);
+        }
+        if (!cutting || stripped.size() == 0) {
+            return blocks;
+        }
+        return stripped;
+    }
+
+    /**
+     * Drop image blocks from a user message as long as visible text remains
+     * (requirement: user bubbles render text/@path only). Image-only messages
+     * keep their image so they stay visible until the history reload swaps them
+     * for the @path link.
+     */
+    static JsonArray dropImagesWithVisibleText(JsonArray blocks) {
+        boolean hasVisibleText = false;
+        for (JsonElement block : blocks) {
+            JsonObject obj = block.getAsJsonObject();
+            if ("text".equals(getString(obj, "type"))
+                    && obj.has("text") && obj.get("text").isJsonPrimitive()
+                    && !obj.get("text").getAsString().isBlank()) {
+                hasVisibleText = true;
+                break;
+            }
+        }
+        if (!hasVisibleText) {
+            return blocks;
+        }
+        JsonArray kept = new JsonArray();
+        for (JsonElement block : blocks) {
+            if (!"image".equals(getString(block.getAsJsonObject(), "type"))) {
+                kept.add(block);
+            }
+        }
+        return kept.size() > 0 ? kept : blocks;
+    }
+
+    /**
+     * Strip attachment temp references (under the qwen-mate-attachments dir)
+     * from any line that also carries a non-temp @path reference — the "both"
+     * send form keeps the original path as the visible reference while the temp
+     * copy only feeds CLI expansion. Lines with only temp refs (screenshot-only
+     * messages) keep them: the temp filename is the only @filename the bubble
+     * can show.
+     */
+    static JsonArray stripRedundantTempRefs(JsonArray blocks) {
+        JsonArray kept = new JsonArray();
+        boolean changed = false;
+        for (JsonElement block : blocks) {
+            JsonObject obj = block.getAsJsonObject();
+            if ("text".equals(getString(obj, "type"))
+                    && obj.has("text") && obj.get("text").isJsonPrimitive()) {
+                String stripped = stripTempRefsFromLines(obj.get("text").getAsString());
+                if (!stripped.equals(obj.get("text").getAsString())) {
+                    JsonObject rewritten = obj.deepCopy();
+                    rewritten.addProperty("text", stripped);
+                    kept.add(rewritten);
+                    changed = true;
+                    continue;
+                }
+            }
+            kept.add(block);
+        }
+        return changed ? kept : blocks;
+    }
+
+    /** Per-line temp-ref strip: only lines that mix temp and non-temp @path refs are rewritten. */
+    private static String stripTempRefsFromLines(String text) {
+        if (!text.contains(ATTACHMENT_DIR_SEGMENT)) {
+            return text;
+        }
+        String[] lines = text.split("\n", -1);
+        StringBuilder out = new StringBuilder(text.length());
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            if (i > 0) {
+                out.append('\n');
+            }
+            out.append(stripTempRefsFromLine(line));
+        }
+        return out.toString();
+    }
+
+    private static String stripTempRefsFromLine(String line) {
+        if (!line.contains(ATTACHMENT_DIR_SEGMENT) || !lineHasNonTempPathRef(line)) {
+            return line;
+        }
+        return ATTACHMENT_TEMP_REF.matcher(line).replaceAll("")
+                .replace(SAME_FILE_ANNOTATION, "")
+                .stripLeading();
+    }
+
+    /** True when the line carries at least one absolute-path @ref outside the attachment temp dir. */
+    private static boolean lineHasNonTempPathRef(String line) {
+        Matcher matcher = AT_TOKEN.matcher(line);
+        while (matcher.find()) {
+            String token = matcher.group();
+            if (!token.contains(ATTACHMENT_DIR_SEGMENT) && isPathRefToken(token)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** True for absolute-path @refs (Windows drive, UNC, or unix absolute). */
+    private static boolean isPathRefToken(String token) {
+        if (token.length() < 3) {
+            return false;
+        }
+        // token[0] is '@'; "@C:\..." has the drive colon at index 2, while
+        // "@/..." and "@\\..." (UNC) branch at index 1.
+        return token.charAt(2) == ':' || token.charAt(1) == '/' || token.charAt(1) == '\\';
     }
 
     /** Convert one Gemini-style part into zero or more Claude-template blocks. */

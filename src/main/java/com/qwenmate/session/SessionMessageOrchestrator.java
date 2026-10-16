@@ -274,6 +274,16 @@ public class SessionMessageOrchestrator {
                         state.replaceMessages(pageMessages);
                         LOG.info("History cursor reset; replaced transcript with latest page: "
                                 + pageMessages.size() + " messages, totalTurns=" + totalTurns);
+                    } else if (beforeTurn == null && !state.getMessagesReference().isEmpty()) {
+                        // A cursor-less request asks for the latest page, which for a
+                        // live transcript is the turn already on screen — prepending it
+                        // duplicated the first-turn bubble (2026-10-15 regression, also
+                        // reached via a stale client cursor). The frontend now hides the
+                        // loader until a real cursor exists; this guard keeps any caller
+                        // from re-introducing the duplicate. Page info still publishes so
+                        // the client cursor converges.
+                        LOG.info("Skipping prepend of cursor-less latest page over a live transcript"
+                                + ": pageMessages=" + pageMessages.size() + ", fromTurn=" + fromTurn);
                     } else {
                         state.prependMessages(pageMessages);
                         LOG.info("Prepended history page: " + pageMessages.size() + " messages"

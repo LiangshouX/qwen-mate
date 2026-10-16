@@ -36,22 +36,16 @@ public class SessionContextService {
 
         try {
             JsonArray contentArr = new JsonArray();
-            String userDisplayText = normalizedInput;
 
-            if (attachments != null && !attachments.isEmpty()) {
-                for (QwenMateSession.Attachment att : attachments) {
-                    if (isImageAttachment(att)) {
-                        contentArr.add(createImageBlock(att));
-                    }
-                }
-
-                if (userDisplayText.isEmpty()) {
-                    userDisplayText = generateAttachmentSummary(attachments);
-                }
-            }
-
-            userDisplayText = processReferences(normalizedInput, "terminal", "Terminal Output", this::resolveTerminalContent);
+            String userDisplayText = processReferences(normalizedInput, "terminal", "Terminal Output", this::resolveTerminalContent);
             userDisplayText = processReferences(userDisplayText, "service", "Service Output", this::resolveServiceContent);
+            // Attachments never add image blocks anymore: user bubbles render the
+            // "@path + text" form only (the transcript parser strips the CLI-side
+            // @expansion on history reload). Image-only sends fall back to the
+            // attachment summary so the send-time bubble stays visible.
+            if (userDisplayText.isEmpty() && attachments != null && !attachments.isEmpty()) {
+                userDisplayText = generateAttachmentSummary(attachments);
+            }
 
             contentArr.add(createTextBlock(userDisplayText));
 
@@ -341,27 +335,6 @@ public class SessionContextService {
             }
             return "";
         });
-    }
-
-    private boolean isImageAttachment(QwenMateSession.Attachment att) {
-        if (att == null) {
-            return false;
-        }
-        String mediaType = att.mediaType != null ? att.mediaType : "";
-        return mediaType.startsWith("image/") && att.data != null;
-    }
-
-    private JsonObject createImageBlock(QwenMateSession.Attachment att) {
-        JsonObject imageBlock = new JsonObject();
-        imageBlock.addProperty("type", "image");
-
-        JsonObject source = new JsonObject();
-        source.addProperty("type", "base64");
-        source.addProperty("media_type", att.mediaType);
-        source.addProperty("data", att.data);
-        imageBlock.add("source", source);
-
-        return imageBlock;
     }
 
     private JsonObject createTextBlock(String text) {

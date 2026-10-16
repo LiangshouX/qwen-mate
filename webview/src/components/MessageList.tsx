@@ -238,13 +238,14 @@ export const MessageList = memo(forwardRef<MessageListRevealHandle, MessageListP
   const shouldCollapse = collapsedCount > 0;
   const nextTurnCount = Math.min(REVEAL_TURN_PAGE_SIZE, hiddenTurnCount);
 
-  // Disk pagination: hidden once the transcript provably starts at the
-  // session's first turn (hasMore=false), available while earlier turns may
-  // still exist — including when no page info has arrived yet, where the first
-  // request has no turn cursor and asks for the latest page (beforeTurn=null).
+  // Disk pagination: hidden until a loaded page reports earlier turns
+  // remain (hasMore=true). While no page info has arrived yet the null-cursor
+  // "latest page" request would fetch the turn already on screen, and
+  // prepending it duplicated the first-turn bubble (2026-10-15 regression);
+  // a fresh session provably has nothing earlier, so the button stays hidden.
   const canLoadEarlierFromDisk = Boolean(currentSessionId)
     && messages.length > 0
-    && (historyPageInfo == null || historyPageInfo.hasMore);
+    && historyPageInfo?.hasMore === true;
 
   const handleLoadEarlierFromDisk = useCallback(() => {
     if (loadingEarlierHistoryRef.current || !currentSessionId) return;

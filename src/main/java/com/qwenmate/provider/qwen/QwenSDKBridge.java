@@ -1095,6 +1095,9 @@ public class QwenSDKBridge extends BaseSDKBridge {
                 o.addProperty("fileName", a.fileName);
                 o.addProperty("mediaType", a.mediaType);
                 o.addProperty("data", a.data);
+                if (a.sourcePath != null && !a.sourcePath.isEmpty()) {
+                    o.addProperty("sourcePath", a.sourcePath);
+                }
                 attArr.add(o);
             }
             stdinInput.add("attachments", attArr);

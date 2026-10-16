@@ -406,4 +406,119 @@ public class QwenTranscriptParserTest {
                 "a568800a410b14456088b56be93a5c48ed8467775ff9627a9b8ce722f6e906e9",
                 QwenHistoryReader.projectHash("D:\\Code\\Java\\jetbrains-qc-gui"));
     }
+
+    @Test
+    public void stripsAtExpansionWrapperFromHistoryBubbles() {
+        // Real shape from session 88468: prompt part, expansion header, "Content
+        // from", inlineData image, end marker.
+        String record = "{\"uuid\":\"x1\",\"parentUuid\":null,\"sessionId\":\"s1\","
+                + "\"timestamp\":\"2026-10-14T11:10:56.000Z\",\"type\":\"user\","
+                + "\"message\":{\"role\":\"user\",\"parts\":["
+                + "{\"text\":\"@C:\\\\Users\\\\u\\\\.qwen\\\\tmp\\\\qwen-mate-attachments\\\\att-1.png\\n\\n\\u8bc6\\u56fe\\u6d4b\\u8bd5\"},"
+                + "{\"text\":\"\\n--- Content from referenced files ---\"},"
+                + "{\"text\":\"\\nContent from C:\\\\x\\\\att-1.png:\\n\"},"
+                + "{\"inlineData\":{\"mimeType\":\"image/png\",\"data\":\"AAAA\"}},"
+                + "{\"text\":\"\\n--- End of content ---\"}]}}";
+
+        QwenTranscriptParser.ParsedSession session = parse(record);
+
+        JsonArray blocks = messageAt(session, 0).getAsJsonObject("message").getAsJsonArray("content");
+        assertEquals(1, blocks.size());
+        String text = blocks.get(0).getAsJsonObject().get("text").getAsString();
+        assertTrue(text.startsWith("@C:\\Users\\u\\.qwen\\tmp\\qwen-mate-attachments\\att-1.png"));
+        assertFalse(text.contains("Content from referenced files"));
+    }
+
+    @Test
+    public void stripsExpansionKeepsOriginalWhenMarkerSplitsOwnPart() {
+        JsonArray blocks = new JsonArray();
+        JsonObject prompt = new JsonObject();
+        prompt.addProperty("type", "text");
+        prompt.addProperty("text", "typed text only");
+        blocks.add(prompt);
+        JsonObject marker = new JsonObject();
+        marker.addProperty("type", "text");
+        marker.addProperty("text", "\n--- Content from referenced files ---");
+        blocks.add(marker);
+        JsonObject footer = new JsonObject();
+        footer.addProperty("type", "text");
+        footer.addProperty("text", "\n--- End of content ---");
+        blocks.add(footer);
+
+        JsonArray stripped = QwenTranscriptParser.stripAtExpansion(blocks);
+
+        assertEquals(1, stripped.size());
+        assertEquals("typed text only", stripped.get(0).getAsJsonObject().get("text").getAsString());
+    }
+
+    @Test
+    public void stripAtExpansionKeepsBlocksWhenNoMarkerFound() {
+        JsonArray blocks = new JsonArray();
+        JsonObject prompt = new JsonObject();
+        prompt.addProperty("type", "text");
+        prompt.addProperty("text", "plain question");
+        blocks.add(prompt);
+
+        assertEquals(1, QwenTranscriptParser.stripAtExpansion(blocks).size());
+    }
+
+    @Test
+    public void keepsImageWhenMessageHasNoVisibleText() {
+        JsonArray blocks = new JsonArray();
+        JsonObject image = new JsonObject();
+        image.addProperty("type", "image");
+        image.addProperty("src", "data:image/png;base64,AAAA");
+        blocks.add(image);
+
+        assertEquals(1, QwenTranscriptParser.dropImagesWithVisibleText(blocks).size());
+    }
+
+    @Test
+    public void dropsImageWhenVisibleTextRemains() {
+        JsonArray blocks = new JsonArray();
+        JsonObject image = new JsonObject();
+        image.addProperty("type", "image");
+        image.addProperty("src", "data:image/png;base64,AAAA");
+        blocks.add(image);
+        JsonObject text = new JsonObject();
+        text.addProperty("type", "text");
+        text.addProperty("text", "hello");
+        blocks.add(text);
+
+        JsonArray kept = QwenTranscriptParser.dropImagesWithVisibleText(blocks);
+
+        assertEquals(1, kept.size());
+        assertEquals("hello", kept.get(0).getAsJsonObject().get("text").getAsString());
+    }
+
+    @Test
+    public void stripsTempRefWhenOriginalPathRefAlsoPresent() {
+        JsonArray blocks = new JsonArray();
+        JsonObject text = new JsonObject();
+        text.addProperty("type", "text");
+        text.addProperty("text",
+                "@C:\\Users\\u\\.qwen\\tmp\\qwen-mate-attachments\\att-1.png @D:\\Pics\\a.png\n\nbody");
+        blocks.add(text);
+
+        JsonArray kept = QwenTranscriptParser.stripRedundantTempRefs(blocks);
+
+        String rendered = kept.get(0).getAsJsonObject().get("text").getAsString();
+        assertFalse(rendered.contains("qwen-mate-attachments"));
+        assertTrue(rendered.contains("@D:\\Pics\\a.png"));
+        assertTrue(rendered.contains("body"));
+    }
+
+    @Test
+    public void keepsTempRefForScreenshotOnlyMessages() {
+        JsonArray blocks = new JsonArray();
+        JsonObject text = new JsonObject();
+        text.addProperty("type", "text");
+        text.addProperty("text",
+                "@C:\\Users\\u\\.qwen\\tmp\\qwen-mate-attachments\\att-1.png\n\nbody");
+        blocks.add(text);
+
+        JsonArray kept = QwenTranscriptParser.stripRedundantTempRefs(blocks);
+
+        assertTrue(kept.get(0).getAsJsonObject().get("text").getAsString().contains("qwen-mate-attachments"));
+    }
 }

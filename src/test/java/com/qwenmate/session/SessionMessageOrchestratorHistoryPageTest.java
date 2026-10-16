@@ -88,6 +88,43 @@ public class SessionMessageOrchestratorHistoryPageTest {
     }
 
     @Test
+    public void loadEarlierHistoryPageSkipsCursorLessLatestPageOverLiveTranscript() {
+        SessionState state = new SessionState();
+        state.setProvider("qwen");
+        state.setSessionId("session-page");
+        state.setCwd("/workspace");
+        state.addMessage(stateMessage(QwenMateSession.Message.Type.USER, "live prompt"));
+        state.addMessage(stateMessage(QwenMateSession.Message.Type.ASSISTANT, "live reply"));
+
+        RecordingCallback callback = new RecordingCallback();
+        SessionCallbackFacade callbackFacade = new SessionCallbackFacade(null);
+        callbackFacade.setCallback(callback);
+
+        PagingHistoryAccess historyAccess = new PagingHistoryAccess();
+        // A cursor-less request asks for the latest page — over a live transcript
+        // that is the turn already on screen, and prepending it duplicated the
+        // first-turn bubble. The guard must skip the prepend but still publish
+        // page info so the client cursor converges.
+        historyAccess.page = page(true,
+                List.of(message("user", "live prompt"), message("assistant", "live reply")),
+                0, 2, 2, false, false, null);
+
+        SessionMessageOrchestrator orchestrator = new SessionMessageOrchestrator(
+                state, new MessageParser(), callbackFacade, historyAccess, (usedTokens, maxTokens) -> {
+        });
+
+        orchestrator.loadEarlierHistoryPage("session-page", "/workspace", null).join();
+
+        List<QwenMateSession.Message> messages = state.getMessages();
+        assertEquals(2, messages.size());
+        assertEquals("live prompt", messages.get(0).content);
+        assertEquals("live reply", messages.get(1).content);
+        assertEquals(List.of("session-page|0|2|false|false|null"), callback.pageInfos);
+        assertTrue(callback.pageErrors.isEmpty());
+        assertEquals(1, callback.messageUpdates.size());
+    }
+
+    @Test
     public void loadEarlierHistoryPageNotifiesErrorWhenQueryFails() {
         SessionState state = new SessionState();
         state.setProvider("qwen");

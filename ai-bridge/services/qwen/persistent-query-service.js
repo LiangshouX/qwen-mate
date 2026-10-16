@@ -30,7 +30,7 @@ import {
   writePermissionRequest,
 } from './permission-file-ipc.js';
 import { managedMemoryQueryEnv } from './managed-memory-env.js';
-import { persistAttachments, prependAttachmentRefs } from './attachment-files.js';
+import { persistAttachments, prependAttachmentRefs, inlineExternalImageRefs } from './attachment-files.js';
 
 // ─── Runtime registry (mirrors the upstream SDK pattern) ───
 
@@ -717,8 +717,21 @@ export async function sendMessagePersistent(params = {}) {
     // persisted file with read_file instead (inlineData parts it can see).
     // A string prompt also keeps the SDK's single-turn lifecycle (it closes
     // stdin itself; array prompts would leak one CLI process per turn).
-    const attachmentRefs = persistAttachments(attachments);
-    const prompt = prependAttachmentRefs(message, attachmentRefs);
+    // Disk-first persistence: a sourcePath already referenced by the message
+    // (the frontend prepends @sourcePath so the first bubble shows it) is
+    // skipped — inlineExternalImageRefs below owns its temp copy, and
+    // re-prepending would duplicate the reference the model counts as a
+    // second image.
+    const attachmentRefs = persistAttachments(attachments, {
+      cwd,
+      message: typeof message === 'string' ? message : '',
+    });
+    // Typed @path refs to images outside the workspace get an inline temp copy
+    // in front of them, so they expand to inlineData instead of costing a
+    // read_file round-trip; the original token stays as location info with a
+    // "(same file)" annotation so the model doesn't count two images.
+    const { message: messageWithInlinedImages } = inlineExternalImageRefs(message, { cwd });
+    const prompt = prependAttachmentRefs(messageWithInlinedImages, attachmentRefs);
 
     // Permission callback
     const canUseTool = buildCanUseTool(params);
@@ -795,7 +808,9 @@ export async function sendMessagePersistent(params = {}) {
     // session, never generates twice, and throttles retries after transient
     // failures. Failures are silent (logged as structured daemon events).
     if (outcome.success && outcome.sessionId && !requestSessionId) {
-      const userMessageText = extractUserMessageText(message);
+      // The frontend prepends "@sourcePath\n\n" to the message; strip that
+      // ref line so session titles read as the user's text, not a temp path.
+      const userMessageText = extractUserMessageText(message)?.replace(/^@\S[^\n]*\n\n/, '');
       if (userMessageText) {
         maybeGenerateSessionTitle(userMessageText, outcome.sessionId, cwd || null)
           .catch(() => { /* fire-and-forget must never throw */ });

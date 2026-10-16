@@ -440,5 +440,15 @@ export function normalizeBlocks(
     return null;
   }
 
+  // User bubbles render the unified "@path + text" form: images are referenced
+  // by @path, never inlined (requirement). This also covers stale persisted
+  // raws from before that rule existed; assistant images are unaffected.
+  if (isUserMessage) {
+    const withoutImages = contentBlocks.filter((block) => block.type !== 'image');
+    if (withoutImages.length > 0 && withoutImages.length < contentBlocks.length) {
+      return withoutImages;
+    }
+  }
+
   return contentBlocks;
 }
