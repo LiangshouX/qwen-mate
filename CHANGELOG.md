@@ -1,5 +1,25 @@
 # Changelog
 
+##### 1.1.1 (2026-10-27)
+
+Maintenance release focused on slash-command UX and Skills: `/model` is now handled by the GUI with a global-default picker, and the Skills page manages custom commands as well as skills.
+
+Added:
+
+- `/model` is handled locally instead of being forwarded to the CLI (which only replied with usage text): the bare command opens a bottom-sheet single select for the CLI's global default model, built from the `modelProviders` catalog in `~/.qwen/settings.json` with the current default checked; picking a model writes it immediately and closes the sheet, with a hint that session-only switching stays in the model selector below the input box
+- `/model <model-id>` switches the current session model locally; `/model --global <model-id>` persists the default (`model.name` / `model.baseUrl`, with the auth protocol kept in sync); `--fast` / `--project` are rejected locally with a hint and never forwarded; all forms also work while a turn is loading
+- Settings → Skills now has Skills/Commands tabs: custom commands are scanned from `~/.qwen/commands` and `.qwen/commands`, with all/global/project counts, search, expanded frontmatter, and one-click editing in the IDE
+
+Improvements:
+
+- Default-model writes go through the same JSONC-preserving settings writer as the Providers page: comments, indentation, line endings, and BOM survive, and the model catalog refreshes so the selector's "current" badge follows the new default without a restart
+- The typed `/model --global <id>` form resolves the provider bucket from the cached catalog, so ids shared across buckets still write the right endpoint
+- Added copy for all 10 UI languages plus unit tests for command routing, the dialog, the settings-writer op, and Java dispatch
+
+Fixed:
+
+- `/model` no longer burns a full turn on the raw "Current model: …" reply; the command never reaches the backend
+
 ##### 1.1.0 (2026-10-17)
 
 Second stable release. The headline addition is a fully visual provider and model configuration for the Qwen Code CLI; the message-queue and usage-dimension work from 1.1.0-beta1 ships in the same release.

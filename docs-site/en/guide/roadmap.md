@@ -2,7 +2,7 @@
 
 ## Current state
 
-The latest stable release of QwenMate is 1.1.0 (released 2026-10-17). It ships through GitHub Releases and the JetBrains Marketplace; both channels distribute the same build artifact.
+The latest stable release of QwenMate is 1.1.1 (released 2026-10-27). It ships through GitHub Releases and the JetBrains Marketplace; both channels distribute the same build artifact.
 
 Core capabilities today:
 

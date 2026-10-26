@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-QwenMate 最新正式版为 1.1.0（2026-10-17 发布），发布渠道为 GitHub Releases 与 JetBrains Marketplace，两个渠道分发同一份构建产物。
+QwenMate 最新正式版为 1.1.1（2026-10-27 发布），发布渠道为 GitHub Releases 与 JetBrains Marketplace，两个渠道分发同一份构建产物。
 
 已具备的核心能力：
 
