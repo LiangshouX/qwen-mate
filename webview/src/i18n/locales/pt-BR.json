@@ -1303,6 +1303,18 @@
     "multiAgentEdited": "{{count}} agentes editaram este arquivo nesta sessão — revise com cuidado",
     "blockedBy": "Blocked by: {{ids}}"
   },
+  "commands": {
+    "title": "Comandos",
+    "all": "Todos",
+    "searchPlaceholder": "Pesquisar comandos...",
+    "noMatching": "Nenhum comando correspondente encontrado",
+    "emptyHint": "Crie arquivos .md em ~/.qwen/commands ou na pasta .qwen/commands do projeto para adicionar comandos personalizados",
+    "description": "Descrição",
+    "noDescription": "Sem descrição",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "Sem frontmatter",
+    "editInIde": "Editar no IDE"
+  },
   "skills": {
     "all": "Todas",
     "global": "Global",

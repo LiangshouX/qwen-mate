@@ -1303,6 +1303,18 @@
     "multiAgentEdited": "{{count}} агентов изменили этот файл в сессии — проверьте внимательно",
     "blockedBy": "Blocked by: {{ids}}"
   },
+  "commands": {
+    "title": "Команды",
+    "all": "Все",
+    "searchPlaceholder": "Поиск команд...",
+    "noMatching": "Подходящие команды не найдены",
+    "emptyHint": "Создайте .md-файлы в ~/.qwen/commands или в папке .qwen/commands проекта, чтобы добавить пользовательские команды",
+    "description": "Описание",
+    "noDescription": "Без описания",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "Frontmatter отсутствует",
+    "editInIde": "Редактировать в IDE"
+  },
   "skills": {
     "all": "Все",
     "global": "Глобальные",

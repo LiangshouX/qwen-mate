@@ -442,6 +442,11 @@ interface Window {
   updateSkills?: (json: string) => void;
 
   /**
+   * Update custom commands list
+   */
+  updateCommands?: (json: string) => void;
+
+  /**
    * Skill import result callback
    */
   skillImportResult?: (json: string) => void;

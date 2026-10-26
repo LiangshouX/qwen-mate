@@ -1303,6 +1303,18 @@
     "multiAgentEdited": "このセッションで {{count}} 個のエージェントがこのファイルを編集しました。ご注意ください",
     "blockedBy": "Blocked by: {{ids}}"
   },
+  "commands": {
+    "title": "コマンド",
+    "all": "すべて",
+    "searchPlaceholder": "コマンドを検索...",
+    "noMatching": "一致するコマンドが見つかりません",
+    "emptyHint": "~/.qwen/commands またはプロジェクトの .qwen/commands に .md ファイルを作成するとカスタムコマンドを追加できます",
+    "description": "説明",
+    "noDescription": "説明なし",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "Frontmatter はありません",
+    "editInIde": "IDE で編集"
+  },
   "skills": {
     "all": "すべて",
     "global": "グローバル",

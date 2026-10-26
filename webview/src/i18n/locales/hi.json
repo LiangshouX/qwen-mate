@@ -1303,6 +1303,18 @@
     "multiAgentEdited": "इस सत्र में {{count}} एजेंटों ने इस फ़ाइल को संपादित किया — सावधानी से देखें",
     "blockedBy": "Blocked by: {{ids}}"
   },
+  "commands": {
+    "title": "कमांड",
+    "all": "सभी",
+    "searchPlaceholder": "कमांड खोजें...",
+    "noMatching": "कोई मेल खाती कमांड नहीं मिली",
+    "emptyHint": "कस्टम कमांड जोड़ने के लिए ~/.qwen/commands या प्रोजेक्ट की .qwen/commands फ़ोल्डर में .md फ़ाइलें बनाएं",
+    "description": "विवरण",
+    "noDescription": "कोई विवरण नहीं",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "कोई frontmatter नहीं",
+    "editInIde": "IDE में संपादित करें"
+  },
   "skills": {
     "all": "All",
     "global": "Global",

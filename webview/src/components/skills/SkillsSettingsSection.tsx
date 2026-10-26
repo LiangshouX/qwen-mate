@@ -9,6 +9,7 @@ import { SkillList } from './SkillList';
 import { useSkillToggle } from './useSkillToggle';
 import { useFilteredSkills } from './useFilteredSkills';
 import { ToastContainer, type ToastMessage } from '../Toast';
+import { CommandsSettingsSection } from '../commands/CommandsSettingsSection';
 
 interface SkillsSettingsSectionProps {
   currentProvider?: string;
@@ -26,6 +27,9 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
   const [skills, setSkills] = useState<SkillsConfig>({ global: {}, local: {}, user: {}, repo: {} });
   const [loading, setLoading] = useState(true);
   const [expandedSkills, setExpandedSkills] = useState<Set<string>>(new Set());
+
+  // Section switcher: Skills / Commands
+  const [viewMode, setViewMode] = useState<'skills' | 'commands'>('skills');
 
   // UI state
   const [showDropdown, setShowDropdown] = useState(false);
@@ -220,42 +224,64 @@ export function SkillsSettingsSection({ currentProvider = 'qwen' }: SkillsSettin
 
   return (
     <div className="skills-settings-section">
-      {/* Toolbar */}
-      <SkillToolbar
-        isCodex={false}
-        currentFilter={currentFilter}
-        enabledFilter={enabledFilter}
-        totalCount={totalCount}
-        primaryCount={primaryCount}
-        secondaryCount={secondaryCount}
-        enabledCount={enabledCount}
-        disabledCount={disabledCount}
-        searchQuery={searchQuery}
-        loading={loading}
-        showDropdown={showDropdown}
-        dropdownRef={dropdownRef}
-        primaryScope={primaryScope}
-        secondaryScope={secondaryScope}
-        onFilterChange={setCurrentFilter}
-        onEnabledFilterChange={setEnabledFilter}
-        onSearchChange={setSearchQuery}
-        onShowHelp={() => setShowHelpDialog(true)}
-        onToggleDropdown={() => setShowDropdown(!showDropdown)}
-        onImport={handleImport}
-        onRefresh={handleRefresh}
-      />
+      {/* Section switcher: Skills / Commands */}
+      <div className="view-tabs">
+        <button
+          className={`view-tab ${viewMode === 'skills' ? 'active' : ''}`}
+          onClick={() => setViewMode('skills')}
+        >
+          {t('settings.skills')}
+        </button>
+        <button
+          className={`view-tab ${viewMode === 'commands' ? 'active' : ''}`}
+          onClick={() => setViewMode('commands')}
+        >
+          {t('commands.title')}
+        </button>
+      </div>
 
-      {/* Skills list */}
-      <SkillList
-        skills={filteredSkills}
-        loading={loading}
-        expandedSkills={expandedSkills}
-        togglingSkills={togglingSkills}
-        onToggleExpand={toggleExpand}
-        onToggle={handleToggle}
-        onOpen={handleOpen}
-        onDelete={handleDelete}
-      />
+      {viewMode === 'commands' ? (
+        <CommandsSettingsSection />
+      ) : (
+        <>
+          {/* Toolbar */}
+          <SkillToolbar
+            isCodex={false}
+            currentFilter={currentFilter}
+            enabledFilter={enabledFilter}
+            totalCount={totalCount}
+            primaryCount={primaryCount}
+            secondaryCount={secondaryCount}
+            enabledCount={enabledCount}
+            disabledCount={disabledCount}
+            searchQuery={searchQuery}
+            loading={loading}
+            showDropdown={showDropdown}
+            dropdownRef={dropdownRef}
+            primaryScope={primaryScope}
+            secondaryScope={secondaryScope}
+            onFilterChange={setCurrentFilter}
+            onEnabledFilterChange={setEnabledFilter}
+            onSearchChange={setSearchQuery}
+            onShowHelp={() => setShowHelpDialog(true)}
+            onToggleDropdown={() => setShowDropdown(!showDropdown)}
+            onImport={handleImport}
+            onRefresh={handleRefresh}
+          />
+
+          {/* Skills list */}
+          <SkillList
+            skills={filteredSkills}
+            loading={loading}
+            expandedSkills={expandedSkills}
+            togglingSkills={togglingSkills}
+            onToggleExpand={toggleExpand}
+            onToggle={handleToggle}
+            onOpen={handleOpen}
+            onDelete={handleDelete}
+          />
+        </>
+      )}
 
       {/* Dialogs */}
       {showHelpDialog && (

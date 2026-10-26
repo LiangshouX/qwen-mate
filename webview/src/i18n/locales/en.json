@@ -1462,6 +1462,18 @@
     "multiAgentBadge": "Multi-agent",
     "multiAgentEdited": "{{count}} agents edited this file in this session — review carefully"
   },
+  "commands": {
+    "title": "Commands",
+    "all": "All",
+    "searchPlaceholder": "Search commands...",
+    "noMatching": "No matching commands found",
+    "emptyHint": "Create .md files under ~/.qwen/commands or the project's .qwen/commands folder to add custom commands",
+    "description": "Description",
+    "noDescription": "No description",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "No frontmatter",
+    "editInIde": "Edit in IDE"
+  },
   "skills": {
     "all": "All",
     "global": "Global",

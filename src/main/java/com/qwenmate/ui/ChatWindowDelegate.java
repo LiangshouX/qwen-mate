@@ -26,6 +26,7 @@ import com.qwenmate.handler.provider.ProviderHandler;
 import com.qwenmate.handler.SessionHandler;
 import com.qwenmate.handler.SettingsHandler;
 import com.qwenmate.handler.SkillHandler;
+import com.qwenmate.handler.CommandHandler;
 import com.qwenmate.handler.TabHandler;
 import com.qwenmate.handler.UsagePushService;
 import com.qwenmate.handler.UsageStatsHandler;
@@ -283,6 +284,7 @@ public class ChatWindowDelegate {
         messageDispatcher.registerHandler(new McpMarketplaceHandler(handlerContext));
         messageDispatcher.registerHandler(new McpServerImportHandler(handlerContext));
         messageDispatcher.registerHandler(new SkillHandler(handlerContext));
+        messageDispatcher.registerHandler(new CommandHandler(handlerContext));
         messageDispatcher.registerHandler(new FileHandler(handlerContext));
         this.settingsHandler = new SettingsHandler(handlerContext);
         messageDispatcher.registerHandler(this.settingsHandler);

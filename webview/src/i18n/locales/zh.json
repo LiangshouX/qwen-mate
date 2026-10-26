@@ -1462,6 +1462,18 @@
     "multiAgentBadge": "多 Agent",
     "multiAgentEdited": "本会话有 {{count}} 个 Agent 修改过此文件，请留意合并冲突"
   },
+  "commands": {
+    "title": "命令",
+    "all": "全部",
+    "searchPlaceholder": "搜索命令...",
+    "noMatching": "未找到匹配的命令",
+    "emptyHint": "在 ~/.qwen/commands 或项目 .qwen/commands 目录下创建 .md 文件即可添加自定义命令",
+    "description": "描述",
+    "noDescription": "暂无描述",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "暂无 Frontmatter",
+    "editInIde": "在 IDE 中编辑"
+  },
   "skills": {
     "all": "全部",
     "global": "全局",

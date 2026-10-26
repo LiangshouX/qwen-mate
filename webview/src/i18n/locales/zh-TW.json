@@ -1303,6 +1303,18 @@
     "multiAgentEdited": "本會話有 {{count}} 個 Agent 修改過此檔案，請留意合併衝突",
     "blockedBy": "Blocked by: {{ids}}"
   },
+  "commands": {
+    "title": "命令",
+    "all": "全部",
+    "searchPlaceholder": "搜尋命令...",
+    "noMatching": "未找到符合的命令",
+    "emptyHint": "在 ~/.qwen/commands 或專案 .qwen/commands 目錄下建立 .md 檔案即可新增自訂命令",
+    "description": "描述",
+    "noDescription": "暫無描述",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "暫無 Frontmatter",
+    "editInIde": "在 IDE 中編輯"
+  },
   "skills": {
     "all": "全部",
     "global": "全局",

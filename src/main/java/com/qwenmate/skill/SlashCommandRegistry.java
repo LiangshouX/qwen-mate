@@ -33,6 +33,13 @@ public final class SlashCommandRegistry {
     }
 
     /**
+     * A discovered command .md file with its file path and full frontmatter,
+     * used by the command management UI.
+     */
+    public record CommandFile(String name, String description, String source, String path, Map<String, Object> frontmatter) {
+    }
+
+    /**
      * Represents a directory to scan for skills or commands, with its scope.
      */
     public record SkillScanDir(String path, String scope) {
@@ -334,6 +341,18 @@ public final class SlashCommandRegistry {
      * Scans a commands directory recursively for .md files and converts them to slash commands.
      */
     static List<SlashCommand> scanCommandsAsCommands(String dirPath, String source) {
+        List<SlashCommand> commands = new ArrayList<>();
+        for (CommandFile file : scanCommandFiles(dirPath, source)) {
+            commands.add(new SlashCommand(file.name(), file.description(), file.source()));
+        }
+        return commands;
+    }
+
+    /**
+     * Scans a commands directory recursively for .md files, keeping the file path
+     * and full frontmatter for the command management UI.
+     */
+    static List<CommandFile> scanCommandFiles(String dirPath, String source) {
         if (dirPath == null || dirPath.isEmpty()) {
             return List.of();
         }
@@ -342,9 +361,9 @@ public final class SlashCommandRegistry {
             return List.of();
         }
 
-        List<SlashCommand> commands = new ArrayList<>();
-        scanCommandsRecursive(baseDir.toFile(), baseDir, source, commands, 0);
-        return commands;
+        List<CommandFile> files = new ArrayList<>();
+        scanCommandsRecursive(baseDir.toFile(), baseDir, source, files, 0);
+        return files;
     }
 
     // Max recursion depth for command directory scanning to prevent runaway traversal.
@@ -357,7 +376,7 @@ public final class SlashCommandRegistry {
             File dir,
             Path baseDir,
             String source,
-            List<SlashCommand> commands,
+            List<CommandFile> commands,
             int depth
     ) {
         if (depth > MAX_COMMAND_SCAN_DEPTH) {
@@ -384,7 +403,7 @@ public final class SlashCommandRegistry {
 
             if (entry.isFile() && entry.getName().toLowerCase().endsWith(".md")) {
                 String namespace = deriveCommandNamespace(entry, baseDir);
-                SlashCommand cmd = parseCommandFile(entry, namespace, source);
+                CommandFile cmd = parseCommandFile(entry, namespace, source);
                 if (cmd != null) {
                     commands.add(cmd);
                 }
@@ -415,20 +434,19 @@ public final class SlashCommandRegistry {
     }
 
     /**
-     * Parses a single command .md file to extract name and description from frontmatter.
+     * Parses a single command .md file into a CommandFile entry with its full frontmatter.
      */
-    private static SlashCommand parseCommandFile(File mdFile, String namespace, String source) {
+    private static CommandFile parseCommandFile(File mdFile, String namespace, String source) {
         String baseName = mdFile.getName().replaceFirst("\\.md$", "");
         String commandName = namespace != null
                 ? "/" + namespace + ":" + baseName
                 : "/" + baseName;
 
-        String description = SlashCommandJsonReader.extractCommandDescription(mdFile.toPath());
-        if (description == null) {
-            description = "";
-        }
+        Map<String, Object> frontmatter = SlashCommandJsonReader.extractFrontmatterMap(mdFile.toPath());
+        Object desc = frontmatter.get("description");
+        String description = desc != null ? String.valueOf(desc).trim() : "";
 
-        return new SlashCommand(commandName, description, source);
+        return new CommandFile(commandName, description, source, mdFile.getAbsolutePath(), frontmatter);
     }
 
     private static String resolveUserHome() {

@@ -1303,6 +1303,18 @@
     "multiAgentEdited": "이 세션에서 {{count}}개 Agent가 이 파일을 수정했습니다. 주의해서 확인하세요",
     "blockedBy": "Blocked by: {{ids}}"
   },
+  "commands": {
+    "title": "명령",
+    "all": "전체",
+    "searchPlaceholder": "명령 검색...",
+    "noMatching": "일치하는 명령이 없습니다",
+    "emptyHint": "~/.qwen/commands 또는 프로젝트 .qwen/commands 디렉터리에 .md 파일을 만들어 사용자 지정 명령을 추가하세요",
+    "description": "설명",
+    "noDescription": "설명 없음",
+    "frontmatter": "Frontmatter",
+    "noFrontmatter": "Frontmatter 없음",
+    "editInIde": "IDE에서 편집"
+  },
   "skills": {
     "all": "전체",
     "global": "전역",

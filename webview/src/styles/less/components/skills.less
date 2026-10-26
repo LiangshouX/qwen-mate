@@ -1018,3 +1018,70 @@
     background: rgba(156, 163, 175, 0.15);
     color: var(--text-tertiary);
 }
+
+/* ==================== Skills / Commands 视图切换 ==================== */
+
+.view-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.view-tabs .view-tab {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 13px;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+.view-tabs .view-tab:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+
+.view-tabs .view-tab.active {
+    background: var(--accent-primary);
+    color: var(--text-white);
+}
+
+/* ==================== 自定义命令 Frontmatter 展示 ==================== */
+
+.skill-card .frontmatter-container {
+    margin-bottom: 12px;
+}
+
+.skill-card .frontmatter-table {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.skill-card .frontmatter-row {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.skill-card .frontmatter-key {
+    flex-shrink: 0;
+    min-width: 120px;
+    color: var(--text-tertiary);
+    font-family: var(--idea-editor-font-family, monospace);
+}
+
+.skill-card .frontmatter-value {
+    color: var(--text-secondary);
+    word-break: break-all;
+    white-space: pre-wrap;
+}

@@ -1,6 +1,5 @@
 package com.qwenmate.handler;
 
-import com.intellij.openapi.application.ModalityState;
 import com.qwenmate.bridge.NodeDetector;
 import com.qwenmate.handler.core.BaseMessageHandler;
 import com.qwenmate.handler.core.HandlerContext;
@@ -9,11 +8,9 @@ import com.qwenmate.skill.SkillService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.concurrency.AppExecutorUtil;
@@ -337,21 +334,7 @@ public class SkillHandler extends BaseMessageHandler {
 
             final String fileToOpen = targetPath;
 
-            // Use ReadAction.nonBlocking() to find the file in a background thread
-            ReadAction
-                .nonBlocking(() -> {
-                    // Find the file in a background thread (this is a slow operation)
-                    return LocalFileSystem.getInstance().findFileByPath(NodeDetector.toVfsPath(fileToOpen));
-                })
-                .finishOnUiThread(ModalityState.defaultModalityState(), virtualFile -> {
-                    // Open the file on the UI thread
-                    if (virtualFile != null) {
-                        FileEditorManager.getInstance(context.getProject()).openFile(virtualFile, true);
-                    } else {
-                        LOG.error("[SkillHandler] Cannot find file: " + fileToOpen);
-                    }
-                })
-                .submit(AppExecutorUtil.getAppExecutorService());
+            EditorFileOpener.open(context.getProject(), fileToOpen);
 
         } catch (Exception e) {
             LOG.error("[SkillHandler] Failed to open skill: " + e.getMessage(), e);

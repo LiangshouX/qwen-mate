@@ -43,7 +43,7 @@ QwenMate currently supports Qwen Code as its only engine, driving it through the
 - Code DIFF comparison and file navigation
 - Usage statistics: local token consumption with today / 7-day / 30-day windows and all / by-project / by-session dimensions, model share, daily trends, and a 12-month heatmap
 - MCP servers: built-in marketplace, add/edit/remove, connection status and tool lists
-- Skills: browse and manage Qwen Code skills
+- Skills & custom commands: browse and manage Qwen Code skills and commands, expand to inspect frontmatter, edit in the IDE
 - Dark/Light theme with IDE font synchronization
 - 10-language internationalization
 

@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 final class SlashCommandJsonReader {
@@ -59,10 +60,15 @@ final class SlashCommandJsonReader {
         return null;
     }
 
-    static String extractCommandDescription(Path mdPath) {
+    /**
+     * Parses a command file's YAML frontmatter into an ordered map.
+     *
+     * @return the frontmatter fields, or an empty map when absent/unparseable
+     */
+    static Map<String, Object> extractFrontmatterMap(Path mdPath) {
         String yamlText = SkillFrontmatterParser.extractFrontmatter(mdPath);
         if (yamlText == null) {
-            return null;
+            return Map.of();
         }
 
         try {
@@ -76,12 +82,15 @@ final class SlashCommandJsonReader {
             if (parsed instanceof Map) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> map = (Map<String, Object>) parsed;
-                Object desc = map.get("description");
-                return desc != null ? String.valueOf(desc).trim() : null;
+                Map<String, Object> fields = new LinkedHashMap<>();
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    fields.put(String.valueOf(entry.getKey()), entry.getValue());
+                }
+                return fields;
             }
         } catch (Exception e) {
             LOG.debug("Failed to parse command frontmatter: " + mdPath);
         }
-        return null;
+        return Map.of();
     }
 }

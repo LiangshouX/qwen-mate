@@ -43,7 +43,7 @@ QwenMate 目前仅支持 Qwen Code 这一个引擎，通过其官方 TypeScript 
 - 代码 DIFF 对比与文件导航
 - 用量统计：本机 token 消耗，支持今日 / 7 天 / 30 天窗口与全量 / 按项目 / 按会话三个统计维度，含模型份额、每日趋势与 12 个月热力图
 - MCP 服务器：内置市场浏览、增删改配置、连接状态与工具列表
-- Skills：浏览与管理 Qwen Code 技能
+- Skills 与自定义命令：浏览与管理 Qwen Code 技能和命令，展开查看 frontmatter，一键在 IDE 中编辑
 - 深色/浅色主题，IDE 字体同步
 - 10 种语言国际化
 
