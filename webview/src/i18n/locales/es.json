@@ -1445,6 +1445,20 @@
       }
     }
   },
+  "modelSelect": {
+    "title": "Modelo predeterminado",
+    "hint": "Elegir aquí cambia el modelo predeterminado global de Qwen Code. Para cambiar solo la sesión actual, usa el selector de modelo situado debajo del cuadro de entrada.",
+    "empty": "Aún no hay modelos configurados en ~/.qwen/settings.json. Añade uno en la gestión de proveedores.",
+    "openProviderSettings": "Abrir gestión de proveedores",
+    "current": "Predeterminado actual",
+    "saving": "Guardando…",
+    "saved": "Modelo predeterminado establecido en {{model}}",
+    "saveFailed": "No se pudo establecer el modelo predeterminado: {{error}}",
+    "sessionSet": "Modelo de la sesión cambiado a {{model}}",
+    "usageHint": "Uso: /model para elegir el predeterminado global, /model <model-id> para cambiar la sesión actual, /model --global <model-id> para establecer el predeterminado global.",
+    "fastUnsupported": "Cambiar el modelo rápido desde el cuadro de entrada aún no es compatible. Usa la configuración de modelos en la parte inferior del cuadro de entrada.",
+    "projectUnsupported": "La configuración de modelos por proyecto aún no es compatible. Usa Ajustes → Proveedores."
+  },
   "modes": {
     "plan": {
       "label": "Plan",

@@ -1445,6 +1445,20 @@
       }
     }
   },
+  "modelSelect": {
+    "title": "기본 모델",
+    "hint": "여기에서 선택하면 Qwen Code의 전역 기본 모델이 변경됩니다. 현재 세션에만 적용하려면 입력 상자 아래의 모델 선택을 사용하세요.",
+    "empty": "~/.qwen/settings.json 에 아직 모델이 구성되어 있지 않습니다. 먼저 공급자 관리에서 추가하세요.",
+    "openProviderSettings": "공급자 관리 열기",
+    "current": "현재 기본값",
+    "saving": "저장 중…",
+    "saved": "{{model}} 모델을 전역 기본 모델로 설정했습니다",
+    "saveFailed": "기본 모델 설정 실패: {{error}}",
+    "sessionSet": "이 세션의 모델을 {{model}} 로 전환했습니다",
+    "usageHint": "사용법: /model 로 전역 기본값 선택, /model <model-id> 로 현재 세션 전환, /model --global <model-id> 로 전역 기본값 설정.",
+    "fastUnsupported": "입력 상자에서 빠른 모델을 전환하는 기능은 아직 지원되지 않습니다. 입력 상자 아래의 모델 설정을 사용하세요.",
+    "projectUnsupported": "프로젝트 범위 모델 설정은 아직 지원되지 않습니다. 설정 → 공급자 관리 에서 변경하세요."
+  },
   "modes": {
     "plan": {
       "label": "계획",

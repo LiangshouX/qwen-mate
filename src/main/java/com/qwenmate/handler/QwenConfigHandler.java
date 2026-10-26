@@ -5,15 +5,21 @@ import com.qwenmate.settings.QwenMateSettingsService;
 import com.qwenmate.settings.QwenCliConfigReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.intellij.openapi.diagnostic.Logger;
 
 /**
  * Handles the Qwen auth configuration for Settings → Qwen 配置
- * (auth method / API key / base URL).
+ * (auth method / API key / base URL) and the CLI's global default model.
  *
  * Protocol (webview ↔ Java):
- *  - `get_qwen_config`        → `window.updateCurrentQwenConfig(json)`
- *  - `set_qwen_config:<json>` → `window.qwenConfigResult(json)`
+ *  - `get_qwen_config`              → `window.updateCurrentQwenConfig(json)`
+ *  - `set_qwen_config:<json>`       → `window.qwenConfigResult(json)`
+ *  - `set_qwen_default_model:<json>`→ `window.onQwenDefaultModelResult(json)`
+ *
+ * The default-model write is delegated to the same JSONC-preserving settings
+ * writer as the provider management page, so comments/formatting in
+ * {@code ~/.qwen/settings.json} survive (CLI parity).
  */
 public class QwenConfigHandler {
 
@@ -23,11 +29,22 @@ public class QwenConfigHandler {
     private static final String AUTH_METHOD_BASE_URL = "base_url";
     private static final String AUTH_METHOD_ENV = "env";
 
+    /** Seam for tests: runs one settings-writer op and returns its JSON result. */
+    interface ConfigRunner {
+        String run(String settingsPath, String payloadJson) throws Exception;
+    }
+
     private final HandlerContext context;
     private final Gson gson = new Gson();
+    private final ConfigRunner runner;
 
     public QwenConfigHandler(HandlerContext context) {
+        this(context, null);
+    }
+
+    QwenConfigHandler(HandlerContext context, ConfigRunner runner) {
         this.context = context;
+        this.runner = runner != null ? runner : new NodeRunner(context);
     }
 
     /**
@@ -91,6 +108,76 @@ public class QwenConfigHandler {
         context.callJavaScript("window.qwenConfigResult", context.escapeJs(gson.toJson(result)));
     }
 
+    /**
+     * Persist the CLI's global default model (`model` in ~/.qwen/settings.json)
+     * and reply once the JSONC writer finishes.
+     *
+     * Payload: {@code {modelId: string, provider?: string}}. A success also
+     * re-pushes the model catalog so the selector's "current" badge follows
+     * the new default without a plugin restart.
+     */
+    public void handleSetQwenDefaultModel(String content) {
+        JsonObject response = new JsonObject();
+        String modelId = "";
+        try {
+            JsonObject json = gson.fromJson(content, JsonObject.class);
+            if (json == null) {
+                throw new IllegalArgumentException("empty payload");
+            }
+            modelId = optString(json, "modelId").trim();
+            if (modelId.isEmpty()) {
+                throw new IllegalArgumentException("modelId is required");
+            }
+
+            JsonObject payload = new JsonObject();
+            payload.addProperty("op", "setDefaultModel");
+            payload.addProperty("modelId", modelId);
+            String provider = optString(json, "provider").trim();
+            if (!provider.isEmpty()) {
+                payload.addProperty("provider", provider);
+            }
+
+            String raw = runner.run(QwenCliConfigReader.settingsPath().toString(), gson.toJson(payload));
+            JsonObject result = parseWriterResult(raw);
+            boolean ok = result.has("ok") && result.get("ok").getAsBoolean();
+            response.addProperty("success", ok);
+            response.addProperty("modelId", modelId);
+            if (!ok) {
+                response.addProperty("code", optString(result, "code"));
+                response.addProperty("error", optString(result, "message"));
+            }
+        } catch (Exception e) {
+            // warn (not error): Logger.error throws AssertionError under tests,
+            // and an invalid request is an expected path, not a defect.
+            LOG.warn("[QwenConfigHandler] Failed to set default model: " + e.getMessage());
+            response.addProperty("success", false);
+            if (!modelId.isEmpty()) {
+                response.addProperty("modelId", modelId);
+            }
+            response.addProperty("error", e.getMessage() != null ? e.getMessage() : "save failed");
+        }
+        context.callJavaScript("window.onQwenDefaultModelResult", context.escapeJs(gson.toJson(response)));
+        if (response.has("success") && response.get("success").getAsBoolean()) {
+            handleGetQwenModelOptions();
+        }
+    }
+
+    private static JsonObject parseWriterResult(String raw) {
+        try {
+            JsonObject parsed = JsonParser.parseString(raw).getAsJsonObject();
+            if (parsed.has("ok")) {
+                return parsed;
+            }
+        } catch (RuntimeException ignored) {
+            // Fall through to the canonical error shape below.
+        }
+        JsonObject fallback = new JsonObject();
+        fallback.addProperty("ok", false);
+        fallback.addProperty("code", "bridge_error");
+        fallback.addProperty("message", "settings writer returned no result");
+        return fallback;
+    }
+
     private static String normalizeAuthMethod(String method) {
         if (AUTH_METHOD_BASE_URL.equals(method) || AUTH_METHOD_ENV.equals(method)) {
             return method;
@@ -104,5 +191,20 @@ public class QwenConfigHandler {
 
     private static String nullToEmpty(String value) {
         return value != null ? value : "";
+    }
+
+    private static final class NodeRunner implements ConfigRunner {
+        private final NodeJsServiceCaller caller;
+
+        private NodeRunner(HandlerContext context) {
+            this.caller = new NodeJsServiceCaller(context);
+        }
+
+        @Override
+        public String run(String settingsPath, String payloadJson) throws Exception {
+            // User scope only: this writes the global default, never the
+            // project-scoped settings file.
+            return caller.callProviderConfigService(settingsPath, "", payloadJson);
+        }
     }
 }

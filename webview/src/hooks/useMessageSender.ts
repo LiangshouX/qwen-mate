@@ -6,6 +6,8 @@ import type { Attachment, ChatInputBoxHandle, PermissionMode, ReasoningEffort, S
 import { REASONING_LEVELS } from '../components/ChatInputBox/types';
 import { isCommandSendable } from '../components/ChatInputBox/providers/slashCommandProvider';
 import { expandQuoteTokens } from '../components/ChatInputBox/utils/quoteRegistry';
+import { setDefaultModel } from '../utils/defaultModel';
+import { getCachedQwenModelOptions } from './providers/useQwenModelOptions';
 import type { ViewMode } from './useModelProviderState';
 
 /**
@@ -28,6 +30,12 @@ export const SKILLS_COMMANDS = new Set(['/skills']);
  * drives the same selector state the input-box menu uses.
  */
 export const EFFORT_COMMANDS = new Set(['/effort']);
+/**
+ * Model command. Bare /model opens the GUI's global-default picker; an id
+ * switches the current session only; --global writes ~/.qwen/settings.json.
+ * Nothing is forwarded — headless the CLI only prints the model list.
+ */
+export const MODEL_COMMANDS = new Set(['/model']);
 
 // Hoisted regex to avoid creating new RegExp on every call
 const WHITESPACE_REGEX = /\s+/;
@@ -65,6 +73,10 @@ export interface UseMessageSenderOptions {
   handleModeSelect?: (mode: PermissionMode) => void;
   /** Applies a reasoning tier from /effort — same state the selector menu writes. */
   setReasoningEffort?: (effort: ReasoningEffort) => void;
+  /** Applies a session-scoped model switch (/model <id>) — same state the selector writes. */
+  handleModelSelect?: (modelId: string) => void;
+  /** Opens the GUI's global-default picker for a bare /model. */
+  openModelSelectDialog?: () => void;
   openContextUsageDialog: (requestId?: string | null, loading?: boolean) => void;
   closeContextUsageDialog: (requestId?: string | null) => boolean;
 }
@@ -97,6 +109,8 @@ export function useMessageSender({
   forceCreateNewSession,
   handleModeSelect,
   setReasoningEffort,
+  handleModelSelect,
+  openModelSelectDialog,
   openContextUsageDialog,
   closeContextUsageDialog,
 }: UseMessageSenderOptions) {
@@ -268,6 +282,109 @@ export function useMessageSender({
     setMessages((prev) => [...prev, userMessage, assistantMessage]);
     return true;
   }, [setReasoningEffort, setMessages, t]);
+
+  /**
+   * Check for the model command (/model).
+   * - Bare `/model` opens the GUI's global-default picker — headless the CLI
+   *   only prints the model list and usage text.
+   * - `/model <id>` switches the current session model (same state the
+   *   input-box selector writes); the CLI's own session scope is per-process,
+   *   so forwarding it would leave the GUI selector out of sync.
+   * - `/model --global <id>` persists the default model to ~/.qwen/settings.json.
+   * - `--fast` / `--project` and unknown flags get a local hint; nothing is
+   *   forwarded.
+   */
+  const checkModelCommand = useCallback((text: string): boolean => {
+    if (!text.startsWith('/')) return false;
+    const parts = text.split(WHITESPACE_REGEX).filter(Boolean);
+    const command = parts[0].toLowerCase();
+    if (!MODEL_COMMANDS.has(command)) return false;
+
+    const userMessage: QwenMateMessage = {
+      type: 'user',
+      content: text,
+      timestamp: new Date().toISOString(),
+    };
+
+    const args = parts.slice(1);
+    if (args.length === 0) {
+      setMessages((prev) => [...prev, userMessage]);
+      openModelSelectDialog?.();
+      return true;
+    }
+
+    let scope: 'session' | 'global' = 'session';
+    let unsupportedFlag: string | null = null;
+    let modelId = '';
+    for (const arg of args) {
+      if (arg === '--global') {
+        scope = 'global';
+      } else if (arg.startsWith('--')) {
+        unsupportedFlag = arg;
+      } else if (!modelId) {
+        modelId = arg;
+      }
+    }
+
+    if (unsupportedFlag === '--fast' || unsupportedFlag === '--project') {
+      const assistantMessage: QwenMateMessage = {
+        type: 'assistant',
+        content: t(
+          unsupportedFlag === '--fast' ? 'modelSelect.fastUnsupported' : 'modelSelect.projectUnsupported',
+          {
+            defaultValue: unsupportedFlag === '--fast'
+              ? 'Switching the fast model from the chat input is not supported yet. Use the model settings at the bottom of the input box.'
+              : 'Project-scoped model settings are not supported yet. Use Settings → Providers to change them.',
+          },
+        ),
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, userMessage, assistantMessage]);
+      return true;
+    }
+
+    if (unsupportedFlag || !modelId) {
+      const assistantMessage: QwenMateMessage = {
+        type: 'assistant',
+        content: t('modelSelect.usageHint', {
+          defaultValue: 'Usage: /model — pick the global default; /model <model-id> — switch this session; /model --global <model-id> — set the global default.',
+        }),
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, userMessage, assistantMessage]);
+      return true;
+    }
+
+    if (scope === 'global') {
+      setMessages((prev) => [...prev, userMessage]);
+      // The typed form has no bucket argument; reuse the catalog the model
+      // selector already received so a cross-bucket duplicate id resolves.
+      const provider = getCachedQwenModelOptions()?.models
+        .find((model) => model.id === modelId)?.description;
+      void setDefaultModel(modelId, provider).then((result) => {
+        if (result.success) {
+          addToast(t('modelSelect.saved', {
+            model: modelId,
+            defaultValue: `Default model set to ${modelId}`,
+          }), 'success');
+        } else {
+          addToast(t('modelSelect.saveFailed', {
+            error: result.error ?? '',
+            defaultValue: `Failed to set the default model${result.error ? `: ${result.error}` : ''}`,
+          }), 'error');
+        }
+      });
+      return true;
+    }
+
+    handleModelSelect?.(modelId);
+    setMessages((prev) => [...prev, userMessage]);
+    addToast(t('modelSelect.sessionSet', {
+      model: modelId,
+      defaultValue: `Model switched to ${modelId} for this session`,
+    }), 'success');
+    return true;
+  }, [setMessages, openModelSelectDialog, handleModelSelect, addToast, t]);
 
   /**
    * Check for unimplemented slash commands
@@ -579,6 +696,9 @@ export function useMessageSender({
     // Check reasoning-effort command (/effort)
     if (checkEffortCommand(text)) return;
 
+    // Check model command (/model)
+    if (checkModelCommand(text)) return;
+
     // Check for unimplemented commands
     if (checkUnimplementedCommand(text)) return;
 
@@ -587,7 +707,7 @@ export function useMessageSender({
 
     // Execute message
     executeMessage(content, attachments);
-  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkSettingsPageCommand, checkEffortCommand, checkUnimplementedCommand, checkRuntimeUnavailableCommand, executeMessage]);
+  }, [checkNewSessionCommand, checkLocalCommand, checkContextCommand, checkSettingsPageCommand, checkEffortCommand, checkModelCommand, checkUnimplementedCommand, checkRuntimeUnavailableCommand, executeMessage]);
 
   /**
    * Interrupt the current session

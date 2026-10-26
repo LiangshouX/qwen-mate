@@ -47,6 +47,8 @@ public class SettingsHandler extends BaseMessageHandler {
         "get_qwen_config",
         "set_qwen_config",
         "get_qwen_model_options",
+        // Global default model (GUI /model picker)
+        "set_qwen_default_model",
         // Visual provider/model configuration (Settings → 供应商管理)
         "get_provider_config",
         "provider_config_op",
@@ -196,6 +198,9 @@ public class SettingsHandler extends BaseMessageHandler {
                 return true;
             case "get_qwen_model_options":
                 qwenConfigHandler.handleGetQwenModelOptions();
+                return true;
+            case "set_qwen_default_model":
+                qwenConfigHandler.handleSetQwenDefaultModel(content);
                 return true;
             // Visual provider/model configuration
             case "get_provider_config":

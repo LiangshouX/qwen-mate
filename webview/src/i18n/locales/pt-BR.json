@@ -1445,6 +1445,20 @@
       }
     }
   },
+  "modelSelect": {
+    "title": "Modelo padrão",
+    "hint": "Escolher aqui altera o modelo padrão global do Qwen Code. Para alterar apenas a sessão atual, use o seletor de modelo abaixo da caixa de entrada.",
+    "empty": "Ainda não há modelos configurados em ~/.qwen/settings.json. Adicione um em Gerenciamento de provedores.",
+    "openProviderSettings": "Abrir gerenciamento de provedores",
+    "current": "Padrão atual",
+    "saving": "Salvando…",
+    "saved": "Modelo padrão definido como {{model}}",
+    "saveFailed": "Falha ao definir o modelo padrão: {{error}}",
+    "sessionSet": "Modelo da sessão alterado para {{model}}",
+    "usageHint": "Uso: /model para escolher o padrão global, /model <model-id> para alterar a sessão atual, /model --global <model-id> para definir o padrão global.",
+    "fastUnsupported": "Alterar o modelo rápido pela caixa de entrada ainda não é suportado. Use as configurações de modelo na parte inferior da caixa de entrada.",
+    "projectUnsupported": "Configurações de modelo por projeto ainda não são suportadas. Use Configurações → Provedores."
+  },
   "modes": {
     "plan": {
       "label": "Plano",

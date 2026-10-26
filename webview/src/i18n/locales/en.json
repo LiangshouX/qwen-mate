@@ -1609,6 +1609,20 @@
     "effort": "Effort",
     "preset": "Preset"
   },
+  "modelSelect": {
+    "title": "Default model",
+    "hint": "Choosing here changes Qwen Code's global default model. To switch only the current session, use the model selector below the input box.",
+    "empty": "No models are configured in ~/.qwen/settings.json yet. Add one in Provider settings first.",
+    "openProviderSettings": "Open provider settings",
+    "current": "Current default",
+    "saving": "Saving…",
+    "saved": "Default model set to {{model}}",
+    "saveFailed": "Failed to set the default model: {{error}}",
+    "sessionSet": "Model switched to {{model}} for this session",
+    "usageHint": "Usage: /model to pick the global default, /model <model-id> to switch this session, /model --global <model-id> to set the global default.",
+    "fastUnsupported": "Switching the fast model from the chat input is not supported yet. Use the model settings at the bottom of the input box.",
+    "projectUnsupported": "Project-scoped model settings are not supported yet. Use Settings → Providers to change them."
+  },
   "modes": {
     "plan": {
       "label": "Plan",

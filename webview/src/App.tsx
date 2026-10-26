@@ -180,6 +180,14 @@ const App = () => {
         onCancelInterrupt={handleCancelInterrupt}
         permissionDialogTimeoutSeconds={permissionDialogTimeoutSeconds}
         onModeSelect={model.handleModeSelect}
+        onModelSaved={(modelId) => addToast(
+          t('modelSelect.saved', {
+            model: modelId,
+            defaultValue: `Default model set to ${modelId}`,
+          }),
+          'success',
+        )}
+        onOpenProviderSettings={handleNavigateToProviderSettings}
       />
     </>
   );

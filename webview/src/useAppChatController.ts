@@ -21,6 +21,7 @@ import {
   MCP_COMMANDS,
   SKILLS_COMMANDS,
   EFFORT_COMMANDS,
+  MODEL_COMMANDS,
 } from './hooks/useMessageSender';
 import type { Attachment, ChatInputBoxHandle, PermissionMode } from './components/ChatInputBox/types';
 import type { ChatScreenProps } from './components/ChatScreen';
@@ -45,6 +46,7 @@ export interface ChatControllerModelSlice {
   currentSdkInstalled: UseMessageSenderOptions['currentSdkInstalled'];
   reasoningEffort: UseMessageSenderOptions['reasoningEffort'];
   handleModeSelect: (mode: PermissionMode) => void;
+  handleModelSelect: (modelId: string) => void;
   handleProviderSelect: (providerId: string) => void;
   currentProviderRef: UseWindowCallbacksOptions['currentProviderRef'];
   setPermissionMode: UseWindowCallbacksOptions['setPermissionMode'];
@@ -97,6 +99,7 @@ export const useAppChatController = ({
     openContextUsageDialog,
     updateContextUsageData,
     closeContextUsageDialog,
+    openModelSelectDialog,
   } = useDialogs();
 
   // ── Messages flow state (MessagesContext) ──
@@ -136,7 +139,7 @@ export const useAppChatController = ({
     currentProvider, selectedModel, permissionMode,
     selectedAgent, sdkStatusLoading, currentSdkInstalled,
     reasoningEffort,
-    handleModeSelect, handleProviderSelect,
+    handleModeSelect, handleModelSelect, handleProviderSelect,
     currentProviderRef,
     setPermissionMode, setCurrentProvider,
     setQwenPermissionMode,
@@ -264,9 +267,11 @@ export const useAppChatController = ({
     setSettingsInitialTab, setCurrentView,
     forceCreateNewSession,
     handleModeSelect,
+    handleModelSelect,
     setReasoningEffort,
     openContextUsageDialog,
     closeContextUsageDialog,
+    openModelSelectDialog,
   });
 
   // ── Message queue ──
@@ -349,6 +354,12 @@ export const useAppChatController = ({
       // /effort - apply the tier / open the reasoning selector locally, even
       // while loading (same path /context uses for its local handling)
       if (EFFORT_COMMANDS.has(command)) {
+        hookHandleSubmit(content, attachments);
+        return;
+      }
+      // /model - open the global default picker / switch models locally; the
+      // CLI only prints a text reply in this mode, so it must never be forwarded.
+      if (MODEL_COMMANDS.has(command)) {
         hookHandleSubmit(content, attachments);
         return;
       }

@@ -635,6 +635,64 @@ function opSnapshot(state) {
   return buildSnapshot(state.file, state.projectFile, state.processEnv);
 }
 
+/**
+ * Point the CLI's default selection (`model.name` / `model.baseUrl`) at one of
+ * the models declared under `modelProviders`. Mirrors what the CLI persists
+ * for a global `/model --global <id>` switch: the entry's id, the endpoint it
+ * was declared with (an empty baseUrl means "route by id"), and the protocol
+ * the selection routes through.
+ *
+ * The GUI model list sends the bucket it read the entry from; without one a
+ * unique match across buckets is accepted instead of guessing between two
+ * models that share an id.
+ */
+function opSetDefaultModel(state, payload) {
+  const tree = requireParseable(state.file);
+  const modelId = typeof payload.modelId === 'string' ? payload.modelId.trim() : '';
+  if (!modelId) fail('modelId is required', 'invalid_operation');
+
+  const mapping = isPlainObject(tree.providerProtocol) ? tree.providerProtocol : undefined;
+  const providers = isPlainObject(tree.modelProviders) ? tree.modelProviders : {};
+  const requestedBucket = typeof payload.provider === 'string' ? payload.provider.trim() : '';
+  const buckets = requestedBucket ? [requestedBucket] : Object.keys(providers);
+
+  let match = null;
+  for (const bucketId of buckets) {
+    const entries = Array.isArray(providers[bucketId]) ? providers[bucketId] : [];
+    const candidates = entries.filter((entry) => isPlainObject(entry) && entry.id === modelId);
+    if (candidates.length === 0) continue;
+    if (match) {
+      fail(`模型 ${modelId} 在多个供应商下存在，请指定 provider。`, 'ambiguous_model');
+    }
+    match = { bucketId, entry: candidates[0] };
+  }
+  if (!match) fail(`模型不存在：${modelId}`, 'model_not_found');
+  if (!isConversationModel(match.entry)) {
+    fail(`模型 ${modelId} 不是对话模型，不能作为默认模型。`, 'invalid_model');
+  }
+
+  const updates = {};
+  const baseUrl = typeof match.entry.baseUrl === 'string' ? match.entry.baseUrl : '';
+  setDeep(updates, 'model.name', match.entry.id);
+  setDeep(updates, 'model.baseUrl', baseUrl);
+
+  // Keep the auth slot aligned with the model's protocol; only builtin
+  // protocols are valid `security.auth.selectedType` values.
+  let authType;
+  try {
+    authType = plan.resolveModelProtocol(match.bucketId, match.entry, mapping) ?? match.bucketId;
+  } catch {
+    authType = match.bucketId;
+  }
+  const selectedType = getDeep(tree, 'security.auth.selectedType') ?? '';
+  if (BUILTIN_PROTOCOL_IDS.has(authType) && selectedType !== authType) {
+    setDeep(updates, 'security.auth.selectedType', authType);
+  }
+
+  jsonc.persistSettingsUpdates(state.file.path, updates);
+  return null;
+}
+
 function opSaveProvider(state, payload) {
   const tree = requireParseable(state.file);
   const updates = {};
@@ -1367,6 +1425,7 @@ const OPS = {
   saveModel: opSaveModel,
   deleteModel: opDeleteModel,
   setEnvKey: opSetEnvKey,
+  setDefaultModel: opSetDefaultModel,
 };
 
 /**

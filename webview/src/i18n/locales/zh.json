@@ -1609,6 +1609,20 @@
     "effort": "思考强度",
     "preset": "预设"
   },
+  "modelSelect": {
+    "title": "默认模型",
+    "hint": "在这里选择会修改 Qwen Code 的全局默认模型。若只想在当前会话生效，可直接通过底部的模型选择。",
+    "empty": "~/.qwen/settings.json 中还没有配置模型，请先在“供应商管理”中添加。",
+    "openProviderSettings": "打开供应商管理",
+    "current": "当前默认",
+    "saving": "正在保存…",
+    "saved": "已将 {{model}} 设为全局默认模型",
+    "saveFailed": "设置默认模型失败：{{error}}",
+    "sessionSet": "当前会话模型已切换为 {{model}}",
+    "usageHint": "用法：/model 选择全局默认模型，/model <model-id> 切换当前会话，/model --global <model-id> 设置全局默认。",
+    "fastUnsupported": "暂不支持在输入框切换快速模型，请使用输入框底部的模型设置。",
+    "projectUnsupported": "暂不支持项目级模型设置，请在 设置 → 供应商管理 中修改。"
+  },
   "modes": {
     "plan": {
       "label": "规划模式",

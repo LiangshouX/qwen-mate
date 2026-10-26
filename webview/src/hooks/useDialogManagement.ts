@@ -88,6 +88,11 @@ interface UseDialogManagementReturn {
   openContextUsageDialog: (requestId?: string | null, loading?: boolean) => void;
   updateContextUsageData: (requestId: string | null | undefined, data: ContextUsageData) => boolean;
   closeContextUsageDialog: (requestId?: string | null) => boolean;
+
+  // Global default model picker (/model)
+  modelSelectDialogOpen: boolean;
+  openModelSelectDialog: () => void;
+  closeModelSelectDialog: () => void;
 }
 
 /**
@@ -120,6 +125,11 @@ export function useDialogManagement({ t }: UseDialogManagementOptions): UseDialo
   const [contextUsageIsLoading, setContextUsageIsLoading] = useState(false);
   const [contextUsageData, setContextUsageData] = useState<ContextUsageData | null>(null);
   const contextUsageRequestIdRef = useRef<string | null>(null);
+
+  // Global default model picker (/model) — GUI-local, no CLI request behind it.
+  const [modelSelectDialogOpen, setModelSelectDialogOpen] = useState(false);
+  const openModelSelectDialog = useCallback(() => setModelSelectDialogOpen(true), []);
+  const closeModelSelectDialog = useCallback(() => setModelSelectDialogOpen(false), []);
 
   // Open permission dialog
   const openPermissionDialog = useCallback((request: PermissionRequest) => {
@@ -442,5 +452,10 @@ export function useDialogManagement({ t }: UseDialogManagementOptions): UseDialo
     openContextUsageDialog,
     updateContextUsageData,
     closeContextUsageDialog,
+
+    // Global default model picker (/model)
+    modelSelectDialogOpen,
+    openModelSelectDialog,
+    closeModelSelectDialog,
   };
 }

@@ -1111,4 +1111,19 @@ interface Window {
           models?: Array<{ id?: string; name?: string; provider?: string }>;
         }
   ) => void;
+
+  /**
+   * Result of a `set_qwen_default_model` write (GUI /model picker).
+   * Payload: { success: boolean, modelId?: string, code?: string, error?: string }
+   */
+  onQwenDefaultModelResult?: (
+    dataOrStr:
+      | string
+      | {
+          success?: boolean;
+          modelId?: string;
+          code?: string;
+          error?: string;
+        }
+  ) => void;
 }

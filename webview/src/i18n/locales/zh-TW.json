@@ -1450,6 +1450,20 @@
     "effort": "思考強度",
     "preset": "預設組合"
   },
+  "modelSelect": {
+    "title": "預設模型",
+    "hint": "在這裡選擇會修改 Qwen Code 的全域預設模型。若只想在目前工作階段生效，可直接透過底部的模型選擇。",
+    "empty": "~/.qwen/settings.json 中尚未設定模型，請先在「供應商管理」中新增。",
+    "openProviderSettings": "開啟供應商管理",
+    "current": "目前預設",
+    "saving": "正在儲存…",
+    "saved": "已將 {{model}} 設為全域預設模型",
+    "saveFailed": "設定預設模型失敗：{{error}}",
+    "sessionSet": "目前已將工作階段模型切換為 {{model}}",
+    "usageHint": "用法：/model 選擇全域預設模型，/model <model-id> 切換目前工作階段，/model --global <model-id> 設定全域預設。",
+    "fastUnsupported": "暫不支援在輸入框切換快速模型，請使用輸入框底部的模型設定。",
+    "projectUnsupported": "暫不支援專案層級模型設定，請在 設定 → 供應商管理 中修改。"
+  },
   "modes": {
     "plan": {
       "label": "規劃模式",

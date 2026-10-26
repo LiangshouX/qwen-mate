@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ConfirmDialog from './ConfirmDialog';
 import PermissionDialog from './PermissionDialog';
 import AskUserQuestionDialog from './AskUserQuestionDialog';
+import ModelSelectDialog from './ModelSelectDialog';
 import PlanApprovalDialog from './PlanApprovalDialog';
 import { useDialogs } from '../contexts/DialogContext';
 import ContextUsageDialog from './ContextUsageDialog';
@@ -21,6 +22,10 @@ export interface AppDialogsProps {
   permissionDialogTimeoutSeconds?: number;
   /** Apply the execution mode chosen while approving a plan. */
   onPlanApprovalModeChange?: (mode: string) => void;
+  /** Toast after the /model picker persisted a new global default. */
+  onModelSaved?: (modelId: string) => void;
+  /** Empty-state escape hatch: the /model picker has no configured models. */
+  onOpenProviderSettings?: () => void;
 }
 
 /**
@@ -37,6 +42,8 @@ export const AppDialogs = ({
   onCancelInterrupt,
   permissionDialogTimeoutSeconds = DEFAULT_PERMISSION_DIALOG_TIMEOUT_SECONDS,
   onPlanApprovalModeChange,
+  onModelSaved,
+  onOpenProviderSettings,
 }: AppDialogsProps) => {
   const { t } = useTranslation();
   const {
@@ -47,6 +54,7 @@ export const AppDialogs = ({
     planApprovalDialogOpen, currentPlanApprovalRequest,
     handlePlanApprovalApprove, handlePlanApprovalReject,
     contextUsageDialogOpen, contextUsageIsLoading, contextUsageData, closeContextUsageDialog,
+    modelSelectDialogOpen, closeModelSelectDialog,
   } = useDialogs();
 
   // "Don't ask again" checkbox state for the new-session confirm dialog.
@@ -136,6 +144,12 @@ export const AppDialogs = ({
           onClose={closeContextUsageDialog}
         />
       ) : null}
+      <ModelSelectDialog
+        isOpen={modelSelectDialogOpen}
+        onClose={closeModelSelectDialog}
+        onSaved={onModelSaved}
+        onOpenProviderSettings={onOpenProviderSettings}
+      />
     </>
   );
 };

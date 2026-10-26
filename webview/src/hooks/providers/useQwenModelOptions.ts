@@ -28,6 +28,14 @@ export function __resetQwenModelOptionsCacheForTests() {
 }
 
 /**
+ * Last catalog Java pushed, for callers that need a model's bucket without
+ * mounting the hook (the `/model --global <id>` command path).
+ */
+export function getCachedQwenModelOptions(): QwenModelOptions | null {
+  return optionsCache;
+}
+
+/**
  * Force a re-read of ~/.qwen/settings.json model options — called after
  * provider-config writes so newly configured models appear in the selector
  * without a plugin restart. Drops the cache: a mounted consumer picks up the

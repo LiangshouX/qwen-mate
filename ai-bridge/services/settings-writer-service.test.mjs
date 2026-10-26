@@ -680,6 +680,88 @@ describe('model CRUD', () => {
 
 });
 
+describe('setDefaultModel', () => {
+  test('writes the declared endpoint and routes the auth type to the model protocol', () => {
+    writeSettings(
+      JSON.stringify({
+        modelProviders: {
+          mygw: [{ id: 'm1', name: 'M1', envKey: 'GATE_KEY', baseUrl: 'https://gw.example/v1' }],
+        },
+        providerProtocol: { mygw: 'openai' },
+        model: { name: 'old', baseUrl: 'https://old.example/v1' },
+        security: { auth: { selectedType: 'anthropic' } },
+      }),
+    );
+    const result = op({ op: 'setDefaultModel', modelId: 'm1', provider: 'mygw' });
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const settings = readJson();
+    assert.equal(settings.model.name, 'm1');
+    assert.equal(settings.model.baseUrl, 'https://gw.example/v1');
+    assert.equal(settings.security.auth.selectedType, 'openai');
+  });
+
+  test('clears a stale endpoint for id-routed (preset-style) models and keeps comments', () => {
+    writeSettings(
+      '{\n  // keep me\n  "modelProviders": { "openai": [{ "id": "m2", "name": "M2" }] },\n  "model": { "name": "m1", "baseUrl": "https://old.example/v1" }\n}\n',
+    );
+    const result = op({ op: 'setDefaultModel', modelId: 'm2', provider: 'openai' });
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const settings = parseJsoncObject(readRaw());
+    assert.equal(settings.model.name, 'm2');
+    assert.equal(settings.model.baseUrl, '');
+    assert.ok(readRaw().includes('// keep me'), 'JSONC comment preserved');
+  });
+
+  test('disambiguates the same id across buckets via provider', () => {
+    writeSettings(
+      JSON.stringify({
+        modelProviders: {
+          openai: [{ id: 'dup', name: 'OpenAI dup' }],
+          anthropic: [{ id: 'dup', name: 'Anthropic dup', baseUrl: 'https://anth.example/v1' }],
+        },
+      }),
+    );
+    const result = op({ op: 'setDefaultModel', modelId: 'dup', provider: 'anthropic' });
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const settings = readJson();
+    assert.equal(settings.model.name, 'dup');
+    assert.equal(settings.model.baseUrl, 'https://anth.example/v1');
+    assert.equal(settings.security.auth.selectedType, 'anthropic');
+  });
+
+  test('refuses an ambiguous id when no provider is given', () => {
+    writeSettings(
+      JSON.stringify({
+        modelProviders: {
+          openai: [{ id: 'dup' }],
+          anthropic: [{ id: 'dup' }],
+        },
+      }),
+    );
+    const before = readRaw();
+    const result = op({ op: 'setDefaultModel', modelId: 'dup' });
+    assert.equal(result.ok, false);
+    assert.equal(result.code, 'ambiguous_model');
+    assert.equal(readRaw(), before);
+  });
+
+  test('refuses unknown and non-conversation models without touching the file', () => {
+    writeSettings(
+      JSON.stringify({
+        modelProviders: { openai: [{ id: 'img-1', imageOnly: true, baseUrl: 'https://a.example/v1' }] },
+      }),
+    );
+    const before = readRaw();
+    let result = op({ op: 'setDefaultModel', modelId: 'nope' });
+    assert.equal(result.ok, false);
+    assert.equal(result.code, 'model_not_found');
+    result = op({ op: 'setDefaultModel', modelId: 'img-1', provider: 'openai' });
+    assert.equal(result.ok, false);
+    assert.equal(result.code, 'invalid_model');
+    assert.equal(readRaw(), before);
+  });
+});
+
 describe('integrity guarantees', () => {
   test('preserves comments, indent style, BOM and CRLF on write', () => {
     const bom = String.fromCharCode(0xfeff);
