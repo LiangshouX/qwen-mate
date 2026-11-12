@@ -12,14 +12,21 @@ import org.jetbrains.annotations.PropertyKey;
  * This class provides access to localized strings defined in
  * messages/QwenMateBundle*.properties files.
  * </p>
+ * <p>
+ * The bundle is <b>delegated to</b> rather than inherited from: since 2026.3
+ * (263) subclassing {@link DynamicBundle} is deprecated, and the single-argument
+ * {@code DynamicBundle(String)} constructor is deprecated as well. The
+ * {@link DynamicBundle#DynamicBundle(Class, String)} constructor used here exists
+ * unchanged from 2023.3 (233) through 2026.3 (263).
+ * </p>
  */
-public class QwenMateBundle extends DynamicBundle {
+public final class QwenMateBundle {
+
     @NonNls
     private static final String BUNDLE = "messages.QwenMateBundle";
-    private static final QwenMateBundle INSTANCE = new QwenMateBundle();
+    private static final DynamicBundle INSTANCE = new DynamicBundle(QwenMateBundle.class, BUNDLE);
 
     private QwenMateBundle() {
-        super(BUNDLE);
     }
 
     /**
