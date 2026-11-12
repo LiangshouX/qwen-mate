@@ -88,3 +88,7 @@ logs/*.log
 
 # CodeGraph index data (per-machine, never committed)
 .codegraph/
+
+# Python bytecode cache (audit scripts under docs/compatibility/scripts)
+__pycache__/
+*.pyc
