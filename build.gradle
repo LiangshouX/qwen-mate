@@ -138,11 +138,15 @@ dependencies {
 
 intellijPlatform {
     pluginVerification {
-        // Keep local verification focused on binary/internal API compatibility
-        // issues that match Marketplace rejection criteria.
+        // Local verification must fail on what the Marketplace review actually flags.
+        // DEPRECATED_API_USAGES and OVERRIDE_ONLY_API_USAGES were missing: the six
+        // 2026.3 deprecations and the Navigatable override-only warning passed
+        // through local verification unnoticed.
         failureLevel = [
             org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel.COMPATIBILITY_PROBLEMS,
-            org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel.INTERNAL_API_USAGES
+            org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel.INTERNAL_API_USAGES,
+            org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel.DEPRECATED_API_USAGES,
+            org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask.FailureLevel.OVERRIDE_ONLY_API_USAGES
         ]
 
         // PythonCore is pinned to 243.x for compileOnly use across the
@@ -154,10 +158,24 @@ intellijPlatform {
         externalPrefixes = ['com.jetbrains.python']
 
         ides {
+            // Lower bound of the supported range (2023.3). The plugin compiles against
+            // 243, so verifying on 233 is what proves no 243-only API is used.
+            ide('IU', '233.15619.7')
+            // Compile target (2024.3).
+            ide('IU', '243.28141.41')
             // 2026.2.1 EAP build 262.9437.22 – the exact build that surfaced
             // the CefResourceHandler / PluginManagerCore issues during
             // marketplace verification.
             ide('IU', '262.9437.22')
+            // 2026.2 stable.
+            ide('IU', '262.11879.100')
+            // 2026.3 stable – current untilBuild.
+            ide('IU', '263.7307.200')
+            // NOTE: the dynamic EAP channel (select { channels = listOf(Channel.EAP) })
+            // is deliberately NOT used: `select` resolves the JetBrains products-release
+            // feed during the *configuration* phase, so a network hiccup breaks every
+            // Gradle task - not just verifyPlugin. Add the concrete EAP build number
+            // here instead when one needs to be checked.
         }
     }
 
