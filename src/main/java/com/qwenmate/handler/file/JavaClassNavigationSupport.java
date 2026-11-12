@@ -15,6 +15,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.OpenSourceUtil;
 
 import java.util.function.Consumer;
 
@@ -97,7 +98,12 @@ public class JavaClassNavigationSupport {
         }
 
         if (target instanceof Navigatable navigatable && navigatable.canNavigate()) {
-            navigatable.navigate(true);
+            // Navigatable#navigate(boolean) was flagged @ApiStatus.OverrideOnly in some
+            // 2026.3 EAP builds and is being reshaped on master. OpenSourceUtil#navigate
+            // is the supported entry point: the void varargs overload exists unchanged
+            // from 2023.3 (233) through 2026.3 (263) and is not deprecated in either.
+            // Parameters mirror the previous call: requestFocus = true, tryNotToScroll = false.
+            OpenSourceUtil.navigate(true, false, navigatable);
             return;
         }
 

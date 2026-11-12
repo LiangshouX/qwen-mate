@@ -1,6 +1,7 @@
 package com.qwenmate.action.console;
 
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.openapi.actionSystem.DataKey;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import org.junit.Assert;
@@ -25,6 +26,40 @@ public class SendConsoleSelectionToInputActionTest {
     @Test
     public void unsupportedObjectReturnsNull() {
         Assert.assertNull(SendConsoleSelectionToInputAction.resolveSelectedText(new Object()));
+    }
+
+    @Test
+    public void consoleViewKeyIsResolvedFromTheFirstOwnerThatDeclaresIt() {
+        DataKey<Object> key = SendConsoleSelectionToInputAction.resolveConsoleViewKey(
+                new String[]{MissingKeyHolder.class.getName(), KeyHolder.class.getName()});
+
+        Assert.assertSame(KeyHolder.CONSOLE_VIEW, key);
+    }
+
+    @Test
+    public void consoleViewKeyIsNullWhenNoOwnerDeclaresIt() {
+        Assert.assertNull(SendConsoleSelectionToInputAction.resolveConsoleViewKey(
+                new String[]{MissingKeyHolder.class.getName()}));
+    }
+
+    @Test
+    public void consoleViewKeyIsResolvedOnTheRunningIde() {
+        // On every supported IDE version one of the two holders declares the key:
+        // ExecutionDataKeys since 263, LangDataKeys before that.
+        DataKey<Object> key = SendConsoleSelectionToInputAction.resolveConsoleViewKey(new String[]{
+            "com.intellij.openapi.actionSystem.ExecutionDataKeys",
+            "com.intellij.openapi.actionSystem.LangDataKeys"});
+
+        Assert.assertNotNull(key);
+    }
+
+    /** Holder that does not declare the key - stands in for an IDE version without it. */
+    public static final class MissingKeyHolder {
+    }
+
+    /** Holder that declares the key - stands in for an IDE version that has it. */
+    public static final class KeyHolder {
+        public static final DataKey<Object> CONSOLE_VIEW = DataKey.create("test.consoleView");
     }
 
     private static ConsoleView createConsoleView(String selectedText) {
