@@ -1,0 +1,26 @@
+{
+  "updateId": 1196117,
+  "ideVersion": {
+    "ideVersion": "IU-233.15619.7",
+    "releaseVersion": null,
+    "productName": null
+  },
+  "javaVersion": "17.0.12",
+  "resultType": "OK",
+  "verificationVerdict": "Compatible",
+  "pluginStructureWarnings": [],
+  "pluginStructureErrors": [],
+  "compatibilityWarnings": [],
+  "compatibilityProblems": [],
+  "deprecatedApiUsages": [],
+  "experimentalApiUsages": [],
+  "internalApiUsages": [],
+  "overrideOnlyApiUsages": [],
+  "nonExtendableApiUsages": [],
+  "dynamicPluginStatus": {
+    "dynamic": true,
+    "reasons": []
+  },
+  "ignoredCompatibilityProblems": [],
+  "ignoredInternalApiUsages": []
+}

@@ -1,0 +1,60 @@
+{
+  "updateId": 1190816,
+  "ideVersion": {
+    "ideVersion": "IU-263.6259.32",
+    "releaseVersion": null,
+    "productName": null
+  },
+  "javaVersion": "25.0.4.1",
+  "resultType": "WARNINGS",
+  "verificationVerdict": "Compatible. 3 usages of deprecated API",
+  "pluginStructureWarnings": [],
+  "pluginStructureErrors": [],
+  "compatibilityWarnings": [],
+  "compatibilityProblems": [],
+  "deprecatedApiUsages": [
+    {
+      "apiElement": "java.net.URL.<init>(java.lang.String spec)",
+      "usageLocation": "com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String)",
+      "apiElementType": "CONSTRUCTOR",
+      "shortDescription": "Deprecated constructor java.net.URL.<init>(String) invocation",
+      "fullDescription": "Deprecated constructor java.net.URL.<init>(java.lang.String spec) is invoked in com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String) : String",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    },
+    {
+      "apiElement": "com.intellij.DynamicBundle.<init>(java.lang.String pathToBundle)",
+      "usageLocation": "com.qwenmate.i18n.QwenMateBundle.<init>()",
+      "apiElementType": "CONSTRUCTOR",
+      "shortDescription": "Deprecated constructor com.intellij.DynamicBundle.<init>(String) invocation",
+      "fullDescription": "Deprecated constructor com.intellij.DynamicBundle.<init>(java.lang.String pathToBundle) is invoked in com.qwenmate.i18n.QwenMateBundle.<init>()",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    },
+    {
+      "apiElement": "com.intellij.openapi.actionSystem.LangDataKeys.CONSOLE_VIEW : com.intellij.openapi.actionSystem.DataKey",
+      "usageLocation": "com.qwenmate.action.console.SendConsoleSelectionToInputAction.resolveSelectedText(AnActionEvent)",
+      "apiElementType": "FIELD",
+      "shortDescription": "Deprecated field com.intellij.openapi.actionSystem.LangDataKeys.CONSOLE_VIEW access",
+      "fullDescription": "Deprecated field com.intellij.openapi.actionSystem.LangDataKeys.CONSOLE_VIEW : com.intellij.openapi.actionSystem.DataKey is accessed in com.qwenmate.action.console.SendConsoleSelectionToInputAction.resolveSelectedText(AnActionEvent) : String",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    }
+  ],
+  "experimentalApiUsages": [],
+  "internalApiUsages": [],
+  "overrideOnlyApiUsages": [],
+  "nonExtendableApiUsages": [],
+  "dynamicPluginStatus": {
+    "dynamic": true,
+    "reasons": []
+  },
+  "ignoredCompatibilityProblems": [],
+  "ignoredInternalApiUsages": []
+}

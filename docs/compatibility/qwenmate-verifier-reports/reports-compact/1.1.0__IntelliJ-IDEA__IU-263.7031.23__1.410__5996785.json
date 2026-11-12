@@ -1,0 +1,101 @@
+{
+  "updateId": 1196117,
+  "ideVersion": {
+    "ideVersion": "IU-263.7031.23",
+    "releaseVersion": null,
+    "productName": null
+  },
+  "javaVersion": "25.0.4.1",
+  "resultType": "WARNINGS",
+  "verificationVerdict": "Compatible. 6 usages of deprecated API. 1 override-only API usage violation",
+  "pluginStructureWarnings": [],
+  "pluginStructureErrors": [],
+  "compatibilityWarnings": [],
+  "compatibilityProblems": [],
+  "deprecatedApiUsages": [
+    {
+      "apiElement": "java.net.URL.<init>(java.lang.String spec)",
+      "usageLocation": "com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String)",
+      "apiElementType": "CONSTRUCTOR",
+      "shortDescription": "Deprecated constructor java.net.URL.<init>(String) invocation",
+      "fullDescription": "Deprecated constructor java.net.URL.<init>(java.lang.String spec) is invoked in com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String) : String",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    },
+    {
+      "apiElement": "com.intellij.openapi.fileEditor.FileEditorManager.openFile(com.intellij.openapi.vfs.VirtualFile arg0, boolean arg1) : com.intellij.openapi.fileEditor.FileEditor[]",
+      "usageLocation": "com.qwenmate.handler.SkillHandler.lambda$handleOpenSkill$15(String, VirtualFile)",
+      "apiElementType": "METHOD",
+      "shortDescription": "Deprecated method com.intellij.openapi.fileEditor.FileEditorManager.openFile(VirtualFile, boolean) invocation",
+      "fullDescription": "Deprecated method com.intellij.openapi.fileEditor.FileEditorManager.openFile(com.intellij.openapi.vfs.VirtualFile arg0, boolean arg1) : com.intellij.openapi.fileEditor.FileEditor[] is invoked in com.qwenmate.handler.SkillHandler.lambda$handleOpenSkill$15(String, VirtualFile) : void",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    },
+    {
+      "apiElement": "com.intellij.openapi.fileEditor.FileEditorManager.openFile(com.intellij.openapi.vfs.VirtualFile arg0, boolean arg1) : com.intellij.openapi.fileEditor.FileEditor[]",
+      "usageLocation": "com.qwenmate.handler.file.OpenFileHandler.openInEditor(VirtualFile, int, int)",
+      "apiElementType": "METHOD",
+      "shortDescription": "Deprecated method com.intellij.openapi.fileEditor.FileEditorManager.openFile(VirtualFile, boolean) invocation",
+      "fullDescription": "Deprecated method com.intellij.openapi.fileEditor.FileEditorManager.openFile(com.intellij.openapi.vfs.VirtualFile arg0, boolean arg1) : com.intellij.openapi.fileEditor.FileEditor[] is invoked in com.qwenmate.handler.file.OpenFileHandler.openInEditor(VirtualFile, int, int) : void",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    },
+    {
+      "apiElement": "com.intellij.DynamicBundle.<init>(java.lang.String pathToBundle)",
+      "usageLocation": "com.qwenmate.i18n.QwenMateBundle.<init>()",
+      "apiElementType": "CONSTRUCTOR",
+      "shortDescription": "Deprecated constructor com.intellij.DynamicBundle.<init>(String) invocation",
+      "fullDescription": "Deprecated constructor com.intellij.DynamicBundle.<init>(java.lang.String pathToBundle) is invoked in com.qwenmate.i18n.QwenMateBundle.<init>()",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    },
+    {
+      "apiElement": "com.intellij.openapi.actionSystem.LangDataKeys.CONSOLE_VIEW : com.intellij.openapi.actionSystem.DataKey",
+      "usageLocation": "com.qwenmate.action.console.SendConsoleSelectionToInputAction.resolveSelectedText(AnActionEvent)",
+      "apiElementType": "FIELD",
+      "shortDescription": "Deprecated field com.intellij.openapi.actionSystem.LangDataKeys.CONSOLE_VIEW access",
+      "fullDescription": "Deprecated field com.intellij.openapi.actionSystem.LangDataKeys.CONSOLE_VIEW : com.intellij.openapi.actionSystem.DataKey is accessed in com.qwenmate.action.console.SendConsoleSelectionToInputAction.resolveSelectedText(AnActionEvent) : String",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    },
+    {
+      "apiElement": "com.intellij.openapi.fileEditor.FileEditorManager.openTextEditor(com.intellij.openapi.fileEditor.OpenFileDescriptor arg0, boolean arg1) : com.intellij.openapi.editor.Editor",
+      "usageLocation": "com.qwenmate.handler.file.OpenFileHandler.openInEditor(VirtualFile, int, int)",
+      "apiElementType": "METHOD",
+      "shortDescription": "Deprecated method com.intellij.openapi.fileEditor.FileEditorManager.openTextEditor(OpenFileDescriptor, boolean) invocation",
+      "fullDescription": "Deprecated method com.intellij.openapi.fileEditor.FileEditorManager.openTextEditor(com.intellij.openapi.fileEditor.OpenFileDescriptor arg0, boolean arg1) : com.intellij.openapi.editor.Editor is invoked in com.qwenmate.handler.file.OpenFileHandler.openInEditor(VirtualFile, int, int) : void",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    }
+  ],
+  "experimentalApiUsages": [],
+  "internalApiUsages": [],
+  "overrideOnlyApiUsages": [
+    {
+      "apiElement": "com.intellij.pom.Navigatable.navigate(boolean requestFocus) : void",
+      "usageLocation": "com.qwenmate.handler.file.JavaClassNavigationSupport.navigatePointer(Project, SmartPsiElementPointer)",
+      "apiElementType": "METHOD",
+      "shortDescription": "Invocation of override-only method com.intellij.pom.Navigatable.navigate(boolean)",
+      "fullDescription": "Override-only method com.intellij.pom.Navigatable.navigate(boolean) is invoked in com.qwenmate.handler.file.JavaClassNavigationSupport.navigatePointer(Project, SmartPsiElementPointer) : void. This method is marked with @org.jetbrains.annotations.ApiStatus.OverrideOnly annotation, which indicates that the method must be only overridden but not invoked by client code. See documentation of the @ApiStatus.OverrideOnly for more info."
+    }
+  ],
+  "nonExtendableApiUsages": [],
+  "dynamicPluginStatus": {
+    "dynamic": true,
+    "reasons": []
+  },
+  "ignoredCompatibilityProblems": [],
+  "ignoredInternalApiUsages": []
+}

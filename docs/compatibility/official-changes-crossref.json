@@ -1,0 +1,92 @@
+[
+ {
+  "year": "2023.2",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.AnActionEvent.getInputEvent()` method return type changed from `InputEvent` to `@Nullable InputEvent`",
+  "note": "This may break source-compatibility with inheritors written in Kotlin.",
+  "cls": "com.intellij.openapi.actionSystem.AnActionEvent",
+  "member": "getInputEvent()",
+  "sym": "com.intellij.openapi.actionSystem.AnActionEvent",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2024.1",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.AnAction.getTemplateText()` method marked final",
+  "note": "Use `AnAction.getTemplatePresentation().setText()` instead.",
+  "cls": "com.intellij.openapi.actionSystem.AnAction",
+  "member": "getTemplateText()",
+  "sym": "com.intellij.openapi.actionSystem.AnAction",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2024.1",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.ActionGroup.isPopup()` method marked final",
+  "note": "Use `ActionGroup.getTemplatePresentation().setPopupGroup(boolean)` instead.",
+  "cls": "com.intellij.openapi.actionSystem.ActionGroup",
+  "member": "isPopup()",
+  "sym": "com.intellij.openapi.actionSystem.ActionGroup",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2025.2",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.ActionGroup.getChildren(AnActionEvent, ActionManager)` method removed",
+  "note": "Avoid expanding an action group manually",
+  "cls": "com.intellij.openapi.actionSystem.ActionGroup",
+  "member": "getChildren(AnActionEvent, ActionManager)",
+  "sym": "com.intellij.openapi.actionSystem.ActionGroup",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2025.2",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.DefaultActionGroup.getChildren(AnActionEvent, ActionManager)` method removed",
+  "note": "Avoid expanding an action group manually or use `DefaultActionGroup.getChildren(ActionManager)`",
+  "cls": "com.intellij.openapi.actionSystem.DefaultActionGroup",
+  "member": "getChildren(AnActionEvent, ActionManager)",
+  "sym": "com.intellij.openapi.actionSystem.DefaultActionGroup",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2026.3",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.LangDataKeys.RUN_PROFILE` field type changed from `DataKey<RunProfile>` to `DataKey<?>`",
+  "note": "Use `com.intellij.openapi.actionSystem.ExecutionDataKeys.RUN_PROFILE` or add an explicit cast.",
+  "cls": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "member": "RUN_PROFILE",
+  "sym": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2026.3",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.LangDataKeys.CONSOLE_VIEW` field type changed from `DataKey<ConsoleView>` to `DataKey<?>`",
+  "note": "Use `com.intellij.openapi.actionSystem.ExecutionDataKeys.CONSOLE_VIEW` or add an explicit cast.",
+  "cls": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "member": "CONSOLE_VIEW",
+  "sym": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2026.3",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.LangDataKeys.EXECUTION_ENVIRONMENT` field type changed from `DataKey<ExecutionEnvironment>` to `DataKey<?>`",
+  "note": "Use `com.intellij.openapi.actionSystem.ExecutionDataKeys.EXECUTION_ENVIRONMENT` or add an explicit cast.",
+  "cls": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "member": "EXECUTION_ENVIRONMENT",
+  "sym": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ },
+ {
+  "year": "2026.3",
+  "section": null,
+  "raw": "`com.intellij.openapi.actionSystem.LangDataKeys.RUN_CONTENT_DESCRIPTOR` field type changed from `DataKey<RunContentDescriptor>` to `DataKey<?>`",
+  "note": "Use `com.intellij.openapi.actionSystem.ExecutionDataKeys.RUN_CONTENT_DESCRIPTOR` or add an explicit cast.",
+  "cls": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "member": "RUN_CONTENT_DESCRIPTOR",
+  "sym": "com.intellij.openapi.actionSystem.LangDataKeys",
+  "kind": "CLASS-HIT/MEMBER-NOT-USED"
+ }
+]

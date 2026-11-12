@@ -1,0 +1,50 @@
+{
+  "updateId": 1203550,
+  "ideVersion": {
+    "ideVersion": "IU-261.27258.136",
+    "releaseVersion": null,
+    "productName": null
+  },
+  "javaVersion": "25.0.4.1",
+  "resultType": "WARNINGS",
+  "verificationVerdict": "1 compatibility problem, some of which may be caused by absence of optional dependency in the target IDE IU-261.27258.136. 1 usage of deprecated API. 1 ignored compatibility problem",
+  "pluginStructureWarnings": [],
+  "pluginStructureErrors": [],
+  "compatibilityWarnings": [],
+  "compatibilityProblems": [],
+  "deprecatedApiUsages": [
+    {
+      "apiElement": "java.net.URL.<init>(java.lang.String spec)",
+      "usageLocation": "com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String)",
+      "apiElementType": "CONSTRUCTOR",
+      "shortDescription": "Deprecated constructor java.net.URL.<init>(String) invocation",
+      "fullDescription": "Deprecated constructor java.net.URL.<init>(java.lang.String spec) is invoked in com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String) : String",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    }
+  ],
+  "experimentalApiUsages": [],
+  "internalApiUsages": [],
+  "overrideOnlyApiUsages": [],
+  "nonExtendableApiUsages": [],
+  "dynamicPluginStatus": {
+    "dynamic": true,
+    "reasons": []
+  },
+  "ignoredCompatibilityProblems": [
+    {
+      "shortDescription": "Package 'com.jetbrains.python' is not found",
+      "fullDescription": "Package 'com.jetbrains.python' is not found along with its 12 classes.\nProbably the package 'com.jetbrains.python' belongs to a library or dependency that is not resolved by the checker.\nIt is also possible, however, that this package was actually removed from a dependency causing the detected problems. Access to unresolved classes at runtime may lead to **NoSuchClassError**.\nThe following classes of 'com.jetbrains.python' are not resolved (only 5 most used classes are shown, 7 hidden):\n  Class com.jetbrains.python.psi.PyFile is referenced in\n    com.qwenmate.handler.context.PythonContextCollector.collectPythonContext(JsonObject semanticData, Editor editor, Project project, PsiFile psiFile, Document document) : void\n    com.qwenmate.handler.context.PythonContextCollector.getImports(PyFile pyFile) : JsonArray\n  Class com.jetbrains.python.psi.PyStringLiteralExpression is referenced in\n    com.qwenmate.handler.context.PythonContextCollector.extractStringLiteralText(PyStringLiteralExpression expression) : String\n    com.qwenmate.handler.context.PythonContextCollector.getCurrentScope(PsiFile psiFile, int offset) : JsonObject\n  Class com.jetbrains.python.psi.PyClass is referenced in\n    com.qwenmate.handler.context.PythonContextCollector.getCurrentScope(PsiFile psiFile, int offset) : JsonObject\n  Class com.jetbrains.python.psi.PyExpression is referenced in\n    com.qwenmate.handler.context.PythonContextCollector.getCurrentScope(PsiFile psiFile, int offset) : JsonObject\n  Class com.jetbrains.python.psi.PyExpressionStatement is referenced in\n    com.qwenmate.handler.context.PythonContextCollector.getCurrentScope(PsiFile psiFile, int offset) : JsonObject\n",
+      "problemType": "Package not found",
+      "critical": true,
+      "identifier": {
+        "type": "CompatibilityProblem",
+        "detailedType": "Package not found",
+        "location": "com/jetbrains/python"
+      }
+    }
+  ],
+  "ignoredInternalApiUsages": []
+}

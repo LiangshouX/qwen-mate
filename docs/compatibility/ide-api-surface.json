@@ -1,0 +1,1359 @@
+{
+ "files": 282,
+ "symbolCount": 200,
+ "symbols": {
+  "com.intellij.DynamicBundle": [
+   "com/qwenmate/i18n/QwenMateBundle.java",
+   "com/qwenmate/util/LanguageConfigService.java"
+  ],
+  "com.intellij.codeInsight.daemon.impl.HighlightInfo": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.codeInsight.intention.IntentionAction": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.codeInsight.intention.IntentionManager": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.diff.DiffContentFactory": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.diff.DiffDialogHints": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.diff.DiffManager": [
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.diff.DiffManagerEx": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.diff.chains.SimpleDiffRequestChain": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.diff.contents.DiffContent": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.diff.contents.DocumentContent": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.diff.editor.ChainDiffVirtualFile": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.diff.requests.SimpleDiffRequest": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.diff.util.DiffUserDataKeys": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.diff.util.DiffUserDataKeysEx": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.diff.util.Side": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.execution.impl.ConsoleViewImpl": [
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+  ],
+  "com.intellij.execution.process.ProcessEvent": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.execution.process.ProcessHandler": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.execution.process.ProcessListener": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.execution.ui.ConsoleView": [
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+  ],
+  "com.intellij.execution.ui.RunContentDescriptor": [
+   "com/qwenmate/service/RunConfigMonitorService.java"
+  ],
+  "com.intellij.execution.ui.RunContentManager": [
+   "com/qwenmate/service/RunConfigMonitorService.java"
+  ],
+  "com.intellij.icons.AllIcons": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.ide.BrowserUtil": [
+   "com/qwenmate/action/OpenDocumentationAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java"
+  ],
+  "com.intellij.ide.ui.LafManager": [
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/util/ThemeConfigService.java"
+  ],
+  "com.intellij.ide.ui.LafManagerListener": [
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/util/ThemeConfigService.java"
+  ],
+  "com.intellij.ide.ui.UISettings": [
+   "com/qwenmate/util/FontConfigService.java"
+  ],
+  "com.intellij.ide.util.PropertiesComponent": [
+   "com/qwenmate/action/SendShortcutSync.java",
+   "com/qwenmate/handler/DependencyHandler.java",
+   "com/qwenmate/handler/NodePathHandler.java",
+   "com/qwenmate/handler/PermissionModeHandler.java",
+   "com/qwenmate/handler/ProjectConfigHandler.java",
+   "com/qwenmate/handler/TokenTrackerHandler.java",
+   "com/qwenmate/session/SessionLifecycleManager.java",
+   "com/qwenmate/startup/PluginUpdateListener.java",
+   "com/qwenmate/ui/ChatWindowDelegate.java",
+   "com/qwenmate/ui/ErrorPanelBuilder.java",
+   "com/qwenmate/ui/WebviewInitializer.java"
+  ],
+  "com.intellij.ide.workspace.Subproject": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.ide.workspace.SubprojectManager": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.ide.workspace.SubprojectManagerKt": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.ide.workspace.WorkspaceSettings": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.lang.annotation.HighlightSeverity": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.lang.injection.InjectedLanguageManager": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.notification.Notification": [
+   "com/qwenmate/handler/PromptHandler.java"
+  ],
+  "com.intellij.notification.NotificationGroupManager": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java"
+  ],
+  "com.intellij.notification.NotificationType": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/handler/PromptHandler.java"
+  ],
+  "com.intellij.notification.Notifications": [
+   "com/qwenmate/handler/PromptHandler.java"
+  ],
+  "com.intellij.openapi.Disposable": [
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+   "com/qwenmate/service/NodeProcessRegistry.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/ToolWindowLifecycleDisposableService.java"
+  ],
+  "com.intellij.openapi.actionSystem.ActionGroup": [
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.openapi.actionSystem.ActionManager": [
+   "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.openapi.actionSystem.ActionUpdateThread": [
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/HidePanelAction.java",
+   "com/qwenmate/action/OpenDocumentationAction.java",
+   "com/qwenmate/action/RestartWebviewAction.java",
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java"
+  ],
+  "com.intellij.openapi.actionSystem.AnAction": [
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/HidePanelAction.java",
+   "com/qwenmate/action/OpenDocumentationAction.java",
+   "com/qwenmate/action/RestartWebviewAction.java",
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.openapi.actionSystem.AnActionEvent": [
+   "com/qwenmate/action/ChatCopyAction.java",
+   "com/qwenmate/action/ChatCutAction.java",
+   "com/qwenmate/action/ChatNewlineAction.java",
+   "com/qwenmate/action/ChatPasteAction.java",
+   "com/qwenmate/action/ChatSendAction.java",
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/CreateFromTemplateAction.java",
+   "com/qwenmate/action/HidePanelAction.java",
+   "com/qwenmate/action/OpenDocumentationAction.java",
+   "com/qwenmate/action/RestartWebviewAction.java",
+   "com/qwenmate/action/SaveAsTemplateAction.java",
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.openapi.actionSystem.CommonDataKeys": [
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java"
+  ],
+  "com.intellij.openapi.actionSystem.DataKey": [
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java"
+  ],
+  "com.intellij.openapi.actionSystem.DefaultActionGroup": [
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.openapi.actionSystem.ExecutionDataKeys": [
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+  ],
+  "com.intellij.openapi.actionSystem.KeyboardShortcut": [
+   "com/qwenmate/action/SendShortcutSync.java"
+  ],
+  "com.intellij.openapi.actionSystem.LangDataKeys": [
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+  ],
+  "com.intellij.openapi.actionSystem.Shortcut": [
+   "com/qwenmate/action/SendShortcutSync.java"
+  ],
+  "com.intellij.openapi.application.Application": [
+   "com/qwenmate/service/GitCommitMessageService.java",
+   "com/qwenmate/service/commit/CommitDiffProvider.java"
+  ],
+  "com.intellij.openapi.application.ApplicationInfo": [
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.openapi.application.ApplicationManager": [
+   "com/qwenmate/action/ChatPasteAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/bridge/BridgeDirectoryResolver.java",
+   "com/qwenmate/cli/CliStatusDetector.java",
+   "com/qwenmate/handler/AgentHandler.java",
+   "com/qwenmate/handler/CliStatusHandler.java",
+   "com/qwenmate/handler/ClipboardHandler.java",
+   "com/qwenmate/handler/CommandHandler.java",
+   "com/qwenmate/handler/ContextHandler.java",
+   "com/qwenmate/handler/DependencyHandler.java",
+   "com/qwenmate/handler/InputHistoryHandler.java",
+   "com/qwenmate/handler/McpServerHandler.java",
+   "com/qwenmate/handler/NodePathHandler.java",
+   "com/qwenmate/handler/NodeProcessHandler.java",
+   "com/qwenmate/handler/PermissionHandler.java",
+   "com/qwenmate/handler/PermissionModeHandler.java",
+   "com/qwenmate/handler/ProjectConfigHandler.java",
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/PromptHandler.java",
+   "com/qwenmate/handler/SessionHandler.java",
+   "com/qwenmate/handler/SettingsHandler.java",
+   "com/qwenmate/handler/SkillHandler.java",
+   "com/qwenmate/handler/SoundSettingsHandler.java",
+   "com/qwenmate/handler/TokenTrackerHandler.java",
+   "com/qwenmate/handler/UsagePushService.java",
+   "com/qwenmate/handler/UsageStatsHandler.java",
+   "com/qwenmate/handler/diff/DiffBrowserBridge.java",
+   "com/qwenmate/handler/diff/DiffFileOperations.java",
+   "com/qwenmate/handler/diff/EditableDiffHandler.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/handler/file/FileExportHandler.java",
+   "com/qwenmate/handler/file/FileHandler.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenClassHandler.java",
+   "com/qwenmate/handler/file/OpenFileCollector.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/handler/file/RecentFileCollector.java",
+   "com/qwenmate/handler/file/RuntimeContextCollector.java",
+   "com/qwenmate/handler/file/UndoFileHandler.java",
+   "com/qwenmate/handler/history/HistoryExportService.java",
+   "com/qwenmate/handler/history/HistoryLoadService.java",
+   "com/qwenmate/handler/history/HistoryMessageInjector.java",
+   "com/qwenmate/handler/history/HistoryMetadataService.java",
+   "com/qwenmate/handler/importer/McpServerImportHandler.java",
+   "com/qwenmate/handler/marketplace/McpMarketplaceHandler.java",
+   "com/qwenmate/handler/provider/ModelProviderHandler.java",
+   "com/qwenmate/handler/provider/ProviderHandler.java",
+   "com/qwenmate/notifications/QwenMateNotifier.java",
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+   "com/qwenmate/permission/DiffReviewService.java",
+   "com/qwenmate/permission/PermissionDialog.java",
+   "com/qwenmate/permission/PermissionService.java",
+   "com/qwenmate/permission/ToolInterceptor.java",
+   "com/qwenmate/service/GitCommitMessageService.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/service/commit/CommitAIClient.java",
+   "com/qwenmate/service/commit/CommitDiffProvider.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/session/SessionCallbackAdapter.java",
+   "com/qwenmate/session/SessionContextService.java",
+   "com/qwenmate/session/SessionLifecycleManager.java",
+   "com/qwenmate/settings/SessionTemplateService.java",
+   "com/qwenmate/startup/BridgePreloader.java",
+   "com/qwenmate/startup/PluginUpdateListener.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/ChatWindowDelegate.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/ui/WebviewWatchdog.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+   "com/qwenmate/util/EditorFileUtils.java",
+   "com/qwenmate/util/IdeFocusState.java",
+   "com/qwenmate/util/JBCefBrowserFactory.java",
+   "com/qwenmate/util/PlatformUtils.java",
+   "com/qwenmate/util/SelectionTextUtils.java",
+   "com/qwenmate/util/SoundNotificationService.java",
+   "com/qwenmate/util/SystemNotificationService.java",
+   "com/qwenmate/util/ThemeConfigService.java"
+  ],
+  "com.intellij.openapi.application.ModalityState": [
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/handler/ClipboardHandler.java",
+   "com/qwenmate/handler/EditorFileOpener.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenClassHandler.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/service/commit/CommitAIClient.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.application.PathManager": [
+   "com/qwenmate/bridge/BridgeArchiveLocator.java",
+   "com/qwenmate/bridge/BridgePathLocator.java",
+   "com/qwenmate/mcp/marketplace/McpMarketplaceHttpClient.java"
+  ],
+  "com.intellij.openapi.application.ReadAction": [
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/handler/EditorFileOpener.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.command.WriteCommandAction": [
+   "com/qwenmate/handler/file/UndoFileHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.openapi.components": [
+   "com/qwenmate/settings/TabStateService.java"
+  ],
+  "com.intellij.openapi.components.PersistentStateComponent": [
+   "com/qwenmate/settings/SessionTemplateService.java"
+  ],
+  "com.intellij.openapi.components.Service": [
+   "com/qwenmate/service/NodeProcessRegistry.java",
+   "com/qwenmate/settings/SessionTemplateService.java",
+   "com/qwenmate/ui/toolwindow/ToolWindowLifecycleDisposableService.java"
+  ],
+  "com.intellij.openapi.components.State": [
+   "com/qwenmate/settings/SessionTemplateService.java"
+  ],
+  "com.intellij.openapi.components.Storage": [
+   "com/qwenmate/settings/SessionTemplateService.java"
+  ],
+  "com.intellij.openapi.diagnostic.Logger": [
+   "com/qwenmate/action/ChatPasteAction.java",
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/CreateFromTemplateAction.java",
+   "com/qwenmate/action/SaveAsTemplateAction.java",
+   "com/qwenmate/action/SendShortcutSync.java",
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/bridge/BridgeArchiveExtractor.java",
+   "com/qwenmate/bridge/BridgeArchiveLocator.java",
+   "com/qwenmate/bridge/BridgeDirectoryResolver.java",
+   "com/qwenmate/bridge/BridgePathLocator.java",
+   "com/qwenmate/bridge/BridgeSignatureVerifier.java",
+   "com/qwenmate/bridge/EnvironmentConfigurator.java",
+   "com/qwenmate/bridge/NodeDetector.java",
+   "com/qwenmate/bridge/ProcessManager.java",
+   "com/qwenmate/cache/SessionIndexCache.java",
+   "com/qwenmate/cache/SessionIndexManager.java",
+   "com/qwenmate/cache/SessionTitleIndex.java",
+   "com/qwenmate/cli/CliStatusDetector.java",
+   "com/qwenmate/dependency/DependencyManager.java",
+   "com/qwenmate/dependency/NpmPermissionHelper.java",
+   "com/qwenmate/handler/AgentHandler.java",
+   "com/qwenmate/handler/CliModelsHandler.java",
+   "com/qwenmate/handler/CliStatusHandler.java",
+   "com/qwenmate/handler/ClipboardHandler.java",
+   "com/qwenmate/handler/CommandHandler.java",
+   "com/qwenmate/handler/ContextHandler.java",
+   "com/qwenmate/handler/DependencyHandler.java",
+   "com/qwenmate/handler/DiffHandler.java",
+   "com/qwenmate/handler/EditorFileOpener.java",
+   "com/qwenmate/handler/InputHistoryHandler.java",
+   "com/qwenmate/handler/McpServerHandler.java",
+   "com/qwenmate/handler/NodePathHandler.java",
+   "com/qwenmate/handler/NodeProcessHandler.java",
+   "com/qwenmate/handler/PermissionHandler.java",
+   "com/qwenmate/handler/PermissionModeHandler.java",
+   "com/qwenmate/handler/ProjectConfigHandler.java",
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/PromptEnhancerProcessRunner.java",
+   "com/qwenmate/handler/PromptHandler.java",
+   "com/qwenmate/handler/ProviderConfigHandler.java",
+   "com/qwenmate/handler/QwenConfigHandler.java",
+   "com/qwenmate/handler/SessionHandler.java",
+   "com/qwenmate/handler/SettingsHandler.java",
+   "com/qwenmate/handler/SkillHandler.java",
+   "com/qwenmate/handler/SoundSettingsHandler.java",
+   "com/qwenmate/handler/TabHandler.java",
+   "com/qwenmate/handler/TokenTrackerHandler.java",
+   "com/qwenmate/handler/UsagePushService.java",
+   "com/qwenmate/handler/UsageStatsHandler.java",
+   "com/qwenmate/handler/WindowEventHandler.java",
+   "com/qwenmate/handler/context/ContextCollector.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+   "com/qwenmate/handler/diff/DiffBrowserBridge.java",
+   "com/qwenmate/handler/diff/DiffFileOperations.java",
+   "com/qwenmate/handler/diff/EditableDiffHandler.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+   "com/qwenmate/handler/diff/RefreshFileHandler.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/handler/file/FileExportHandler.java",
+   "com/qwenmate/handler/file/FileHandler.java",
+   "com/qwenmate/handler/file/FileSystemCollector.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenClassHandler.java",
+   "com/qwenmate/handler/file/OpenFileCollector.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/handler/file/RecentFileCollector.java",
+   "com/qwenmate/handler/file/RuntimeContextCollector.java",
+   "com/qwenmate/handler/file/UndoFileHandler.java",
+   "com/qwenmate/handler/history/HistoryDeleteService.java",
+   "com/qwenmate/handler/history/HistoryExportService.java",
+   "com/qwenmate/handler/history/HistoryHandler.java",
+   "com/qwenmate/handler/history/HistoryLoadService.java",
+   "com/qwenmate/handler/history/HistoryMessageInjector.java",
+   "com/qwenmate/handler/history/HistoryMetadataService.java",
+   "com/qwenmate/handler/history/SubagentHistoryService.java",
+   "com/qwenmate/handler/importer/McpServerImportHandler.java",
+   "com/qwenmate/handler/marketplace/McpMarketplaceHandler.java",
+   "com/qwenmate/handler/provider/CustomModelPricingHandler.java",
+   "com/qwenmate/handler/provider/ModelProviderHandler.java",
+   "com/qwenmate/handler/provider/ProviderHandler.java",
+   "com/qwenmate/mcp/marketplace/McpMarketplaceHttpClient.java",
+   "com/qwenmate/mcp/marketplace/McpMarketplaceService.java",
+   "com/qwenmate/permission/DiffReviewService.java",
+   "com/qwenmate/permission/PermissionDialog.java",
+   "com/qwenmate/permission/PermissionFileProtocol.java",
+   "com/qwenmate/permission/PermissionRequestWatcher.java",
+   "com/qwenmate/permission/PermissionService.java",
+   "com/qwenmate/permission/PermissionSessionRegistry.java",
+   "com/qwenmate/permission/ToolInterceptor.java",
+   "com/qwenmate/provider/CustomModelContextWindowProvider.java",
+   "com/qwenmate/provider/CustomPricingProvider.java",
+   "com/qwenmate/provider/common/BaseSDKBridge.java",
+   "com/qwenmate/provider/common/DaemonBridge.java",
+   "com/qwenmate/provider/common/SessionLiteReader.java",
+   "com/qwenmate/provider/qwen/QwenDaemonRequestExecutor.java",
+   "com/qwenmate/provider/qwen/QwenHistoryIndexService.java",
+   "com/qwenmate/provider/qwen/QwenHistoryReader.java",
+   "com/qwenmate/service/GitCommitMessageService.java",
+   "com/qwenmate/service/NodeProcessRegistry.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/service/commit/CommitAIClient.java",
+   "com/qwenmate/service/commit/CommitDiffProvider.java",
+   "com/qwenmate/service/commit/CommitPromptBuilder.java",
+   "com/qwenmate/service/commit/ContentDiffSupport.java",
+   "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/session/MessageParser.java",
+   "com/qwenmate/session/QwenMateSession.java",
+   "com/qwenmate/session/QwenMessageHandler.java",
+   "com/qwenmate/session/SessionCallbackAdapter.java",
+   "com/qwenmate/session/SessionContextService.java",
+   "com/qwenmate/session/SessionLifecycleManager.java",
+   "com/qwenmate/session/SessionMessageOrchestrator.java",
+   "com/qwenmate/session/SessionProviderRouter.java",
+   "com/qwenmate/session/SessionSendService.java",
+   "com/qwenmate/session/StreamDeltaThrottler.java",
+   "com/qwenmate/session/StreamMessageCoalescer.java",
+   "com/qwenmate/settings/AbstractPromptManager.java",
+   "com/qwenmate/settings/AgentManager.java",
+   "com/qwenmate/settings/ConfigPathManager.java",
+   "com/qwenmate/settings/LegacyDataDirMigrator.java",
+   "com/qwenmate/settings/McpServerManager.java",
+   "com/qwenmate/settings/PermissionDialogTimeoutSettings.java",
+   "com/qwenmate/settings/ProjectPromptManager.java",
+   "com/qwenmate/settings/QwenCliConfigReader.java",
+   "com/qwenmate/settings/QwenMateSettingsService.java",
+   "com/qwenmate/settings/SessionTemplateService.java",
+   "com/qwenmate/settings/SkillManager.java",
+   "com/qwenmate/settings/TabStateService.java",
+   "com/qwenmate/settings/WorkingDirectoryManager.java",
+   "com/qwenmate/skill/AdditionalDirectoryResolver.java",
+   "com/qwenmate/skill/CommandService.java",
+   "com/qwenmate/skill/SkillFrontmatterParser.java",
+   "com/qwenmate/skill/SkillService.java",
+   "com/qwenmate/skill/SlashCommandJsonReader.java",
+   "com/qwenmate/skill/SlashCommandPathPolicy.java",
+   "com/qwenmate/skill/SlashCommandRegistry.java",
+   "com/qwenmate/startup/BridgePreloader.java",
+   "com/qwenmate/startup/PluginUpdateListener.java",
+   "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/ChatWindowDelegate.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/ui/ErrorPanelBuilder.java",
+   "com/qwenmate/ui/OsrImeCaretFix.java",
+   "com/qwenmate/ui/SurfaceFrameFence.java",
+   "com/qwenmate/ui/UiFontResourceRequestHandler.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/ui/WebviewWatchdog.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/detached/DetachedWindowManager.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+   "com/qwenmate/ui/toolwindow/WebviewEventQueue.java",
+   "com/qwenmate/util/ContentRebuildUtil.java",
+   "com/qwenmate/util/EditorFileUtils.java",
+   "com/qwenmate/util/FontConfigService.java",
+   "com/qwenmate/util/HtmlLoader.java",
+   "com/qwenmate/util/IdeFocusState.java",
+   "com/qwenmate/util/IgnoreRuleMatcher.java",
+   "com/qwenmate/util/JBCefBrowserFactory.java",
+   "com/qwenmate/util/LanguageConfigService.java",
+   "com/qwenmate/util/MessageJsonConverter.java",
+   "com/qwenmate/util/PlatformUtils.java",
+   "com/qwenmate/util/PluginMetadata.java",
+   "com/qwenmate/util/SelectionTextUtils.java",
+   "com/qwenmate/util/ShellExecutor.java",
+   "com/qwenmate/util/SoundNotificationService.java",
+   "com/qwenmate/util/SystemNotificationService.java",
+   "com/qwenmate/util/ThemeConfigService.java",
+   "com/qwenmate/util/WslPathUtil.java",
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.openapi.editor.Document": [
+   "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/context/ContextCollector.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/handler/context/PythonContextCollector.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/handler/file/UndoFileHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.openapi.editor.Editor": [
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/UsagePushService.java",
+   "com/qwenmate/handler/context/ContextCollector.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/handler/context/PythonContextCollector.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.editor.EditorFactory": [
+   "com/qwenmate/ui/EditorContextTracker.java"
+  ],
+  "com.intellij.openapi.editor.ScrollType": [
+   "com/qwenmate/handler/file/OpenFileHandler.java"
+  ],
+  "com.intellij.openapi.editor.SelectionModel": [
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/UsagePushService.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.editor.colors.EditorColorsManager": [
+   "com/qwenmate/util/FontConfigService.java"
+  ],
+  "com.intellij.openapi.editor.colors.EditorColorsScheme": [
+   "com/qwenmate/util/FontConfigService.java"
+  ],
+  "com.intellij.openapi.editor.colors.FontPreferences": [
+   "com/qwenmate/util/FontConfigService.java"
+  ],
+  "com.intellij.openapi.editor.event.SelectionEvent": [
+   "com/qwenmate/ui/EditorContextTracker.java"
+  ],
+  "com.intellij.openapi.editor.event.SelectionListener": [
+   "com/qwenmate/ui/EditorContextTracker.java"
+  ],
+  "com.intellij.openapi.editor.ex.MarkupModelEx": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.openapi.editor.impl.DocumentMarkupModel": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.openapi.editor.markup.RangeHighlighter": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ],
+  "com.intellij.openapi.fileChooser.FileChooser": [
+   "com/qwenmate/handler/AgentHandler.java",
+   "com/qwenmate/handler/ProjectConfigHandler.java",
+   "com/qwenmate/handler/PromptHandler.java",
+   "com/qwenmate/handler/SkillHandler.java",
+   "com/qwenmate/handler/SoundSettingsHandler.java"
+  ],
+  "com.intellij.openapi.fileChooser.FileChooserDescriptor": [
+   "com/qwenmate/handler/AgentHandler.java",
+   "com/qwenmate/handler/ProjectConfigHandler.java",
+   "com/qwenmate/handler/PromptHandler.java",
+   "com/qwenmate/handler/SkillHandler.java",
+   "com/qwenmate/handler/SoundSettingsHandler.java"
+  ],
+  "com.intellij.openapi.fileEditor.FileDocumentManager": [
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/UsagePushService.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/handler/file/UndoFileHandler.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/ui/EditorContextTracker.java"
+  ],
+  "com.intellij.openapi.fileEditor.FileEditor": [
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.fileEditor.FileEditorManager": [
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/SessionHandler.java",
+   "com/qwenmate/handler/UsagePushService.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/file/OpenFileCollector.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.fileEditor.FileEditorManagerEvent": [
+   "com/qwenmate/ui/EditorContextTracker.java"
+  ],
+  "com.intellij.openapi.fileEditor.FileEditorManagerListener": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/ui/EditorContextTracker.java"
+  ],
+  "com.intellij.openapi.fileEditor.OpenFileDescriptor": [
+   "com/qwenmate/handler/EditorFileOpener.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java"
+  ],
+  "com.intellij.openapi.fileEditor.TextEditor": [
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.fileEditor.impl.EditorHistoryManager": [
+   "com/qwenmate/handler/file/RecentFileCollector.java"
+  ],
+  "com.intellij.openapi.fileTypes.FileType": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.openapi.fileTypes.FileTypeManager": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/service/QuickFixService.java"
+  ],
+  "com.intellij.openapi.fileTypes.FileTypes": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.openapi.keymap.Keymap": [
+   "com/qwenmate/action/SendShortcutSync.java"
+  ],
+  "com.intellij.openapi.keymap.KeymapManager": [
+   "com/qwenmate/action/SendShortcutSync.java"
+  ],
+  "com.intellij.openapi.module.Module": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.openapi.module.ModuleManager": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.openapi.module.ModuleType": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.openapi.module.ModuleUtilCore": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.openapi.progress.ProcessCanceledException": [
+   "com/qwenmate/handler/file/FileHandler.java",
+   "com/qwenmate/handler/file/RuntimeContextCollector.java",
+   "com/qwenmate/session/SessionContextService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.openapi.progress.ProgressIndicator": [
+   "com/qwenmate/bridge/BridgeArchiveExtractor.java",
+   "com/qwenmate/bridge/BridgeDirectoryResolver.java"
+  ],
+  "com.intellij.openapi.progress.ProgressManager": [
+   "com/qwenmate/bridge/BridgeDirectoryResolver.java"
+  ],
+  "com.intellij.openapi.progress.Task": [
+   "com/qwenmate/bridge/BridgeDirectoryResolver.java"
+  ],
+  "com.intellij.openapi.project.DumbAware": [
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/HidePanelAction.java",
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.openapi.project.DumbService": [
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java"
+  ],
+  "com.intellij.openapi.project.Project": [
+   "com/qwenmate/action/ChatCopyAction.java",
+   "com/qwenmate/action/ChatCutAction.java",
+   "com/qwenmate/action/ChatNewlineAction.java",
+   "com/qwenmate/action/ChatPasteAction.java",
+   "com/qwenmate/action/ChatSendAction.java",
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/CreateFromTemplateAction.java",
+   "com/qwenmate/action/HidePanelAction.java",
+   "com/qwenmate/action/RestartWebviewAction.java",
+   "com/qwenmate/action/SaveAsTemplateAction.java",
+   "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/handler/EditorFileOpener.java",
+   "com/qwenmate/handler/PromptHandler.java",
+   "com/qwenmate/handler/TabHandler.java",
+   "com/qwenmate/handler/context/ContextCollector.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/handler/context/PythonContextCollector.java",
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+   "com/qwenmate/handler/core/HandlerContext.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenClassHandler.java",
+   "com/qwenmate/handler/file/OpenFileCollector.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/handler/file/RecentFileCollector.java",
+   "com/qwenmate/handler/file/RuntimeContextCollector.java",
+   "com/qwenmate/notifications/QwenMateNotifier.java",
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+   "com/qwenmate/permission/DiffReviewService.java",
+   "com/qwenmate/permission/PermissionDialog.java",
+   "com/qwenmate/permission/PermissionDialogRouter.java",
+   "com/qwenmate/permission/PermissionManager.java",
+   "com/qwenmate/permission/PermissionRequest.java",
+   "com/qwenmate/permission/PermissionService.java",
+   "com/qwenmate/permission/ToolInterceptor.java",
+   "com/qwenmate/service/GitCommitMessageService.java",
+   "com/qwenmate/service/NodeProcessRegistry.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/service/commit/CommitAIClient.java",
+   "com/qwenmate/service/commit/CommitDiffProvider.java",
+   "com/qwenmate/service/commit/CommitPromptBuilder.java",
+   "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+   "com/qwenmate/service/commit/GitDiffBackend.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/session/QwenMateSession.java",
+   "com/qwenmate/session/SessionCallbackFacade.java",
+   "com/qwenmate/session/SessionContextService.java",
+   "com/qwenmate/session/SessionLifecycleManager.java",
+   "com/qwenmate/session/SessionMessageOrchestrator.java",
+   "com/qwenmate/session/SessionSendService.java",
+   "com/qwenmate/settings/ProjectPromptManager.java",
+   "com/qwenmate/settings/PromptManagerFactory.java",
+   "com/qwenmate/settings/QwenMateSettingsService.java",
+   "com/qwenmate/settings/TabStateService.java",
+   "com/qwenmate/startup/BridgePreloader.java",
+   "com/qwenmate/startup/PluginUpdateListener.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/ChatWindowDelegate.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/detached/DetachedWindowManager.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+   "com/qwenmate/ui/toolwindow/ToolWindowLifecycleDisposableService.java",
+   "com/qwenmate/util/EditorFileUtils.java",
+   "com/qwenmate/util/SelectionTextUtils.java",
+   "com/qwenmate/util/SystemNotificationService.java",
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.openapi.project.ProjectManager": [
+   "com/qwenmate/permission/PermissionDialogRouter.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.openapi.project.ProjectManagerListener": [
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.openapi.project.workspace.SubprojectInfoProvider": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.openapi.roots.ModuleRootManager": [
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+  ],
+  "com.intellij.openapi.roots.ProjectFileIndex": [
+   "com/qwenmate/handler/context/JavaContextCollector.java"
+  ],
+  "com.intellij.openapi.startup.ProjectActivity": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/startup/BridgePreloader.java",
+   "com/qwenmate/startup/PluginUpdateListener.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.openapi.ui.DialogWrapper": [
+   "com/qwenmate/permission/PermissionDialog.java",
+   "com/qwenmate/ui/TemplateSelectionDialog.java"
+  ],
+  "com.intellij.openapi.ui.InputValidatorEx": [
+   "com/qwenmate/action/tab/RenameTabAction.java"
+  ],
+  "com.intellij.openapi.ui.Messages": [
+   "com/qwenmate/action/SaveAsTemplateAction.java",
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+   "com/qwenmate/util/SelectionTextUtils.java"
+  ],
+  "com.intellij.openapi.ui.popup.JBPopup": [
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+  ],
+  "com.intellij.openapi.ui.popup.JBPopupFactory": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+  ],
+  "com.intellij.openapi.ui.popup.ListPopup": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java"
+  ],
+  "com.intellij.openapi.ui.popup.PopupStep": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java"
+  ],
+  "com.intellij.openapi.ui.popup.util.BaseListPopupStep": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java"
+  ],
+  "com.intellij.openapi.util.CheckedDisposable": [
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.openapi.util.Computable": [
+   "com/qwenmate/handler/SessionHandler.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/permission/DiffReviewService.java",
+   "com/qwenmate/session/SessionContextService.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.util.Disposer": [
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java"
+  ],
+  "com.intellij.openapi.util.Key": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.openapi.util.SystemInfo": [
+   "com/qwenmate/action/SendShortcutSync.java",
+   "com/qwenmate/util/IgnoreRuleMatcher.java",
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.openapi.util.TextRange": [
+   "com/qwenmate/handler/context/ContextCollector.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java"
+  ],
+  "com.intellij.openapi.util.io.FileUtil": [
+   "com/qwenmate/bridge/BridgeArchiveExtractor.java"
+  ],
+  "com.intellij.openapi.util.registry.Registry": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.openapi.util.text.StringUtil": [
+   "com/qwenmate/ui/TemplateSelectionDialog.java"
+  ],
+  "com.intellij.openapi.vcs.CheckinProjectPanel": [
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+  ],
+  "com.intellij.openapi.vcs.CommitMessageI": [
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+  ],
+  "com.intellij.openapi.vcs.FilePath": [
+   "com/qwenmate/service/commit/ContentDiffSupport.java",
+   "com/qwenmate/service/commit/Git4IdeaDiffBackend.java"
+  ],
+  "com.intellij.openapi.vcs.VcsDataKeys": [
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+  ],
+  "com.intellij.openapi.vcs.VcsException": [
+   "com/qwenmate/service/commit/ContentDiffSupport.java"
+  ],
+  "com.intellij.openapi.vcs.changes.Change": [
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+   "com/qwenmate/service/GitCommitMessageService.java",
+   "com/qwenmate/service/commit/CommitDiffProvider.java",
+   "com/qwenmate/service/commit/ContentDiffSupport.java",
+   "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+   "com/qwenmate/service/commit/GitDiffBackend.java"
+  ],
+  "com.intellij.openapi.vcs.changes.ChangeListManager": [
+   "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+  ],
+  "com.intellij.openapi.vcs.changes.ChangesUtil": [
+   "com/qwenmate/service/commit/ContentDiffSupport.java",
+   "com/qwenmate/service/commit/Git4IdeaDiffBackend.java"
+  ],
+  "com.intellij.openapi.vcs.changes.ContentRevision": [
+   "com/qwenmate/service/commit/ContentDiffSupport.java"
+  ],
+  "com.intellij.openapi.vfs.LocalFileSystem": [
+   "com/qwenmate/handler/AgentHandler.java",
+   "com/qwenmate/handler/EditorFileOpener.java",
+   "com/qwenmate/handler/ProjectConfigHandler.java",
+   "com/qwenmate/handler/PromptHandler.java",
+   "com/qwenmate/handler/SkillHandler.java",
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+   "com/qwenmate/handler/diff/DiffFileOperations.java",
+   "com/qwenmate/handler/diff/EditableDiffHandler.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/handler/file/UndoFileHandler.java",
+   "com/qwenmate/permission/DiffReviewService.java",
+   "com/qwenmate/util/EditorFileUtils.java"
+  ],
+  "com.intellij.openapi.vfs.VirtualFile": [
+   "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/handler/AgentHandler.java",
+   "com/qwenmate/handler/ProjectConfigHandler.java",
+   "com/qwenmate/handler/PromptEnhancerHandler.java",
+   "com/qwenmate/handler/PromptHandler.java",
+   "com/qwenmate/handler/SessionHandler.java",
+   "com/qwenmate/handler/SkillHandler.java",
+   "com/qwenmate/handler/UsagePushService.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+   "com/qwenmate/handler/diff/DiffFileOperations.java",
+   "com/qwenmate/handler/diff/EditableDiffHandler.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+   "com/qwenmate/handler/diff/RefreshFileHandler.java",
+   "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+   "com/qwenmate/handler/file/FileHandler.java",
+   "com/qwenmate/handler/file/OpenFileCollector.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/handler/file/RecentFileCollector.java",
+   "com/qwenmate/handler/file/UndoFileHandler.java",
+   "com/qwenmate/permission/DiffReviewService.java",
+   "com/qwenmate/service/QuickFixService.java",
+   "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/util/EditorFileUtils.java",
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.openapi.vfs.VirtualFileManager": [
+   "com/qwenmate/session/SessionCallbackAdapter.java",
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.openapi.vfs.newvfs.BulkFileListener": [
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent": [
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.openapi.vfs.newvfs.events.VFileEvent": [
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.openapi.wm.CustomStatusBarWidget": [
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+  ],
+  "com.intellij.openapi.wm.StatusBar": [
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+  ],
+  "com.intellij.openapi.wm.StatusBarWidget": [
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+  ],
+  "com.intellij.openapi.wm.StatusBarWidgetFactory": [
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+  ],
+  "com.intellij.openapi.wm.ToolWindow": [
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/HidePanelAction.java",
+   "com/qwenmate/action/RestartWebviewAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/handler/TabHandler.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+   "com/qwenmate/util/SelectionTextUtils.java"
+  ],
+  "com.intellij.openapi.wm.ToolWindowFactory": [
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.openapi.wm.ToolWindowManager": [
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/HidePanelAction.java",
+   "com/qwenmate/action/RestartWebviewAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/handler/TabHandler.java",
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+   "com/qwenmate/util/SelectionTextUtils.java"
+  ],
+  "com.intellij.openapi.wm.WindowManager": [
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/util/SystemNotificationService.java"
+  ],
+  "com.intellij.openapi.wm.ex.ToolWindowManagerListener": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.pom.Navigatable": [
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.psi.JavaPsiFacade": [
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.psi.PsiClass": [
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.psi.PsiElement": [
+   "com/qwenmate/handler/context/PythonContextCollector.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.psi.PsiFile": [
+   "com/qwenmate/handler/context/PythonContextCollector.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.psi.PsiJavaFile": [
+   "com/qwenmate/handler/context/ContextCollector.java",
+   "com/qwenmate/handler/file/OpenClassHandler.java"
+  ],
+  "com.intellij.psi.PsiNameIdentifierOwner": [
+   "com/qwenmate/handler/context/PythonContextCollector.java"
+  ],
+  "com.intellij.psi.PsiNamedElement": [
+   "com/qwenmate/handler/context/PythonContextCollector.java"
+  ],
+  "com.intellij.psi.SmartPointerManager": [
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.psi.SmartPsiElementPointer": [
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.psi.search.FilenameIndex": [
+   "com/qwenmate/handler/file/OpenFileHandler.java"
+  ],
+  "com.intellij.psi.search.GlobalSearchScope": [
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java"
+  ],
+  "com.intellij.psi.search.SearchScope": [
+   "com/qwenmate/handler/context/JavaContextCollector.java"
+  ],
+  "com.intellij.psi.search.searches.ReferencesSearch": [
+   "com/qwenmate/handler/context/JavaContextCollector.java"
+  ],
+  "com.intellij.psi.util.PsiTreeUtil": [
+   "com/qwenmate/handler/context/ContextCollector.java",
+   "com/qwenmate/handler/context/JavaContextCollector.java",
+   "com/qwenmate/handler/context/PythonContextCollector.java"
+  ],
+  "com.intellij.psi.util.PsiUtil": [
+   "com/qwenmate/handler/context/JavaContextCollector.java"
+  ],
+  "com.intellij.terminal.JBTerminalWidget": [
+   "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+   "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java"
+  ],
+  "com.intellij.terminal.actions.TerminalActionUtil": [
+   "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java"
+  ],
+  "com.intellij.testFramework.LightVirtualFile": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.ui.JBColor": [
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+   "com/qwenmate/util/ThemeConfigService.java"
+  ],
+  "com.intellij.ui.components.JBLabel": [
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+  ],
+  "com.intellij.ui.components.JBList": [
+   "com/qwenmate/ui/TemplateSelectionDialog.java"
+  ],
+  "com.intellij.ui.components.JBScrollPane": [
+   "com/qwenmate/ui/TemplateSelectionDialog.java"
+  ],
+  "com.intellij.ui.components.JBTextField": [
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+  ],
+  "com.intellij.ui.content.Content": [
+   "com/qwenmate/action/ChatToolWindowAction.java",
+   "com/qwenmate/action/RestartWebviewAction.java",
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/handler/TabHandler.java",
+   "com/qwenmate/service/NodeProcessRegistry.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/ChatWindowDelegate.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.ui.content.ContentFactory": [
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/handler/TabHandler.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.ui.content.ContentManager": [
+   "com/qwenmate/action/tab/CreateNewTabAction.java",
+   "com/qwenmate/action/tab/DetachTabAction.java",
+   "com/qwenmate/action/tab/RenameTabAction.java",
+   "com/qwenmate/handler/TabHandler.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.ui.content.ContentManagerEvent": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.ui.content.ContentManagerListener": [
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/terminal/TerminalMonitorService.java",
+   "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+  ],
+  "com.intellij.ui.jcef.JBCefApp": [
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.ui.jcef.JBCefBrowser": [
+   "com/qwenmate/action/dev/OpenDevToolsAction.java",
+   "com/qwenmate/handler/core/HandlerContext.java",
+   "com/qwenmate/permission/PermissionDialog.java",
+   "com/qwenmate/session/SessionLifecycleManager.java",
+   "com/qwenmate/ui/ChatWindowDelegate.java",
+   "com/qwenmate/ui/SurfaceFrameFence.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/ui/WebviewWatchdog.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.ui.jcef.JBCefBrowserBase": [
+   "com/qwenmate/permission/PermissionDialog.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.ui.jcef.JBCefBrowserBuilder": [
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.ui.jcef.JBCefInputMethodAdapter": [
+   "com/qwenmate/ui/OsrImeCaretFix.java"
+  ],
+  "com.intellij.ui.jcef.JBCefJSQuery": [
+   "com/qwenmate/permission/PermissionDialog.java",
+   "com/qwenmate/ui/WebviewInitializer.java"
+  ],
+  "com.intellij.ui.jcef.JBCefOSRHandlerFactory": [
+   "com/qwenmate/ui/SurfaceFrameFence.java",
+   "com/qwenmate/ui/WebviewInitializer.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.intellij.util.Alarm": [
+   "com/qwenmate/session/SessionCallbackAdapter.java",
+   "com/qwenmate/session/StreamMessageCoalescer.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java"
+  ],
+  "com.intellij.util.Consumer": [
+   "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+  ],
+  "com.intellij.util.Function": [
+   "com/qwenmate/ui/SurfaceFrameFence.java"
+  ],
+  "com.intellij.util.OpenSourceUtil": [
+   "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+  ],
+  "com.intellij.util.Query": [
+   "com/qwenmate/handler/context/JavaContextCollector.java"
+  ],
+  "com.intellij.util.concurrency.AppExecutorUtil": [
+   "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+   "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+   "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+   "com/qwenmate/handler/CliModelsHandler.java",
+   "com/qwenmate/handler/CliStatusHandler.java",
+   "com/qwenmate/handler/DependencyHandler.java",
+   "com/qwenmate/handler/EditorFileOpener.java",
+   "com/qwenmate/handler/NodePathHandler.java",
+   "com/qwenmate/handler/NodeProcessHandler.java",
+   "com/qwenmate/handler/PermissionHandler.java",
+   "com/qwenmate/handler/SkillHandler.java",
+   "com/qwenmate/handler/TokenTrackerHandler.java",
+   "com/qwenmate/handler/UsageStatsHandler.java",
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/handler/file/FileHandler.java",
+   "com/qwenmate/handler/file/OpenClassHandler.java",
+   "com/qwenmate/handler/file/OpenFileHandler.java",
+   "com/qwenmate/handler/provider/ModelProviderHandler.java",
+   "com/qwenmate/provider/common/BaseSDKBridge.java",
+   "com/qwenmate/service/RunConfigMonitorService.java",
+   "com/qwenmate/session/EditorContextCollector.java",
+   "com/qwenmate/ui/ChatWindowDelegate.java",
+   "com/qwenmate/ui/WebviewWatchdog.java",
+   "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+   "com/qwenmate/util/EditorFileUtils.java",
+   "com/qwenmate/util/SelectionTextUtils.java"
+  ],
+  "com.intellij.util.concurrency.annotations.RequiresEdt": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+  ],
+  "com.intellij.util.messages.MessageBusConnection": [
+   "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+   "com/qwenmate/ui/EditorContextTracker.java",
+   "com/qwenmate/watcher/PromptFileWatcher.java"
+  ],
+  "com.intellij.util.ui.JBUI": [
+   "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+   "com/qwenmate/ui/detached/DetachedChatFrame.java",
+   "com/qwenmate/util/SystemNotificationService.java"
+  ],
+  "com.intellij.util.ui.UIUtil": [
+   "com/qwenmate/ui/detached/DetachedChatFrame.java"
+  ],
+  "com.jetbrains.cef.JCefAppConfig": [
+   "com/qwenmate/util/JBCefBrowserFactory.java"
+  ],
+  "com.jetbrains.python.psi": [
+   "com/qwenmate/handler/context/PythonContextCollector.java"
+  ],
+  "com.jetbrains.python.psi.PyFile": [
+   "com/qwenmate/handler/context/ContextCollector.java"
+  ]
+ },
+ "staticSymbols": {}
+}

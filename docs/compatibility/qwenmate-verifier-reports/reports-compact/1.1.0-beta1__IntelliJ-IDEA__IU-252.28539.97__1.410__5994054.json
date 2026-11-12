@@ -1,0 +1,38 @@
+{
+  "updateId": 1195823,
+  "ideVersion": {
+    "ideVersion": "IU-252.28539.97",
+    "releaseVersion": null,
+    "productName": null
+  },
+  "javaVersion": "21.0.9",
+  "resultType": "WARNINGS",
+  "verificationVerdict": "Compatible. 1 usage of deprecated API",
+  "pluginStructureWarnings": [],
+  "pluginStructureErrors": [],
+  "compatibilityWarnings": [],
+  "compatibilityProblems": [],
+  "deprecatedApiUsages": [
+    {
+      "apiElement": "java.net.URL.<init>(java.lang.String spec)",
+      "usageLocation": "com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String)",
+      "apiElementType": "CONSTRUCTOR",
+      "shortDescription": "Deprecated constructor java.net.URL.<init>(String) invocation",
+      "fullDescription": "Deprecated constructor java.net.URL.<init>(java.lang.String spec) is invoked in com.qwenmate.mcp.marketplace.McpMarketplaceHttpClient.httpGet(String) : String",
+      "deprecationInfo": {
+        "forRemoval": false,
+        "untilVersion": null
+      }
+    }
+  ],
+  "experimentalApiUsages": [],
+  "internalApiUsages": [],
+  "overrideOnlyApiUsages": [],
+  "nonExtendableApiUsages": [],
+  "dynamicPluginStatus": {
+    "dynamic": true,
+    "reasons": []
+  },
+  "ignoredCompatibilityProblems": [],
+  "ignoredInternalApiUsages": []
+}

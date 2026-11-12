@@ -1,0 +1,4206 @@
+{
+ "sdk": "C:\\Users\\31770\\.gradle\\caches\\8.14.4\\transforms\\91fdaeac77d37742293e897cc4f4da69\\transformed\\ideaIC-2024.3.1-win",
+ "rows": [
+  {
+   "symbol": "com.intellij.DynamicBundle",
+   "class": "com.intellij.DynamicBundle",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/i18n/QwenMateBundle.java",
+    "com/qwenmate/util/LanguageConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.codeInsight.daemon.impl.HighlightInfo",
+   "class": "com.intellij.codeInsight.daemon.impl.HighlightInfo",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.codeInsight.intention.IntentionAction",
+   "class": "com.intellij.codeInsight.intention.IntentionAction",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.codeInsight.intention.IntentionManager",
+   "class": "com.intellij.codeInsight.intention.IntentionManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.DiffContentFactory",
+   "class": "com.intellij.diff.DiffContentFactory",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.DiffDialogHints",
+   "class": "com.intellij.diff.DiffDialogHints",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.DiffManager",
+   "class": "com.intellij.diff.DiffManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.DiffManagerEx",
+   "class": "com.intellij.diff.DiffManagerEx",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.chains.SimpleDiffRequestChain",
+   "class": "com.intellij.diff.chains.SimpleDiffRequestChain",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.contents.DiffContent",
+   "class": "com.intellij.diff.contents.DiffContent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.contents.DocumentContent",
+   "class": "com.intellij.diff.contents.DocumentContent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.editor.ChainDiffVirtualFile",
+   "class": "com.intellij.diff.editor.ChainDiffVirtualFile",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.requests.SimpleDiffRequest",
+   "class": "com.intellij.diff.requests.SimpleDiffRequest",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.util.DiffUserDataKeys",
+   "class": "com.intellij.diff.util.DiffUserDataKeys",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.util.DiffUserDataKeysEx",
+   "class": "com.intellij.diff.util.DiffUserDataKeysEx",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.diff.util.Side",
+   "class": "com.intellij.diff.util.Side",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.execution.impl.ConsoleViewImpl",
+   "class": "com.intellij.execution.impl.ConsoleViewImpl",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.execution.process.ProcessEvent",
+   "class": "com.intellij.execution.process.ProcessEvent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.execution.process.ProcessHandler",
+   "class": "com.intellij.execution.process.ProcessHandler",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.execution.process.ProcessListener",
+   "class": "com.intellij.execution.process.ProcessListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.execution.ui.ConsoleView",
+   "class": "com.intellij.execution.ui.ConsoleView",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.execution.ui.RunContentDescriptor",
+   "class": "com.intellij.execution.ui.RunContentDescriptor",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.execution.ui.RunContentManager",
+   "class": "com.intellij.execution.ui.RunContentManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.icons.AllIcons",
+   "class": "com.intellij.icons.AllIcons",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.BrowserUtil",
+   "class": "com.intellij.ide.BrowserUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/OpenDocumentationAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.ui.LafManager",
+   "class": "com.intellij.ide.ui.LafManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/util/ThemeConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.ui.LafManagerListener",
+   "class": "com.intellij.ide.ui.LafManagerListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/util/ThemeConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.ui.UISettings",
+   "class": "com.intellij.ide.ui.UISettings",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "com.intellij.openapi.components.State",
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/FontConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.util.PropertiesComponent",
+   "class": "com.intellij.ide.util.PropertiesComponent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/SendShortcutSync.java",
+    "com/qwenmate/handler/DependencyHandler.java",
+    "com/qwenmate/handler/NodePathHandler.java",
+    "com/qwenmate/handler/PermissionModeHandler.java",
+    "com/qwenmate/handler/ProjectConfigHandler.java",
+    "com/qwenmate/handler/TokenTrackerHandler.java",
+    "com/qwenmate/session/SessionLifecycleManager.java",
+    "com/qwenmate/startup/PluginUpdateListener.java",
+    "com/qwenmate/ui/ChatWindowDelegate.java",
+    "com/qwenmate/ui/ErrorPanelBuilder.java",
+    "com/qwenmate/ui/WebviewInitializer.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.workspace.Subproject",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.workspace.SubprojectManager",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.workspace.SubprojectManagerKt",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ide.workspace.WorkspaceSettings",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.lang.annotation.HighlightSeverity",
+   "class": "com.intellij.lang.annotation.HighlightSeverity",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.lang.injection.InjectedLanguageManager",
+   "class": "com.intellij.lang.injection.InjectedLanguageManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.notification.Notification",
+   "class": "com.intellij.notification.Notification",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/PromptHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.notification.NotificationGroupManager",
+   "class": "com.intellij.notification.NotificationGroupManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.notification.NotificationType",
+   "class": "com.intellij.notification.NotificationType",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/handler/PromptHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.notification.Notifications",
+   "class": "com.intellij.notification.Notifications",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/PromptHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.Disposable",
+   "class": "com.intellij.openapi.Disposable",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+    "com/qwenmate/service/NodeProcessRegistry.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/ToolWindowLifecycleDisposableService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.ActionGroup",
+   "class": "com.intellij.openapi.actionSystem.ActionGroup",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.ActionManager",
+   "class": "com.intellij.openapi.actionSystem.ActionManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.ActionUpdateThread",
+   "class": "com.intellij.openapi.actionSystem.ActionUpdateThread",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/HidePanelAction.java",
+    "com/qwenmate/action/OpenDocumentationAction.java",
+    "com/qwenmate/action/RestartWebviewAction.java",
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.AnAction",
+   "class": "com.intellij.openapi.actionSystem.AnAction",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/HidePanelAction.java",
+    "com/qwenmate/action/OpenDocumentationAction.java",
+    "com/qwenmate/action/RestartWebviewAction.java",
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.AnActionEvent",
+   "class": "com.intellij.openapi.actionSystem.AnActionEvent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatCopyAction.java",
+    "com/qwenmate/action/ChatCutAction.java",
+    "com/qwenmate/action/ChatNewlineAction.java",
+    "com/qwenmate/action/ChatPasteAction.java",
+    "com/qwenmate/action/ChatSendAction.java",
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/CreateFromTemplateAction.java",
+    "com/qwenmate/action/HidePanelAction.java",
+    "com/qwenmate/action/OpenDocumentationAction.java",
+    "com/qwenmate/action/RestartWebviewAction.java",
+    "com/qwenmate/action/SaveAsTemplateAction.java",
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.CommonDataKeys",
+   "class": "com.intellij.openapi.actionSystem.CommonDataKeys",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.DataKey",
+   "class": "com.intellij.openapi.actionSystem.DataKey",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.DefaultActionGroup",
+   "class": "com.intellij.openapi.actionSystem.DefaultActionGroup",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.ExecutionDataKeys",
+   "class": "com.intellij.openapi.actionSystem.ExecutionDataKeys",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.KeyboardShortcut",
+   "class": "com.intellij.openapi.actionSystem.KeyboardShortcut",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/SendShortcutSync.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.LangDataKeys",
+   "class": "com.intellij.openapi.actionSystem.LangDataKeys",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.actionSystem.Shortcut",
+   "class": "com.intellij.openapi.actionSystem.Shortcut",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/SendShortcutSync.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.application.Application",
+   "class": "com.intellij.openapi.application.Application",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/GitCommitMessageService.java",
+    "com/qwenmate/service/commit/CommitDiffProvider.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.application.ApplicationInfo",
+   "class": "com.intellij.openapi.application.ApplicationInfo",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.application.ApplicationManager",
+   "class": "com.intellij.openapi.application.ApplicationManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatPasteAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/bridge/BridgeDirectoryResolver.java",
+    "com/qwenmate/cli/CliStatusDetector.java",
+    "com/qwenmate/handler/AgentHandler.java",
+    "com/qwenmate/handler/CliStatusHandler.java",
+    "com/qwenmate/handler/ClipboardHandler.java",
+    "com/qwenmate/handler/CommandHandler.java",
+    "com/qwenmate/handler/ContextHandler.java",
+    "com/qwenmate/handler/DependencyHandler.java",
+    "com/qwenmate/handler/InputHistoryHandler.java",
+    "com/qwenmate/handler/McpServerHandler.java",
+    "com/qwenmate/handler/NodePathHandler.java",
+    "com/qwenmate/handler/NodeProcessHandler.java",
+    "com/qwenmate/handler/PermissionHandler.java",
+    "com/qwenmate/handler/PermissionModeHandler.java",
+    "com/qwenmate/handler/ProjectConfigHandler.java",
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/PromptHandler.java",
+    "com/qwenmate/handler/SessionHandler.java",
+    "com/qwenmate/handler/SettingsHandler.java",
+    "com/qwenmate/handler/SkillHandler.java",
+    "com/qwenmate/handler/SoundSettingsHandler.java",
+    "com/qwenmate/handler/TokenTrackerHandler.java",
+    "com/qwenmate/handler/UsagePushService.java",
+    "com/qwenmate/handler/UsageStatsHandler.java",
+    "com/qwenmate/handler/diff/DiffBrowserBridge.java",
+    "com/qwenmate/handler/diff/DiffFileOperations.java",
+    "com/qwenmate/handler/diff/EditableDiffHandler.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/handler/file/FileExportHandler.java",
+    "com/qwenmate/handler/file/FileHandler.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenClassHandler.java",
+    "com/qwenmate/handler/file/OpenFileCollector.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/handler/file/RecentFileCollector.java",
+    "com/qwenmate/handler/file/RuntimeContextCollector.java",
+    "com/qwenmate/handler/file/UndoFileHandler.java",
+    "com/qwenmate/handler/history/HistoryExportService.java",
+    "com/qwenmate/handler/history/HistoryLoadService.java",
+    "com/qwenmate/handler/history/HistoryMessageInjector.java",
+    "com/qwenmate/handler/history/HistoryMetadataService.java",
+    "com/qwenmate/handler/importer/McpServerImportHandler.java",
+    "com/qwenmate/handler/marketplace/McpMarketplaceHandler.java",
+    "com/qwenmate/handler/provider/ModelProviderHandler.java",
+    "com/qwenmate/handler/provider/ProviderHandler.java",
+    "com/qwenmate/notifications/QwenMateNotifier.java",
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+    "com/qwenmate/permission/DiffReviewService.java",
+    "com/qwenmate/permission/PermissionDialog.java",
+    "com/qwenmate/permission/PermissionService.java",
+    "com/qwenmate/permission/ToolInterceptor.java",
+    "com/qwenmate/service/GitCommitMessageService.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/service/commit/CommitAIClient.java",
+    "com/qwenmate/service/commit/CommitDiffProvider.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/session/SessionCallbackAdapter.java",
+    "com/qwenmate/session/SessionContextService.java",
+    "com/qwenmate/session/SessionLifecycleManager.java",
+    "com/qwenmate/settings/SessionTemplateService.java",
+    "com/qwenmate/startup/BridgePreloader.java",
+    "com/qwenmate/startup/PluginUpdateListener.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/ChatWindowDelegate.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/ui/WebviewWatchdog.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+    "com/qwenmate/util/EditorFileUtils.java",
+    "com/qwenmate/util/IdeFocusState.java",
+    "com/qwenmate/util/JBCefBrowserFactory.java",
+    "com/qwenmate/util/PlatformUtils.java",
+    "com/qwenmate/util/SelectionTextUtils.java",
+    "com/qwenmate/util/SoundNotificationService.java",
+    "com/qwenmate/util/SystemNotificationService.java",
+    "com/qwenmate/util/ThemeConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.application.ModalityState",
+   "class": "com.intellij.openapi.application.ModalityState",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/handler/ClipboardHandler.java",
+    "com/qwenmate/handler/EditorFileOpener.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenClassHandler.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/service/commit/CommitAIClient.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.application.PathManager",
+   "class": "com.intellij.openapi.application.PathManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/bridge/BridgeArchiveLocator.java",
+    "com/qwenmate/bridge/BridgePathLocator.java",
+    "com/qwenmate/mcp/marketplace/McpMarketplaceHttpClient.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.application.ReadAction",
+   "class": "com.intellij.openapi.application.ReadAction",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/handler/EditorFileOpener.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.command.WriteCommandAction",
+   "class": "com.intellij.openapi.command.WriteCommandAction",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/UndoFileHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.components",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/settings/TabStateService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.components.PersistentStateComponent",
+   "class": "com.intellij.openapi.components.PersistentStateComponent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/settings/SessionTemplateService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.components.Service",
+   "class": "com.intellij.openapi.components.Service",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "java.lang.annotation.Retention"
+   ],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/NodeProcessRegistry.java",
+    "com/qwenmate/settings/SessionTemplateService.java",
+    "com/qwenmate/ui/toolwindow/ToolWindowLifecycleDisposableService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.components.State",
+   "class": "com.intellij.openapi.components.State",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "java.lang.annotation.Retention"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/settings/SessionTemplateService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.components.Storage",
+   "class": "com.intellij.openapi.components.Storage",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "java.lang.annotation.Retention"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/settings/SessionTemplateService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.diagnostic.Logger",
+   "class": "com.intellij.openapi.diagnostic.Logger",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatPasteAction.java",
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/CreateFromTemplateAction.java",
+    "com/qwenmate/action/SaveAsTemplateAction.java",
+    "com/qwenmate/action/SendShortcutSync.java",
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/bridge/BridgeArchiveExtractor.java",
+    "com/qwenmate/bridge/BridgeArchiveLocator.java",
+    "com/qwenmate/bridge/BridgeDirectoryResolver.java",
+    "com/qwenmate/bridge/BridgePathLocator.java",
+    "com/qwenmate/bridge/BridgeSignatureVerifier.java",
+    "com/qwenmate/bridge/EnvironmentConfigurator.java",
+    "com/qwenmate/bridge/NodeDetector.java",
+    "com/qwenmate/bridge/ProcessManager.java",
+    "com/qwenmate/cache/SessionIndexCache.java",
+    "com/qwenmate/cache/SessionIndexManager.java",
+    "com/qwenmate/cache/SessionTitleIndex.java",
+    "com/qwenmate/cli/CliStatusDetector.java",
+    "com/qwenmate/dependency/DependencyManager.java",
+    "com/qwenmate/dependency/NpmPermissionHelper.java",
+    "com/qwenmate/handler/AgentHandler.java",
+    "com/qwenmate/handler/CliModelsHandler.java",
+    "com/qwenmate/handler/CliStatusHandler.java",
+    "com/qwenmate/handler/ClipboardHandler.java",
+    "com/qwenmate/handler/CommandHandler.java",
+    "com/qwenmate/handler/ContextHandler.java",
+    "com/qwenmate/handler/DependencyHandler.java",
+    "com/qwenmate/handler/DiffHandler.java",
+    "com/qwenmate/handler/EditorFileOpener.java",
+    "com/qwenmate/handler/InputHistoryHandler.java",
+    "com/qwenmate/handler/McpServerHandler.java",
+    "com/qwenmate/handler/NodePathHandler.java",
+    "com/qwenmate/handler/NodeProcessHandler.java",
+    "com/qwenmate/handler/PermissionHandler.java",
+    "com/qwenmate/handler/PermissionModeHandler.java",
+    "com/qwenmate/handler/ProjectConfigHandler.java",
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/PromptEnhancerProcessRunner.java",
+    "com/qwenmate/handler/PromptHandler.java",
+    "com/qwenmate/handler/ProviderConfigHandler.java",
+    "com/qwenmate/handler/QwenConfigHandler.java",
+    "com/qwenmate/handler/SessionHandler.java",
+    "com/qwenmate/handler/SettingsHandler.java",
+    "com/qwenmate/handler/SkillHandler.java",
+    "com/qwenmate/handler/SoundSettingsHandler.java",
+    "com/qwenmate/handler/TabHandler.java",
+    "com/qwenmate/handler/TokenTrackerHandler.java",
+    "com/qwenmate/handler/UsagePushService.java",
+    "com/qwenmate/handler/UsageStatsHandler.java",
+    "com/qwenmate/handler/WindowEventHandler.java",
+    "com/qwenmate/handler/context/ContextCollector.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+    "com/qwenmate/handler/diff/DiffBrowserBridge.java",
+    "com/qwenmate/handler/diff/DiffFileOperations.java",
+    "com/qwenmate/handler/diff/EditableDiffHandler.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+    "com/qwenmate/handler/diff/RefreshFileHandler.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/handler/file/FileExportHandler.java",
+    "com/qwenmate/handler/file/FileHandler.java",
+    "com/qwenmate/handler/file/FileSystemCollector.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenClassHandler.java",
+    "com/qwenmate/handler/file/OpenFileCollector.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/handler/file/RecentFileCollector.java",
+    "com/qwenmate/handler/file/RuntimeContextCollector.java",
+    "com/qwenmate/handler/file/UndoFileHandler.java",
+    "com/qwenmate/handler/history/HistoryDeleteService.java",
+    "com/qwenmate/handler/history/HistoryExportService.java",
+    "com/qwenmate/handler/history/HistoryHandler.java",
+    "com/qwenmate/handler/history/HistoryLoadService.java",
+    "com/qwenmate/handler/history/HistoryMessageInjector.java",
+    "com/qwenmate/handler/history/HistoryMetadataService.java",
+    "com/qwenmate/handler/history/SubagentHistoryService.java",
+    "com/qwenmate/handler/importer/McpServerImportHandler.java",
+    "com/qwenmate/handler/marketplace/McpMarketplaceHandler.java",
+    "com/qwenmate/handler/provider/CustomModelPricingHandler.java",
+    "com/qwenmate/handler/provider/ModelProviderHandler.java",
+    "com/qwenmate/handler/provider/ProviderHandler.java",
+    "com/qwenmate/mcp/marketplace/McpMarketplaceHttpClient.java",
+    "com/qwenmate/mcp/marketplace/McpMarketplaceService.java",
+    "com/qwenmate/permission/DiffReviewService.java",
+    "com/qwenmate/permission/PermissionDialog.java",
+    "com/qwenmate/permission/PermissionFileProtocol.java",
+    "com/qwenmate/permission/PermissionRequestWatcher.java",
+    "com/qwenmate/permission/PermissionService.java",
+    "com/qwenmate/permission/PermissionSessionRegistry.java",
+    "com/qwenmate/permission/ToolInterceptor.java",
+    "com/qwenmate/provider/CustomModelContextWindowProvider.java",
+    "com/qwenmate/provider/CustomPricingProvider.java",
+    "com/qwenmate/provider/common/BaseSDKBridge.java",
+    "com/qwenmate/provider/common/DaemonBridge.java",
+    "com/qwenmate/provider/common/SessionLiteReader.java",
+    "com/qwenmate/provider/qwen/QwenDaemonRequestExecutor.java",
+    "com/qwenmate/provider/qwen/QwenHistoryIndexService.java",
+    "com/qwenmate/provider/qwen/QwenHistoryReader.java",
+    "com/qwenmate/service/GitCommitMessageService.java",
+    "com/qwenmate/service/NodeProcessRegistry.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/service/commit/CommitAIClient.java",
+    "com/qwenmate/service/commit/CommitDiffProvider.java",
+    "com/qwenmate/service/commit/CommitPromptBuilder.java",
+    "com/qwenmate/service/commit/ContentDiffSupport.java",
+    "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/session/MessageParser.java",
+    "com/qwenmate/session/QwenMateSession.java",
+    "com/qwenmate/session/QwenMessageHandler.java",
+    "com/qwenmate/session/SessionCallbackAdapter.java",
+    "com/qwenmate/session/SessionContextService.java",
+    "com/qwenmate/session/SessionLifecycleManager.java",
+    "com/qwenmate/session/SessionMessageOrchestrator.java",
+    "com/qwenmate/session/SessionProviderRouter.java",
+    "com/qwenmate/session/SessionSendService.java",
+    "com/qwenmate/session/StreamDeltaThrottler.java",
+    "com/qwenmate/session/StreamMessageCoalescer.java",
+    "com/qwenmate/settings/AbstractPromptManager.java",
+    "com/qwenmate/settings/AgentManager.java",
+    "com/qwenmate/settings/ConfigPathManager.java",
+    "com/qwenmate/settings/LegacyDataDirMigrator.java",
+    "com/qwenmate/settings/McpServerManager.java",
+    "com/qwenmate/settings/PermissionDialogTimeoutSettings.java",
+    "com/qwenmate/settings/ProjectPromptManager.java",
+    "com/qwenmate/settings/QwenCliConfigReader.java",
+    "com/qwenmate/settings/QwenMateSettingsService.java",
+    "com/qwenmate/settings/SessionTemplateService.java",
+    "com/qwenmate/settings/SkillManager.java",
+    "com/qwenmate/settings/TabStateService.java",
+    "com/qwenmate/settings/WorkingDirectoryManager.java",
+    "com/qwenmate/skill/AdditionalDirectoryResolver.java",
+    "com/qwenmate/skill/CommandService.java",
+    "com/qwenmate/skill/SkillFrontmatterParser.java",
+    "com/qwenmate/skill/SkillService.java",
+    "com/qwenmate/skill/SlashCommandJsonReader.java",
+    "com/qwenmate/skill/SlashCommandPathPolicy.java",
+    "com/qwenmate/skill/SlashCommandRegistry.java",
+    "com/qwenmate/startup/BridgePreloader.java",
+    "com/qwenmate/startup/PluginUpdateListener.java",
+    "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/ChatWindowDelegate.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/ui/ErrorPanelBuilder.java",
+    "com/qwenmate/ui/OsrImeCaretFix.java",
+    "com/qwenmate/ui/SurfaceFrameFence.java",
+    "com/qwenmate/ui/UiFontResourceRequestHandler.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/ui/WebviewWatchdog.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/detached/DetachedWindowManager.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+    "com/qwenmate/ui/toolwindow/WebviewEventQueue.java",
+    "com/qwenmate/util/ContentRebuildUtil.java",
+    "com/qwenmate/util/EditorFileUtils.java",
+    "com/qwenmate/util/FontConfigService.java",
+    "com/qwenmate/util/HtmlLoader.java",
+    "com/qwenmate/util/IdeFocusState.java",
+    "com/qwenmate/util/IgnoreRuleMatcher.java",
+    "com/qwenmate/util/JBCefBrowserFactory.java",
+    "com/qwenmate/util/LanguageConfigService.java",
+    "com/qwenmate/util/MessageJsonConverter.java",
+    "com/qwenmate/util/PlatformUtils.java",
+    "com/qwenmate/util/PluginMetadata.java",
+    "com/qwenmate/util/SelectionTextUtils.java",
+    "com/qwenmate/util/ShellExecutor.java",
+    "com/qwenmate/util/SoundNotificationService.java",
+    "com/qwenmate/util/SystemNotificationService.java",
+    "com/qwenmate/util/ThemeConfigService.java",
+    "com/qwenmate/util/WslPathUtil.java",
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.Document",
+   "class": "com.intellij.openapi.editor.Document",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/context/ContextCollector.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/handler/context/PythonContextCollector.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/handler/file/UndoFileHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.Editor",
+   "class": "com.intellij.openapi.editor.Editor",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/UsagePushService.java",
+    "com/qwenmate/handler/context/ContextCollector.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/handler/context/PythonContextCollector.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.EditorFactory",
+   "class": "com.intellij.openapi.editor.EditorFactory",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/EditorContextTracker.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.ScrollType",
+   "class": "com.intellij.openapi.editor.ScrollType",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/OpenFileHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.SelectionModel",
+   "class": "com.intellij.openapi.editor.SelectionModel",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/UsagePushService.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.colors.EditorColorsManager",
+   "class": "com.intellij.openapi.editor.colors.EditorColorsManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/FontConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.colors.EditorColorsScheme",
+   "class": "com.intellij.openapi.editor.colors.EditorColorsScheme",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/FontConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.colors.FontPreferences",
+   "class": "com.intellij.openapi.editor.colors.FontPreferences",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/FontConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.event.SelectionEvent",
+   "class": "com.intellij.openapi.editor.event.SelectionEvent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/EditorContextTracker.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.event.SelectionListener",
+   "class": "com.intellij.openapi.editor.event.SelectionListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/EditorContextTracker.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.ex.MarkupModelEx",
+   "class": "com.intellij.openapi.editor.ex.MarkupModelEx",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.impl.DocumentMarkupModel",
+   "class": "com.intellij.openapi.editor.impl.DocumentMarkupModel",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.editor.markup.RangeHighlighter",
+   "class": "com.intellij.openapi.editor.markup.RangeHighlighter",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileChooser.FileChooser",
+   "class": "com.intellij.openapi.fileChooser.FileChooser",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/AgentHandler.java",
+    "com/qwenmate/handler/ProjectConfigHandler.java",
+    "com/qwenmate/handler/PromptHandler.java",
+    "com/qwenmate/handler/SkillHandler.java",
+    "com/qwenmate/handler/SoundSettingsHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileChooser.FileChooserDescriptor",
+   "class": "com.intellij.openapi.fileChooser.FileChooserDescriptor",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/AgentHandler.java",
+    "com/qwenmate/handler/ProjectConfigHandler.java",
+    "com/qwenmate/handler/PromptHandler.java",
+    "com/qwenmate/handler/SkillHandler.java",
+    "com/qwenmate/handler/SoundSettingsHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.FileDocumentManager",
+   "class": "com.intellij.openapi.fileEditor.FileDocumentManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/UsagePushService.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/handler/file/UndoFileHandler.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/ui/EditorContextTracker.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.FileEditor",
+   "class": "com.intellij.openapi.fileEditor.FileEditor",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.FileEditorManager",
+   "class": "com.intellij.openapi.fileEditor.FileEditorManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/SessionHandler.java",
+    "com/qwenmate/handler/UsagePushService.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/file/OpenFileCollector.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.FileEditorManagerEvent",
+   "class": "com.intellij.openapi.fileEditor.FileEditorManagerEvent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/EditorContextTracker.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.FileEditorManagerListener",
+   "class": "com.intellij.openapi.fileEditor.FileEditorManagerListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/ui/EditorContextTracker.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.OpenFileDescriptor",
+   "class": "com.intellij.openapi.fileEditor.OpenFileDescriptor",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/EditorFileOpener.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.TextEditor",
+   "class": "com.intellij.openapi.fileEditor.TextEditor",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileEditor.impl.EditorHistoryManager",
+   "class": "com.intellij.openapi.fileEditor.impl.EditorHistoryManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "com.intellij.openapi.components.Service",
+    "com.intellij.openapi.components.State",
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/RecentFileCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileTypes.FileType",
+   "class": "com.intellij.openapi.fileTypes.FileType",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileTypes.FileTypeManager",
+   "class": "com.intellij.openapi.fileTypes.FileTypeManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/service/QuickFixService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.fileTypes.FileTypes",
+   "class": "com.intellij.openapi.fileTypes.FileTypes",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.keymap.Keymap",
+   "class": "com.intellij.openapi.keymap.Keymap",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/SendShortcutSync.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.keymap.KeymapManager",
+   "class": "com.intellij.openapi.keymap.KeymapManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/SendShortcutSync.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.module.Module",
+   "class": "com.intellij.openapi.module.Module",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.module.ModuleManager",
+   "class": "com.intellij.openapi.module.ModuleManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.module.ModuleType",
+   "class": "com.intellij.openapi.module.ModuleType",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.module.ModuleUtilCore",
+   "class": "com.intellij.openapi.module.ModuleUtilCore",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.progress.ProcessCanceledException",
+   "class": "com.intellij.openapi.progress.ProcessCanceledException",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/FileHandler.java",
+    "com/qwenmate/handler/file/RuntimeContextCollector.java",
+    "com/qwenmate/session/SessionContextService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.progress.ProgressIndicator",
+   "class": "com.intellij.openapi.progress.ProgressIndicator",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/bridge/BridgeArchiveExtractor.java",
+    "com/qwenmate/bridge/BridgeDirectoryResolver.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.progress.ProgressManager",
+   "class": "com.intellij.openapi.progress.ProgressManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/bridge/BridgeDirectoryResolver.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.progress.Task",
+   "class": "com.intellij.openapi.progress.Task",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/bridge/BridgeDirectoryResolver.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.project.DumbAware",
+   "class": "com.intellij.openapi.project.DumbAware",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/HidePanelAction.java",
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.project.DumbService",
+   "class": "com.intellij.openapi.project.DumbService",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.project.Project",
+   "class": "com.intellij.openapi.project.Project",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatCopyAction.java",
+    "com/qwenmate/action/ChatCutAction.java",
+    "com/qwenmate/action/ChatNewlineAction.java",
+    "com/qwenmate/action/ChatPasteAction.java",
+    "com/qwenmate/action/ChatSendAction.java",
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/CreateFromTemplateAction.java",
+    "com/qwenmate/action/HidePanelAction.java",
+    "com/qwenmate/action/RestartWebviewAction.java",
+    "com/qwenmate/action/SaveAsTemplateAction.java",
+    "com/qwenmate/action/console/SendConsoleSelectionToInputAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/handler/EditorFileOpener.java",
+    "com/qwenmate/handler/PromptHandler.java",
+    "com/qwenmate/handler/TabHandler.java",
+    "com/qwenmate/handler/context/ContextCollector.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/handler/context/PythonContextCollector.java",
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+    "com/qwenmate/handler/core/HandlerContext.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenClassHandler.java",
+    "com/qwenmate/handler/file/OpenFileCollector.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/handler/file/RecentFileCollector.java",
+    "com/qwenmate/handler/file/RuntimeContextCollector.java",
+    "com/qwenmate/notifications/QwenMateNotifier.java",
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+    "com/qwenmate/permission/DiffReviewService.java",
+    "com/qwenmate/permission/PermissionDialog.java",
+    "com/qwenmate/permission/PermissionDialogRouter.java",
+    "com/qwenmate/permission/PermissionManager.java",
+    "com/qwenmate/permission/PermissionRequest.java",
+    "com/qwenmate/permission/PermissionService.java",
+    "com/qwenmate/permission/ToolInterceptor.java",
+    "com/qwenmate/service/GitCommitMessageService.java",
+    "com/qwenmate/service/NodeProcessRegistry.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/service/commit/CommitAIClient.java",
+    "com/qwenmate/service/commit/CommitDiffProvider.java",
+    "com/qwenmate/service/commit/CommitPromptBuilder.java",
+    "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+    "com/qwenmate/service/commit/GitDiffBackend.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/session/QwenMateSession.java",
+    "com/qwenmate/session/SessionCallbackFacade.java",
+    "com/qwenmate/session/SessionContextService.java",
+    "com/qwenmate/session/SessionLifecycleManager.java",
+    "com/qwenmate/session/SessionMessageOrchestrator.java",
+    "com/qwenmate/session/SessionSendService.java",
+    "com/qwenmate/settings/ProjectPromptManager.java",
+    "com/qwenmate/settings/PromptManagerFactory.java",
+    "com/qwenmate/settings/QwenMateSettingsService.java",
+    "com/qwenmate/settings/TabStateService.java",
+    "com/qwenmate/startup/BridgePreloader.java",
+    "com/qwenmate/startup/PluginUpdateListener.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/ChatWindowDelegate.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/detached/DetachedWindowManager.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+    "com/qwenmate/ui/toolwindow/ToolWindowLifecycleDisposableService.java",
+    "com/qwenmate/util/EditorFileUtils.java",
+    "com/qwenmate/util/SelectionTextUtils.java",
+    "com/qwenmate/util/SystemNotificationService.java",
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.project.ProjectManager",
+   "class": "com.intellij.openapi.project.ProjectManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/permission/PermissionDialogRouter.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.project.ProjectManagerListener",
+   "class": "com.intellij.openapi.project.ProjectManagerListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.project.workspace.SubprojectInfoProvider",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.roots.ModuleRootManager",
+   "class": "com.intellij.openapi.roots.ModuleRootManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.roots.ProjectFileIndex",
+   "class": "com.intellij.openapi.roots.ProjectFileIndex",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/JavaContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.startup.ProjectActivity",
+   "class": "com.intellij.openapi.startup.ProjectActivity",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/startup/BridgePreloader.java",
+    "com/qwenmate/startup/PluginUpdateListener.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.DialogWrapper",
+   "class": "com.intellij.openapi.ui.DialogWrapper",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/permission/PermissionDialog.java",
+    "com/qwenmate/ui/TemplateSelectionDialog.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.InputValidatorEx",
+   "class": "com.intellij.openapi.ui.InputValidatorEx",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/tab/RenameTabAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.Messages",
+   "class": "com.intellij.openapi.ui.Messages",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/SaveAsTemplateAction.java",
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+    "com/qwenmate/util/SelectionTextUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.popup.JBPopup",
+   "class": "com.intellij.openapi.ui.popup.JBPopup",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.popup.JBPopupFactory",
+   "class": "com.intellij.openapi.ui.popup.JBPopupFactory",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.popup.ListPopup",
+   "class": "com.intellij.openapi.ui.popup.ListPopup",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.popup.PopupStep",
+   "class": "com.intellij.openapi.ui.popup.PopupStep",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.ui.popup.util.BaseListPopupStep",
+   "class": "com.intellij.openapi.ui.popup.util.BaseListPopupStep",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.CheckedDisposable",
+   "class": "com.intellij.openapi.util.CheckedDisposable",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.Computable",
+   "class": "com.intellij.openapi.util.Computable",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/SessionHandler.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/permission/DiffReviewService.java",
+    "com/qwenmate/session/SessionContextService.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.Disposer",
+   "class": "com.intellij.openapi.util.Disposer",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.Key",
+   "class": "com.intellij.openapi.util.Key",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.SystemInfo",
+   "class": "com.intellij.openapi.util.SystemInfo",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/SendShortcutSync.java",
+    "com/qwenmate/util/IgnoreRuleMatcher.java",
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.TextRange",
+   "class": "com.intellij.openapi.util.TextRange",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.io.FileUtil",
+   "class": "com.intellij.openapi.util.io.FileUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/bridge/BridgeArchiveExtractor.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.registry.Registry",
+   "class": "com.intellij.openapi.util.registry.Registry",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.util.text.StringUtil",
+   "class": "com.intellij.openapi.util.text.StringUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/TemplateSelectionDialog.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.CheckinProjectPanel",
+   "class": "com.intellij.openapi.vcs.CheckinProjectPanel",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.CommitMessageI",
+   "class": "com.intellij.openapi.vcs.CommitMessageI",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.FilePath",
+   "class": "com.intellij.openapi.vcs.FilePath",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/commit/ContentDiffSupport.java",
+    "com/qwenmate/service/commit/Git4IdeaDiffBackend.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.VcsDataKeys",
+   "class": "com.intellij.openapi.vcs.VcsDataKeys",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.VcsException",
+   "class": "com.intellij.openapi.vcs.VcsException",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/commit/ContentDiffSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.changes.Change",
+   "class": "com.intellij.openapi.vcs.changes.Change",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java",
+    "com/qwenmate/service/GitCommitMessageService.java",
+    "com/qwenmate/service/commit/CommitDiffProvider.java",
+    "com/qwenmate/service/commit/ContentDiffSupport.java",
+    "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+    "com/qwenmate/service/commit/GitDiffBackend.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.changes.ChangeListManager",
+   "class": "com.intellij.openapi.vcs.changes.ChangeListManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/vcs/GenerateCommitMessageAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.changes.ChangesUtil",
+   "class": "com.intellij.openapi.vcs.changes.ChangesUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/commit/ContentDiffSupport.java",
+    "com/qwenmate/service/commit/Git4IdeaDiffBackend.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vcs.changes.ContentRevision",
+   "class": "com.intellij.openapi.vcs.changes.ContentRevision",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/commit/ContentDiffSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vfs.LocalFileSystem",
+   "class": "com.intellij.openapi.vfs.LocalFileSystem",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/AgentHandler.java",
+    "com/qwenmate/handler/EditorFileOpener.java",
+    "com/qwenmate/handler/ProjectConfigHandler.java",
+    "com/qwenmate/handler/PromptHandler.java",
+    "com/qwenmate/handler/SkillHandler.java",
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+    "com/qwenmate/handler/diff/DiffFileOperations.java",
+    "com/qwenmate/handler/diff/EditableDiffHandler.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/handler/file/UndoFileHandler.java",
+    "com/qwenmate/permission/DiffReviewService.java",
+    "com/qwenmate/util/EditorFileUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vfs.VirtualFile",
+   "class": "com.intellij.openapi.vfs.VirtualFile",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/SelectionReferenceBuilder.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/handler/AgentHandler.java",
+    "com/qwenmate/handler/ProjectConfigHandler.java",
+    "com/qwenmate/handler/PromptEnhancerHandler.java",
+    "com/qwenmate/handler/PromptHandler.java",
+    "com/qwenmate/handler/SessionHandler.java",
+    "com/qwenmate/handler/SkillHandler.java",
+    "com/qwenmate/handler/UsagePushService.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/handler/context/WorkspaceContextCollector.java",
+    "com/qwenmate/handler/diff/DiffFileOperations.java",
+    "com/qwenmate/handler/diff/EditableDiffHandler.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/diff/InteractiveDiffMessageHandler.java",
+    "com/qwenmate/handler/diff/RefreshFileHandler.java",
+    "com/qwenmate/handler/diff/SimpleDiffDisplayHandler.java",
+    "com/qwenmate/handler/file/FileHandler.java",
+    "com/qwenmate/handler/file/OpenFileCollector.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/handler/file/RecentFileCollector.java",
+    "com/qwenmate/handler/file/UndoFileHandler.java",
+    "com/qwenmate/permission/DiffReviewService.java",
+    "com/qwenmate/service/QuickFixService.java",
+    "com/qwenmate/service/commit/Git4IdeaDiffBackend.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/util/EditorFileUtils.java",
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vfs.VirtualFileManager",
+   "class": "com.intellij.openapi.vfs.VirtualFileManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/session/SessionCallbackAdapter.java",
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vfs.newvfs.BulkFileListener",
+   "class": "com.intellij.openapi.vfs.newvfs.BulkFileListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent",
+   "class": "com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.vfs.newvfs.events.VFileEvent",
+   "class": "com.intellij.openapi.vfs.newvfs.events.VFileEvent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.CustomStatusBarWidget",
+   "class": "com.intellij.openapi.wm.CustomStatusBarWidget",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.StatusBar",
+   "class": "com.intellij.openapi.wm.StatusBar",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.StatusBarWidget",
+   "class": "com.intellij.openapi.wm.StatusBarWidget",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.StatusBarWidgetFactory",
+   "class": "com.intellij.openapi.wm.StatusBarWidgetFactory",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.ToolWindow",
+   "class": "com.intellij.openapi.wm.ToolWindow",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/HidePanelAction.java",
+    "com/qwenmate/action/RestartWebviewAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/handler/TabHandler.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+    "com/qwenmate/util/SelectionTextUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.ToolWindowFactory",
+   "class": "com.intellij.openapi.wm.ToolWindowFactory",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.ToolWindowManager",
+   "class": "com.intellij.openapi.wm.ToolWindowManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/HidePanelAction.java",
+    "com/qwenmate/action/RestartWebviewAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/handler/TabHandler.java",
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+    "com/qwenmate/util/SelectionTextUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.WindowManager",
+   "class": "com.intellij.openapi.wm.WindowManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/util/SystemNotificationService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.openapi.wm.ex.ToolWindowManagerListener",
+   "class": "com.intellij.openapi.wm.ex.ToolWindowManagerListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.pom.Navigatable",
+   "class": "com.intellij.pom.Navigatable",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.JavaPsiFacade",
+   "class": "com.intellij.psi.JavaPsiFacade",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "plugins\\Kotlin\\kotlinc\\lib\\kotlin-compiler.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.PsiClass",
+   "class": "com.intellij.psi.PsiClass",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "plugins\\Kotlin\\kotlinc\\lib\\kotlin-compiler.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.PsiElement",
+   "class": "com.intellij.psi.PsiElement",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/PythonContextCollector.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.PsiFile",
+   "class": "com.intellij.psi.PsiFile",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/PythonContextCollector.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.PsiJavaFile",
+   "class": "com.intellij.psi.PsiJavaFile",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "plugins\\Kotlin\\kotlinc\\lib\\kotlin-compiler.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java",
+    "com/qwenmate/handler/file/OpenClassHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.PsiNameIdentifierOwner",
+   "class": "com.intellij.psi.PsiNameIdentifierOwner",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/PythonContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.PsiNamedElement",
+   "class": "com.intellij.psi.PsiNamedElement",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/PythonContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.SmartPointerManager",
+   "class": "com.intellij.psi.SmartPointerManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.SmartPsiElementPointer",
+   "class": "com.intellij.psi.SmartPsiElementPointer",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.search.FilenameIndex",
+   "class": "com.intellij.psi.search.FilenameIndex",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/OpenFileHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.search.GlobalSearchScope",
+   "class": "com.intellij.psi.search.GlobalSearchScope",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.search.SearchScope",
+   "class": "com.intellij.psi.search.SearchScope",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/JavaContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.search.searches.ReferencesSearch",
+   "class": "com.intellij.psi.search.searches.ReferencesSearch",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/JavaContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.util.PsiTreeUtil",
+   "class": "com.intellij.psi.util.PsiTreeUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java",
+    "com/qwenmate/handler/context/JavaContextCollector.java",
+    "com/qwenmate/handler/context/PythonContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.psi.util.PsiUtil",
+   "class": "com.intellij.psi.util.PsiUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "plugins\\Kotlin\\kotlinc\\lib\\kotlin-compiler.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/JavaContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.terminal.JBTerminalWidget",
+   "class": "com.intellij.terminal.JBTerminalWidget",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java",
+    "com/qwenmate/terminal/SendTerminalSelectionToInputAction.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.terminal.actions.TerminalActionUtil",
+   "class": "com.intellij.terminal.actions.TerminalActionUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/terminal/LegacyTerminalSendActionProvider.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.testFramework.LightVirtualFile",
+   "class": "com.intellij.testFramework.LightVirtualFile",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.JBColor",
+   "class": "com.intellij.ui.JBColor",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java",
+    "com/qwenmate/util/ThemeConfigService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.components.JBLabel",
+   "class": "com.intellij.ui.components.JBLabel",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.components.JBList",
+   "class": "com.intellij.ui.components.JBList",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/TemplateSelectionDialog.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.components.JBScrollPane",
+   "class": "com.intellij.ui.components.JBScrollPane",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/TemplateSelectionDialog.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.components.JBTextField",
+   "class": "com.intellij.ui.components.JBTextField",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.content.Content",
+   "class": "com.intellij.ui.content.Content",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/ChatToolWindowAction.java",
+    "com/qwenmate/action/RestartWebviewAction.java",
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/handler/TabHandler.java",
+    "com/qwenmate/service/NodeProcessRegistry.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/ChatWindowDelegate.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.content.ContentFactory",
+   "class": "com.intellij.ui.content.ContentFactory",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/handler/TabHandler.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.content.ContentManager",
+   "class": "com.intellij.ui.content.ContentManager",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/tab/CreateNewTabAction.java",
+    "com/qwenmate/action/tab/DetachTabAction.java",
+    "com/qwenmate/action/tab/RenameTabAction.java",
+    "com/qwenmate/handler/TabHandler.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.content.ContentManagerEvent",
+   "class": "com.intellij.ui.content.ContentManagerEvent",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.content.ContentManagerListener",
+   "class": "com.intellij.ui.content.ContentManagerListener",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/terminal/TerminalMonitorService.java",
+    "com/qwenmate/ui/toolwindow/QwenMateToolWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.jcef.JBCefApp",
+   "class": "com.intellij.ui.jcef.JBCefApp",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.jcef.JBCefBrowser",
+   "class": "com.intellij.ui.jcef.JBCefBrowser",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/dev/OpenDevToolsAction.java",
+    "com/qwenmate/handler/core/HandlerContext.java",
+    "com/qwenmate/permission/PermissionDialog.java",
+    "com/qwenmate/session/SessionLifecycleManager.java",
+    "com/qwenmate/ui/ChatWindowDelegate.java",
+    "com/qwenmate/ui/SurfaceFrameFence.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/ui/WebviewWatchdog.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.jcef.JBCefBrowserBase",
+   "class": "com.intellij.ui.jcef.JBCefBrowserBase",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/permission/PermissionDialog.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.jcef.JBCefBrowserBuilder",
+   "class": "com.intellij.ui.jcef.JBCefBrowserBuilder",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.jcef.JBCefInputMethodAdapter",
+   "class": "com.intellij.ui.jcef.JBCefInputMethodAdapter",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/OsrImeCaretFix.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.jcef.JBCefJSQuery",
+   "class": "com.intellij.ui.jcef.JBCefJSQuery",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/permission/PermissionDialog.java",
+    "com/qwenmate/ui/WebviewInitializer.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.ui.jcef.JBCefOSRHandlerFactory",
+   "class": "com.intellij.ui.jcef.JBCefOSRHandlerFactory",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/SurfaceFrameFence.java",
+    "com/qwenmate/ui/WebviewInitializer.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java",
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.Alarm",
+   "class": "com.intellij.util.Alarm",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/session/SessionCallbackAdapter.java",
+    "com/qwenmate/session/StreamMessageCoalescer.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/ui/toolwindow/QwenMateChatWindow.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.Consumer",
+   "class": "com.intellij.util.Consumer",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "java.lang.FunctionalInterface"
+   ],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/notifications/QwenMateStatusBarWidget.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.Function",
+   "class": "com.intellij.util.Function",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "java.lang.FunctionalInterface"
+   ],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/SurfaceFrameFence.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.OpenSourceUtil",
+   "class": "com.intellij.util.OpenSourceUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/file/JavaClassNavigationSupport.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.Query",
+   "class": "com.intellij.util.Query",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/JavaContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.concurrency.AppExecutorUtil",
+   "class": "com.intellij.util.concurrency.AppExecutorUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/CopySelectionReferenceAction.java",
+    "com/qwenmate/action/editor/SendFilePathToInputAction.java",
+    "com/qwenmate/action/editor/SendSelectionToTerminalAction.java",
+    "com/qwenmate/handler/CliModelsHandler.java",
+    "com/qwenmate/handler/CliStatusHandler.java",
+    "com/qwenmate/handler/DependencyHandler.java",
+    "com/qwenmate/handler/EditorFileOpener.java",
+    "com/qwenmate/handler/NodePathHandler.java",
+    "com/qwenmate/handler/NodeProcessHandler.java",
+    "com/qwenmate/handler/PermissionHandler.java",
+    "com/qwenmate/handler/SkillHandler.java",
+    "com/qwenmate/handler/TokenTrackerHandler.java",
+    "com/qwenmate/handler/UsageStatsHandler.java",
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/handler/file/FileHandler.java",
+    "com/qwenmate/handler/file/OpenClassHandler.java",
+    "com/qwenmate/handler/file/OpenFileHandler.java",
+    "com/qwenmate/handler/provider/ModelProviderHandler.java",
+    "com/qwenmate/provider/common/BaseSDKBridge.java",
+    "com/qwenmate/service/RunConfigMonitorService.java",
+    "com/qwenmate/session/EditorContextCollector.java",
+    "com/qwenmate/ui/ChatWindowDelegate.java",
+    "com/qwenmate/ui/WebviewWatchdog.java",
+    "com/qwenmate/ui/toolwindow/CodeSnippetManager.java",
+    "com/qwenmate/util/EditorFileUtils.java",
+    "com/qwenmate/util/SelectionTextUtils.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.concurrency.annotations.RequiresEdt",
+   "class": "com.intellij.util.concurrency.annotations.RequiresEdt",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "java.lang.annotation.Documented",
+    "java.lang.annotation.Retention",
+    "java.lang.annotation.Target"
+   ],
+   "jar": "lib\\util-8.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.messages.MessageBusConnection",
+   "class": "com.intellij.util.messages.MessageBusConnection",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [
+    "kotlin.Metadata"
+   ],
+   "jar": "lib\\util.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/diff/InteractiveDiffManager.java",
+    "com/qwenmate/ui/EditorContextTracker.java",
+    "com/qwenmate/watcher/PromptFileWatcher.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.ui.JBUI",
+   "class": "com.intellij.util.ui.JBUI",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/action/editor/QuickFixWithQwenMateAction.java",
+    "com/qwenmate/ui/detached/DetachedChatFrame.java",
+    "com/qwenmate/util/SystemNotificationService.java"
+   ]
+  },
+  {
+   "symbol": "com.intellij.util.ui.UIUtil",
+   "class": "com.intellij.util.ui.UIUtil",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\app-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/ui/detached/DetachedChatFrame.java"
+   ]
+  },
+  {
+   "symbol": "com.jetbrains.cef.JCefAppConfig",
+   "class": "com.jetbrains.cef.JCefAppConfig",
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": "lib\\lib-client.jar",
+   "error": null,
+   "refs": [
+    "com/qwenmate/util/JBCefBrowserFactory.java"
+   ]
+  },
+  {
+   "symbol": "com.jetbrains.python.psi",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/PythonContextCollector.java"
+   ]
+  },
+  {
+   "symbol": "com.jetbrains.python.psi.PyFile",
+   "class": null,
+   "member": null,
+   "deprecatedClass": false,
+   "deprecatedMember": false,
+   "deprecatedMemberDetail": null,
+   "internal": false,
+   "experimental": false,
+   "obsolete": false,
+   "classAnnotations": [],
+   "jar": null,
+   "error": null,
+   "refs": [
+    "com/qwenmate/handler/context/ContextCollector.java"
+   ]
+  }
+ ]
+}
