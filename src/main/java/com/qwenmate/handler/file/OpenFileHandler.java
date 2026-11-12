@@ -10,10 +10,14 @@ import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
+import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
@@ -34,6 +38,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +52,10 @@ class OpenFileHandler {
     private static final Pattern LINE_INFO_PATTERN = Pattern.compile("^(.*):(\\d+)(?:-(\\d+))?$");
     private static final Pattern SAFE_EXTERNAL_URL_PATTERN =
             Pattern.compile("^(https?|mailto):.*$", Pattern.CASE_INSENSITIVE);
+    /** Delay between attempts to locate the editor that shows the requested file. */
+    private static final long SELECTION_RETRY_DELAY_MS = 50L;
+    /** How many times to look for that editor before giving up on the range selection. */
+    private static final int MAX_SELECTION_ATTEMPTS = 20;
 
     private final HandlerContext context;
 
@@ -570,6 +579,12 @@ class OpenFileHandler {
 
     /**
      * Open a virtual file in the editor, optionally navigating to a line range.
+     *
+     * <p>The platform deprecated the synchronous {@code openFile}/{@code openTextEditor}
+     * pair, so the file is opened through the supported entry points instead:
+     * {@link OpenFileDescriptor#navigate(boolean)} opens the file and drops the caret
+     * on the target line, and the range selection is applied as soon as the editor
+     * for that file is available.</p>
      */
     private void openInEditor(VirtualFile virtualFile, int lineNumber, int endLineNumber) {
         Project project = context.getProject();
@@ -578,38 +593,146 @@ class OpenFileHandler {
         }
 
         if (lineNumber <= 0) {
-            FileEditorManager.getInstance(project).openFile(virtualFile, true);
+            // No line information: just open the file. navigate(true) keeps the
+            // focus request the old openFile(file, true) had.
+            new OpenFileDescriptor(project, virtualFile).navigate(true);
             return;
         }
 
-        OpenFileDescriptor descriptor = new OpenFileDescriptor(project, virtualFile);
-        Editor editor = FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
+        // Open the file and place the caret on the target line. The platform clamps
+        // out-of-range lines itself, so no document access is needed here - reading
+        // the document before the file is open would force a synchronous disk load
+        // on the EDT.
+        new OpenFileDescriptor(project, virtualFile, lineNumber - 1, 0).navigate(true);
 
+        // The range selection needs a live Editor, so it is applied once the editor
+        // for this file shows up.
+        applySelectionWhenReady(project, virtualFile, lineNumber, endLineNumber);
+    }
+
+    /**
+     * Apply the range selection once the editor for {@code virtualFile} is available.
+     *
+     * <p>The open may complete synchronously (the editor already exists) or
+     * asynchronously (the platform schedules it), so the editor is looked up right
+     * away and only then retried with a short delay.</p>
+     */
+    private void applySelectionWhenReady(Project project, VirtualFile virtualFile,
+                                         int lineNumber, int endLineNumber) {
+        Editor editor = findEditor(project, virtualFile);
+        if (editor != null) {
+            applySelection(editor, lineNumber, endLineNumber);
+            return;
+        }
+        scheduleSelection(project, virtualFile, lineNumber, endLineNumber, 0);
+    }
+
+    private void scheduleSelection(Project project, VirtualFile virtualFile,
+                                    int lineNumber, int endLineNumber, int attempt) {
+        AppExecutorUtil.getAppScheduledExecutorService().schedule(
+                () -> ApplicationManager.getApplication().invokeLater(
+                        () -> applySelectionIfReady(project, virtualFile, lineNumber, endLineNumber, attempt),
+                        ModalityState.nonModal()),
+                SELECTION_RETRY_DELAY_MS, TimeUnit.MILLISECONDS);
+    }
+
+    private void applySelectionIfReady(Project project, VirtualFile virtualFile,
+                                       int lineNumber, int endLineNumber, int attempt) {
+        if (project.isDisposed() || !virtualFile.isValid()) {
+            return;
+        }
+
+        Editor editor = findEditor(project, virtualFile);
         if (editor == null) {
-            LOG.warn("Cannot open text editor: " + virtualFile.getPath());
-            FileEditorManager.getInstance(project).openFile(virtualFile, true);
+            if (attempt < MAX_SELECTION_ATTEMPTS) {
+                scheduleSelection(project, virtualFile, lineNumber, endLineNumber, attempt + 1);
+            } else {
+                // The file itself was already opened and the caret placed by
+                // OpenFileDescriptor#navigate - only the range selection is lost.
+                LOG.warn("Editor not ready, skipped range selection for: " + virtualFile.getPath());
+                new OpenFileDescriptor(project, virtualFile).navigate(true);
+            }
             return;
         }
 
-        int lineCount = editor.getDocument().getLineCount();
-        if (lineCount <= 0) {
+        applySelection(editor, lineNumber, endLineNumber);
+    }
+
+    /**
+     * Move the caret to the requested line and select the requested range.
+     */
+    private static void applySelection(Editor editor, int lineNumber, int endLineNumber) {
+        Document document = editor.getDocument();
+        EditorNavigationTarget target =
+                EditorNavigationTarget.resolve(documentGeometry(document), lineNumber, endLineNumber);
+        if (target == null) {
             LOG.warn("File is empty, cannot navigate to line " + lineNumber);
             return;
         }
 
-        int zeroBasedLine = Math.min(Math.max(0, lineNumber - 1), lineCount - 1);
-        int startOffset = editor.getDocument().getLineStartOffset(zeroBasedLine);
-        editor.getCaretModel().moveToOffset(startOffset);
+        editor.getCaretModel().moveToOffset(target.startOffset());
 
-        if (endLineNumber >= lineNumber) {
-            int zeroBasedEndLine = Math.min(endLineNumber - 1, lineCount - 1);
-            int endOffset = editor.getDocument().getLineEndOffset(zeroBasedEndLine);
-            editor.getSelectionModel().setSelection(startOffset, endOffset);
+        if (target.hasSelection()) {
+            editor.getSelectionModel().setSelection(target.startOffset(), target.endOffset());
         } else {
             editor.getSelectionModel().removeSelection();
         }
 
         editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);
+    }
+
+    /**
+     * Find the editor showing {@code virtualFile}, or {@code null} when it is not open yet.
+     */
+    private static Editor findEditor(Project project, VirtualFile virtualFile) {
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
+        for (FileEditor fileEditor : fileEditorManager.getAllEditors(virtualFile)) {
+            if (fileEditor instanceof TextEditor textEditor) {
+                Editor editor = textEditor.getEditor();
+                if (editor != null) {
+                    return editor;
+                }
+            }
+        }
+        Editor selected = fileEditorManager.getSelectedTextEditor();
+        if (selected != null && isSameFile(selected, virtualFile)) {
+            return selected;
+        }
+        return null;
+    }
+
+    /**
+     * Whether {@code editor} shows {@code virtualFile}.
+     */
+    private static boolean isSameFile(Editor editor, VirtualFile virtualFile) {
+        try {
+            return FileDocumentManager.getInstance().getFile(editor.getDocument()) == virtualFile;
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Adapt a {@link Document} to the line/offset abstraction used by
+     * {@link EditorNavigationTarget}.
+     */
+    private static EditorNavigationTarget.LineGeometry documentGeometry(Document document) {
+        return new EditorNavigationTarget.LineGeometry() {
+            @Override
+            public int lineCount() {
+                return document.getLineCount();
+            }
+
+            @Override
+            public int lineStartOffset(int line) {
+                return document.getLineStartOffset(line);
+            }
+
+            @Override
+            public int lineEndOffset(int line) {
+                return document.getLineEndOffset(line);
+            }
+        };
     }
 
     /**
