@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -95,7 +96,7 @@ final class McpMarketplaceHttpClient {
     }
 
     private static String httpGet(String urlValue) throws IOException {
-        URL url = new URL(urlValue);
+        URL url = toUrl(urlValue);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         // Do not auto-follow redirects: a 3xx Location could point at an internal address (SSRF via
@@ -122,6 +123,23 @@ final class McpMarketplaceHttpClient {
 
         try (InputStream inputStream = connection.getInputStream()) {
             return readBody(inputStream, MAX_RESPONSE_BYTES);
+        }
+    }
+
+    /**
+     * Build the request URL without the deprecated {@code new URL(String)} constructor.
+     *
+     * <p>{@code new URL(String)} threw {@link java.net.MalformedURLException} (an
+     * {@link IOException}) for malformed input, while {@link URI#create} throws
+     * {@link IllegalArgumentException}. The translation keeps the error contract every
+     * caller of this client already handles - an unchecked exception would escape the
+     * {@code IOException}-based caching and fallback logic.</p>
+     */
+    static URL toUrl(String urlValue) throws IOException {
+        try {
+            return URI.create(urlValue).toURL();
+        } catch (IllegalArgumentException e) {
+            throw new IOException("Malformed marketplace URL: " + urlValue, e);
         }
     }
 

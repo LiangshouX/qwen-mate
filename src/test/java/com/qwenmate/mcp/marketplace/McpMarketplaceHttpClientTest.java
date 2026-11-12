@@ -74,4 +74,24 @@ public class McpMarketplaceHttpClientTest {
             new ByteArrayInputStream("hello".getBytes(StandardCharsets.UTF_8)), 1024);
         Assert.assertEquals("hello", body);
     }
+
+    @Test
+    public void toUrlAcceptsAbsoluteUrl() throws IOException {
+        Assert.assertEquals("https://api.github.com/orgs/acme/repos",
+            McpMarketplaceHttpClient.toUrl("https://api.github.com/orgs/acme/repos").toString());
+    }
+
+    @Test
+    public void toUrlRejectsMalformedUrlAsIoException() {
+        // URI.create signals malformed input with IllegalArgumentException; the client
+        // contract is IOException so the caching / stale-fallback path still applies.
+        IOException error = Assert.assertThrows(IOException.class,
+            () -> McpMarketplaceHttpClient.toUrl("not a url"));
+        Assert.assertTrue(error.getMessage().contains("Malformed marketplace URL"));
+    }
+
+    @Test
+    public void toUrlRejectsUrlWithoutProtocolAsIoException() {
+        Assert.assertThrows(IOException.class, () -> McpMarketplaceHttpClient.toUrl("api.github.com/orgs"));
+    }
 }
