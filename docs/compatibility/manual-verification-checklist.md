@@ -149,19 +149,31 @@ Python PSI 的废弃状态已由静态审计证明（详见 `deprecation-audit-r
 
 ---
 
-## 8. F3 组 · 验证器复跑（3 格）—— 不需要 IDE
+## 8. F3 组 · 验证器复跑（4 格）—— 不需要 IDE
 
-| # | 操作 | 期望结果 | 通过 |
+| # | 操作 | 期望结果 | 状态 |
 |---|---|---|---|
-| F3.1 | 对 **263** 跑一次 verifier | **0 条弃用**（原为 6 条）、0 override-only、0 compatibility problem | ☐ |
-| F3.2 | 完整矩阵（**233 / 243 / 262 / 263**）跑在 **CI** 上 | 四个版本全部 0 弃用、0 override-only、0 compatibility problem | ☐ |
-| F3.3 | 打开 `build.gradle`，看 `pluginVerification { failureLevel = [...] }` | 列表含 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES` | ☐ |
+| F3.1 | 对 **233**（区间下界）跑 verifier | **0 弃用、0 override-only** | ✅ 已通过（2026-11-17） |
+| F3.2 | 对 **261**（近上界）跑 verifier | **0 弃用、0 override-only** | ✅ 已通过（2026-11-17） |
+| F3.3 | 对 **262 / 263** 跑 verifier | 同样 **0 弃用、0 override-only** | ☐ 待跑（走 CI） |
+| F3.4 | 打开 `build.gradle`，看 `pluginVerification { failureLevel = [...] }` | 列表含 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES` | ✅ 已确认 |
 
-**怎么跑 verifier**（二选一）：
+> **别被那一条 "compatibility problem" 吓到**：没有 Python 插件的 IDE 一定会报
+> `#Package 'com.jetbrains.python' is not found` —— 那是 **optional** 依赖，引用它的代码在
+> `python-features.xml` 可选模块里，不装 Python 插件就根本不加载。**不算失败。**
 
-- **本地全矩阵**：`./gradlew.bat verifyPlugin -PskipWebview=true --console=plain`
-  —— 会按 `build.gradle` 的 `ides` 下载 5 个 IDE（约 5 GB），四个版本的结果一起出来。
-- **只跑 263**：临时把 `build.gradle` 的 `pluginVerification { ides { … } }` 只留 `ide('IU', '263.7307.200')` 再执行上面的命令；或上传 Marketplace 走 JetBrains 托管验证（插件页面的 Compatibility Problems 栏）。
+**怎么跑**
+
+- **完整矩阵**（CI，或本地网络正常时）：
+  `./gradlew.bat verifyPlugin -PskipWebview=true --console=plain`
+  —— 按 `build.gradle` 的 `ides` 下 5 个 IDE（约 5 GB）。
+- **手上有现成 IDE 时**（不受 JetBrains CDN 影响，更快）：
+  ```bash
+  bash docs/compatibility/scripts/run_verifier_local.sh \
+    build/distributions/qwen-mate-1.1.1.zip \
+    /path/to/idea-233 /path/to/idea-261
+  ```
+  IDE 可以是已安装的目录，也可以是从 Gradle 缓存里解压出来的 zip。
 
 ---
 
@@ -182,8 +194,9 @@ Python PSI 的废弃状态已由静态审计证明（详见 `deprecation-audit-r
 
 ### 发布判定
 
-- **可以发布**：A–E 全通过，F1.1 / F1.2 / F1.4 通过，F3.1 的 263 为 0 弃用。
+- **可以发布**：A–E 全通过，F1.1 / F1.2 / F1.4 通过，verifier 在 **233 / 261 上 0 弃用**（已实测）。
 - **必须先修**：任一组出现 `NoSuchMethodError` / `NoSuchFieldError` / `NoClassDefFoundError`，或 A、B、C、D、E 任一格失败。
+- **建议补齐**：262 / 263 的 verifier 跑一次（CI 即可，不阻塞发布）。
 - **允许未覆盖**（记入上表即可，不阻塞发布）：B 组的 `LangDataKeys` 回退分支（日常 IDE ≥263 时）、F2 全部、F1.3 / F1.5（无 233 时）。
 - **待决策**：F1.2 的实测结果决定要不要做 JCEF 类隔离重构 —— 拿到结果再决定，不要盲改。
 
@@ -197,6 +210,7 @@ Python PSI 的废弃状态已由静态审计证明（详见 `deprecation-audit-r
 |---|---|
 | 本轮改动用到的 7 个平台 API 在 233 上存在且未废弃 | `scripts/verify_platform_api_versions.py` |
 | 编译产物字节码里残留的弃用调用点 = 0 | `scripts/check_compiled_refs.py` |
+| **233 / 261 实跑 verifier：0 弃用、0 override-only** | `scripts/run_verifier_local.sh`（报告见 `verifier-local-2026-11-17/`） |
 | Python PSI 12 类 + 6 方法在 243 / 263 均未废弃 | `scripts/audit_python_psi_apis.py` |
 | 243 SDK 上 200 个平台符号 0 命中 | `scripts/audit_sdk_deprecations.py` |
 

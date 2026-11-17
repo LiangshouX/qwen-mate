@@ -1,0 +1,9 @@
+Plugin ID: com.qwenmate
+Plugin Version: 1.1.1
+Descriptor parsed in: 2 s 85 ms
+Descriptor parsed (raw ms): 2085
+Plugin size (bytes): 21553624
+Verified classes in plugin artifact: 541
+Verification time: 1 m 14 s 197 ms
+Verification time (raw ms): 74197
+

@@ -577,6 +577,65 @@ Kotlin 的「接收者 lambda」在 Groovy 里，`useInstaller` 会被解析到 
 报 `Could not set unknown property 'useInstaller' for extension 'ides'`。
 用 `ide(type, version, useInstaller)` 的三参重载即可（该重载在 2.10.5 里标记为 deprecated，但行为正确）。
 
+**下载会瞬时失败，但不用改配置**：cache-redirector 会把请求转到 CloudFront 边缘节点
+（`d2cico3c979uwg.cloudfront.net`），该节点偶尔直接 `Connection refused`——
+报错长得像"构件不存在"，实际构件在仓库里（HEAD 校验 200）。
+**重跑即可**：已下好的 IDE 留在 Gradle 缓存里，下一次从断点继续，不会重下。
+
+**两条下载通道的分工（2026-11-17 实测）**：
+
+| 通道 | 实际路径 | 实测 |
+|---|---|---|
+| **Maven 仓库**（build 号） | `cache-redirector` → `www.jetbrains.com` → `d2cico3c979uwg.cloudfront.net` | 边缘节点整体拒连时，**连 pom 都拉不到**，报错显示"构件不存在" |
+| **安装包**（产品版本） | `download.jetbrains.com` → `download-cdn.clf.jetbrains.com.cn` | 302 签名正常，但大文件取回时好时坏 |
+
+**绕行方案（本次实际用的）**：不依赖 Gradle 解析 IDE，直接用 **verifier CLI + 本地已有 IDE**：
+
+```bash
+java -jar verifier-cli-all.jar check-plugin <plugin.zip> <ide-dir> [更多 ide-dir...] \
+  -verification-reports-dir <out> -verification-reports-formats plain,html,markdown
+```
+
+- verifier CLI 本体在 `packages.jetbrains.team` 上（实测可达，36 MB）。
+- IDE 可以是**已安装的 IDE 目录**，也可以是之前从 Maven 通道下到 Gradle 缓存里的 zip 解压出来的目录。
+- 这样一次就能同时验证多个 IDE，且完全绕开 Gradle 的坐标解析。
+
+### 7.8 本地 verifier 实测结果（2026-11-17）
+
+用 **verifier CLI 1.411 + 本地 IDE 目录**跑的（绕开 Gradle 坐标解析，理由见 §7.7）：
+
+| IDE | 弃用 | override-only | 兼容性问题 | 缺失的可选依赖 |
+|---|---|---|---|---|
+| **IU-233.15619.7**（2023.3.8，区间下界） | **0** | **0** | 1（见下） | `com.intellij.modules.jcef`、`com.intellij.modules.python` |
+| **IU-261.26222.65**（2026.1.4，近上界） | **0** | **0** | 1（见下） | `com.intellij.modules.python` |
+
+两个 IDE 的唯一"兼容性问题"都是同一条：
+
+```
+#Package 'com.jetbrains.python' is not found
+  Package 'com.jetbrains.python' is not found along with its 12 classes.
+  Missing dependencies: com.intellij.modules.python (optional): Unavailable
+```
+
+**这不是真问题**：`com.jetbrains.python` 是 `plugin.xml` 里的 **optional** 依赖
+（`<depends optional="true" config-file="python-features.xml">com.intellij.modules.python</depends>`），
+引用它的 `PythonContextCollector` 在 `python-features.xml` 这个可选内容模块里，
+**没有 Python 插件的 IDE 根本不会加载它**。IU 发行版本来就不自带 PythonCore（只有 PyCharm 自带）。
+Gradle 侧的 `externalPrefixes = ['com.jetbrains.python']` 就是为屏蔽这一类噪音而设的。
+
+**两个附带结论**：
+
+1. **233 上 `com.intellij.modules.jcef` 解析不到**（别名 2025.3.1 才存在），
+   与 §3.1 的判断一致 —— `jcef-features.xml` 在 233 上不会加载，是**预期行为**，不是缺陷。
+2. **261 上 `com.intellij.modules.jcef` 正常解析** ✓ —— 说明 2026.x 的 JCEF 独立插件依赖声明是通的。
+
+**没跑到的**：`262.9437.185` / `262.11879.100` / `263.7307.200` —— 不是配置问题，
+是 JetBrains 的 CDN 在本次执行期间对大文件整体拒连（§7.7）。这三个版本放 CI 跑。
+
+原始报告（精简版，去掉 500 KB+ 的 html 与依赖清单）已归档：
+[`verifier-local-2026-11-17/`](verifier-local-2026-11-17/)，
+复跑命令见 `scripts/run_verifier_local.sh`。
+
 **引用来源**
 
 - [Incompatible Changes in IntelliJ Platform and Plugins API 2026.*](https://plugins.jetbrains.com/docs/intellij/api-changes-list-2026.html)

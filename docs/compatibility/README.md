@@ -13,6 +13,7 @@
 | override-only 告警 | 1 条（仅 2 个 EAP build 出现） | **0 条** |
 | 242–262 区间的弃用告警 | 1 条（`java.net.URL`，从 242 起每个 build 都报） | **0 条** |
 | 编译产物字节码里的弃用调用点 | — | **0**（`scripts/check_compiled_refs.py` 可复跑证明） |
+| **本地实跑 verifier（233 / 261）** | — | **0 弃用、0 override-only**（`verifier-local-2026-11-17/`） |
 | 全量测试 | 994 passed / 0 failed | **1000 passed / 0 failed / 8 skipped** |
 
 改动按风险拆成 5 个提交（见 `git log`）：`fix`(URL) → `fix`(DynamicBundle) → `refactor`(打开文件流程) → `fix`(字段级弃用 + override-only) → `chore`(验证门禁)。
@@ -74,6 +75,15 @@
 
 低风险机械替换各自独立；**有真实行为变化的改动单独出一个提交**，便于独立回滚。
 
+### 7. 自动化验证尽量别依赖需要联网解析的中间层
+
+`verifyPlugin` 让 Gradle 去解析 IDE 版本 → 中间夹了一层 JetBrains CDN，大文件容易被拒连，
+而且**报错长得像"构件不存在"**（实际构件在仓库里）。两个绕法：
+
+- IDE 直接用**本地目录**（已安装的 IDE，或从 Gradle 缓存里解压出来的 zip）→ `scripts/run_verifier_local.sh`。
+- verifier CLI **永远带 `-offline`**，否则它会去 Marketplace 查插件依赖，网络不通时整条命令挂死
+  （表现为 CPU 占用为 0、只有 Established 的 TLS 连接）。
+
 ---
 
 ## 最小验证路径（实测过，别装 5 个 IDE）
@@ -103,8 +113,9 @@
 | `sdk-243-deprecation-audit.json` | 逐符号在 243 SDK 上的废弃/内部化/试验性判定（0 命中） |
 | `official-changes-crossref.json` | 与官方 2023–2026 变更清单（380 条）的交叉比对命中项 |
 | `apichanges/2023–2026.md` | JetBrains 官方破坏性变更清单原件 |
+| `verifier-local-2026-11-17/` | **本地实跑 verifier 的精简报告**：233（区间下界）与 261（近上界），各 0 弃用 / 0 override-only |
 | `qwenmate-verifier-reports/reports-compact/` | 78 份托管验证报告的浓缩版（审计的原始证据） |
-| `scripts/` | 8 个可复跑脚本（见下） |
+| `scripts/` | 9 个可复跑脚本（见下） |
 
 ## 复跑
 
@@ -135,6 +146,17 @@ python scripts/verify_platform_api_versions.py 233 243 263
 # Python PSI API 审计（补上 externalPrefixes 排除掉的整块视野）
 python scripts/audit_python_psi_apis.py
 ```
+
+**本地实跑 verifier**（不需要 JetBrains 账号，IDE 用本地目录，不走 Gradle 坐标解析）：
+
+```bash
+bash scripts/run_verifier_local.sh \
+  ../../build/distributions/qwen-mate-1.1.1.zip \
+  /path/to/ideaIU-233 /path/to/ideaIU-261
+```
+
+> `run_verifier_local.sh` 必须带 `-offline`（脚本里已加）：否则 verifier 会去 Marketplace 查插件依赖，
+> 网络不通时整条命令挂死。IDE 目录可以是已安装的 IDE，也可以是从 Gradle 缓存里解压出来的 zip。
 
 > `verify_platform_api_versions.py` 与 `audit_python_psi_apis.py` 需要联网（从
 > intellij-community 的 release tag 拉源码），下载内容缓存在系统临时目录，不落进仓库。
