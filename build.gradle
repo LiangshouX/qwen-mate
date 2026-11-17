@@ -160,17 +160,23 @@ intellijPlatform {
         ides {
             // Lower bound of the supported range (2023.3). The plugin compiles against
             // 243, so verifying on 233 is what proves no 243-only API is used.
-            ide('IU', '233.15619.7')
+            ide('IU', '233.15619.7', false)
             // Compile target (2024.3).
-            ide('IU', '243.28141.41')
-            // 2026.2.1 EAP build 262.9437.22 – the exact build that surfaced
-            // the CefResourceHandler / PluginManagerCore issues during
+            ide('IU', '243.28141.41', false)
+            // 2026.2.1 EAP build 262.9437.185 – the published build of the branch that
+            // surfaced the CefResourceHandler / PluginManagerCore issues during
             // marketplace verification.
-            ide('IU', '262.9437.22')
+            ide('IU', '262.9437.185', false)
             // 2026.2 stable.
-            ide('IU', '262.11879.100')
+            ide('IU', '262.11879.100', false)
             // 2026.3 stable – current untilBuild.
-            ide('IU', '263.7307.200')
+            ide('IU', '263.7307.200', false)
+            // NOTE: the third argument `useInstaller = false` is required, not a style
+            // choice. With the default (true) the plugin resolves the IDE from
+            // download.jetbrains.com, which only publishes product versions
+            // (2026.3, 2024.3, …) – there is no installer artifact for a build number,
+            // so every 233.xxxxx.x version resolves to a 404. The IntelliJ Maven
+            // repository does publish build numbers.
             // NOTE: the dynamic EAP channel (select { channels = listOf(Channel.EAP) })
             // is deliberately NOT used: `select` resolves the JetBrains products-release
             // feed during the *configuration* phase, so a network hiccup breaks every
