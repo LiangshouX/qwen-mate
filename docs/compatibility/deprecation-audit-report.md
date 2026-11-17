@@ -208,7 +208,7 @@
 
 ### 3.2 验证矩阵覆盖不足
 
-- **现状**：`build.gradle:156-161` 只钉了 `ide('IU', '262.9437.22')`；`failureLevel` 只有 `COMPATIBILITY_PROBLEMS` 和 `INTERNAL_API_USAGES`，**没有 `DEPRECATED_API_USAGES`** → 本地验证根本不会因 6 条弃用而失败。
+- **现状**：`pluginVerification.ides` 当时只钉了 `ide('IU', '262.9437.22')`（该 build 号后被证明不存在，见 §7.7）；`failureLevel` 只有 `COMPATIBILITY_PROBLEMS` 和 `INTERNAL_API_USAGES`，**没有 `DEPRECATED_API_USAGES`** → 本地验证根本不会因 6 条弃用而失败。
 - **建议**：
   ```groovy
   pluginVerification {
@@ -233,8 +233,9 @@
   > - 枚举名在 2.10.5 里确实是 `DEPRECATED_API_USAGES` 与 `OVERRIDE_ONLY_API_USAGES`，本节建议可直接用。
   > - **`select { channels = ... }` 动态 EAP 通道不能用**：它在 **配置期**就要拉取 JetBrains 产品清单，
   >   一旦网络抖动会让**所有** Gradle 任务失败（本轮实测 `Could not create provider for value source ProductReleasesValueSource`）。
-  >   已改为固定 build 号（`233.15619.7` / `243.28141.41` / `262.9437.22` / `262.11879.100` / `263.7307.200`，
-  >   全部经 HEAD 校验在 JetBrains 仓库中存在）。
+  > - **`ide(...)` 必须显式 `useInstaller = false`**（本轮实际踩到，见 §7.7）。
+  > - 已改为固定 build 号（`233.15619.7` / `243.28141.41` / `262.9437.185` / `262.11879.100` / `263.7307.200`），
+  >   全部经 HEAD 校验在 JetBrains **Maven 仓库**中存在。
 
 ### 3.3 编译目标不是区间下界 — ⏸️ 用"对 233 单独验证"替代（见 §7.4）
 
@@ -244,7 +245,7 @@
 
 ### 3.4 PythonCore 是完全盲区 — ✅ 源码级审计已做（运行时行为仍需人工验证）
 
-- **现状**：`build.gradle:118` 固定 `plugin('PythonCore', '243.22562.145')`，`build.gradle:154` 用 `externalPrefixes = ['com.jetbrains.python']` 把整个 Python 包排除在 verifier 检查外。
+- **现状**：`build.gradle:118` 固定 `plugin('PythonCore', '243.22562.145')`，`build.gradle:158` 用 `externalPrefixes = ['com.jetbrains.python']` 把整个 Python 包排除在 verifier 检查外。
 - **后果**：`com.jetbrains.python` 的所有弃用/移除**完全不在视野内**。
 - **建议**：至少做一次"用最新 PythonCore 编译 + 人工核对 `PythonContextCollector` 所用 API"（该类用了 `PyFile`、`PyFunction`、`PyClass`、`PyStatementList`、`PyStatement`、`PyExpressionStatement`、`PyExpression`、`PyStringLiteralExpression`、`PyParameter`、`PyImportStatement`、`PyFromImportStatement`）。代码里刻意避开 `PyAstFunction.getContent()`（experimental）与 `getStringValue()`（Marketplace-flagged）的做法是对的，这个警惕要保持。
 - **✅ 已完成的替代方案**：不重编译（重编译最新 PythonCore 需要把工具链升到 Java 25，见 §3.5，成本与风险都不小），
@@ -468,7 +469,7 @@ IDE 只需要回答"行为对不对"。233 仅在两种情况下需要：日常 
 | P0-b | `i18n/QwenMateBundle.java` | 从**继承** `DynamicBundle` 改为**委托**：`new DynamicBundle(QwenMateBundle.class, BUNDLE)` |
 | P1-a | `action/console/SendConsoleSelectionToInputAction.java` | `LangDataKeys.CONSOLE_VIEW` 字段引用 → 运行时反射解析 `ExecutionDataKeys` → `LangDataKeys` |
 | P1-b | `handler/file/JavaClassNavigationSupport.java` | `navigatable.navigate(true)` → `OpenSourceUtil.navigate(true, false, navigatable)` |
-| P2-§3.2 | `build.gradle` | `failureLevel` 增加 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；验证矩阵扩到 5 个固定 build（233 / 243 / 262 ×2 / 263），**无 EAP 通道** |
+| P2-§3.2 | `build.gradle` | `failureLevel` 增加 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；验证矩阵钉到 5 个固定 build（233 / 243 / 262 ×2 / 263），**`useInstaller = false`**、**无 EAP 通道** |
 
 新增测试 6 个（`McpMarketplaceHttpClientTest` +3、`SendConsoleSelectionToInputActionTest` +3）。
 
@@ -500,7 +501,7 @@ IDE 只需要回答"行为对不对"。233 仅在两种情况下需要：日常 
 
 | 子项 | 状态 | 说明 |
 |---|---|---|
-| §3.2 验证矩阵 | ✅ **已加固** | `failureLevel` 加了 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；矩阵钉到 `233.15619.7` / `243.28141.41` / `262.9437.22` / `262.11879.100` / `263.7307.200` 五个固定 build（**不用 EAP 通道**）。**弃用从此是构建门禁，不再是"翻报告才发现"** |
+| §3.2 验证矩阵 | ✅ **已加固** | `failureLevel` 加了 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；矩阵钉到 `233.15619.7` / `243.28141.41` / `262.9437.185` / `262.11879.100` / `263.7307.200` 五个固定 build（`useInstaller = false`、**不用 EAP 通道**）。**弃用从此是构建门禁，不再是"翻报告才发现"** |
 | §3.3 编译目标 | ⏸️ **未动编译目标** | 下移到 233 需要下载 233 SDK 并重编译整个插件，收益是"防止将来误用新 API"，属于预防性投资。本轮改用 §3.2 矩阵里的 `ide('IU', '233.15619.7')` 达到同等效果——**验证 233** 同样能抓出"用了 243 才有的 API"，且不需要换编译目标 |
 | §3.4 PythonCore 盲区 | ✅ **审计已做** | 新增 `scripts/audit_python_psi_apis.py`：从 intellij-community 的 243 与 263 tag 拉取 Python PSI 源码，逐类逐方法核对废弃标记。**结论：12 个类、6 个被调用方法在 243 与 263 均未废弃**（`PyFile.getElementNamed` 虽标了 `@Deprecated(forRemoval = true)`，但插件没用它） |
 | §3.1 JCEF 拆插件 | ⏸️ **未改代码，转人工验证** | 涉及 11 个 always-loaded 文件的类隔离，且失效条件是"JCEF 插件被禁用"——**必须先在真实 2026.2/2026.3 上把触发条件复现出来**，再决定要不要动那 11 个文件。清单 F1.2 就是这一格；**在拿到 F1.2 的实测结果之前改代码属于盲改** |
@@ -545,6 +546,36 @@ com.intellij.pom.Navigatable.navigate      0 calls   0 deprecated
 剩下的都是"必须真实 IDE 才能验"的项，已全部集中到
 [`manual-verification-checklist.md`](manual-verification-checklist.md)，一次做完即可收口。
 **起点是日常在用的那个 IDE（2026.2+ 更好）**；233 只在需要覆盖 B 组回退分支或 F1.3 / F1.5 时才加装。
+
+### 7.7 验证器 IDE 坐标踩坑（2026-11-17 实测）
+
+第一次跑 `verifyPlugin` 直接失败：
+
+```
+Could not find idea:ideaIU:233.15619.7
+```
+
+**两个互相独立的问题**：
+
+1. **`ide(...)` 默认走安装包通道，解析不到 build 号。**
+   `ide(type, version)` 的 `useInstaller` 默认是 `true`，即去 `download.jetbrains.com/idea/ideaIU-<version>-win.zip` 找。
+   那个地址只发布**产品版本**（`ideaIU-2026.3-win.zip`），**没有 build 号** → 任何 `233.xxxxx.x` 形式的版本必然 404。
+   build 号只在 IntelliJ **Maven 仓库**里有：
+   `https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIU/<build>/`
+   → 写法必须是 `ide('IU', '233.15619.7', false)`（第三参 `useInstaller = false`）。
+
+2. **`262.9437.22` 这个 build 号根本不存在。**
+   查仓库 `maven-metadata.xml` 后，2026.2.1 EAP 分支上真实发布的是 **`262.9437.185`**。
+   上一轮"HEAD 校验通过"查的是**下载页**而不是仓库元数据，所以没发现这个错。
+
+**顺带一个类型映射细节**（读 2.10.5 源码 `IntelliJPlatformType.fromCode`）：
+`IU` 这个 code 在 **build ≥ 253 / 版本 ≥ 2025.3** 时会被映射成统一版 `IntellijIdea`（构件 `idea`），
+低于阈值才映射回 `IntellijIdeaUltimate`（构件 `ideaIU`）。两个构件在仓库里都存在，结论不受影响，但要知道这条映射规则。
+
+**Groovy DSL 的坑**：`create('IU', 'xxx') { useInstaller = false }` 写不了 ——
+Kotlin 的「接收者 lambda」在 Groovy 里，`useInstaller` 会被解析到 owner（`ides` 扩展）上，
+报 `Could not set unknown property 'useInstaller' for extension 'ides'`。
+用 `ide(type, version, useInstaller)` 的三参重载即可（该重载在 2.10.5 里标记为 deprecated，但行为正确）。
 
 **引用来源**
 
