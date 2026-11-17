@@ -68,7 +68,7 @@
 
 ### 5. 人工验证项集中到最后一次做完
 
-所有需要真实 IDE 的项**汇总成一份清单**（`manual-verification-checklist.md`），一次做完收口，不要分批返工。每格给出：操作 / 期望结果 / 逐 IDE 勾选栏 / 失败信号。
+所有需要真实 IDE 的项**汇总成一份清单**（`manual-verification-checklist.md`），一次做完收口，不要分批返工。每格给出：**操作 / 期望结果 / 一个勾选框**；不通过的样子紧跟在组内，元解释、跨版本证据、审计结论一律留在报告里，不进清单。
 
 ### 6. 改动按风险分提交
 
@@ -89,7 +89,7 @@
 - **IDEA 是绿色包**：解压即用。Toolbox 装的话 IDE 里还能 *Run Another IDE Version* 直接切版本。
 - **verifier 复跑是最贵的一步**（每个 IDE 1.2–1.5 GB）→ 本地只留 263，其余放 CI。
 
-详见 `manual-verification-checklist.md` 的 §0.5。
+详见 `manual-verification-checklist.md`（清单里的版本要求与「未覆盖项」处理方式都在那里）。
 
 ---
 
@@ -98,7 +98,7 @@
 | 文件 | 内容 |
 |---|---|
 | `deprecation-audit-report.md` | **主报告**：决策摘要、工作清单、结构性风险、执行顺序、两轮实施记录（含全部调研结论与踩坑） |
-| `manual-verification-checklist.md` | **集中人工验证清单**：A–F 六组、逐 IDE 勾选栏、失败信号、最小路径 |
+| `manual-verification-checklist.md` | **集中人工验证清单**：准备 → A/B/C/D/E/F1/F2/F3 八组 → 收口记录与发布判定（1 个 IDE 即可） |
 | `ide-api-surface.json` | 插件用到的 200 个 IDE 符号及出现位置（282 个源文件） |
 | `sdk-243-deprecation-audit.json` | 逐符号在 243 SDK 上的废弃/内部化/试验性判定（0 命中） |
 | `official-changes-crossref.json` | 与官方 2023–2026 变更清单（380 条）的交叉比对命中项 |

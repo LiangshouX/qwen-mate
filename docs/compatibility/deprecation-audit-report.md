@@ -223,7 +223,7 @@
           ide('IU', '243.22562.145')   // 编译目标
           ide('IU', '262.11879.100')   // 2026.2 稳定版
           ide('IU', '263.7307.200')    // 2026.3 稳定版
-          select { channels = listOf(ProductRelease.Channel.EAP); sinceBuild = '263' }  // EAP 通道
+          select { channels = listOf(ProductRelease.Channel.EAP); sinceBuild = '263' }  // EAP 通道 —— ❌ 不可用，见下方说明
       }
   }
   ```
@@ -265,14 +265,17 @@
 
 ## 4. 执行顺序与验收
 
+> 本节是第一轮的**分阶段计划**，已执行完毕（见 §7）。**当前的验证范围、顺序与发布判定以
+> [`manual-verification-checklist.md`](manual-verification-checklist.md) 为准。**
+
 | 阶段 | 内容 | 风险 | 验收 |
 |---|---|---|---|
 | **P0-a** | §1.1 URL | 低 | 263 弃用 6→5 |
 | **P0-b** | §1.2 DynamicBundle | 低 | 263 弃用 5→4；10 语言文案正常 |
 | **P0-c** | §1.3 打开文件流程重构 | **中高** | 263 弃用 4→**0**；三个打开交互回归通过 |
-| **P1-a** | §2.1 CONSOLE_VIEW 反射 | 低 | 263 弃用保持 0；233/263 双端实测控制台发送 |
-| **P1-b** | §2.2 Navigatable | 低 | 263 override-only = 0；双端实测 Java 类跳转 |
-| **P2** | §3.1 JCEF / §3.2 验证矩阵 / §3.3 编译目标下移 / §3.4 PythonCore 盲区 | 中 | 4 build + EAP 通道全绿；262/263 真实启动通过 |
+| **P1-a** | §2.1 CONSOLE_VIEW 反射 | 低 | 263 弃用保持 0；控制台发送见清单 B 组 |
+| **P1-b** | §2.2 Navigatable | 低 | 263 override-only = 0；类跳转见清单 C 组 |
+| **P2** | §3.1 JCEF / §3.2 验证矩阵 / §3.3 编译目标下移 / §3.4 PythonCore 盲区 | 中 | 5 个固定 build 全绿；262/263 真实启动通过 |
 
 **建议提交切分**：P0-a、P0-b、P0-c 各一个提交（P0-c 单独出，便于独立回滚）；P1 两项可合并为一个"消除字段级弃用与 override-only"提交。
 
@@ -356,15 +359,15 @@ bash "Compatibility verification/qwenmate-verifier-reports/run_local_verificatio
 - **空文件**：落在唯一的空行；`lineCount == 0` 返回 null
 - **末尾换行**：额外算一空行
 
-全量测试：**994 passed / 0 failed / 8 skipped**，`checkstyleMain` 通过。
+全量测试（**第一轮**）：**994 passed / 0 failed / 8 skipped**，`checkstyleMain` 通过。
 
 ### 5.5 仍需人工在真实 IDE 验证的项
 
-> ⚠️ **本节已被 §6.1 的集中清单取代**——所有需要真实 IDE 的验证项（A–F 六组）都已汇总到
+> ⚠️ **本节已被 §6.1 的集中清单取代**——所有需要真实 IDE 的验证项（A/B/C/D/E/F1/F2/F3）都已汇总到
 > [`manual-verification-checklist.md`](manual-verification-checklist.md)，**一次做完即可收口**，不要分批返工。
 > 下面保留原始三项作为背景。
 
-单元测试覆盖的是**几何计算**，无法覆盖"文件真的打开了、编辑器真的就绪"。以下三项必须在 **233 与 263 两个 IDE 上各做一次真实验证**（因为本次改动的核心正是跨版本 API 可用性）：
+单元测试覆盖的是**几何计算**，无法覆盖"文件真的打开了、编辑器真的就绪"。**原计划**在 233 与 263 两个 IDE 上各做一次真实验证（因为本次改动的核心正是跨版本 API 可用性）：
 
 1. 打开文件（无行号）→ 文件打开并获得焦点
 2. 打开文件并跳到指定行 → 光标在目标行
@@ -393,7 +396,7 @@ bash "Compatibility verification/qwenmate-verifier-reports/run_local_verificatio
 
 ### 5.7 编译产物级验证
 
-`scripts/check_compiled_refs.py` 扫描 `build/classes/java/main` 的**字节码常量池**，逐条统计被监控 API 的调用点（按 `owner + name + descriptor` 精确匹配，避免重载折叠）。当前结果：
+`scripts/check_compiled_refs.py` 扫描 `build/classes/java/main` 的**字节码常量池**，逐条统计被监控 API 的调用点（按 `owner + name + descriptor` 精确匹配，避免重载折叠）。**第一轮结果**（已被 §7.5 的第二轮取代）：
 
 ```
 scanned 541 class files (0 parse errors)
@@ -407,7 +410,7 @@ OpenFileDescriptor.navigate(boolean)       3 calls   0 deprecated
 => remaining deprecated call sites in compiled output: 4
 ```
 
-剩余 4 条全部属于**本次未实施**的其它工作项：
+第一轮残留的 4 条全部已在第二轮处理完（见 §7.1、§7.5）：
 
 | 剩余弃用调用 | 归属 | 对应报告条目 |
 |---|---|---|
@@ -438,7 +441,7 @@ OpenFileDescriptor.navigate(boolean)       3 calls   0 deprecated
 | `scripts/check_compiled_refs.py` | **扫描编译产物字节码常量池**，逐条统计被监控 API 的调用点（按 owner+name+descriptor 精确匹配），直接证明"弃用调用归零" |
 | `scripts/verify_platform_api_versions.py` | **跨版本平台 API 核验器**：从 233 / 243 / 263 三个 release tag 拉取平台源码，逐个判定成员是否存在、是否 `@Deprecated`、构造器签名是否一致（能抓到 `requestOpenFile` 这类"签名变更型"静默破坏） |
 | `scripts/audit_python_psi_apis.py` | **Python 盲区审计器**：从 intellij-community 的 243 / 263 tag 拉取 Python PSI 源码，逐类逐方法核对废弃标记（补上 `externalPrefixes` 排除掉的整块视野） |
-| `manual-verification-checklist.md` | **集中人工验证清单**：A–F 六组、逐 IDE 勾选栏、失败信号与执行顺序建议 |
+| `manual-verification-checklist.md` | **集中人工验证清单**：准备 → A/B/C/D/E/F1/F2/F3 八组 → 收口记录与发布判定（1 个 IDE 即可） |
 
 脚本已做路径自解析，在 `deprecation-audit/` 下可直接复跑。
 
@@ -447,8 +450,11 @@ OpenFileDescriptor.navigate(boolean)       3 calls   0 deprecated
 **所有需要真实 IDE 的验证项已集中到一份清单**：[`manual-verification-checklist.md`](manual-verification-checklist.md)。
 
 它按 A（打开文件）/ B（控制台选区）/ C（Java 类跳转）/ D（界面文案）/ E（Marketplace URL）/
-F（JCEF、PythonCore、验证器复跑）分组，每项给出操作、期望结果与逐 IDE 的勾选栏，
-并标明"哪一个 IDE 必须测、为什么"和失败信号。**先测 233（下界）**，一旦 233 通过，其余版本基本只剩例行确认。
+F1（JCEF）/ F2（Python）/ F3（验证器复跑）分组，每项给出操作、期望结果与一个勾选框，
+组后紧跟"不通过的样子"，最后是收口记录表与**发布判定**（可以发布 / 必须先修 / 允许未覆盖 / 待决策）。
+
+**只需 1 个 IDE**：日常在用的那个。版本兼容性已由三条静态证据覆盖（历史验证报告 + 三版本源码逐字核对 + 字节码扫描），
+IDE 只需要回答"行为对不对"。233 仅在两种情况下需要：日常 IDE ≥263 时补 B 组的回退分支，或做 F1.3 / F1.5。
 
 ---
 
@@ -462,7 +468,7 @@ F（JCEF、PythonCore、验证器复跑）分组，每项给出操作、期望�
 | P0-b | `i18n/QwenMateBundle.java` | 从**继承** `DynamicBundle` 改为**委托**：`new DynamicBundle(QwenMateBundle.class, BUNDLE)` |
 | P1-a | `action/console/SendConsoleSelectionToInputAction.java` | `LangDataKeys.CONSOLE_VIEW` 字段引用 → 运行时反射解析 `ExecutionDataKeys` → `LangDataKeys` |
 | P1-b | `handler/file/JavaClassNavigationSupport.java` | `navigatable.navigate(true)` → `OpenSourceUtil.navigate(true, false, navigatable)` |
-| P2-§3.2 | `build.gradle` | `failureLevel` 增加 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；验证矩阵扩到 233 / 243 / 262 / 263 + 263-EAP 通道 |
+| P2-§3.2 | `build.gradle` | `failureLevel` 增加 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；验证矩阵扩到 5 个固定 build（233 / 243 / 262 ×2 / 263），**无 EAP 通道** |
 
 新增测试 6 个（`McpMarketplaceHttpClientTest` +3、`SendConsoleSelectionToInputActionTest` +3）。
 
@@ -494,9 +500,9 @@ F（JCEF、PythonCore、验证器复跑）分组，每项给出操作、期望�
 
 | 子项 | 状态 | 说明 |
 |---|---|---|
-| §3.2 验证矩阵 | ✅ **已加固** | `failureLevel` 加了 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；矩阵扩到 `233.15619.7` / `243.28141.41` / `262.9437.22` / `262.11879.100` / `263.7307.200` + 263-EAP 通道。**弃用从此是构建门禁，不再是"翻报告才发现"** |
+| §3.2 验证矩阵 | ✅ **已加固** | `failureLevel` 加了 `DEPRECATED_API_USAGES` + `OVERRIDE_ONLY_API_USAGES`；矩阵钉到 `233.15619.7` / `243.28141.41` / `262.9437.22` / `262.11879.100` / `263.7307.200` 五个固定 build（**不用 EAP 通道**）。**弃用从此是构建门禁，不再是"翻报告才发现"** |
 | §3.3 编译目标 | ⏸️ **未动编译目标** | 下移到 233 需要下载 233 SDK 并重编译整个插件，收益是"防止将来误用新 API"，属于预防性投资。本轮改用 §3.2 矩阵里的 `ide('IU', '233.15619.7')` 达到同等效果——**验证 233** 同样能抓出"用了 243 才有的 API"，且不需要换编译目标 |
-| §3.4 PythonCore 盲区 | ✅ **审计已做** | 新增 `scripts/audit_python_psi_apis.py`：从 intellij-community 的 243 与 263 tag 拉取 Python PSI 源码，逐类逐方法核对废弃标记。**结论：12 个类、5 个被调用方法在 243 与 263 均未废弃**（`PyFile.getElementNamed` 虽标了 `@Deprecated(forRemoval = true)`，但插件没用它） |
+| §3.4 PythonCore 盲区 | ✅ **审计已做** | 新增 `scripts/audit_python_psi_apis.py`：从 intellij-community 的 243 与 263 tag 拉取 Python PSI 源码，逐类逐方法核对废弃标记。**结论：12 个类、6 个被调用方法在 243 与 263 均未废弃**（`PyFile.getElementNamed` 虽标了 `@Deprecated(forRemoval = true)`，但插件没用它） |
 | §3.1 JCEF 拆插件 | ⏸️ **未改代码，转人工验证** | 涉及 11 个 always-loaded 文件的类隔离，且失效条件是"JCEF 插件被禁用"——**必须先在真实 2026.2/2026.3 上把触发条件复现出来**，再决定要不要动那 11 个文件。清单 F1.2 就是这一格；**在拿到 F1.2 的实测结果之前改代码属于盲改** |
 
 ### 7.5 验证结果
@@ -538,8 +544,7 @@ com.intellij.pom.Navigatable.navigate      0 calls   0 deprecated
 
 剩下的都是"必须真实 IDE 才能验"的项，已全部集中到
 [`manual-verification-checklist.md`](manual-verification-checklist.md)，一次做完即可收口。
-**建议起点是 233（下界）**——它同时是 API 最少、JCEF 别名解析不到、
-`ExecutionDataKeys.CONSOLE_VIEW` 不存在的一端，信息量最大。
+**起点是日常在用的那个 IDE（2026.2+ 更好）**；233 只在需要覆盖 B 组回退分支或 F1.3 / F1.5 时才加装。
 
 **引用来源**
 
