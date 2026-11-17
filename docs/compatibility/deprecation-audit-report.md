@@ -442,9 +442,11 @@ OpenFileDescriptor.navigate(boolean)       3 calls   0 deprecated
 | `scripts/check_compiled_refs.py` | **扫描编译产物字节码常量池**，逐条统计被监控 API 的调用点（按 owner+name+descriptor 精确匹配），直接证明"弃用调用归零" |
 | `scripts/verify_platform_api_versions.py` | **跨版本平台 API 核验器**：从 233 / 243 / 263 三个 release tag 拉取平台源码，逐个判定成员是否存在、是否 `@Deprecated`、构造器签名是否一致（能抓到 `requestOpenFile` 这类"签名变更型"静默破坏） |
 | `scripts/audit_python_psi_apis.py` | **Python 盲区审计器**：从 intellij-community 的 243 / 263 tag 拉取 Python PSI 源码，逐类逐方法核对废弃标记（补上 `externalPrefixes` 排除掉的整块视野） |
+| `scripts/run_verifier_local.sh` | **本地 verifier 一键复跑**：verifier CLI + 本地 IDE 目录（可多个），必带 `-offline`；绕开 Gradle 的 IDE 坐标解析与 JetBrains CDN 抖动 |
+| `verifier-local-2026-11-17/` | **本地实跑 verifier 的精简报告**：233 / 261 各 0 弃用、0 override-only |
 | `manual-verification-checklist.md` | **集中人工验证清单**：准备 → A/B/C/D/E/F1/F2/F3 八组 → 收口记录与发布判定（1 个 IDE 即可） |
 
-脚本已做路径自解析，在 `deprecation-audit/` 下可直接复跑。
+脚本已做路径自解析，在 `docs/compatibility/` 下可直接复跑（`run_verifier_local.sh` 除外，它吃命令行参数）。
 
 ### 6.1 人工验证清单
 
